@@ -25,12 +25,15 @@ class ManagementClient {
 		bool unregisterService();
 		bool registerCategory(const std::string& category);
 		bool unregisterCategory(const std::string& category);
+		bool getManagementIP(std::string& ip);
 	private:
 		HttpClient		*m_client;
 		std::string		*m_uuid;
 		Logger			*m_logger;
 		std::map<std::string, std::string>
 					m_categories;
+		std::string		m_coreAddress;
+		uint16_t		m_corePort;
 };
 
 #endif

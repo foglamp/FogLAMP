@@ -111,11 +111,15 @@ class StorageClient(AbstractStorage):
     def _get_storage_service(self, host, port):
         """ get Storage service """
 
-        conn = http.client.HTTPConnection("{0}:{1}".format(host, port))
-        # TODO: need to set http / https based on service protocol
+        try:
+            conn = http.client.HTTPConnection("{0}:{1}".format(host, port))
+            # TODO: need to set http / https based on service protocol
 
-        conn.request('GET', url='/foglamp/service?name=FogLAMP%20Storage')
-        r = conn.getresponse()
+            conn.request('GET', url='/foglamp/service?name=FogLAMP%20Storage')
+            r = conn.getresponse()
+        except Exception:
+            _LOGGER.error("Failed to request storage service entry from core");
+            raise
 
         # TODO: FOGL-615
         # log error with message if status is 4xx or 5xx

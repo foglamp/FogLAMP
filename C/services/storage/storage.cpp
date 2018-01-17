@@ -152,8 +152,18 @@ void StorageService::start(string& coreAddress, unsigned short corePort)
 		// TODO proper hostname lookup
 		unsigned short listenerPort = api->getListenerPort();
 		unsigned short managementListener = management.getListenerPort();
-		ServiceRecord record(m_name, "Storage", "http", "localhost", listenerPort, managementListener);
 		ManagementClient *client = new ManagementClient(coreAddress, corePort);
+		string myIP;
+		if (!client->getManagementIP(myIP))
+		{
+			logger->error("Failed to determine the IP address of the storage service, using localhost");
+			myIP = "localhost";
+		}
+		else
+		{
+			logger->info("Registering storage service with address %s", myIP.c_str());
+		}
+		ServiceRecord record(m_name, "Storage", "http", myIP.c_str(), listenerPort, managementListener);
 		client->registerService(record);
 		client->registerCategory(STORAGE_CATEGORY);
 

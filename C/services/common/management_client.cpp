@@ -13,6 +13,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <arpa/inet.h>
 
 using namespace std;
 using namespace rapidjson;
@@ -21,7 +22,7 @@ using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
 /**
  * Management Client constructor
  */
-ManagementClient::ManagementClient(const string& hostname, const unsigned short port) : m_uuid(0)
+ManagementClient::ManagementClient(const string& hostname, const unsigned short port) : m_uuid(0), m_coreAddress(hostname), m_corePort(port)
 {
 ostringstream urlbase;
 
@@ -172,4 +173,48 @@ ostringstream convert;
                 return false;
         }
         return false;
+}
+
+/**
+ * Determine our source IP address by connecting to the core
+ * mamagement Port and checking which interface we used.
+ */
+bool ManagementClient::getManagementIP(string& buffer)
+{
+	int sock = socket(AF_INET, SOCK_DGRAM, 0);
+	if (sock == -1)
+	{
+		return false;
+	}
+
+	struct sockaddr_in serv;
+	memset(&serv, 0, sizeof(serv));
+    	serv.sin_family = AF_INET;
+	serv.sin_addr.s_addr = inet_addr(m_coreAddress.c_str());
+	serv.sin_port = htons(m_corePort);
+
+	int err = connect(sock, (const sockaddr*) &serv, sizeof(serv));
+	if (err == -1)
+	{
+		close(sock);
+		return false;
+	}
+
+	sockaddr_in name;
+	socklen_t namelen = sizeof(name);
+	if ((err = getsockname(sock, (sockaddr*) &name, &namelen)) == -1)
+	{
+		close(sock);
+		return false;
+	}
+
+	char cbuf[16];
+	if (inet_ntop(AF_INET, &name.sin_addr, cbuf, 16) == NULL)
+	{
+		close(sock);
+		return false;
+	}
+	buffer = cbuf;
+	close(sock);
+	return true;
 }
