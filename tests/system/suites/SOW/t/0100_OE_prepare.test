@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+# Checks the availability of the snap command
+snap help >> /dev/null
+if [[ ${?} != 0 ]]; then
+
+    # FIXME: TBC install the snap command
+    echo ERROR: Install the snap command.
+fi
+
+# Removes FogLAMP snap if it is already installed
+sudo snap remove ${FOGLAMP_NAME} >> ${RESULT_DIR}/$TEST_NAME.temp 2>&1
+
+# Checks if FogLAMP is not installed
+snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.temp 2>&1 | grep -c ${FOGLAMP_NAME}
