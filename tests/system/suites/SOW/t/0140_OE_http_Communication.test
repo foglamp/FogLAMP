@@ -1,3 +1,4 @@
 #!/bin/bash
 
-# TBD
+foglamp start
+foglamp status
