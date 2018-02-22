@@ -3,18 +3,15 @@
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
-# FIXME: for DBG
-# rm ${TMP_DIRECTORY}/${FOGLAMP_SNAP} >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
-
 # Downloads FogLAMP snap if it is not already available
 if [[ ! -f ${TMP_DIRECTORY}/${FOGLAMP_SNAP} ]]; then
 
-    echo Downloadin FogLAMP snap. >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    echo Downloadin FogLAMP snap.        >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
 
     cd   ${TMP_DIRECTORY}
-    wget ${FOGLAMP_SNAP_PATH}     >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    ${CMD_WGET} ${FOGLAMP_SNAP_PATH}     >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
 
-    echo FogLAMP snap dowloaded.  >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    echo FogLAMP snap dowloaded.         >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
 fi
 
 # Installs FogLAMP snap
