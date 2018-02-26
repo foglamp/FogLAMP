@@ -3,12 +3,17 @@
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
+# Ensures the initial status, FogLAMP stopped
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
 # Starts FogLAMP
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/starts_foglamp.bash                                                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 tail -n1 ${RESULT_DIR}/$TEST_NAME.2.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Checks FogLAMP is running
-${CMD_CURL} -s http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/ping  >> ${RESULT_DIR}/$TEST_NAME.3.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+${CMD_CURL} -s http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/ping                                                >> ${RESULT_DIR}/$TEST_NAME.3.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Checks the result
 cat ${RESULT_DIR}/$TEST_NAME.3.temp | grep -c "uptime"
+

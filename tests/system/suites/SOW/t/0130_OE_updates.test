@@ -1,3 +1,65 @@
 #!/bin/bash
 
-#TBD
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+# Updates the expected file to avoid storing of hardcoded versions
+echo "${FOGLAMP_NAME} ${FOGLAMP_SNAP_VERSION}"         >  ${SUITE_NAME}/e/${TEST_NAME}.expected
+echo "${FOGLAMP_NAME} ${FOGLAMP_SNAP_UPDATE_VERSION}"  >> ${SUITE_NAME}/e/${TEST_NAME}.expected
+
+# Lists the initial snap
+version_initial=`snap list | grep ${FOGLAMP_NAME} |  cut -d' ' -f 1,5 2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+echo ${version_initial}
+
+# Starts FogLAMP
+$TEST_BASEDIR/bash/starts_foglamp.bash                                                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Starts the update process to create the initial configuration
+${CMD_CURL}  -X PUT http://localhost:8081/foglamp/update                                                                >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Waits until the update process has created the default configurations
+${TEST_BASEDIR}/bash/wait_creation_cfg.bash "SNAP_UPD/repository"                                                       >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Retrieves the configuration
+${CMD_CURL}  -X GET http://localhost:8081/foglamp/category/SNAP_UPD/repository                                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Configures the update process to retrieves the snaps from the local file system
+sudo classic << EOF                                                                                                     >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+#!/bin/bash
+curl -X PUT -d '{"value": "file:///${TMP_DIRECTORY}"}' http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/SNAP_UPD/repository
+EOF
+
+# Retrieves the updated configuration
+${CMD_CURL}  -X GET http://localhost:8081/foglamp/category/SNAP_UPD/repository                                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Executes the update retrieving the snap from the local file system
+${CMD_CURL}  -X PUT http://localhost:8081/foglamp/update                                                                >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Waits until either the version is updated or the timeout is reached
+count=0
+while [ true ]
+do
+    # Checks the FogLAMP snap version
+    version_updated=`snap list | grep ${FOGLAMP_NAME} |  cut -d' ' -f 1,5                                               2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+
+    if [[ "${version_initial}" != ${version_updated} ]]; then
+
+        echo FogLAMP Updated - N. of retries :${count}: - current version :${version_updated}:                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+        break
+    else
+        if [[ $count -le ${RETRY_COUNT} ]]
+        then
+            echo FogLAMP still not updated, waiting...                                                                  >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+            echo N. of retries :${count}:                                                                               >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
+            sleep 1
+            count=$((count+1))
+        else
+            echo Timeout reached - N. of retries :${count}:                                                             >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
+            exit 1
+        fi
+    fi
+done
+
+# Lists final FogLAMP snap version
+version_updated=`snap list | grep ${FOGLAMP_NAME} |  cut -d' ' -f 1,5 2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+echo ${version_updated}

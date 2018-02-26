@@ -3,19 +3,42 @@
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
-# Downloads FogLAMP snap if it is not already available
-if [[ ! -f ${TMP_DIRECTORY}/${FOGLAMP_SNAP} ]]; then
+# Downloads the FogLAMP snap if it is not already available in the local file system
+if [[ ! -f ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP} ]]; then
 
-    echo Downloadin FogLAMP snap.        >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    echo -n WARNING: the snap :${FOGLAMP_SNAP}: is not available in the local file system :${SNAPS_DIRECTORY}:          >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    echo    , trying to download it from :${FOGLAMP_SNAP_PATH}/${FOGLAMP_SNAP}:                                         >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
 
-    cd   ${TMP_DIRECTORY}
-    ${CMD_WGET} ${FOGLAMP_SNAP_PATH}     >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    cd   ${SNAPS_DIRECTORY}
+    ${CMD_WGET} ${FOGLAMP_SNAP_PATH}/${FOGLAMP_SNAP}                                                                    >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+fi
 
-    echo FogLAMP snap dowloaded.         >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+# Downloads the FogLAMP snap for the update process if it is not already available in the local file system
+if [[ ! -f ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP_UPDATE} ]]; then
+
+    echo -n WARNING: the snap :${FOGLAMP_SNAP_UPDATE}: is not available in the local file system :${SNAPS_DIRECTORY}:   >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    echo    , trying to download it from :${FOGLAMP_SNAP_PATH}/${FOGLAMP_SNAP_UPDATE}:                                  >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+
+    cd   ${SNAPS_DIRECTORY}
+    ${CMD_WGET} ${FOGLAMP_SNAP_PATH}/${FOGLAMP_SNAP_UPDATE}                                                             >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+fi
+
+# Checks FogLAMP snap availability
+if [[ ! -f ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP} ]]; then
+
+    echo ERROR: the snap :${FOGLAMP_SNAP}: is not available in the local file system :${SNAPS_DIRECTORY}:               >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    exit 1
+fi
+
+# Checks the availability of FogLAMP snap for the update
+if [[ ! -f ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP_UPDATE} ]]; then
+
+    echo ERROR: the snap :${FOGLAMP_SNAP_UPDATE}: is not available in the local file system :${SNAPS_DIRECTORY}:        >> ${RESULT_DIR}/$TEST_NAME.temp  2>&1
+    exit 1
 fi
 
 # Installs FogLAMP snap
-sudo snap install --devmode ${TMP_DIRECTORY}/${FOGLAMP_SNAP} >> ${RESULT_DIR}/$TEST_NAME.temp 2>&1
+sudo snap install --devmode ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP}                                                          >> ${RESULT_DIR}/$TEST_NAME.temp 2>&1
 
 # Checks if FogLAMP snap is installed
 snap list ${FOGLAMP_NAME} | grep -c ${FOGLAMP_NAME}

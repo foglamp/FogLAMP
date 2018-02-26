@@ -6,28 +6,24 @@ source ${SUITE_BASEDIR}/suite.cfg
 url_rest_api=http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/rest_api
 
 # Checks FogLAMP configuration
-${CMD_CURL} -X GET ${url_rest_api}                                                                         >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+${CMD_CURL} -X GET ${url_rest_api}                                                                                      >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Disables HTTP communication - HTTPS should be used
-sudo classic << EOF                                                                                        >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+sudo classic << EOF                                                                                                     >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 #!/bin/bash
 curl -X PUT -d '{"value": "false" }' "${url_rest_api}/enableHttp"
 EOF
 
 # Checks FogLAMP configuration
-${CMD_CURL} -X GET ${url_rest_api}                                                                         >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+${CMD_CURL} -X GET ${url_rest_api}                                                                                      >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Stops FogLAMP
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                      >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Starts FogLAMP
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                     >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Pings FogLAMP using HTTPS - note the use of the -k option
-${CMD_CURL} -k -s -X GET https://${FOGLAMP_SERVER}:${FOGLAMP_HTTPsPort}/foglamp/ping                       >> ${RESULT_DIR}/$TEST_NAME.0.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+${CMD_CURL} -k -s -X GET https://${FOGLAMP_SERVER}:${FOGLAMP_HTTPsPort}/foglamp/ping                                    >> ${RESULT_DIR}/$TEST_NAME.0.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 cat ${RESULT_DIR}/$TEST_NAME.0.temp | grep -c "uptime"
-
-# Forces a FogLAMP stop
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                      >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                      >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp

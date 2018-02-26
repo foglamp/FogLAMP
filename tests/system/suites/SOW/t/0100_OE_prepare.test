@@ -3,18 +3,28 @@
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
+if [[ "${FOGLAMP_SNAP_VERSION}"        == "x.x.x" || \
+      "${FOGLAMP_SNAP_UPDATE_VERSION}" == "x.x.x"    \
+   ]]; then
+
+    echo ERROR : the file suite.cfg should be modified using the appropriated values.
+    exit 1
+fi
+
 # Checks the availability of the snap command
-snap help >> /dev/null
+snap help                                                                                                               > /dev/null 2>&1
 if [[ ${?} != 0 ]]; then
 
-    echo ERROR: Install the snap command.
+    echo ERROR: the snap command is not available, install it.
+    exit 1
 fi
 
 # Stops FogLAMP
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop > ${RESULT_DIR}/$TEST_NAME.1.temp 2>&1
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Removes FogLAMP snap if it is already installed
-sudo snap remove ${FOGLAMP_NAME} >> ${RESULT_DIR}/$TEST_NAME.temp 2>&1
+sudo snap remove ${FOGLAMP_NAME}                                                                                        >> ${RESULT_DIR}/$TEST_NAME.temp 2>&1
 
 # Checks if FogLAMP is not installed
 snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.temp 2>&1 | grep -c ${FOGLAMP_NAME}
