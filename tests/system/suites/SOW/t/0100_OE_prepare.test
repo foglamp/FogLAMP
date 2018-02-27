@@ -19,9 +19,12 @@ if [[ ${?} != 0 ]]; then
     exit 1
 fi
 
-# Stops FogLAMP
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
-$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+# Stops FogLAMP if running
+if [[ `command -v foglamp status` ]]; then
+
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+fi
 
 # Removes FogLAMP snap if it is already installed
 sudo snap remove ${FOGLAMP_NAME}                                                                                        >> ${RESULT_DIR}/$TEST_NAME.temp 2>&1
