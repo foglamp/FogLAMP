@@ -8,7 +8,7 @@ echo "${FOGLAMP_NAME} ${FOGLAMP_SNAP_VERSION}"         >  ${SUITE_NAME}/e/${TEST
 echo "${FOGLAMP_NAME} ${FOGLAMP_SNAP_UPDATE_VERSION}"  >> ${SUITE_NAME}/e/${TEST_NAME}.expected
 
 # Lists the initial snap
-version_initial=`snap list | grep ${FOGLAMP_NAME} |  cut -d' ' -f 1,5 2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+version_initial=`snap list | grep ${FOGLAMP_NAME} | awk '{ print $1 " " $2}' 2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
 echo ${version_initial}
 
 # Starts FogLAMP
@@ -40,9 +40,9 @@ count=0
 while [ true ]
 do
     # Checks the FogLAMP snap version
-    version_updated=`snap list | grep ${FOGLAMP_NAME} |  cut -d' ' -f 1,5                                               2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+    version_updated=`snap list | grep ${FOGLAMP_NAME} |  awk '{ print $1 " " $2}'                                       2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
 
-    if [[ "${version_initial}" != ${version_updated} ]]; then
+    if [[ ${version_updated} == "${FOGLAMP_NAME} ${FOGLAMP_SNAP_UPDATE_VERSION}" ]]; then
 
         echo FogLAMP Updated - N. of retries :${count}: - current version :${version_updated}:                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
         break
@@ -61,5 +61,5 @@ do
 done
 
 # Lists final FogLAMP snap version
-version_updated=`snap list | grep ${FOGLAMP_NAME} |  cut -d' ' -f 1,5 2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+version_updated=`snap list | grep ${FOGLAMP_NAME} |  awk '{ print $1 " " $2}'   2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
 echo ${version_updated}
