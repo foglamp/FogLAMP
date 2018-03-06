@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Globals declaration
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+# Checks if a proper configuration is available
+if [[ "${FOGLAMP_SNAP_VERSION}"        == "x.x.x" || \
+      "${FOGLAMP_SNAP_UPDATE_VERSION}" == "x.x.x"    \
+   ]]; then
+
+    echo ERROR : the suite.cfg file should be modified using the appropriated values.
+    exit 1
+fi
+
+# Checks the availability of the snap command
+snap help                                                                                                               > /dev/null 2>&1
+if [[ ${?} != 0 ]]; then
+
+    echo ERROR: the snap command is not available, install it.
+    exit 1
+fi
+
+# Stops FogLAMP if it is running
+if [[ `command -v foglamp status` ]]; then
+
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                               >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                               >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+fi
+
+# Removes FogLAMP snap if it is already installed
+sudo snap remove ${FOGLAMP_NAME}                                                                                        >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Checks if FogLAMP is installed
+snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp 2>&1 | grep -c ${FOGLAMP_NAME}
+
+# Installs FogLAMP snap
+sudo snap install --devmode ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP}                                                          >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Checks if FogLAMP is installed
+snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp 2>&1 | grep -c ${FOGLAMP_NAME}
+
+# Starts from a defined status
+echo -e "YES" | $TEST_BASEDIR/bash/exec_any_foglamp_command.bash reset                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
