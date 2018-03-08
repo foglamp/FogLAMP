@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Global constants declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare RETRY_COUNT
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+echo 0240_CA_edge_discoverability
+

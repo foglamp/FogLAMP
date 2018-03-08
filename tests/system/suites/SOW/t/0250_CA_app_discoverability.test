@@ -1,0 +1,135 @@
+#!/bin/bash
+
+# Global constants declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare RETRY_COUNT
+
+# FIXME:
+declare FOGLAMP_ROOT
+declare FOGLAMP_AVAHI_STRING
+declare CMD_JQ
+declare CMD_AVBROWSE
+
+declare CMD_CURL
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+# Discovers FogLAMP: waits until FogLAMP is available or it reaches the timeout
+count=1
+while [ true ]
+do
+    if [[ "${EXECUTION_ENV}" == "userver" || "${EXECUTION_ENV}" == "raspbian" ]]; then
+
+        list_complete=`${CMD_AVBROWSE} -t -d local _foglamp-user._tcp --resolve -p`
+
+    elif [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+        echo ERROR : functionality not implemented.
+        exit 1
+    fi
+
+    if [[ "${list_complete}" != ""  ]]; then
+
+        echo FogLAMP discovered after N. of retries :${count}:                                                          >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+        echo FogLAMP discovered.
+        break
+    else
+        if [[ $count -le ${RETRY_COUNT} ]]
+        then
+            echo FogLAMP not reachable, retrying - N. of retries :${count}:                                             >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+            sleep 1
+            count=$((count+1))
+        else
+            echo ERROR: FogLAMP not reachable. N. of retries :${count}:
+            exit 1
+        fi
+    fi
+done
+
+# Identifies FogLAMP IP address and Port
+echo FogLAMP services discovered :${list_complete}:                                                                     >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# FIXME:
+list_addresses=`${CMD_AVBROWSE} -t -d local ${FOGLAMP_AVAHI_STRING} --resolve -p | grep -E "^=;"`
+row_selected=`echo ${list_addresses} | head -1`
+foglamp_ip=`echo ${row_selected} | cut -d ';' -f 8`
+foglamp_port=`echo ${row_selected} | cut -d ';' -f 9`
+
+# Identifies FogLAMP IP address and Port
+echo FogLAMP discovered - IP Address :${foglamp_ip}: - Port :${foglamp_port}:                                            >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Checks FogLAMP is running
+if [[ "${EXECUTION_ENV}" == "userver" || "${EXECUTION_ENV}" == "raspbian" ]]; then
+
+    ${CMD_CURL} -s -X GET http://${foglamp_ip}:${foglamp_port}/foglamp/ping | grep -c "uptime"
+
+elif [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    echo ERROR : functionality not implemented.
+    exit 1
+fi
+
+# Stops FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+echo FogLAMP content cleaned - command 'reset'.
+
+# Starts from a defined status
+echo -e "YES" | $TEST_BASEDIR/bash/exec_any_foglamp_command.bash reset                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+#
+# Starts, configures FogLAMP and tests the communication with the PI Server using OMF.
+#
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  > ${RESULT_DIR}/$TEST_NAME.0.temp 2>&1
+tail -n1 ${RESULT_DIR}/$TEST_NAME.0.temp
+$TEST_BASEDIR/bash/sleep.bash 10
+
+# Injects a data into FogLAMP
+echo '[{"name":"'${ASSET_CODE}'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   $RESULT_DIR/$TEST_NAME.4.temp 2>&1
+$TEST_BASEDIR/bash/inject_fogbench_data.bash -t $RESULT_DIR/$TEST_NAME.4.temp                                           >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+grep '^Total Messages Transferred: ' $RESULT_DIR/$TEST_NAME.1.temp
+
+# Retrieves asset list
+echo FogLAMP asset list:
+if [[ "${EXECUTION_ENV}" == "userver" || "${EXECUTION_ENV}" == "raspbian" ]]; then
+
+    cmd="${CMD_CURL} -s -X GET http://${foglamp_ip}:${foglamp_port}/foglamp/asset"
+    echo Executed command :${cmd}:                                                                                         >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    ${cmd} | ${CMD_JQ} "."                           2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+elif [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    echo ERROR : functionality not implemented.
+    exit 1
+fi
+
+#
+# Test tear-down
+#
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
