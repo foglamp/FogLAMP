@@ -816,6 +816,11 @@ INSERT INTO foglamp.configuration ( key, description, value )
              ' { "plugin" : { "type" : "string", "value" : "cc2650async", "default" : "cc2650async", "description" : "Python module name of the plugin to load" } } '
            );
 
+INSERT INTO foglamp.configuration ( key, description, value )
+    VALUES ( 'MAX31865',
+             'MAX31865 async South Plugin',
+             ' { "plugin" : { "type" : "string", "value" : "max31865async", "default" : "max31865async", "description" : "Python module name of the plugin to load" } } '
+           );
 
 -- Statistics
 INSERT INTO foglamp.statistics ( key, description, value, previous_value )
@@ -856,6 +861,7 @@ INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'HTTP_SOUTH', 
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'COAP',       '["services/south"]' );
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'CC2650POLL', '["services/south"]' );
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'CC2650ASYN', '["services/south"]' );
+INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'MAX31865',   '["services/south"]' );
 
 -- North Tasks
 --
@@ -1025,6 +1031,19 @@ INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
                 '00:00:00',                             -- schedule_interval
                 true,                                   -- exclusive
                 false                                   -- disabled
+              );
+
+-- MAX31865 Async
+INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
+                                schedule_time, schedule_interval, exclusive, enabled )
+       VALUES ( '7e156fa9-52b0-4eaf-be02-4ae79be84512', -- id
+                'MAX31865 async south',                 -- schedule_name
+                'MAX31865',                             -- process_name
+                1,                                      -- schedule_type (startup)
+                NULL,                                   -- schedule_time
+                '00:00:00',                             -- schedule_interval
+                true,                                   -- exclusive
+                true                                    -- enabled
               );
 
 
