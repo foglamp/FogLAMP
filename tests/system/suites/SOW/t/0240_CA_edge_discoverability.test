@@ -30,5 +30,5 @@ declare RETRY_COUNT
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
-echo 0240_CA_edge_discoverability
+echo INFO : Not implemented.
 
