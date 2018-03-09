@@ -154,7 +154,7 @@ def _plugin_stop(handle):
     Raises:
     """
     GPIO.cleanup()
-    _LOGGER.info('MAX31865 (async) {} Disconnected.'.format(bluetooth_adr))
+    _LOGGER.info('MAX31865 (async) Disconnected.')
 
 
 def plugin_shutdown(handle):
