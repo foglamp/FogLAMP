@@ -1,1 +1,33 @@
-DBG - 0210_CA_edge_communication
+# Get All Assets - foglamp/asset
+{
+  "asset_code": "SOW_fogbench_test_1",
+  "count": 1
+}
+{
+  "asset_code": "SOW_fogbench_test_2",
+  "count": 2
+}
+{
+  "asset_code": "SOW_fogbench_test_3",
+  "count": 1
+}
+# Get Asset Readings -  foglamp/asset/{asset_code}
+{
+  "sensor_1": 10,
+  "sensor_2": 20
+}
+# Get Single Sensor Values for an Asset - /foglamp/asset/{asset_code}/{reading}
+{
+  "sensor_1": 10
+}
+{
+  "sensor_2": 20
+}
+# Get Minimum, Maximum & Averages of a Set of Sensor Readings - /foglamp/asset/{asset_code}/{reading}/summary
+{
+  "sensor_1": {
+    "average": "10",
+    "min": "10",
+    "max": "10"
+  }
+}

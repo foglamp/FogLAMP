@@ -35,6 +35,5 @@ declare CMD_CURL
 
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
-#!/usr/bin/env bash
 
-echo DBG - 0220_CA_app_communication
+echo ERROR : Test not implemented yet.

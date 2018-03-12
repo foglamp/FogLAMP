@@ -33,8 +33,92 @@ declare CMD_JQ
 declare CMD_AVBROWSE
 declare CMD_CURL
 
+#
+# Tests preparation
+#
+
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
-#!/usr/bin/env bash
 
-echo DBG - 0210_CA_edge_communication
+tmp_file=$RESULT_DIR/$TEST_NAME.3.temp
+
+# FIXME:
+if [[ 1 == 0 ]]; then
+
+    if [[ "${EXECUTION_ENV}" == "userver" ]]; then
+
+        echo ERROR : Test not implemented for the Ubuntu Server environment.
+        exit 1
+    fi
+
+    # Ensures FogLAMP is stopped
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+    # Starts from a defined status
+    echo -e "YES" | $TEST_BASEDIR/bash/exec_any_foglamp_command.bash reset                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+
+    # Starts FogLAMP
+    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  > ${RESULT_DIR}/$TEST_NAME.0.temp 2>&1
+    tail -n1 ${RESULT_DIR}/$TEST_NAME.0.temp
+    $TEST_BASEDIR/bash/sleep.bash 10
+
+    # Injects data into FogLAMP
+    echo '[{"name":"'${ASSET_CODE}_1'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   ${tmp_file} 2>&1
+    $TEST_BASEDIR/bash/inject_fogbench_data.bash -t ${tmp_file}                                                             >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+    echo '[{"name":"'${ASSET_CODE}_2'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   ${tmp_file} 2>&1
+    $TEST_BASEDIR/bash/inject_fogbench_data.bash -t ${tmp_file}                                                             >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+    echo '[{"name":"'${ASSET_CODE}_2'","sensor_values":[{"name":"sensor","type":"number","min":20,"max":20,"precision":0}]}]' >   ${tmp_file} 2>&1
+    $TEST_BASEDIR/bash/inject_fogbench_data.bash -t ${tmp_file}                                                             >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+    echo '[{"name":"'${ASSET_CODE}_3'","sensor_values":[{"name":"sensor_1","type":"number","min":10,"max":10,"precision":0},{"name":"sensor_2","type":"number","min":20,"max":20,"precision":0}]}]' >   ${tmp_file} 2>&1
+    $TEST_BASEDIR/bash/inject_fogbench_data.bash -t ${tmp_file}                                                             >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+fi
+
+
+#
+# Tests the APIs
+#
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    # Tests - Get All Assets - foglamp/asset
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/asset | jq  ".|=sort_by(.asset_code)|.[]|{asset_code,count}"   >  ${tmp_file}
+EOF
+# |=sort_by(.asset_code)
+    echo \#' Get All Assets - foglamp/asset'
+    cat ${tmp_file}
+
+    # Tests - Get Asset Readings -  foglamp/asset/{asset_code}
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/asset/${ASSET_CODE}_3 | jq  '.[] | .reading'    >  ${tmp_file}
+EOF
+    echo \#' Get Asset Readings -  foglamp/asset/{asset_code}'
+    cat ${tmp_file}
+
+    # Tests - Get Single Sensor Values for an Asset - /foglamp/asset/{asset_code}/{reading}
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/asset/${ASSET_CODE}_3/sensor_1 | jq  '.[] | {sensor_1}'        >  ${tmp_file}
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/asset/${ASSET_CODE}_3/sensor_2 | jq  '.[] | {sensor_2}'        >>  ${tmp_file}
+EOF
+    echo \#' Get Single Sensor Values for an Asset - /foglamp/asset/{asset_code}/{reading}'
+    cat ${tmp_file}
+
+    # Tests - Get Minimum, Maximum & Averages of a Set of Sensor Readings
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/asset/${ASSET_CODE}_3/sensor_1/summary | jq  '.'        >  ${tmp_file}
+EOF
+    echo \#' Get Minimum, Maximum & Averages of a Set of Sensor Readings - /foglamp/asset/{asset_code}/{reading}/summary'
+    cat ${tmp_file}
+
+
+
+elif [[ "${EXECUTION_ENV}" == "userver"  ]]; then
+
+    echo ERROR : functionality not implemented yet.
+    exit 1
+fi
