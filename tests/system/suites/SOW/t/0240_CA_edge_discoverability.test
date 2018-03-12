@@ -30,5 +30,5 @@ declare RETRY_COUNT
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
-echo INFO : Not implemented.
+echo ERROR : Test not implemented.
 

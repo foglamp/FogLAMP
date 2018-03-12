@@ -43,7 +43,7 @@ if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
         echo '`'                                                                                                        >> ${tmp_script}
 
         echo 'result=$?'                                                                                                >> ${tmp_script}
-        echo 'if [[ $result == 0 ]]; then'                                                                              >> ${tmp_script}
+        echo 'if [[ $result == 0 && "$value" != "" ]]; then'                                                      >> ${tmp_script}
         echo 'echo ${value}  >> ' "${RESULT_DIR}/$TEST_NAME.991.temp"                                                   >> ${tmp_script}
         echo 'echo ${result} >> ' "${RESULT_DIR}/$TEST_NAME.991.temp"                                                   >> ${tmp_script}
         echo 'else '                                                                                                    >> ${tmp_script}

@@ -44,12 +44,9 @@ if [[ ${?} != 0 ]]; then
     exit 1
 fi
 
-# Stops FogLAMP if it is running
-if [[ `command -v foglamp status` ]]; then
-
-    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                               >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
-    $TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                               >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
-fi
+# Ensure FogLAMP is stopped
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
 
 # Removes FogLAMP snap if it is already installed
 sudo snap remove ${FOGLAMP_NAME}                                                                                        >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
@@ -62,6 +59,7 @@ sudo snap install --devmode ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP}                  
 
 # Checks if FogLAMP is installed
 snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp 2>&1 | grep -c ${FOGLAMP_NAME}
+
 
 # Starts from a defined status
 echo -e "YES" | $TEST_BASEDIR/bash/exec_any_foglamp_command.bash reset                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp

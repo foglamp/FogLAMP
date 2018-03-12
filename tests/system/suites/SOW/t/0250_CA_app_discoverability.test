@@ -36,6 +36,12 @@ declare CMD_CURL
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    echo ERROR : Test not implemented in the Ubuntu Core environment.
+    exit 1
+fi
+
 # Discovers FogLAMP: waits until FogLAMP is available or it reaches the timeout
 count=1
 while [ true ]
