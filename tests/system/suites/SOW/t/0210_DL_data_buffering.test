@@ -22,7 +22,6 @@ declare PI_SERVER_PORT
 declare OMF_PRODUCER_TOKEN
 declare OMF_TYPE_ID
 
-
 declare SNAPS_DIRECTORY
 
 declare ASSET_CODE
