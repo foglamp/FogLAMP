@@ -1,1 +1,2 @@
 Tests the REST API to interface sensor and external devices.
+Note: the timestamp field of the API output is overwritten using 'xxx'.

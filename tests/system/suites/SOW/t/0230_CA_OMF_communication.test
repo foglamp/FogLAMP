@@ -30,6 +30,10 @@ declare RETRY_COUNT
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
+# Ensures FogLAMP is stopped
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
 #
 # Starts, configures FogLAMP and tests the communication with the PI Server using OMF.
 #
