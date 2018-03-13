@@ -1,1 +1,22 @@
-DBG 0210_DL_data_buffering
+FogLAMP started.
+Total Messages Transferred: 1
+[
+  {
+    "asset_code": "SOW_fogbench_test",
+    "count": 1
+  }
+]
+{
+  "sensor": 10
+}
+FogLAMP stopped.
+FogLAMP started.
+[
+  {
+    "asset_code": "SOW_fogbench_test",
+    "count": 1
+  }
+]
+{
+  "sensor": 10
+}

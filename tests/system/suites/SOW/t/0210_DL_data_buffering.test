@@ -43,4 +43,49 @@ if [[ "${EXECUTION_ENV}" == "userver" ]]; then
     exit 1
 fi
 
-echo DBG 0210_DL_data_buffering
+# Extracts stored data
+extract_data () {
+
+    $TEST_BASEDIR/bash/count_assets_http.bash
+    $TEST_BASEDIR/bash/read_an_asset_http.bash ${ASSET_CODE}                                                            > ${tmp_file} 2>&1
+
+    if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+        sudo classic << EOF                                                                                             >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+        jq  '.[] | .reading' ${tmp_file}                                                                                > ${RESULT_DIR}/$TEST_NAME.5.temp
+EOF
+        cat ${RESULT_DIR}/$TEST_NAME.5.temp
+    fi
+
+
+}
+
+#
+# Main
+#
+tmp_file=$RESULT_DIR/$TEST_NAME.3.temp
+tmp_file_append=$RESULT_DIR/$TEST_NAME.4.temp
+
+# Starts FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  >> ${tmp_file_append} 2>&1
+tail -n1 ${tmp_file_append}
+$TEST_BASEDIR/bash/sleep.bash 10
+
+# Injects data into FogLAMP
+echo '[{"name":"'${ASSET_CODE}'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   ${tmp_file} 2>&1
+$TEST_BASEDIR/bash/inject_fogbench_data.bash -t ${tmp_file}                                                             >>  ${tmp_file_append} 2>&1
+grep '^Total Messages Transferred: ' ${tmp_file_append}
+
+extract_data
+
+# Stops FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >> ${tmp_file_append} 2>&1
+tail -n1 ${tmp_file_append}
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Starts FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  >> ${tmp_file_append} 2>&1
+tail -n1 ${tmp_file_append}
+$TEST_BASEDIR/bash/sleep.bash 10
+
+extract_data
