@@ -1,4 +1,17 @@
 #!/bin/bash
+##############################################################################
+#
+# FogLAMP SOW Acceptance Criteria test
+# Copyright (C) 2018 Dianomic Systems, Inc.
+#
+##############################################################################
+
+##############################################################################
+#
+## This script is used to run SOW Acceptance Criteria tests related to
+## 'Data Logic'
+#
+##############################################################################
 
 # Globals declaration
 declare SUITE_BASEDIR

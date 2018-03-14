@@ -1,0 +1,11 @@
+FogLAMP started.
+FogLAMP started.
+Total Messages Transferred: 1
+{
+  "Good": true,
+  "Questionable": false,
+  "Substituted": false,
+  "Timestamp": "xxx",
+  "UnitsAbbreviation": "",
+  "Value": 10
+}
