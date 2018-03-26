@@ -1,0 +1,14 @@
+Tests the update while it is collecting data from the sensors and sending data to the PI system.
+The snaps should be stored in the local file system using a tree like the following under ${TMP_DIRECTORY} :
+
+    snaps
+        x86_64
+            foglamp.info
+            foglamp_1.1.3_amd64.snap
+            foglamp_1.1.4_amd64.snap
+
+'foglamp.info' contains the information regarding the latest version available, in the previous example :
+
+    foglamp@foglamp-core:~/tmp/snaps/x86_64$ cat foglamp.info
+    1.1.4
+

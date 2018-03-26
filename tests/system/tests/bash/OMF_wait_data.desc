@@ -1,0 +1,1 @@
+It waits until either the data is available in the PI server or it reaches the timeout.

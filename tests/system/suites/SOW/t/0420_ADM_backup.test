@@ -1,0 +1,145 @@
+#!/bin/bash
+##############################################################################
+#
+# FogLAMP SOW Acceptance Criteria test
+# Copyright (C) 2018 Dianomic Systems, Inc.
+#
+##############################################################################
+
+##############################################################################
+#
+## This script is used to run SOW Acceptance Criteria tests related to
+## 'Admin'
+#
+##############################################################################
+
+# Global constants declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare RETRY_COUNT
+
+declare FOGLAMP_ROOT
+declare FOGLAMP_AVAHI_STRING
+declare CMD_JQ
+declare CMD_AVBROWSE
+declare CMD_CURL
+
+declare BACKUPS_DIR
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+if [[ "${EXECUTION_ENV}" != "ucore" ]]; then
+
+    echo ERROR : Test implemented only for Ubuntu core environment.
+    exit 1
+fi
+
+#
+## Temporary files, one will be overwritten every time the second one used only in append mode
+#
+export TMP_FILE_OVERWRITE="$RESULT_DIR/$TEST_NAME.4.temp"
+export TMP_FILE_APPEND="$RESULT_DIR/$TEST_NAME.5.temp"
+
+export TEST_ID="${TEST_NAME:0:4}"
+export TEST_ASSET_CODE=${ASSET_CODE}_${TEST_ID}
+
+
+#
+## Test preparation
+#
+
+# Ensure FogLAMP is stopped
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+echo -e "YES" | $TEST_BASEDIR/bash/exec_any_foglamp_command.bash reset                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  > ${RESULT_DIR}/$TEST_NAME.0.temp 2>&1
+tail -n1 ${RESULT_DIR}/$TEST_NAME.0.temp                                                                                2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+#
+## Main
+#
+
+# Cleans up the backup directory
+rm -f ${BACKUPS_DIR}/*.dump
+
+$TEST_BASEDIR/bash/inject_sample_data.bash "${TEST_ASSET_CODE}"
+
+$TEST_BASEDIR/bash/wait_data_stored.bash
+
+$TEST_BASEDIR/bash/retrieve_asset_list.bash
+
+# Executes the first backup
+echo Executes a backup :
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X POST http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/backup  | jq -S "."                            > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+$TEST_BASEDIR/bash/wait_backup_status.bash 1 "COMPLETED"
+
+$TEST_BASEDIR/bash/inject_sample_data.bash "${TEST_ASSET_CODE}"
+
+$TEST_BASEDIR/bash/wait_data_stored.bash
+
+$TEST_BASEDIR/bash/retrieve_asset_list.bash
+
+# Executes the second backup
+echo Executes a backup :
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X POST http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/backup  | jq -S "."                            > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+$TEST_BASEDIR/bash/wait_backup_status.bash 2 "COMPLETED"
+
+# Retrieves backups list
+echo Retrieves backups list :
+$TEST_BASEDIR/bash/retrieve_baskup_list.bash
+
+# Retrieves the details of a backup
+echo Retrieves the details of a backup :
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/backup/1 |  jq -S '.date="xxx"'                 > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+# Lists backup files replacing strings that could change and the first line related to 'total'
+echo Backup files :
+ls -l ${BACKUPS_DIR} | awk '{ gsub(/[0-9]/,"x",$9);print $1" "t$3" "$4" "$9 }' |  grep -v '^total'

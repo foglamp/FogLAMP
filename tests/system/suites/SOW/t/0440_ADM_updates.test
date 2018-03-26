@@ -1,0 +1,186 @@
+#!/bin/bash
+##############################################################################
+#
+# FogLAMP SOW Acceptance Criteria test
+# Copyright (C) 2018 Dianomic Systems, Inc.
+#
+##############################################################################
+
+##############################################################################
+#
+## This script is used to run SOW Acceptance Criteria tests related to
+## 'Admin'
+#
+##############################################################################
+
+# Global constants declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare RETRY_COUNT
+
+declare FOGLAMP_ROOT
+declare FOGLAMP_AVAHI_STRING
+declare CMD_JQ
+declare CMD_AVBROWSE
+declare CMD_CURL
+
+declare SUITE_NAME
+declare TMP_DIRECTORY
+
+declare FOGLAMP_EXE
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+
+if [[ "${EXECUTION_ENV}" != "ucore" ]]; then
+
+    echo ERROR : Test implemented only for Ubuntu core environment.
+    exit 1
+fi
+
+#
+## Temporary files, one will be overwritten every time the second one used only in append mode
+#
+export TMP_FILE_OVERWRITE="$RESULT_DIR/$TEST_NAME.4.temp"
+export TMP_FILE_APPEND="$RESULT_DIR/$TEST_NAME.5.temp"
+
+export TEST_ID="${TEST_NAME:0:4}"
+export TEST_ASSET_CODE=${ASSET_CODE}_${TEST_ID}
+
+#
+## Test preparation
+#
+
+# Configures FogLAMP for the communication with the PI Server using OMF.
+$TEST_BASEDIR/bash/OMF_configure.bash
+
+# Injects data into FogLAMP
+echo '[{"name":"'${TEST_ASSET_CODE}'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   $RESULT_DIR/$TEST_NAME.801.temp 2>&1
+$TEST_BASEDIR/bash/inject_fogbench_data.bash -t $RESULT_DIR/$TEST_NAME.801.temp                                         >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+grep '^Total Messages Transferred: ' $RESULT_DIR/$TEST_NAME.1.temp
+
+# Waits until either the data is available in the PI server or it reaches the timeout.
+$TEST_BASEDIR/bash/OMF_wait_data.bash full ${OMF_PRODUCER_TOKEN} ${TEST_ASSET_CODE}
+
+#
+## Main
+#
+
+# Updates the expected file to avoid storing of hardcoded versions
+cp ${SUITE_NAME}/e/${TEST_NAME}.exp_base            ${SUITE_NAME}/e/${TEST_NAME}.expected
+sed -i "s/x.x.x1/${FOGLAMP_SNAP_VERSION}/"          ${SUITE_NAME}/e/${TEST_NAME}.expected
+sed -i "s/x.x.x2/${FOGLAMP_SNAP_UPDATE_VERSION}/"   ${SUITE_NAME}/e/${TEST_NAME}.expected
+
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Lists the initial snap
+version_initial=`snap list | grep ${FOGLAMP_NAME} | awk '{ print $1 " " $2}'                                            2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+echo ${version_initial}
+
+# Starts FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  > ${TMP_FILE_OVERWRITE}  2>&1
+tail -n1 ${TMP_FILE_OVERWRITE}
+
+#
+# Loads data in parallel at the update
+#
+$TEST_BASEDIR/bash/sleep.bash 10
+command="$TEST_BASEDIR/bash/inject_sample_data_continuous.bash $TEST_ASSET_CODE"
+$command >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp  &
+pid=$!
+echo Injection process started.
+echo Injection process PID :$pid:                                                                                       >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/sleep.bash 10
+$TEST_BASEDIR/bash/retrieve_asset_list.bash                                                                             >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Starts the update process to create the initial configuration
+${CMD_CURL}  -X PUT http://localhost:8081/foglamp/update                                                                >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Waits until the update process has created the default configurations
+${TEST_BASEDIR}/bash/wait_creation_cfg.bash "SNAP_UPD/repository"                                                       >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Retrieves the configuration - for monitoring reason
+${CMD_CURL}  -X GET http://localhost:8081/foglamp/category/SNAP_UPD/repository                                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Configures the update process to retrieves the snaps from the local file system
+sudo classic << EOF                                                                                                     >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    #!/bin/bash
+    curl -X PUT -d '{"value": "file:///${TMP_DIRECTORY}"}' http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/SNAP_UPD/repository
+    logout
+EOF
+
+# Retrieves the updated configuration - for monitoring reason
+${CMD_CURL}  -X GET http://localhost:8081/foglamp/category/SNAP_UPD/repository                                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+$TEST_BASEDIR/bash/retrieve_asset_list.bash                                                                             >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+${FOGLAMP_EXE} status                                                                                                   >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
+
+# Executes the update retrieving the snap from the local file system
+${CMD_CURL}  -X PUT http://localhost:8081/foglamp/update                                                                >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Waits until either the version is updated or the timeout is reached
+count=0
+while [ true ]
+do
+    # Checks the FogLAMP snap version
+    version_updated=`snap list | grep ${FOGLAMP_NAME} |  awk '{ print $1 " " $2}'                                       2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+
+    if [[ ${version_updated} == "${FOGLAMP_NAME} ${FOGLAMP_SNAP_UPDATE_VERSION}" ]]; then
+
+        echo FogLAMP Updated - current version :${version_updated}: - N. of retries :${count}:                          >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+        break
+    else
+        if [[ $count -le ${RETRY_COUNT} ]]
+        then
+            echo FogLAMP not updated yet, waiting... - N. of retries :${count}:                                         >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+            sleep 1
+            count=$((count+1))
+        else
+            echo FogLAMP not updated, timeout reached - N. of retries :${count}:                                        >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
+            exit 1
+        fi
+    fi
+done
+
+# Lists final FogLAMP snap version
+version_updated=`snap list | grep ${FOGLAMP_NAME} |  awk '{ print $1 " " $2}'   2>> ${RESULT_DIR}/$TEST_NAME.2.temp`
+echo ${version_updated}
+
+${FOGLAMP_EXE} status                                                                                                   >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
+$TEST_BASEDIR/bash/sleep.bash 20
+${FOGLAMP_EXE} status                                                                                                   >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
+
+$TEST_BASEDIR/bash/retrieve_asset_list.bash                                                                             >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Kills the injection process
+echo Kills the injection process.
+echo Kills the injection process PID :${pid}:                                                                           >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+kill -9 ${pid}                                                                                                          >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+# wait is used to avoid the message '...Killed...' in the stdout/stderr
+wait    ${pid}                                                                                                          >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/sleep.bash 5

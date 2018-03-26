@@ -1,0 +1,16 @@
+foglamp removed :0
+foglamp installed :1
+FogLAMP started.
+FogLAMP started.
+{
+  "uptime": "xxx"
+}
+Total Messages Transferred: 1
+{
+  "Good": true,
+  "Questionable": false,
+  "Substituted": false,
+  "Timestamp": "xxx",
+  "UnitsAbbreviation": "",
+  "Value": 10
+}

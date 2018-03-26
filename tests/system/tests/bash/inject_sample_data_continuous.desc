@@ -1,0 +1,1 @@
+Injects sample data into FogLAMP until either it is killed or it reaches the timeout.
