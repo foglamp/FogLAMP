@@ -3,6 +3,10 @@ foglamp installed :1
 FogLAMP started.
 FogLAMP started.
 {
+  "authenticationOptional": "xxx",
+  "dataPurged": "xxx",
+  "dataRead": "xxx",
+  "dataSent": "xxx",
   "uptime": "xxx"
 }
 Total Messages Transferred: 1

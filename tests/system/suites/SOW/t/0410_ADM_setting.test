@@ -107,7 +107,7 @@ $TEST_BASEDIR/bash/OMF_configure.bash
 if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
 
     sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
-    curl -s http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/ping   | jq '.uptime="xxx"'                            > ${tmp_file_overwrite} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/ping   | jq -S '.authenticationOptional="xxx"|.dataRead="xxx"|.dataPurged="xxx"|.dataSent="xxx"|.uptime="xxx"'  > ${tmp_file_overwrite} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
     logout
 EOF
     cat ${tmp_file_overwrite}
