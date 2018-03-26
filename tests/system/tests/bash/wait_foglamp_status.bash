@@ -10,11 +10,14 @@ function evaluate_foglamp_status {
 
     output=$(${FOGLAMP_EXE} status 2>&1)
 
-    if [[ ${output} =~ 'FogLAMP uptime' ]]; then
+    # To upper case
+    output=${output^^}
+
+    if [[ ${output} =~ 'FOGLAMP UPTIME' ]]; then
 
         status="RUNNING"
 
-    elif [[ ${output} =~ 'FogLAMP not running.' ]]; then
+    elif [[ ${output} =~ 'FOGLAMP NOT RUNNING.' ]]; then
 
         status="STOPPED"
     else
