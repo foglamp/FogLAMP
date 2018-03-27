@@ -1,0 +1,185 @@
+#!/bin/bash
+##############################################################################
+#
+# FogLAMP SOW Acceptance Criteria test
+# Copyright (C) 2018 Dianomic Systems, Inc.
+#
+##############################################################################
+
+##############################################################################
+#
+## This script is used to run SOW Acceptance Criteria tests related to
+## 'Data Management'
+#
+##############################################################################
+
+# Global constants declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare RETRY_COUNT
+
+declare FOGLAMP_ROOT
+declare FOGLAMP_AVAHI_STRING
+declare CMD_JQ
+declare CMD_AVBROWSE
+declare CMD_CURL
+
+declare BACKUPS_DIR
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+if [[ "${EXECUTION_ENV}" != "ucore" ]]; then
+
+    echo ERROR : Test implemented only for Ubuntu core environment.
+    exit 1
+fi
+
+#
+## Temporary files, one will be overwritten every time the second one used only in append mode
+#
+export TMP_FILE_OVERWRITE="$RESULT_DIR/$TEST_NAME.4.temp"
+export TMP_FILE_APPEND="$RESULT_DIR/$TEST_NAME.5.temp"
+
+export TEST_ID="${TEST_NAME:0:4}"
+export TEST_ASSET_CODE=${ASSET_CODE}_${TEST_ID}
+
+#
+## Test preparation
+#
+
+# Identifies the schedule id of the Purge process
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                     >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/schedule | jq --raw-output '.schedules | .[] | select(.name=="purge") | .id' > ${TMP_FILE_OVERWRITE}
+    logout
+EOF
+    if [[ -f "${TMP_FILE_OVERWRITE}" ]]; then
+
+        export SCHEDULE_ID_PURGE=`cat ${TMP_FILE_OVERWRITE}`
+
+        if [[ "${SCHEDULE_ID_PURGE}" == "" ]]; then
+
+            echo ERROR : It is not possible to determine the schedule id of the purge process.
+            exit 1
+        fi
+    else
+        echo ERROR : It is not possible to determine the schedule id of the purge process.
+        exit 1
+
+    fi
+fi
+
+# Changes the interval.time to 1 minute
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    echo Original interval.time  of the purge process                                                                   >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/schedule/${SCHEDULE_ID_PURGE}  | jq -S '.'                           >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    echo Updated interval.time  of the purge process                                                                   >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/schedule/${SCHEDULE_ID_PURGE} -d '{ "repeat" : 60 }' | jq -S '.'     >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+# Waits until the Purge process creates the initial configurations
+${TEST_BASEDIR}/bash/wait_creation_cfg.bash "PURGE_READ"                                                                >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/PURGE_READ  | jq -S '.'                > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+#
+## Main
+#
+
+# FIXME: more data
+$TEST_BASEDIR/bash/inject_sample_data.bash "${TEST_ASSET_CODE}"
+
+# FIXME:
+$TEST_BASEDIR/bash/sleep.bash 10
+
+echo Status before the purge :
+# Retrieves the current status: N. of available readings an purged data
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/statistics | jq -S '.[]|select(.key=="READINGS")'   > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/statistics | jq -S '.[]|select(.key=="PURGED")'     >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+
+# Changes the parameters on which the purge process bases his operations
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/PURGE_READ/size -d '{ "value" : "1" }' | jq -S '.'     > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/PURGE_READ/age  -d '{ "value" : "1" }' | jq -S '.'     >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+# Retrieves/checks the updated values
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/PURGE_READ/size | jq -S '{"value":.value}'     > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/PURGE_READ/age  | jq -S '{"value":.value}'     >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+# FIXME:
+$TEST_BASEDIR/bash/sleep.bash 10
+
+echo Status after the purge :
+# Retrieves the current status: N. of available readings an purged data
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/statistics | jq -S '.[]|select(.key=="READINGS")'   > ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s -X GET http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/statistics | jq -S '.[]|select(.key=="PURGED")'     >> ${TMP_FILE_OVERWRITE} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${TMP_FILE_OVERWRITE}
+fi
+
+
+
+
+

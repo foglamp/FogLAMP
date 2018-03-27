@@ -1,0 +1,2 @@
+Configures FogLAMP for the communication with the PI Server using OMF,
+it expects FogLAMP started and it will restart it.

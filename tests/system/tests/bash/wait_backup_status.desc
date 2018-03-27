@@ -1,0 +1,1 @@
+Waits until either the backup reaches the requested status or it reaches the timeout.
