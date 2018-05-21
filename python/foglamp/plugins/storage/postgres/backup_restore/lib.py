@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#raw_data -*- coding: utf-8 -*-
 # Copyright (C) 2017
 
 """ Library used for backup and restore operations
@@ -10,8 +10,6 @@ import os
 import asyncio
 import json
 from enum import IntEnum
-import psycopg2
-from psycopg2.extras import RealDictCursor
 
 from foglamp.common import logger
 from foglamp.common.storage_client import payload_builder
@@ -693,51 +691,34 @@ class BackupRestoreLib(object):
 
         return backup_information
 
-    def storage_retrieve(self, sql_cmd):
-        """  Executes a sql command against the Storage layer that retrieves data
+    ###
+    ### Execute a psql command and return results
+    ###
+    def psql_cmd(self, sql_cmd):
+        """  Execute a sql command via psql and return the result
 
         Args:
+            sql_cmf - the SQL Command
         Returns:
-            raw_data:list - Python list containing the rows retrieved from the Storage layer
+            result_data - data returned from the execution
         Raises:
         """
 
-        _logger.debug("{func} - sql cmd |{cmd}| ".format(func="storage_retrieve",
-                                                         cmd=sql_cmd))
+        psql_lead  = 'psql -qt -d foglamp -c "'
+        psql_trail = '" | tr -d "\n"'
 
-        db_connection_string = self._DB_CONNECTION_STRING.format(db=self.config["database"])
+        cmd = psql_lead + sql_cmd + psql_trail
+        psql_result = exec_wait( cmd, True )
 
-        _pg_conn = psycopg2.connect(db_connection_string, cursor_factory=RealDictCursor)
+        result_code = psql_result[0]
+        result_data = psql_result[1].spli('|')
 
-        _pg_cur = _pg_conn.cursor()
+        #####
+        ##### Error handling required
+        #####
 
-        _pg_cur.execute(sql_cmd)
-        raw_data = _pg_cur.fetchall()
-        _pg_conn.close()
+        return result_data
 
-        return raw_data
-
-    def storage_update(self, sql_cmd):
-        """Executes a sql command against the Storage layer that updates data
-
-        Args:
-            sql_cmd: sql command to execute
-        Returns:
-        Raises:
-        """
-
-        _logger.debug("{func} - sql cmd |{cmd}| ".format(
-                                                            func="storage_update",
-                                                            cmd=sql_cmd))
-
-        db_connection_string = self._DB_CONNECTION_STRING.format(db=self.config["database"])
-
-        _pg_conn = psycopg2.connect(db_connection_string)
-        _pg_cur = _pg_conn.cursor()
-
-        _pg_cur.execute(sql_cmd)
-        _pg_conn.commit()
-        _pg_conn.close()
 
     def backup_status_update(self, backup_id, status):
         """ Updates the status of the backup in the Storage layer
@@ -753,13 +734,12 @@ class BackupRestoreLib(object):
                                                           id=backup_id))
 
         sql_cmd = """
-
-            UPDATE foglamp.backups SET  status={status} WHERE id='{id}';
-
+            UPDATE foglamp.backups SET status={status} WHERE id='{id}';
             """.format(status=status,
                        id=backup_id, )
 
-        self.storage_update(sql_cmd)
+        data = self.psql_cmd( sql_cmd )
+
 
     def retrieve_configuration(self):
         """  Retrieves the configuration either from the manager or from a local file.
