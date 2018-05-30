@@ -755,7 +755,7 @@ class OmfNorthPlugin(object):
 
                         status_code = resp.status
                         text = await resp.text()
-                        sys.stderr.write(str(omf_data_json))
+                        # sys.stderr.write(str(omf_data_json))
 
             except Exception as e:
                 _error = Exception(plugin_common.MESSAGES_LIST["e000024"].format(e))
