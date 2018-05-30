@@ -220,7 +220,8 @@ def handling_input_parameters():
     else:
         try:
             stream_id = int(param_stream_id)
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000011"].format(str(sys.argv))
             _LOGGER.error(_message)
             raise InvalidCommandLineParameters(_message)
@@ -295,7 +296,7 @@ class SendingProcess:
         "duration": {
             "description": "How long the sending process should run (in seconds) before stopping.",
             "type": "integer",
-            "default": "60"
+            "default": "6000"
         },
         "source": {
             "description": "Defines the source of the data to be sent on the stream, "
@@ -306,7 +307,7 @@ class SendingProcess:
         "blockSize": {
             "description": "The size of a block of readings to send in each transmission.",
             "type": "integer",
-            "default": "500"
+            "default": "1900"
         },
         "memory_buffer_size": {
             "description": "Number of elements of blockSize size that should be managed as an in memory buffer"
@@ -465,7 +466,8 @@ class SendingProcess:
             if self._plugin_info['type'] == self._PLUGIN_TYPE and \
                self._plugin_info['name'] != "Empty North Plugin":
                 north_ok = True
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000000"]
             SendingProcess._logger.error(_message)
             raise
@@ -495,7 +497,8 @@ class SendingProcess:
                 _message = _MESSAGES_LIST["e000008"]
                 SendingProcess._logger.error(_message)
                 raise UnknownDataSource
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000009"]
             SendingProcess._logger.error(_message)
             raise
@@ -592,7 +595,8 @@ class SendingProcess:
 
             raw_data = statistics_history['rows']
             converted_data = self._transform_in_memory_data_statistics(raw_data)
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000009"]
             SendingProcess._logger.error(_message)
             raise
@@ -651,7 +655,8 @@ class SendingProcess:
                 raw_data = ""
             else:
                 raw_data = ""
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000000"]
             SendingProcess._logger.error(_message)
             raise
@@ -678,7 +683,8 @@ class SendingProcess:
             else:
                 last_object_id = rows[0]['last_object']
                 SendingProcess._logger.debug("{0} - last_object id |{1}| ".format("_last_object_id_read", last_object_id))
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000019"]
             SendingProcess._logger.error(_message)
             raise
@@ -988,7 +994,8 @@ class SendingProcess:
             _stats = Statistics(self._storage)
             await _stats.update(key, num_sent)
 
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000010"]
             SendingProcess._logger.error(_message)
             raise
@@ -1034,7 +1041,8 @@ class SendingProcess:
                                                                             cat_keep_original))
             _config_from_manager = self._event_loop.run_until_complete(cfg_manager.get_category_all_items(cat_name))
             return _config_from_manager
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000003"]
             SendingProcess._logger.error(_message)
             raise
@@ -1074,7 +1082,7 @@ class SendingProcess:
             self._config['north'] = _config_from_manager['plugin']['value']
             _config_from_manager['_CONFIG_CATEGORY_NAME'] = config_category_name
             self._config_from_manager = _config_from_manager
-        except Exception:
+        except Exception as ex:
             _message = _MESSAGES_LIST["e000003"]
             SendingProcess._logger.error(_message)
             raise
@@ -1204,7 +1212,8 @@ class SendingProcess:
         """
         try:
             self._plugin.plugin_shutdown(self._plugin_handle)
-        except Exception:
+        except Exception as ex:
+            SendingProcess._logger.exception(ex)
             _message = _MESSAGES_LIST["e000007"]
             SendingProcess._logger.error(_message)
             loop = asyncio.get_event_loop()

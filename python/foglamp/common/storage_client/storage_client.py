@@ -916,7 +916,7 @@ class ReadingsStorageClientAsync(StorageClientAsync):
                         raise StorageServerError(code=resp.status, reason=resp.reason, error=jdoc)
                         # _LOGGER.debug("Inserted %s records", jdoc['readings_added'])
         except Exception as ex:
-            raise Exception(str(ex))
+            raise
 
         return jdoc
 

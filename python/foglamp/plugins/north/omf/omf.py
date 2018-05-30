@@ -90,12 +90,12 @@ _CONFIG_DEFAULT_OMF = {
     "URL": {
         "description": "The URL of the PI Connector to send data to",
         "type": "string",
-        "default": "https://pi-server:5460/ingress/messages"
+        "default": "https://192.168.7.64:5460/ingress/messages"
     },
     "producerToken": {
         "description": "The producer token that represents this FogLAMP stream",
         "type": "string",
-        "default": "omf_north_0001"
+        "default": "uid=0a5c48cd-9cd8-4ef6-b7dc-ea8b6e38907e&crt=20180501225727392&sig=cAWrsb4zPC5f9sXJse6Qs30GujB3zt+WRilXKRtTw8U="
     },
     "OMFMaxRetry": {
         "description": "Max number of retries for the communication with the OMF PI Connector Relay",
@@ -755,6 +755,7 @@ class OmfNorthPlugin(object):
 
                         status_code = resp.status
                         text = await resp.text()
+                        sys.stderr.write(str(omf_data_json))
 
             except Exception as e:
                 _error = Exception(plugin_common.MESSAGES_LIST["e000024"].format(e))

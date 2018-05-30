@@ -23,7 +23,7 @@ __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
 _LOGGER = logger.setup(__name__)  # type: logging.Logger
-_MAX_ATTEMPTS = 2
+_MAX_ATTEMPTS = 5
 
 # _LOGGER = logger.setup(__name__, level=logging.DEBUG)  # type: logging.Logger
 # _LOGGER = logger.setup(__name__, destination=logger.CONSOLE, level=logging.DEBUG)
@@ -97,16 +97,16 @@ class Ingest(object):
     _write_statistics_frequency_seconds = 5
     """The number of seconds to wait before writing readings-related statistics to storage"""
 
-    _readings_buffer_size = 500
+    _readings_buffer_size = 40000
     """Maximum number of readings to buffer in memory"""
 
-    _max_concurrent_readings_inserts = 5
+    _max_concurrent_readings_inserts = 4
     """Maximum number of concurrent processes that send batches of readings to storage"""
 
-    _readings_insert_batch_size = 100
+    _readings_insert_batch_size = 10000
     """Maximum number of readings in a batch of inserts"""
 
-    _readings_insert_batch_timeout_seconds = 1
+    _readings_insert_batch_timeout_seconds = 10000
     """Number of seconds to wait for a readings list to reach the minimum batch size"""
 
     _max_readings_insert_batch_connection_idle_seconds = 60
@@ -411,7 +411,7 @@ class Ingest(object):
                         batch_size = len(readings_list)
                         cls._discarded_readings_stats += batch_size
                         _LOGGER.warning('Insert failed: Queue index: %s Batch size: %s', list_index, batch_size)
-                    break
+                    continue
 
             del readings_list[:batch_size]
 
