@@ -1,0 +1,66 @@
+FogLAMP started.
+# Get All Assets - foglamp/asset
+[
+  {
+    "asset_code": "SOW_fogbench_test_1",
+    "count": 1
+  },
+  {
+    "asset_code": "SOW_fogbench_test_2",
+    "count": 2
+  },
+  {
+    "asset_code": "SOW_fogbench_test_3",
+    "count": 1
+  },
+  {
+    "asset_code": "SOW_fogbench_test_4",
+    "count": 2
+  }
+]
+# Get Asset Readings -  foglamp/asset/{asset_code}
+[
+  {
+    "reading": {
+      "sensor_1": 10,
+      "sensor_2": 20
+    },
+    "timestamp": "xxx"
+  }
+]
+# Get Single Sensor Values for an Asset - /foglamp/asset/{asset_code}/{reading}
+[
+  {
+    "timestamp": "xxx",
+    "sensor_1": 10
+  }
+]
+[
+  {
+    "timestamp": "xxx",
+    "sensor_2": 20
+  }
+]
+# Get Minimum, Maximum & Averages of a Set of Sensor Readings - /foglamp/asset/{asset_code}/{reading}/summary
+{
+  "sensor_1": {
+    "average": "10",
+    "max": "10",
+    "min": "10"
+  }
+}
+# Get Time Averaged Asset Values - /foglamp/asset/{asset_code}/{reading}/series
+[
+  {
+    "timestamp": "xxx",
+    "max": "10",
+    "min": "10",
+    "average": "10"
+  },
+  {
+    "timestamp": "xxx",
+    "max": "20",
+    "min": "20",
+    "average": "20"
+  }
+]

@@ -19,7 +19,7 @@ from foglamp.common import logger
 from foglamp.common.statistics import Statistics
 from foglamp.common.configuration_manager import ConfigurationManager
 from foglamp.common.storage_client.storage_client import ReadingsStorageClient, StorageClient
-
+from foglamp.common.storage_client.exceptions import StorageServerError
 
 __author__ = "Terris Linenbach"
 __copyright__ = "Copyright (c) 2017 OSIsoft, LLC"
@@ -27,6 +27,8 @@ __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
 _LOGGER = logger.setup(__name__)  # type: logging.Logger
+_MAX_ATTEMPTS = 2
+
 # _LOGGER = logger.setup(__name__, level=logging.DEBUG)  # type: logging.Logger
 # _LOGGER = logger.setup(__name__, destination=logger.CONSOLE, level=logging.DEBUG)
 
@@ -115,6 +117,7 @@ class Ingest(object):
 
     _max_readings_insert_batch_reconnect_wait_seconds = 10
     """The maximum number of seconds to wait before reconnecting to storage when inserting readings"""
+
     # Configuration (end)
 
     @classmethod
@@ -125,12 +128,12 @@ class Ingest(object):
         category = 'South'
 
         default_config = {
-             "write_statistics_frequency_seconds": {
+            "write_statistics_frequency_seconds": {
                 "description": "The number of seconds to wait before writing readings-related "
                                "statistics to storage",
                 "type": "integer",
                 "default": str(cls._write_statistics_frequency_seconds)
-             },
+            },
             "readings_buffer_size": {
                 "description": "The maximum number of readings to buffer in memory",
                 "type": "integer",
@@ -155,13 +158,13 @@ class Ingest(object):
             },
             "max_readings_insert_batch_connection_idle_seconds": {
                 "description": "Close storage connections used to insert readings when idle for "
-                            "this number of seconds",
+                               "this number of seconds",
                 "type": "integer",
                 "default": str(cls._max_readings_insert_batch_connection_idle_seconds)
             },
             "max_readings_insert_batch_reconnect_wait_seconds": {
                 "description": "The maximum number of seconds to wait before reconnecting to "
-                                "storage when inserting readings",
+                               "storage when inserting readings",
                 "type": "integer",
                 "default": str(cls._max_readings_insert_batch_reconnect_wait_seconds)
             },
@@ -169,24 +172,23 @@ class Ingest(object):
 
         # Create configuration category and any new keys within it
         cfg_manager = ConfigurationManager(cls.storage)
-        await cfg_manager.create_category(category, default_config,
-                                                    'South server configuration')
+        await cfg_manager.create_category(category, default_config, 'South server configuration')
 
         # Read configuration
         config = await cfg_manager.get_category_all_items(category)
 
         cls._write_statistics_frequency_seconds = int(config['write_statistics_frequency_seconds']
-                                                            ['value'])
+                                                      ['value'])
         cls._readings_buffer_size = int(config['readings_buffer_size']['value'])
         cls._max_concurrent_readings_inserts = int(config['max_concurrent_readings_inserts']
-                                                         ['value'])
+                                                   ['value'])
         cls._readings_insert_batch_size = int(config['readings_insert_batch_size']['value'])
         cls._readings_insert_batch_timeout_seconds = int(config
                                                          ['readings_insert_batch_timeout_seconds']
                                                          ['value'])
         cls._max_readings_insert_batch_connection_idle_seconds = int(
-                config['max_readings_insert_batch_connection_idle_seconds']
-                      ['value'])
+            config['max_readings_insert_batch_connection_idle_seconds']
+            ['value'])
         cls._max_readings_insert_batch_reconnect_wait_seconds = int(
             config['max_readings_insert_batch_reconnect_wait_seconds']['value'])
 
@@ -341,8 +343,8 @@ class Ingest(object):
 
                 try:
                     await asyncio.wait_for(
-                            waiter,
-                            cls._max_readings_insert_batch_connection_idle_seconds)
+                        waiter,
+                        cls._max_readings_insert_batch_connection_idle_seconds)
                 except asyncio.CancelledError:
                     # Don't assume the list is empty
 
@@ -359,8 +361,7 @@ class Ingest(object):
             # If batch size still not reached but another list has inserted
             # recently, wait some more
             if (not cls._stop) and (len(readings_list) < cls._readings_insert_batch_size) and ((
-                    time.time() - cls._last_insert_time) <
-                    cls._readings_insert_batch_timeout_seconds):
+                    time.time() - cls._last_insert_time) < cls._readings_insert_batch_timeout_seconds):
                 continue
 
             attempt = 0
@@ -375,41 +376,38 @@ class Ingest(object):
                     payload = dict()
                     payload['readings'] = readings_list
 
-                    res = cls.readings_storage.append(json.dumps(payload))
-
                     try:
-                        if res["response"] == "appended":
-                            batch_size = len(readings_list)
-                            cls._readings_stats += batch_size
-                    except KeyError:
+                        cls.readings_storage.append(json.dumps(payload))
+                        batch_size = len(readings_list)
+                        cls._readings_stats += batch_size
+                    except StorageServerError as ex:
+                        err_response = ex.error
                         # if key error in next, it will be automatically in parent except block
-                        if res["retryable"]:  # retryable is bool
+                        if err_response["retryable"]:  # retryable is bool
                             # raise and exception handler will retry
-                            raise res["message"]
+                            _LOGGER.warning("Got %s error, retrying ...", err_response["source"])
+                            raise
                         else:
-                            # not re-tryable
-                            _LOGGER.error(res["message"])
+                            # not retryable
+                            _LOGGER.error("%s, %s", err_response["source"], err_response["message"])
                             batch_size = len(readings_list)
                             cls._discarded_readings_stats += batch_size
-                            # let the loop break
 
                     # _LOGGER.debug('End insert: Queue index: %s Batch size: %s',
                     #               list_index, batch_size)
-
                     break
-                except Exception:
+                except Exception as ex:
                     attempt += 1
 
                     # TODO logging each time is overkill
-                    _LOGGER.exception('Insert failed on attempt #%s, list index: %s',
-                                      attempt, list_index)
+                    _LOGGER.exception('Insert failed on attempt #%s, list index: %s | %s',
+                                      attempt, list_index, str(ex))
 
-                    if cls._stop and attempt >= 1:
+                    if cls._stop or attempt >= _MAX_ATTEMPTS:
                         # Stopping. Discard the entire list upon failure.
                         batch_size = len(readings_list)
                         cls._discarded_readings_stats += batch_size
                         _LOGGER.warning('Insert failed: Queue index: %s Batch size: %s', list_index, batch_size)
-
                     break
 
             del readings_list[:batch_size]
@@ -428,7 +426,9 @@ class Ingest(object):
 
         # Register static statistics
         await stats.register('READINGS', 'The number of readings received by FogLAMP since startup')
-        await stats.register('DISCARDED', 'The number of readings discarded at the input side by FogLAMP, i.e. discarded before being  placed in the buffer. This may be due to some error in the readings themselves.')
+        await stats.register('DISCARDED', 'The number of readings discarded at the input side by FogLAMP, i.e. '
+                                          'discarded before being  placed in the buffer. This may be due to some '
+                                          'error in the readings themselves.')
 
         while not cls._stop:
             # stop() calls _write_statistics_sleep_task.cancel().
@@ -450,21 +450,20 @@ class Ingest(object):
 
             try:
                 await stats.update('READINGS', readings)
-            except Exception:  # TODO catch real exception
+            except Exception as ex:
                 cls._readings_stats += readings
-                _LOGGER.exception('An error occurred while writing readings statistics')
+                _LOGGER.exception('An error occurred while writing readings statistics, %s', str(ex))
 
             readings = cls._discarded_readings_stats
             cls._discarded_readings_stats = 0
-            
+
             try:
                 await stats.update('DISCARDED', readings)
-            # TODO catch real exception
-            except Exception:  # TODO catch real exception
+            except Exception as ex:
                 cls._discarded_readings_stats += readings
-                _LOGGER.exception('An error occurred while writing discarded statistics')
+                _LOGGER.exception('An error occurred while writing discarded statistics, Error: %s', str(ex))
 
-            """ Register the statistics keys as this may be the first time the key has come into existance """
+            """ Register the statistics keys as this may be the first time the key has come into existence """
             for key in cls._sensor_stats:
                 description = 'The number of readings received by FogLAMP since startup for sensor {}'.format(key)
                 await stats.register(key, description)
@@ -472,7 +471,7 @@ class Ingest(object):
                 await stats.add_update(cls._sensor_stats)
                 cls._sensor_stats = {}
             except Exception as ex:
-                _LOGGER.exception('An error occurred while writing sensor statistics, error: %s', str(ex))
+                _LOGGER.exception('An error occurred while writing sensor statistics, Error: %s', str(ex))
 
         _LOGGER.info('South statistics writer stopped')
 
@@ -502,7 +501,7 @@ class Ingest(object):
 
     @classmethod
     async def add_readings(cls, asset: str, timestamp: Union[str, datetime.datetime],
-                           key: Union[str, uuid.UUID] = None, readings: dict = None)->None:
+                           key: Union[str, uuid.UUID] = None, readings: dict = None) -> None:
         """Adds an asset readings record to FogLAMP
 
         Args:
@@ -541,11 +540,6 @@ class Ingest(object):
             if timestamp is None:
                 raise ValueError('timestamp can not be None')
 
-            # TODO: for?
-            ''' below code from node JS, works fine!
-                dt = new Date()
-                timestamp = dt.toISOString()
-            '''
             # if not isinstance(timestamp, datetime.datetime):
             #     # validate
             #     timestamp = dateutil.parser.parse(timestamp)
