@@ -1,0 +1,102 @@
+#!/bin/bash
+##############################################################################
+#
+# FogLAMP SOW Acceptance Criteria test
+# Copyright (C) 2018 Dianomic Systems, Inc.
+#
+##############################################################################
+
+##############################################################################
+#
+## This script is used to run SOW Acceptance Criteria tests related to
+## 'Data Logic'
+#
+##############################################################################
+
+# Global constants declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+declare FOGLAMP_PORT
+declare SENDING_PROCESS_DATA
+declare SCHEDULE_ID_OMF_PLUGIN
+
+declare PI_SERVER
+declare PI_SERVER_PORT
+declare OMF_PRODUCER_TOKEN
+declare OMF_TYPE_ID
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare RETRY_COUNT
+
+declare FOGLAMP_ROOT
+declare FOGLAMP_AVAHI_STRING
+declare CMD_JQ
+declare CMD_AVBROWSE
+declare CMD_CURL
+
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+if [[ "${EXECUTION_ENV}" == "userver" ]]; then
+
+    echo ERROR : Test not implemented for the Ubuntu Server environment.
+    exit 1
+fi
+
+# Extracts stored data
+extract_data () {
+
+    $TEST_BASEDIR/bash/count_assets_http.bash
+    $TEST_BASEDIR/bash/read_an_asset_http.bash ${ASSET_CODE}                                                            > ${tmp_file} 2>&1
+
+    if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+        sudo classic << EOF                                                                                             >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+        jq  '.[] | .reading' ${tmp_file}                                                                                > ${RESULT_DIR}/$TEST_NAME.5.temp
+EOF
+        cat ${RESULT_DIR}/$TEST_NAME.5.temp
+    fi
+}
+
+#
+# Main
+#
+tmp_file=$RESULT_DIR/$TEST_NAME.3.temp
+tmp_file_append=$RESULT_DIR/$TEST_NAME.4.temp
+
+# Starts FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  >> ${tmp_file_append} 2>&1
+tail -n1 ${tmp_file_append}
+$TEST_BASEDIR/bash/sleep.bash 10
+
+# Injects data into FogLAMP
+echo '[{"name":"'${ASSET_CODE}'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   ${tmp_file} 2>&1
+$TEST_BASEDIR/bash/inject_fogbench_data.bash -t ${tmp_file}                                                             >>  ${tmp_file_append} 2>&1
+grep '^Total Messages Transferred: ' ${tmp_file_append}
+
+extract_data
+
+# Stops FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >> ${tmp_file_append} 2>&1
+tail -n1 ${tmp_file_append}
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Starts FogLAMP
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  >> ${tmp_file_append} 2>&1
+tail -n1 ${tmp_file_append}
+$TEST_BASEDIR/bash/sleep.bash 10
+
+extract_data

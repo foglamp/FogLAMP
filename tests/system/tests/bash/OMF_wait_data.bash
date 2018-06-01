@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#
+# the scripts has optionals parameters :
+#   $1 : full=extract all the json information
+#   $2 : producer token to use
+#   $3 : asset code to extract from PI-Web
+#
+
 # Global constants declaration
 declare EXECUTION_ENV
 declare SUITE_BASEDIR
@@ -23,6 +30,32 @@ declare url_elements_list
 # Reads configuration setting
 source ${SUITE_BASEDIR}/suite.cfg
 
+#
+# Handles optional input parameters
+#
+if [[ "$1" == "full" ]]; then
+
+    export param_full_output=1
+else
+    export param_full_output=0
+fi
+
+if [[ "$2" != "" ]]; then
+
+    export param_omf_producer_token=$2
+else
+    export param_omf_producer_token=${OMF_PRODUCER_TOKEN}
+fi
+
+if [[ "$3" != "" ]]; then
+
+    export param_asset_code=$3
+else
+    export param_asset_code=${ASSET_CODE}
+fi
+
+
+
 function pi_web_retrieves_value_ucore {
 
     url_assets_list=""
@@ -31,7 +64,7 @@ function pi_web_retrieves_value_ucore {
 
     # Retrieves the asset list
     sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.701.temp 2>> ${RESULT_DIR}/$TEST_NAME.702.temp
-    curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_elements_list} |  jq --raw-output '.Items | .[] | select(.Name=="'${OMF_PRODUCER_TOKEN}'")  | .Links | .Elements' > ${RESULT_DIR}/$TEST_NAME.700.temp
+    curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_elements_list} |  jq --raw-output '.Items | .[] | select(.Name=="'${param_omf_producer_token}'")  | .Links | .Elements' > ${RESULT_DIR}/$TEST_NAME.700.temp
     logout
 EOF
     url_assets_list=`cat ${RESULT_DIR}/$TEST_NAME.700.temp`
@@ -41,7 +74,7 @@ EOF
 
         # Retrieves asset information
         sudo classic << EOF                                                                                                >> ${RESULT_DIR}/$TEST_NAME.701.temp 2>> ${RESULT_DIR}/$TEST_NAME.702.temp
-        curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_assets_list} |  jq --raw-output '.Items | .[] | select(.Name=="'${ASSET_CODE}'") | .Links | .EndValue'  > ${RESULT_DIR}/$TEST_NAME.700.temp
+        curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_assets_list} |  jq --raw-output '.Items | .[] | select(.Name=="'${param_asset_code}'") | .Links | .EndValue'  > ${RESULT_DIR}/$TEST_NAME.700.temp
         logout
 EOF
 
@@ -51,17 +84,27 @@ EOF
 
     if [[ "${url_asset}" != "" ]]; then
 
-        # Retrieves the value
-        sudo classic << EOF                                                                                          >> ${RESULT_DIR}/$TEST_NAME.701.temp 2>> ${RESULT_DIR}/$TEST_NAME.702.temp
-        curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_asset} |  jq --raw-output '.Items | .[] | select(.Name=="sensor") | .Value | .Value'  > ${RESULT_DIR}/$TEST_NAME.700.temp
-        logout
+        if [[ $param_full_output == 1 ]]; then
+
+            # Retrieves the value
+            sudo classic << EOF                                                                                          >> ${RESULT_DIR}/$TEST_NAME.701.temp 2>> ${RESULT_DIR}/$TEST_NAME.702.temp
+            curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_asset} |  jq -S '.Items | .[] | select(.Name=="sensor") | .Value | .Timestamp="xxx" '  > ${RESULT_DIR}/$TEST_NAME.700.temp
+            logout
 EOF
+
+        else
+            # Retrieves the value
+            sudo classic << EOF                                                                                          >> ${RESULT_DIR}/$TEST_NAME.701.temp 2>> ${RESULT_DIR}/$TEST_NAME.702.temp
+            curl -s -u  ${PI_SERVER_UID}:${PI_SERVER_PWD} -X GET -k ${url_asset} |  jq --raw-output '.Items | .[] | select(.Name=="sensor") | .Value | .Value'  > ${RESULT_DIR}/$TEST_NAME.700.temp
+            logout
+EOF
+        fi
 
         value=`cat ${RESULT_DIR}/$TEST_NAME.700.temp`
         echo value :${value}:                                                                                           >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
     fi
 
-    echo ${value}
+    echo "${value}"
 }
 
 
@@ -105,7 +148,7 @@ EOF
         if [[ "${value}" != "" && "${value}" != *"PI Point not found"* ]]; then
 
             echo Value retrieved - N. of retries :${count}:                                                             >> $RESULT_DIR/$TEST_NAME.1.temp 2>&1
-            echo ${value}
+            echo "${value}"
             exit 0
         else
             if [[ $count -le ${RETRY_COUNT} ]]
