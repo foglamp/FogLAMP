@@ -1,0 +1,122 @@
+#!/bin/bash
+##############################################################################
+#
+# FogLAMP SOW Acceptance Criteria test
+# Copyright (C) 2018 Dianomic Systems, Inc.
+#
+##############################################################################
+
+##############################################################################
+#
+## This script is used to run SOW Acceptance Criteria tests related to
+## 'Admin'
+#
+##############################################################################
+
+# Globals declaration
+declare EXECUTION_ENV
+declare SUITE_BASEDIR
+declare TEST_BASEDIR
+declare RESULT_DIR
+declare TEST_NAME
+
+declare FOGLAMP_SERVER
+declare FOGLAMP_HTTPPort
+declare FOGLAMP_SNAP_VERSION
+declare FOGLAMP_SNAP_UPDATE_VERSION
+declare FOGLAMP_NAME
+declare FOGLAMP_SNAP
+
+declare CMD_CURL
+
+declare SNAPS_DIRECTORY
+
+declare ASSET_CODE
+declare OMF_PRODUCER_TOKEN
+
+# Reads configuration setting
+source ${SUITE_BASEDIR}/suite.cfg
+
+if [[ "${EXECUTION_ENV}" == "userver" ]]; then
+
+    echo ERROR : Test not implemented for the Ubuntu Server environment.
+    exit 1
+fi
+
+#
+## Temporary files, one will be overwritten every time the second one used only in append mode
+#
+export tmp_file_overwrite="$RESULT_DIR/$TEST_NAME.4.temp"
+export tmp_file_append="$RESULT_DIR/$TEST_NAME.5.temp"
+
+export TEST_ID="${TEST_NAME:0:4}"
+export TEST_ASSET_CODE=${ASSET_CODE}_${TEST_ID}
+
+# Checks if a proper configuration is available
+if [[ "${FOGLAMP_SNAP_VERSION}"        == "x.x.x" || \
+      "${FOGLAMP_SNAP_UPDATE_VERSION}" == "x.x.x"    \
+   ]]; then
+
+    echo ERROR : the suite.cfg file should be modified using the appropriated values.
+    exit 1
+fi
+
+# Checks the availability of the snap command
+snap help                                                                                                               > /dev/null 2>&1
+if [[ ${?} != 0 ]]; then
+
+    echo ERROR: the snap command is not available, install it.
+    exit 1
+fi
+
+# Ensure FogLAMP is stopped
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Removes FogLAMP snap if it is already installed
+sudo snap remove ${FOGLAMP_NAME}                                                                                        >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Checks if FogLAMP is installed
+echo -n ${FOGLAMP_NAME} removed :
+snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp 2>&1 | grep -c ${FOGLAMP_NAME}
+
+# Installs FogLAMP snap
+sudo snap install --devmode ${SNAPS_DIRECTORY}/${FOGLAMP_SNAP}                                                          >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Checks if FogLAMP is installed
+echo -n ${FOGLAMP_NAME} installed :
+snap list ${FOGLAMP_NAME} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp 2>&1 | grep -c ${FOGLAMP_NAME}
+
+# Starts from a defined status
+echo -e "YES" | $TEST_BASEDIR/bash/exec_any_foglamp_command.bash reset                                                  >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+# Ensures FogLAMP is stopped
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash stop                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash kill                                                                   >>  ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+
+#
+## Starts and configures FogLAMP
+#
+$TEST_BASEDIR/bash/exec_any_foglamp_command.bash start                                                                  > ${RESULT_DIR}/$TEST_NAME.0.temp 2>&1
+tail -n1 ${RESULT_DIR}/$TEST_NAME.0.temp
+
+# Configures FogLAMP for the communication with the PI Server using OMF.
+$TEST_BASEDIR/bash/OMF_configure.bash
+
+# Pings FogLAMP
+if [[ "${EXECUTION_ENV}" == "ucore" ]]; then
+
+    sudo classic << EOF                                                                                                 >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    curl -s http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/ping   | jq -S '.authenticationOptional="xxx"|.dataRead="xxx"|.dataPurged="xxx"|.dataSent="xxx"|.uptime="xxx"'  > ${tmp_file_overwrite} 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+    logout
+EOF
+    cat ${tmp_file_overwrite}
+fi
+
+# Injects data into FogLAMP
+echo '[{"name":"'${TEST_ASSET_CODE}'","sensor_values":[{"name":"sensor","type":"number","min":10,"max":10,"precision":0}]}]' >   $RESULT_DIR/$TEST_NAME.801.temp 2>&1
+$TEST_BASEDIR/bash/inject_fogbench_data.bash -t $RESULT_DIR/$TEST_NAME.801.temp                                         >>  $RESULT_DIR/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
+grep '^Total Messages Transferred: ' $RESULT_DIR/$TEST_NAME.1.temp
+
+# Waits until either the data is available in the PI server or it reaches the timeout.
+$TEST_BASEDIR/bash/OMF_wait_data.bash full ${OMF_PRODUCER_TOKEN} ${TEST_ASSET_CODE}

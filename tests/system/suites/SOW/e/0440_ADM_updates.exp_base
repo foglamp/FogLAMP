@@ -1,0 +1,15 @@
+FogLAMP started.
+Total Messages Transferred: 1
+{
+  "Good": true,
+  "Questionable": false,
+  "Substituted": false,
+  "Timestamp": "xxx",
+  "UnitsAbbreviation": "",
+  "Value": 10
+}
+foglamp x.x.x1
+FogLAMP started.
+Injection process started.
+foglamp x.x.x2
+Kills the injection process.

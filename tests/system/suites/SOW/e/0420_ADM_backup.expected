@@ -1,0 +1,49 @@
+FogLAMP started.
+Total Messages Transferred: 1
+[
+  {
+    "asset_code": "SOW_fogbench_test_0420",
+    "count": 1
+  }
+]
+Executes a backup :
+{
+  "status": "running"
+}
+"COMPLETED"
+Total Messages Transferred: 1
+[
+  {
+    "asset_code": "SOW_fogbench_test_0420",
+    "count": 2
+  }
+]
+Executes a backup :
+{
+  "status": "running"
+}
+"COMPLETED"
+Retrieves backups list :
+{
+  "backups": [
+    {
+      "date": "xxx",
+      "id": 2,
+      "status": "COMPLETED"
+    },
+    {
+      "date": "xxx",
+      "id": 1,
+      "status": "COMPLETED"
+    }
+  ]
+}
+Retrieves the details of a backup :
+{
+  "date": "xxx",
+  "id": 1,
+  "status": "COMPLETED"
+}
+Backup files :
+-rw-rw-r-- foglamp foglamp foglamp_backup_xxxx_xx_xx_xx_xx_xx.dump
+-rw-rw-r-- foglamp foglamp foglamp_backup_xxxx_xx_xx_xx_xx_xx.dump
