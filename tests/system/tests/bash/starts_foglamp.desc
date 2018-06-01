@@ -1,1 +1,1 @@
-# Starts FogLAMP, retries the operation if fails
+# Starts FogLAMP, it will retry operation if fails.

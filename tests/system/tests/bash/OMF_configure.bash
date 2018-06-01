@@ -29,6 +29,7 @@ OMF_configure_ucore () {
     # Enables the OMF plugin
     sudo classic << EOF_01                                                                                              >> ${RESULT_DIR}/$TEST_NAME.1.temp 2>> ${RESULT_DIR}/$TEST_NAME.2.temp
     curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/schedule/${SCHEDULE_ID_OMF_PLUGIN} -d '{ "enabled" : true }'
+    logout
 EOF_01
 
     # Waits until the OMF plugin has created the default configurations
@@ -39,6 +40,7 @@ EOF_01
     curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/${SENDING_PROCESS_DATA}/URL           -d '{ "value" : "https://${PI_SERVER}:${PI_SERVER_PORT}/ingress/messages"}'
     curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/${SENDING_PROCESS_DATA}/producerToken -d '{ "value" : "${OMF_PRODUCER_TOKEN}" }'
     curl -s -X PUT http://${FOGLAMP_SERVER}:${FOGLAMP_HTTPPort}/foglamp/category/OMF_TYPES/type-id                     -d '{ "value" : "${OMF_TYPE_ID}" }'
+    logout
 EOF_02
 
     # Restarts FogLAMP to ensure the new configurations are used

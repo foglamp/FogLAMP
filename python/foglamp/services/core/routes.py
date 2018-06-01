@@ -4,6 +4,7 @@
 # See: http://foglamp.readthedocs.io/
 # FOGLAMP_END
 
+from foglamp.services.core.api import auth
 from foglamp.services.core.api import audit as api_audit
 from foglamp.services.core.api import browser
 from foglamp.services.core.api import common as api_common
@@ -25,6 +26,21 @@ __version__ = "${VERSION}"
 def setup(app):
     app.router.add_route('GET', '/foglamp/ping', api_common.ping)
     app.router.add_route('PUT', '/foglamp/shutdown', api_common.shutdown)
+
+    # user
+    app.router.add_route('GET', '/foglamp/user', auth.get_user)
+    app.router.add_route('POST', '/foglamp/user', auth.create_user)
+    app.router.add_route('PUT', '/foglamp/user/{id}', auth.update_user)
+    app.router.add_route('DELETE', '/foglamp/user/{id}', auth.delete_user)
+
+    # role
+    app.router.add_route('GET', '/foglamp/user/role', auth.get_roles)
+
+    # auth
+    app.router.add_route('POST', '/foglamp/login', auth.login)
+    app.router.add_route('PUT', '/foglamp/logout', auth.logout_me)
+    # logout all active sessions
+    app.router.add_route('PUT', '/foglamp/{user_id}/logout', auth.logout)
 
     # Configuration
     app.router.add_route('GET', '/foglamp/category', api_configuration.get_categories)
@@ -93,6 +109,9 @@ def setup(app):
     app.router.add_route('GET', '/foglamp/support', support.fetch_support_bundle)
     app.router.add_route('GET', '/foglamp/support/{bundle}', support.fetch_support_bundle_item)
     app.router.add_route('POST', '/foglamp/support', support.create_support_bundle)
+
+    # Get Syslog
+    app.router.add_route('GET', '/foglamp/syslog', support.get_syslog_entries)
 
     # enable cors support
     enable_cors(app)
