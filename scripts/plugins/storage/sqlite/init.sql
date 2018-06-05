@@ -661,6 +661,27 @@ INSERT INTO foglamp.configuration ( key, description, value )
               ' { "plugin" : { "type" : "string", "value" : "coap_listen", "default" : "coap_listen", "description" : "Python module name of the plugin to load" } } '
             );
 
+-- simplesima: simplesim Listener Plugin
+INSERT INTO foglamp.configuration ( key, description, value )
+     VALUES ( 'simplesima',
+              'simplesima Listener South Plugin',
+              ' { "plugin" : { "type" : "string", "value" : "simplesima", "default" : "simplesima", "description" : "Python module name of the plugin to load" } } '
+            );
+
+-- simplesimb: simplesimb Listener Plugin
+INSERT INTO foglamp.configuration ( key, description, value )
+     VALUES ( 'simplesimb',
+              'simplesimb Listener South Plugin',
+              ' { "plugin" : { "type" : "string", "value" : "simplesimb", "default" : "simplesimb", "description" : "Python module name of the plugin to load" } } '
+            );
+
+-- simplesimc: simplesimc Listener Plugin
+INSERT INTO foglamp.configuration ( key, description, value )
+     VALUES ( 'simplesimc',
+              'simplesimc Listener South Plugin',
+              ' { "plugin" : { "type" : "string", "value" : "simplesimc", "default" : "simplesimc", "description" : "Python module name of the plugin to load" } } '
+            );
+
 INSERT INTO foglamp.configuration ( key, description, value )
     VALUES ( 'CC2650POLL',
              'TI SensorTag CC2650 polling South Plugin',
@@ -710,6 +731,9 @@ INSERT INTO foglamp.scheduled_processes (name, script) VALUES ('restore', '["tas
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'POLL',       '["services/south"]' );
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'HTTP_SOUTH', '["services/south"]' );
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'COAP',       '["services/south"]' );
+INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'simplesima',       '["services/south"]' );
+INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'simplesimb',       '["services/south"]' );
+INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'simplesimc',       '["services/south"]' );
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'CC2650POLL', '["services/south"]' );
 INSERT INTO foglamp.scheduled_processes ( name, script ) VALUES ( 'CC2650ASYN', '["services/south"]' );
 
@@ -840,7 +864,7 @@ INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
                 NULL,                                   -- schedule_time
                 '00:00:00',                             -- schedule_interval
                 't',                                   -- exclusive
-                't'                                    -- enabled
+                'f'                                   -- disabled
               );
 
 -- COAP Listener
@@ -853,7 +877,46 @@ INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
                 NULL,                                   -- schedule_time
                 '00:00:00',                             -- schedule_interval
                 't',                                   -- exclusive
-                't'                                    -- enabled
+                'f'                                   -- disabled
+              );
+
+-- simplesima Listener
+INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
+                                schedule_time, schedule_interval, exclusive, enabled )
+       VALUES ( 'a95d84ab-3fc4-4fa2-aa32-654be9bdefc6', -- id
+                'simplesima listener south',                  -- schedule_name
+                'simplesima',                                 -- process_name
+                1,                                      -- schedule_type (startup)
+                NULL,                                   -- schedule_time
+                '00:00:00',                             -- schedule_interval
+                't',                                   -- exclusive
+                't'                                   -- disabled
+              );
+
+-- simplesimb Listener
+INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
+                                schedule_time, schedule_interval, exclusive, enabled )
+       VALUES ( '819b1f2c-482a-4602-8fa4-e42f4893308e', -- id
+                'simplesimb listener south',                  -- schedule_name
+                'simplesimb',                                 -- process_name
+                1,                                      -- schedule_type (startup)
+                NULL,                                   -- schedule_time
+                '00:00:00',                             -- schedule_interval
+                't',                                   -- exclusive
+                'f'                                   -- disabled
+              );
+
+-- simplesimc Listener
+INSERT INTO foglamp.schedules ( id, schedule_name, process_name, schedule_type,
+                                schedule_time, schedule_interval, exclusive, enabled )
+       VALUES ( 'c0d962c8-8f30-44e1-8753-92b22cf9e61e', -- id
+                'simplesimc listener south',                  -- schedule_name
+                'simplesimc',                                 -- process_name
+                1,                                      -- schedule_type (startup)
+                NULL,                                   -- schedule_time
+                '00:00:00',                             -- schedule_interval
+                't',                                   -- exclusive
+                'f'                                   -- disabled
               );
 
 -- TI CC2650 Poll

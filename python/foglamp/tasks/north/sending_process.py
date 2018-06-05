@@ -301,13 +301,7 @@ class SendingProcess:
         "duration": {
             "description": "How long the sending process should run (in seconds) before stopping.",
             "type": "integer",
-            "default": "60"
-        },
-        "sleepInterval": {
-            "description": "A period of time, expressed in seconds, "
-                           "the main task will wait before evaluate if the duration has expired",
-            "type": "integer",
-            "default": "1"
+            "default": "6000"
         },
         "source": {
             "description": "Defines the source of the data to be sent on the stream, "
@@ -318,7 +312,7 @@ class SendingProcess:
         "blockSize": {
             "description": "The size of a block of readings to send in each transmission.",
             "type": "integer",
-            "default": "500"
+            "default": "1900"
         },
         "memory_buffer_size": {
             "description": "Number of elements of blockSize size that should be managed as an in memory buffer"
