@@ -36,6 +36,17 @@ USB4704::~USB4704()
         }
 }
 
+
+/**
+ * Set name of asset to be used to append readings
+ *
+ * @param asset	The name of the asset
+ */
+void USB4704::setAssetName(const std::string& asset)
+{
+	m_asset = asset;
+}
+
 /**
  * Add a new analogue pin to be monitored by the plugin
  *
