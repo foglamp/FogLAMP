@@ -41,7 +41,7 @@ extern "C" {
  * The plugin information structure
  */
 static PLUGIN_INFORMATION info = {
-	"DHT11",                  // Name
+	"foglamp-dht11",          // Name
 	"1.0.0",                  // Version
 	0,    			  // Flags
 	PLUGIN_TYPE_SOUTH,        // Type

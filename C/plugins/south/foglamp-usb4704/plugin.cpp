@@ -34,7 +34,7 @@ using namespace rapidjson;
  * Default configuration
  */
 #define CONFIG	"{\"plugin\" : { \"description\" : \"Advantech USB-4704 Data Acquisition Module\", " \
-			"\"type\" : \"string\", \"default\" : \"usb4704\" }, " \
+			"\"type\" : \"string\", \"default\" : \"foglamp-usb4704\" }, " \
 		"\"asset\" : { \"description\" : \"Asset name to use for readings\", " \
 			"\"type\" : \"string\", \"default\" : \"usb4704\" }, " \
 		"\"connections\" : { \"description\" : \"Utilisation of connections on USB-4704\", " \
@@ -62,7 +62,7 @@ extern "C" {
  * The plugin information structure
  */
 static PLUGIN_INFORMATION info = {
-	"usb4704",                // Name
+	"foglamp-usb4704",        // Name
 	"1.0.0",                  // Version
 	0,    			  // Flags
 	PLUGIN_TYPE_SOUTH,        // Type

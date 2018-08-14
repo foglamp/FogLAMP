@@ -24,7 +24,7 @@ using namespace std;
  * Default configuration
  */
 #define CONFIG	"{\"plugin\" : { \"description\" : \"INA219 current and voltage sensor\", " \
-			"\"type\" : \"string\", \"default\" : \"ina219\" }, " \
+			"\"type\" : \"string\", \"default\" : \"foglamp-ina219\" }, " \
 		"\"asset\" : { \"description\" : \"Asset name\", "\
 			"\"type\" : \"string\", \"default\" : \"electrical\" }, " \
 		"\"address\" : { \"description\" : \"Address of IAN219\", " \
@@ -42,7 +42,7 @@ extern "C" {
  * The plugin information structure
  */
 static PLUGIN_INFORMATION info = {
-	"ina219",                 // Name
+	"foglamp-ina219",         // Name
 	"1.0.0",                  // Version
 	0,    			  // Flags
 	PLUGIN_TYPE_SOUTH,        // Type

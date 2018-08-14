@@ -46,7 +46,7 @@ using namespace rapidjson;
 				"]}\" }"
 		
 
-#define THINGSPEAK_PLUGIN_DESC "\"plugin\": {\"description\": \"ThingSpeak North\", \"type\": \"string\", \"default\": \"thingspeak\"}"
+#define THINGSPEAK_PLUGIN_DESC "\"plugin\": {\"description\": \"ThingSpeak North\", \"type\": \"string\", \"default\": \"Thingspeak\"}"
 
 #define PLUGIN_DEFAULT_CONFIG_INFO "{" THINGSPEAK_PLUGIN_DESC ", " PLUGIN_DEFAULT_CONFIG "}"
 
