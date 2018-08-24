@@ -50,7 +50,7 @@ using namespace std;
 				"\\\"registers\\\" : { \\\"temperature\\\" : 1," \
 				  		  "\\\"humidity\\\" : 2 }," \
 				"\\\"inputRegisters\\\" : { }" \
-			"} } }"
+			"}\" } }"
 
 /**
  * The Modbus plugin interface
