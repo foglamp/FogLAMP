@@ -114,7 +114,7 @@ _DEFAULT_CONFIG_OMF_TYPES = {}
 
 def plugin_info():
     return {
-        'name': "OMF North",
+        'name': "PI Server North",
         'version': "1.0.0",
         'type': "north",
         'interface': "1.0",

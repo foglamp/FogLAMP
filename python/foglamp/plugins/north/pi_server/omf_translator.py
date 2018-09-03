@@ -11,6 +11,7 @@
 """
 
 import aiohttp
+import asyncio
 import copy
 import time
 import json
@@ -460,10 +461,10 @@ class OmfTranslator(object):
         num_retry = 1
         max_retry = self._config['OMFMaxRetry']
         _message = None
-        _error = None
-        _is_error = False
+        _error_exception = None
 
         while num_retry <= max_retry:
+            _error_exception = None
             try:
                 async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self._verify_ssl)) as session:
                     async with session.post(url=url, headers=header, data=data, timeout=timeout) as resp:
@@ -473,22 +474,22 @@ class OmfTranslator(object):
                         self._logger.debug(">>>>>>>> OUT %s, %s", status_code, text)
                         if not str(status_code).startswith('2'):  # Evaluate the HTTP status codes
                             raise RuntimeError(str(status_code) + " " + text)
+            except (TimeoutError, asyncio.TimeoutError) as ex:
+                _message = "an error occurred during the request to the destination - server address |{0}| - error details |{1}|".format(self._config['URL'], "connection Timeout")
+                _error_exception = plugin_exceptions.URLConnectionError(_message)
             except RuntimeError as e:
-                _message = "an error occurred during the request to the destination - error details |{0}|".format(e)
-                _error = plugin_exceptions.URLFetchError(_message)
-                _is_error = True
+                _message = "an error occurred during the request to the destination - server address |{0}| - error details |{1}|".format(self._config['URL'], str(e))
+                _error_exception = plugin_exceptions.URLFetchError(_message)
             except Exception as e:
-                _message = "an error occurred during the request to the destination - error details |{0}|".format(e)
-                __error = Exception(_message)
-                _is_error = True
+                _message = "an error occurred during the request to the destination - server address |{0}| - error details |{1}|".format(self._config['URL'], str(e))
+                _error_exception = Exception(_message)
 
-            # Retry on error
-            if _is_error:
-                time.sleep(sleep_time)
+            # Retry if any _error_exception is found
+            if _error_exception is not None:
+                await asyncio.sleep(sleep_time)
                 num_retry += 1
                 sleep_time *= 2
             else: break
 
-        # Finally, if error persists even after retries, raise an exception
-        if _is_error: raise plugin_exceptions.DataSendError(_error)
-
+        # Finally, if _error_exception is not None, raise it
+        if _error_exception is not None: raise _error_exception
