@@ -13,11 +13,10 @@
 import aiohttp
 import asyncio
 import copy
-import time
 import json
 
-import foglamp.tasks.north.common as plugin_common
-import foglamp.tasks.north.exceptions as plugin_exceptions
+import foglamp.plugins.north.common.common as plugin_common
+import foglamp.plugins.north.common.exceptions as plugin_exceptions
 from foglamp.common.storage_client import payload_builder
 from foglamp.common.storage_client.exceptions import StorageServerError
 

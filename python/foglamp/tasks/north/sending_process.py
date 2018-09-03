@@ -26,12 +26,9 @@ import datetime
 import signal
 import json
 import uuid
-import ast
-import copy
 
-import foglamp.tasks.north.exceptions as plugin_exceptions
-import foglamp.tasks.north.common as plugin_common
-from foglamp.common.parser import Parser
+import foglamp.plugins.north.common.common as plugin_common
+import foglamp.plugins.north.common.exceptions as plugin_exceptions
 from foglamp.common.storage_client.storage_client import StorageClientAsync, ReadingsStorageClientAsync
 from foglamp.common.storage_client import payload_builder
 from foglamp.common import statistics

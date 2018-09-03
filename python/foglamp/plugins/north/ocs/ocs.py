@@ -15,7 +15,7 @@ import json
 import logging
 
 from foglamp.common import logger
-from foglamp.plugins.north.ocs.omf_translator import *
+from foglamp.plugins.north.common.omf_translator import *
 
 
 __author__ = "Stefano Simonelli, Amarendra K Sinha"

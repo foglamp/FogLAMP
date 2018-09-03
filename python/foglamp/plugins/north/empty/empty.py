@@ -6,8 +6,8 @@
 
 """ North Plugin template """
 
-import foglamp.tasks.north.common as plugin_common
-import foglamp.tasks.north.exceptions as plugin_exceptions
+import foglamp.plugins.north.common.common as plugin_common
+import foglamp.plugins.north.common.exceptions as plugin_exceptions
 
 from foglamp.common import logger
 

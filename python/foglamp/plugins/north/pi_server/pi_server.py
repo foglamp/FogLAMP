@@ -15,7 +15,7 @@ import json
 import logging
 
 from foglamp.common import logger
-from foglamp.plugins.north.pi_server.omf_translator import *
+from foglamp.plugins.north.common.omf_translator import *
 
 __author__ = "Stefano Simonelli, Amarendra K Sinha"
 __copyright__ = "Copyright (c) 2017 OSIsoft, LLC"
