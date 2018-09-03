@@ -10,83 +10,22 @@
     PICROMF = PI Connector Relay OMF
 """
 
-from datetime import datetime
-import sys
-import copy
 import ast
-import resource
-import datetime
-import time
 import json
 import logging
-# noinspection PyPackageRequirements
-import foglamp.plugins.north.common.common as plugin_common
-import foglamp.plugins.north.common.exceptions as plugin_exceptions
+
 from foglamp.common import logger
+from foglamp.plugins.north.ocs.omf_translator import *
 
-import foglamp.plugins.north.pi_server.pi_server as pi_server
 
-# Module information
-__author__ = "Stefano Simonelli"
-__copyright__ = "Copyright (c) 2018 OSIsoft, LLC"
+__author__ = "Stefano Simonelli, Amarendra K Sinha"
+__copyright__ = "Copyright (c) 2017 OSIsoft, LLC"
 __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
 
-# LOG configuration
-_LOG_LEVEL_DEBUG = 10
-_LOG_LEVEL_INFO = 20
-_LOG_LEVEL_WARNING = 30
-
-_LOGGER_LEVEL = _LOG_LEVEL_WARNING
-_LOGGER_DESTINATION = logger.SYSLOG
-_logger = None
-
-# Defines what and the level of details for logging
-_log_debug_level = 0
-_log_performance = False
-_stream_id = None
-_destination_id = None
-
 _MODULE_NAME = "ocs_north"
-
-# Messages used for Information, Warning and Error notice
-MESSAGES_LIST = {
-
-    # Information messages
-    "i000000": "information.",
-
-    # Warning / Error messages
-    "e000000": "general error.",
-
-    "e000001": "the producerToken must be defined, use the FogLAMP API to set a proper value.",
-    "e000002": "the producerToken cannot be an empty string, use the FogLAMP API to set a proper value.",
-
-    "e000010": "the type-id must be defined, use the FogLAMP API to set a proper value.",
-    "e000011": "the type-id cannot be an empty string, use the FogLAMP API to set a proper value.",
-
-}
-
-
-# Configurations retrieved from the Configuration Manager
-_config_omf_types = {}
-_config = {}
-
-# Forces the recreation of PIServer objects when the first error occurs
-_recreate_omf_objects = True
-
-# Messages used for Information, Warning and Error notice
-_MESSAGES_LIST = {
-    # Information messages
-    "i000000": "information.",
-    # Warning / Error messages
-    "e000000": "general error.",
-}
-
-# Configuration related to the OMF North
 _CONFIG_CATEGORY_DESCRIPTION = 'Configuration of OCS North plugin'
-
-
 # The parameters used for the interaction with OCS are :
 #    producerToken                      - It allows to ingest data into OCS using OMF.
 #    tenant_id / client_id / client_id  - They are used for the authentication and interaction with the OCS API,
@@ -94,60 +33,70 @@ _CONFIG_CATEGORY_DESCRIPTION = 'Configuration of OCS North plugin'
 #    namespace                          - Specifies the OCS namespace where the information are stored,
 #                                         it is used for the interaction with the OCS API.
 #
-_CONFIG_DEFAULT_OMF = {
+_DEFAULT_CONFIG_OCS = {
     'plugin': {
         'description': 'OCS North Plugin',
         'type': 'string',
-        'default': 'ocs'
+        'default': 'ocs',
+        "readonly": "true"
     },
     "URL": {
         "description": "The URL of OCS (OSIsoft Cloud Services) ",
         "type": "string",
-        "default": "https://dat-a.osisoft.com/api/omf"
+        "default": "https://dat-a.osisoft.com/api/omf",
+        "order": "1"
     },
     "producerToken": {
         "description": "The producer token used to authenticate as a valid publisher and "
                        "required to ingest data into OCS using OMF.",
         "type": "string",
-        "default": "ocs_north_0001"
+        "default": "ocs_producer_token",
+        "order": "2"
     },
     "namespace": {
         "description": "Specifies the OCS namespace where the information are stored and "
                        "it is used for the interaction with the OCS API.",
         "type": "string",
-        "default": "ocs_namespace_0001"
+        "default": "ocs_namespace_0001",
+        "order": "6"
     },
     "tenant_id": {
-      "description": "Tenant id associated to the specific OCS account.",
-      "type": "string",
-      "default": "ocs_tenant_id"
+        "description": "Tenant id associated to the specific OCS account.",
+        "type": "string",
+        "default": "ocs_tenant_id",
+        "order": "7"
     },
     "client_id": {
-      "description": "Client id associated to the specific OCS account, "
-                     "it is used to authenticate the source for using the OCS API.",
-      "type": "string",
-      "default": "ocs_client_id"
+        "description": "Client id associated to the specific OCS account, "
+        "it is used to authenticate the source for using the OCS API.",
+        "type": "string",
+        "default": "ocs_client_id",
+        "order": "8"
     },
     "client_secret": {
-      "description": "Client secret associated to the specific OCS account, "
-                     "it is used to authenticate the source for using the OCS API.",
-      "type": "string",
-      "default": "ocs_client_secret"
+        "description": "Client secret associated to the specific OCS account, "
+        "it is used to authenticate the source for using the OCS API.",
+        "type": "string",
+        "default": "ocs_client_secret",
+        "order": "9"
     },
     "OMFMaxRetry": {
         "description": "Max number of retries for the communication with the OMF PI Connector Relay",
         "type": "integer",
-        "default": "5"
+        "default": "5",
+        "order": "3"
     },
     "OMFRetrySleepTime": {
         "description": "Seconds between each retry for the communication with the OMF PI Connector Relay",
         "type": "integer",
-        "default": "1"
+        "default": "1",
+        "order": "4"
     },
     "OMFHttpTimeout": {
         "description": "Timeout in seconds for the HTTP operations with the OMF PI Connector Relay",
         "type": "integer",
-        "default": "30"
+        "default": "30",
+        "order": "5"
     },
     "StaticData": {
         "description": "Static data to include in each sensor reading sent to OMF.",
@@ -177,159 +126,69 @@ _CONFIG_DEFAULT_OMF = {
     "formatInteger": {
         "description": "OMF format property to apply to the type Integer",
         "type": "string",
-        "default": "int64"
+        "default": "int32"
+    },
+    "verifySSL": {
+        "description": "Verify SSL certificate",
+        "type": "boolean",
+        "default": "false"
+    },
+    "compression": {
+        "description": "Compression required",
+        "type": "boolean",
+        "default": "false"
     }
 }
 
-# Configuration related to the OMF Types
+_OMF_PREFIX_MEASUREMENT = "measurement"
+_OMF_PREFIX_SENSOR = "sensor"
 _CONFIG_CATEGORY_OMF_TYPES_NAME = 'OCS_TYPES'
-_CONFIG_CATEGORY_OMF_TYPES_DESCRIPTION = 'Configuration of OCS types'
-
-_CONFIG_DEFAULT_OMF_TYPES = pi_server.CONFIG_DEFAULT_OMF_TYPES
-
-_OMF_TEMPLATE_TYPE = pi_server.OMF_TEMPLATE_TYPE
-
-
-def _performance_log(_function):
-    """ Logs information for performance measurement """
-
-    def wrapper(*arg):
-        """ wrapper """
-
-        # Avoids any exceptions related to the performance measurement
-        try:
-
-            start = datetime.datetime.now()
-
-            # Code execution
-            result = _function(*arg)
-
-            if _log_performance:
-
-                usage = resource.getrusage(resource.RUSAGE_SELF)
-                memory_process = (usage[2])/1000
-                delta = datetime.datetime.now() - start
-                delta_milliseconds = int(delta.total_seconds() * 1000)
-
-                _logger.info("PERFORMANCE - {0} - milliseconds |{1:>8,}| - memory MB |{2:>8,}|".format(
-                                _function.__name__,
-                                delta_milliseconds,
-                                memory_process))
-
-            return result
-
-        except Exception as ex:
-            print("ERROR - {func} - error details |{error}|".format(
-                                                                    func="_performance_log",
-                                                                    error=ex), file=sys.stderr)
-            raise
-            
-    return wrapper
+_CONFIG_CATEGORY_OMF_TYPES_DESCRIPTION = 'OCS Types'
+_DEFAULT_CONFIG_OMF_TYPES = {}
 
 
 def plugin_info():
-    """ Returns information about the plugin.
-
-    Args:
-    Returns:
-        dict: plugin information
-    Raises:
-    """
-
+    """ Returns information about the plugin."""
     return {
         'name': "OCS North",
         'version': "1.0.0",
         'type': "north",
         'interface': "1.0",
-        'config': _CONFIG_DEFAULT_OMF
+        'config': _DEFAULT_CONFIG_OCS
     }
 
-def _validate_configuration(data):
-    """ Validates the configuration retrieved from the Configuration Manager
-    Args:
-        data: configuration retrieved from the Configuration Manager
-    Returns:
-    Raises:
-        ValueError
-    """
-
-    _message = ""
-
-    if 'producerToken' not in data:
-        _message = MESSAGES_LIST["e000001"]
-
-    else:
-        if data['producerToken']['value'] == "":
-
-            _message = MESSAGES_LIST["e000002"]
-
-    if _message != "":
-        _logger.error(_message)
-        raise ValueError(_message)
-
-
-def _validate_configuration_omf_type(data):
-    """ Validates the configuration retrieved from the Configuration Manager related to the OMF types
-    Args:
-        data: configuration retrieved from the Configuration Manager
-    Returns:
-    Raises:
-        ValueError
-    """
-
-    _message = ""
-
-    if 'type-id' not in data:
-        _message = MESSAGES_LIST["e000010"]
-    else:
-        if data['type-id']['value'] == "":
-
-            _message = MESSAGES_LIST["e000011"]
-
-    if _message != "":
-        _logger.error(_message)
-        raise ValueError(_message)
 
 def plugin_init(data):
-    """ Initializes the OMF plugin for the sending of blocks of readings to the PI Connector.
-    Args:
-    Returns:
-    Raises:
-        PluginInitializeFailed
-    """
+    """ Initializes the OMF plugin for the sending of blocks of readings to the PI Connector."""
 
-    global _config
-    global _config_omf_types
-    global _logger
-    global _recreate_omf_objects
-    global _log_debug_level, _log_performance, _stream_id, _destination_id
-
-    _log_debug_level = data['debug_level']
-    _log_performance = data['log_performance']
-    _stream_id = data['stream_id']
-    _destination_id = data['destination_id']
-
+    # Check producerToken first. No need to proceed further if producerToken is missing or is invalid
     try:
-        # note : _module_name is used as __name__ refers to the Sending Process
-        logger_name = _MODULE_NAME + "_" + str(_stream_id)
+        if data['producerToken'] == "": raise ValueError("the producerToken cannot be an empty string, use the FogLAMP API to set a proper value.")
+    except KeyError:
+        raise ValueError("the producerToken must be defined, use the FogLAMP API to set a proper value.")
 
-        _logger = \
-            logger.setup(logger_name, destination=_LOGGER_DESTINATION) if _log_debug_level == 0 else\
-            logger.setup(
-                            logger_name,
-                            destination=_LOGGER_DESTINATION,
-                            level=logging.INFO if _log_debug_level == 1 else logging.DEBUG)
+    # Define logger
+    _log_debug_level = data['debug_level']
+    _stream_id = data['stream_id']
+    logger_name = _MODULE_NAME + "_" + str(_stream_id)
+    _logger = logger.setup(logger_name, level=logging.INFO if _log_debug_level in [0, 1, None] else logging.DEBUG)
 
-    except Exception as ex:
-        _logger.error("{0} - ERROR - {1}".format(
-                                                time.strftime("%Y-%m-%d %H:%M:%S:"),
-                                                plugin_common.MESSAGES_LIST["e000012"].format(str(ex))))
-        raise ex
-    _logger.debug("{0} - ".format("plugin_info"))
+    # Fetch and validate OMF_TYPES fetched from configuration
+    _config_omf_types = data['sending_process_instance']._fetch_configuration(
+                                  cat_name=_CONFIG_CATEGORY_OMF_TYPES_NAME,
+                                  cat_desc=_CONFIG_CATEGORY_OMF_TYPES_DESCRIPTION,
+                                  cat_config=_DEFAULT_CONFIG_OMF_TYPES,
+                                  cat_keep_original=True)
+    for item in _config_omf_types:
+        if _config_omf_types[item]['type'] == 'JSON':
+            new_value = json.loads(_config_omf_types[item]['value'])
+            _config_omf_types[item]['value'] = new_value
 
-    _validate_configuration(data)
+    # Generate prefixes for static/dynamic data sepaprate for each source
+    _prefix_sensor = "{}_{}".format(_OMF_PREFIX_SENSOR, data['source']['value'])
+    _prefix_measurement = "{}_{}".format(_OMF_PREFIX_MEASUREMENT, data['source']['value'])
 
-    # Retrieves the configurations and apply the related conversions
+    _config = {}
     _config['_CONFIG_CATEGORY_NAME'] = data['_CONFIG_CATEGORY_NAME']
     _config['URL'] = data['URL']['value']
     _config['producerToken'] = data['producerToken']['value']
@@ -337,49 +196,20 @@ def plugin_init(data):
     _config['OMFRetrySleepTime'] = int(data['OMFRetrySleepTime']['value'])
     _config['OMFHttpTimeout'] = int(data['OMFHttpTimeout']['value'])
     _config['StaticData'] = ast.literal_eval(data['StaticData']['value'])
-
     _config['formatNumber'] = data['formatNumber']['value']
     _config['formatInteger'] = data['formatInteger']['value']
-
-    # TODO: compare instance fetching via inspect vs as param passing
-    # import inspect
-    # _config['sending_process_instance'] = inspect.currentframe().f_back.f_locals['self']
+    _config['verifySSL'] = data['verifySSL']['value']
+    _config['compression'] = data['compression']['value']
     _config['sending_process_instance'] = data['sending_process_instance']
-
-    # _config_omf_types = json.loads(data['omf_types']['value'])
-    # noinspection PyProtectedMember
-    _config_omf_types = _config['sending_process_instance']._fetch_configuration(
-                                  cat_name=_CONFIG_CATEGORY_OMF_TYPES_NAME,
-                                  cat_desc=_CONFIG_CATEGORY_OMF_TYPES_DESCRIPTION,
-                                  cat_config=_CONFIG_DEFAULT_OMF_TYPES,
-                                  cat_keep_original=True)
-
-    _validate_configuration_omf_type(_config_omf_types)
-
-    # Converts the value field from str to a dict
-    for item in _config_omf_types:
-
-        if _config_omf_types[item]['type'] == 'JSON':
-
-            # The conversion from a dict to str changes the case and it should be fixed before the conversion
-            value = _config_omf_types[item]['value'].replace("true", "True")
-            new_value = ast.literal_eval(value)
-            _config_omf_types[item]['value'] = new_value
-
-    _logger.debug("{0} - URL {1}".format("plugin_init", _config['URL']))
-
-    try:
-        _recreate_omf_objects = True
-
-    except Exception as ex:
-        _logger.error(plugin_common.MESSAGES_LIST["e000011"].format(ex))
-        raise plugin_exceptions.PluginInitializeFailed(ex)
+    _config['prefix_measurement'] = _prefix_measurement
+    _config['prefix_sensor'] = _prefix_sensor
+    _config['logger'] = _logger
+    _config['config_omf_types'] = _config_omf_types
 
     return _config
 
 
-# noinspection PyUnusedLocal
-async def plugin_send(data, raw_data, stream_id):
+async def plugin_send(handle, raw_data, stream_id):
     """ Translates and sends to the destination system the data provided by the Sending Process
     Args:
         data: plugin_handle from sending_process
@@ -391,81 +221,89 @@ async def plugin_send(data, raw_data, stream_id):
         num_sent     : Number of rows sent, used for the update of the statistics
     Raises:
     """
-    
-    global _recreate_omf_objects
-
-    is_data_sent = False
-    config_category_name = data['_CONFIG_CATEGORY_NAME']
-    type_id = _config_omf_types['type-id']['value']
-
-    # Sets globals for the OMF module
-    pi_server._logger = _logger
-    pi_server._log_debug_level = _log_debug_level
-    pi_server._log_performance = _log_performance
-
-    ocs_north = OCSNorthPlugin(data['sending_process_instance'], data, _config_omf_types, _logger)
+    _logger = handle['logger']
+    ocs_north = OCSNorthPlugin(handle)
 
     try:
-        # Alloc the in memory buffer
-        buffer_size = len(raw_data)
-        data_to_send = [None for x in range(buffer_size)]
-
-        is_data_available, new_position, num_sent = ocs_north.transform_in_memory_data(data_to_send, raw_data)
-
-        if is_data_available:
-
-            await ocs_north.create_omf_objects(raw_data, config_category_name, type_id)
-
-            try:
-                await ocs_north.send_in_memory_data_to_picromf("Data", data_to_send)
-
-            except Exception as ex:
-                # Forces the recreation of PIServer's objects on the first error occurred
-                if _recreate_omf_objects:
-                    await ocs_north.deleted_omf_types_already_created(config_category_name, type_id)
-                    _recreate_omf_objects = False
-                    _logger.debug("{0} - Forces objects recreation ".format("plugin_send"))
-                raise ex
-            else:
-                is_data_sent = True
-
+        is_data_sent = False
+        ocs_north._type_id = await ocs_north._get_next_type_id()
+        data_to_send, last_id = await ocs_north.prepare_to_send(raw_data)
+        num_to_sent = len(data_to_send)
+        await ocs_north.send_message("data", data_to_send) # Send Data
+        is_data_sent = True
     except Exception as ex:
-        _logger.exception(plugin_common.MESSAGES_LIST["e000031"].format(ex))
-        raise
+        _logger.exception("cannot complete the sending operation - error details |{0}|".format(ex))
+        await ocs_north.delete_omf_types_already_created()
+        raise ex
 
-    return is_data_sent, new_position, num_sent
-
-
-# noinspection PyUnusedLocal
-def plugin_shutdown(data):
-    """ Terminates the plugin
-    Returns:
-    Raises:
-    """
-    try:
-        _logger.debug("{0} - plugin_shutdown".format(_MODULE_NAME))
-
-    except Exception as ex:
-        _logger.error(plugin_common.MESSAGES_LIST["e000013"].format(ex))
-        raise
+    return is_data_sent, last_id, num_to_sent
 
 
 def plugin_reconfigure():
-    """ Reconfigures the plugin, it should be called when the configuration of the plugin is changed during the
-        operation of the South service.
-        The new configuration category should be passed.
-
-    Args:
-    Returns:
-    Raises:
-    """
-
     pass
 
 
-class OCSNorthPlugin(pi_server.PIServerNorthPlugin):
+def plugin_shutdown(data):
+    pass
+
+
+class OCSNorthPlugin(OmfTranslator):
     """ North OCS North Plugin """
 
-    def __init__(self, sending_process_instance, config, config_omf_types,  _logger):
+    def __init__(self, handle):
+        super().__init__(handle)
 
-        super().__init__(sending_process_instance, config, config_omf_types, _logger)
+    def filter_identifier(self, identifier):
+        """
+        Rules for OCS identifier:
+        1. not case sensitive
+        2. can contain spaces
+        3. cannot start with two underscores (__)
+        4. can contain max 250 characters
+        5. cannot use /;:?/[]{}'#@!$%\*&+=
+        6. cannot end or start with a period
+        7. cannot contain consecutive period
+        8. cannot consist of just one period
+
+        :param identifier:
+        :return: identifier
+        """
+        new_identifier = identifier[:249] if len(identifier) > 250 else identifier
+        new_identifier = new_identifier[2:] if new_identifier.startswith('__') else new_identifier
+        new_identifier = new_identifier[1:] if new_identifier.startswith('.') else new_identifier
+        new_identifier = new_identifier[:-1] if new_identifier.endswith('.') else new_identifier
+        new_identifier = new_identifier.replace('%', 'prcntg_') if new_identifier.startswith('%') else new_identifier
+        new_identifier = new_identifier.replace('%', '_prcntg') if new_identifier.endswith('%') else new_identifier
+
+        new_identifier = new_identifier. \
+            replace('..', '.'). \
+            replace(' ', ''). \
+            replace('`', ''). \
+            replace('~', ''). \
+            replace('!', ''). \
+            replace('@', ''). \
+            replace('#', ''). \
+            replace('$', ''). \
+            replace('%', ''). \
+            replace('^', ''). \
+            replace('&', ''). \
+            replace('*', ''). \
+            replace('(', ''). \
+            replace(')', ''). \
+            replace('+', ''). \
+            replace('=', ''). \
+            replace('{', ''). \
+            replace('}', ''). \
+            replace('[', ''). \
+            replace(']', ''). \
+            replace('|', ''). \
+            replace('\\', ''). \
+            replace(':', ''). \
+            replace(";", ''). \
+            replace('"', ''). \
+            replace("'", ''). \
+            replace("/", '_'). \
+            replace("?", ''). \
+            replace("`", ""). \
+            replace(",", "")
+        return new_identifier

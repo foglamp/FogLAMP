@@ -11,16 +11,22 @@ __copyright__ = "Copyright (c) 2017 OSIsoft, LLC"
 __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
-__all__ = ('NorthPluginException', 'DataSendError')
+__all__ = ('UnknownDataSource', 'URLFetchError', 'PluginInitializeFailed', 'NorthPluginException', 'DataSendError')
 
-
-class URLFetchError(RuntimeError):
-    """ Unable to fetch from the HTTP server """
-    pass
 
 
 class PluginInitializeFailed(RuntimeError):
     """ Unable to initialize the plugin """
+    pass
+
+
+class UnknownDataSource(RuntimeError):
+    """ the data source could be only one among: readings or statistics"""
+    pass
+
+
+class URLFetchError(RuntimeError):
+    """ Unable to fetch from the HTTP server """
     pass
 
 
