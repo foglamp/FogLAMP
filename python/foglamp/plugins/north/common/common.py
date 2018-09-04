@@ -13,7 +13,14 @@ __version__ = "${VERSION}"
 
 
 def convert_to_type(value):
-    """Evaluates and converts to the type in relation to its actual value, for example "180.2" to float 180.2"""
+    """Evaluates and converts to the type in relation to its actual value, for example "180.2" to float 180.2
+
+          Args:
+             value : value to evaluate and convert
+          Returns:
+              value_converted: converted value
+          Raises:
+    """
     value_type = evaluate_type(value)
     if value_type == "string":
         value_converted = value
@@ -27,7 +34,14 @@ def convert_to_type(value):
 
 
 def evaluate_type(value):
-    """Evaluates the type in relation to its value"""
+    """Evaluates the type in relation to its value
+
+          Args:
+             value : value to evaluate
+          Returns:
+              Evaluated type {integer,number,string}
+          Raises:
+    """
     try:
         float(value)
         try:
@@ -50,7 +64,15 @@ def evaluate_type(value):
 
 
 def identify_unique_asset_codes(raw_data):
-    """Identify unique asset codes in the data block"""
+    """Identify unique asset codes in the data block
+
+         Args:
+             raw_data : data block retrieved from the Storage layer that should be evaluated
+         Returns:
+             unique_asset_codes : list of unique codes
+
+         Raises:
+    """
     unique_asset_codes = []
     for row in raw_data:
         asset_code = row['asset_code']
