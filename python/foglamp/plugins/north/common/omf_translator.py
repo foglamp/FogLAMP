@@ -339,14 +339,22 @@ class OmfTranslator(object):
 
         for item in asset_codes_to_evaluate:
             asset_code = item["asset_code"]
+            from_configuration = True
             if not any(tmp_item == asset_code for tmp_item in asset_codes_already_created):
                 try:
-                    assert asset_code in self._config_omf_types
-                except (KeyError, AssertionError):
-                    await self._create_omf_types_automatic(item)  # configuration_based = False
+                    if asset_code not in self._config_omf_types: raise KeyError
+                    if not self._config_omf_types[asset_code]: raise ValueError
+                except (KeyError, ValueError):
+                    from_configuration = False
+                try:
+                    if from_configuration is False:
+                        await self._create_omf_types_automatic(item)  # configuration_based = False
+                    else:
+                        await self._create_omf_types_from_configuration(asset_code)  # configuration_based = True
+                except:
+                    self._logger.warning("Error in creating type for {}:{}".format(config_category_name, asset_code))
                 else:
-                    await self._create_omf_types_from_configuration(asset_code)  # configuration_based = True
-                await self._flag_created_omf_type(config_category_name, asset_code)
+                    await self._flag_created_omf_type(config_category_name, asset_code)
 
     async def _create_omf_containers(self):
         containers = list()

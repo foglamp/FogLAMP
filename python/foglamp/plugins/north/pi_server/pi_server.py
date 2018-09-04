@@ -196,7 +196,7 @@ async def plugin_send(handle, raw_data, stream_id):
         num_to_sent = len(data_to_send)
         await pi_server_north.send_message("data", data_to_send) # Send Data
         is_data_sent = True
-    except (plugin_exceptions.URLFetchError, plugin_exceptions.DataSendError, Exception) as ex:
+    except (plugin_exceptions.URLFetchError, plugin_exceptions.URLConnectionError, plugin_exceptions.DataSendError, Exception) as ex:
         _logger.exception("cannot complete the sending operation - error details |{0}|".format(ex))
         await pi_server_north.delete_omf_types_already_created()
         raise plugin_exceptions.DataSendError(ex)
