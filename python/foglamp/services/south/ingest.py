@@ -123,7 +123,7 @@ class Ingest(object):
         """Creates default values for the South configuration category and then reads all
         values for this category
         """
-        category = 'South'
+        category = "{}Advanced".format(cls._parent_service._name)
 
         default_config = {
             "write_statistics_frequency_seconds": {
@@ -171,14 +171,17 @@ class Ingest(object):
         # Create configuration category and any new keys within it
         config_payload = json.dumps({
             "key": category,
-            "description": 'South Service configuration',
+            "description": '{} South Service Ingest configuration'.format(cls._parent_service._name),
             "value": default_config,
-            "keep_original_items": False
+            "keep_original_items": True
         })
         cls._parent_service._core_microservice_management_client.create_configuration_category(config_payload)
 
         # Read configuration
         config = cls._parent_service._core_microservice_management_client.get_configuration_category(category_name=category)
+
+        # Create child category
+        cls._parent_service._core_microservice_management_client.create_child_category(parent=cls._parent_service._name, children=[category])
 
         cls._write_statistics_frequency_seconds = int(config['write_statistics_frequency_seconds']
                                                       ['value'])
@@ -548,7 +551,7 @@ class Ingest(object):
 
         # asset tracker checking
         payload = {"asset": asset, "event": "Ingest", "service": cls._parent_service._name,
-                   "plugin": cls._parent_service._plugin_handle['plugin']['value']}
+                   "plugin": cls._parent_service._plugin_info['config']['plugin']['default']}
         if payload not in cls._payload_events:
             cls._parent_service._core_microservice_management_client.create_asset_tracker_event(payload)
             cls._payload_events.append(payload)

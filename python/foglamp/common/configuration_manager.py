@@ -81,6 +81,13 @@ class ConfigurationCache(object):
                 oldest_entry = category_name
         self.cache.pop(oldest_entry)
 
+    def remove(self, key):
+        """Remove the entry with given key name"""
+        for category_name in self.cache:
+            if key == category_name:
+                self.cache.pop(key)
+                break
+
     @property
     def size(self):
         """Return the size of the cache"""
@@ -239,10 +246,13 @@ class ConfigurationManager(ConfigurationManagerSingleton):
                 if entry_name in optional_item_entries:
                     if entry_name == 'readonly' or entry_name == 'deprecated':
                         if self._validate_type_value('boolean', entry_val) is False:
-                            raise ValueError('Unrecognized value for item_name {}'.format(entry_name))
+                            raise ValueError('Entry value must be boolean for item name {}'.format(entry_name))
+                    elif entry_name == 'minimum' or entry_name == 'maximum':
+                        if (self._validate_type_value('integer', entry_val) or self._validate_type_value('float', entry_val)) is False:
+                            raise ValueError('Entry value must be an integer or float for item name {}'.format(entry_name))
                     else:
                         if self._validate_type_value('integer', entry_val) is False:
-                            raise ValueError('Unrecognized value for item_name {}'.format(entry_name))
+                            raise ValueError('Entry value must be an integer for item name {}'.format(entry_name))
 
                     d = {entry_name: entry_val}
                     expected_item_entries.update(d)

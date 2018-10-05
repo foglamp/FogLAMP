@@ -7,6 +7,10 @@
  *
  * Author: Mark Riddoch, Massimiliano Pinto
  */
+
+#include <sys/timerfd.h>
+#include <time.h>
+#include <stdint.h>
 #include <south_service.h>
 #include <management_api.h>
 #include <storage_client.h>
@@ -116,7 +120,7 @@ void doIngest(Ingest *ingest, Reading reading)
 /**
  * Constructor for the south service
  */
-SouthService::SouthService(const string& myName) : m_name(myName), m_shutdown(false), m_pollInterval(1000)
+SouthService::SouthService(const string& myName) : m_name(myName), m_shutdown(false), m_readingsPerSec(1)
 {
 	logger = new Logger(myName);
 }
@@ -166,7 +170,7 @@ void SouthService::start(string& coreAddress, unsigned short corePort)
 		}
 
 		// Get a handle on the storage layer
-		ServiceRecord storageRecord("FogLAMP%20Storage");
+		ServiceRecord storageRecord("FogLAMP Storage");
 		if (!m_mgtClient->getService(storageRecord))
 		{
 			logger->fatal("Unable to find storage service");
@@ -197,9 +201,9 @@ void SouthService::start(string& coreAddress, unsigned short corePort)
 		Ingest ingest(storage, timeout, threshold, m_name, pluginName, m_mgtClient);
 
 		try {
-			m_pollInterval = 500;
-			if (m_config.itemExists("pollInterval"))
-				m_pollInterval = (unsigned long)atoi(m_config.getValue("pollInterval").c_str());
+			m_readingsPerSec = 1;
+			if (m_config.itemExists("readingsPerSec"))
+				m_readingsPerSec = (unsigned long)atoi(m_config.getValue("readingsPerSec").c_str());
 		} catch (ConfigItemNotFound e) {
 			logger->info("Defaulting to inline default for poll interval");
 		}
@@ -215,12 +219,49 @@ void SouthService::start(string& coreAddress, unsigned short corePort)
 		// Get and ingest data
 		if (! southPlugin->isAsync())
 		{
+			int fd = createTimerFd(1000000/(int)m_readingsPerSec); // interval to be passed is in usecs
+			if (fd >= 0)
+				logger->info("Created timer FD with interval of %u usecs", 1000000/m_readingsPerSec);
+			else
+			{
+				logger->fatal("Could not create timer FD");
+				return;
+			}
+			
+			int pollCount = 0;
+			struct timespec start, end;
+			if (clock_gettime(CLOCK_MONOTONIC, &start) == -1)
+			   Logger::getLogger()->error("polling loop start: clock_gettime");
+
 			while (!m_shutdown)
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(m_pollInterval));
-				Reading reading = southPlugin->poll();
-				ingest.ingest(reading);
+				uint64_t exp;
+				ssize_t s;
+				
+				s = read(fd, &exp, sizeof(uint64_t));
+				if ((unsigned int)s != sizeof(uint64_t))
+					logger->error("timerfd read()");
+				if (exp > 100)
+					logger->error("%d expiry notifications accumulated", exp);
+				for (uint64_t i=0; i<exp; i++)
+				{
+					Reading reading = southPlugin->poll();
+					ingest.ingest(reading);
+					++pollCount;
+				}
 			}
+			if (clock_gettime(CLOCK_MONOTONIC, &end) == -1)
+			   Logger::getLogger()->error("polling loop end: clock_gettime");
+			
+			int secs = end.tv_sec - start.tv_sec;
+		   	int nsecs = end.tv_nsec - start.tv_nsec;
+		   	if (nsecs < 0)
+			{
+				secs--;
+				nsecs += 1000000000;
+			}
+			Logger::getLogger()->info("%d readings generated in %d.%d secs", pollCount, secs, nsecs);
+			close(fd);
 		}
 		else
 		{
@@ -329,7 +370,7 @@ void SouthService::configChange(const string& categoryName, const string& catego
 			category.c_str());
 	m_config = m_mgtClient->getCategory(m_name);
 	try {
-		m_pollInterval = (unsigned long)atoi(m_config.getValue("pollInterval").c_str());
+		m_readingsPerSec = (unsigned long)atoi(m_config.getValue("readingsPerSec").c_str());
 	} catch (ConfigItemNotFound e) {
 		logger->error("Failed to update poll interval following configuration change");
 	}
@@ -348,5 +389,54 @@ void SouthService::addConfigDefaults(DefaultConfigCategory& defaultConfig)
 		defaultConfig.addItem(defaults[i].name, defaults[i].description,
 			defaults[i].type, defaults[i].value, defaults[i].value);	
 	}
+}
+
+/**
+ * Create a timer FD on which a read would return data every time the given 
+ * interval elapses
+ *
+ * @param usecs	 Time in micro-secs after which data would be available on the timer FD
+ */
+int SouthService::createTimerFd(int usecs)
+{
+	int fd = -1;
+	struct itimerspec new_value;
+	struct timespec now;
+	
+	if (clock_gettime(CLOCK_REALTIME, &now) == -1)
+	   Logger::getLogger()->error("clock_gettime");
+
+	new_value.it_value.tv_sec = now.tv_sec;
+	new_value.it_value.tv_nsec = now.tv_nsec + usecs*1000;
+	if (new_value.it_value.tv_nsec >= 1000000000)
+	{
+		new_value.it_value.tv_sec += new_value.it_value.tv_nsec/1000000000;
+		new_value.it_value.tv_nsec %= 1000000000;
+	}
+	
+	new_value.it_interval.tv_sec = 0;
+	new_value.it_interval.tv_nsec = usecs*1000;
+	if (new_value.it_interval.tv_nsec >= 1000000000)
+	{
+		new_value.it_interval.tv_sec += new_value.it_interval.tv_nsec/1000000000;
+		new_value.it_interval.tv_nsec %= 1000000000;
+	}
+	
+	errno=0;
+	fd = timerfd_create(CLOCK_REALTIME, 0);
+	if (fd == -1)
+	{
+		Logger::getLogger()->error("timerfd_create failed, errno=%d (%s)", errno, strerror(errno));
+		return fd;
+	}
+
+	if (timerfd_settime(fd, TFD_TIMER_ABSTIME, &new_value, NULL) == -1)
+	{
+	    Logger::getLogger()->error("timerfd_settime failed, errno=%d (%s)", errno, strerror(errno));
+	    close (fd);
+		return -1;
+	}
+
+	return fd;
 }
 

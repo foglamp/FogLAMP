@@ -14,6 +14,7 @@
 #include <map>
 #include <reading.h>
 #include <http_sender.h>
+#include <zlib.h>
 
 #define OMF_TYPE_STRING  "string"
 #define OMF_TYPE_INTEGER "integer"
@@ -56,7 +57,7 @@ class OMF
 
 		// Method with vector (by reference) of reading pointers
 		uint32_t sendToServer(const std::vector<Reading *>& readings,
-				      bool skipSentDataTypes = true);
+				      bool compression, bool skipSentDataTypes = true);
 
 		// Send a single reading (by reference)
 		uint32_t sendToServer(const Reading& reading,
@@ -71,6 +72,10 @@ class OMF
 
 		// Get saved OMF formats
 		std::string getFormatType(const std::string &key) const;
+
+		// Compress string using gzip
+		std::string compress_string(const std::string& str,
+                            				int compressionlevel = Z_DEFAULT_COMPRESSION);
 
 	private:
 		/**
@@ -121,7 +126,6 @@ class OMF
 		const std::string		m_path;
 		const std::string		m_typeId;
 		const std::string		m_producerToken;
-		std::map<std::string, bool>	m_createdTypes;
 
 		// Define the OMF format to use for each type
 		// the format will not be applied if the string is empty
@@ -133,11 +137,13 @@ class OMF
 
     		// Vector with OMF_TYPES
 		const std::vector<std::string> omfTypes = { OMF_TYPE_STRING,
-							    OMF_TYPE_INTEGER,
+							    OMF_TYPE_FLOAT,  // Forces the creation of float also for integer numbers
 							    OMF_TYPE_FLOAT };
 		// HTTP Sender interface
 		HttpSender&		m_sender;
 		bool			m_lastError;
+		unsigned long long      m_readings;
+		unsigned long long      m_usecs;
 };
 
 /**

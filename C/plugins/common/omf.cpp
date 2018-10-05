@@ -11,10 +11,16 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
+#include <chrono>
 #include <omf.h>
 #include <logger.h>
+#include <zlib.h>
 
 using namespace std;
+
+// Cache for OMF data types
+static std::map<std::string, bool>	OMFcreatedTypes;
 
 /**
  * OMFData constructor
@@ -24,6 +30,7 @@ OMFData::OMFData(const Reading& reading)
 	// Convert reading data into the OMF JSON string
 	m_value.append("{\"containerid\": \"measurement_");
 	m_value.append(reading.getAssetName() + "\", \"values\": [{");
+
 
 	// Get reading data
 	const vector<Datapoint*> data = reading.getReadingData();
@@ -63,14 +70,71 @@ OMF::OMF(HttpSender& sender,
 	 m_path(path),
 	 m_typeId(id),
 	 m_producerToken(token),
-         m_sender(sender)
+	 m_sender(sender)
 {
 	m_lastError = false;
+        m_readings = 0;
+        m_usecs = 0;
 }
 
 // Destructor
 OMF::~OMF()
 {
+	Logger::getLogger()->info("Total %lld readings sent to PI server in %lld usecs, amortized request->response time = %lld usec/reading", m_readings, m_usecs, m_usecs/m_readings);
+}
+
+
+/**
+ * Compress a string
+ *
+ * @param str			Input STL string that is to be compressed
+ * @param compressionlevel	zlib/gzip Compression level
+ * @return str			gzip compressed binary data
+ */
+std::string OMF::compress_string(const std::string& str,
+                            int compressionlevel)
+{
+    const int windowBits = 15;
+    const int GZIP_ENCODING = 16;
+
+    z_stream zs;                        // z_stream is zlib's control structure
+    memset(&zs, 0, sizeof(zs));
+
+    if (deflateInit2(&zs, compressionlevel, Z_DEFLATED,
+		 windowBits | GZIP_ENCODING, 8,
+		 Z_DEFAULT_STRATEGY) != Z_OK)
+        throw(std::runtime_error("deflateInit failed while compressing."));
+
+    zs.next_in = (Bytef*)str.data();
+    zs.avail_in = str.size();           // set the z_stream's input
+
+    int ret;
+    char outbuffer[32768];
+    std::string outstring;
+
+    // retrieve the compressed bytes blockwise
+    do {
+        zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
+        zs.avail_out = sizeof(outbuffer);
+
+        ret = deflate(&zs, Z_FINISH);
+
+        if (outstring.size() < zs.total_out) {
+            // append the block to the output string
+            outstring.append(outbuffer,
+                             zs.total_out - outstring.size());
+        }
+    } while (ret == Z_OK);
+
+    deflateEnd(&zs);
+
+    if (ret != Z_STREAM_END) {          // an error occurred that was not EOF
+        std::ostringstream oss;
+        oss << "Exception during zlib compression: (" << ret << ") " << zs.msg;
+        throw(std::runtime_error(oss.str()));
+    }
+
+    return outstring;
 }
 
 /**
@@ -199,7 +263,7 @@ bool OMF::sendDataTypes(const Reading& row) const
  * @return                    != on success, 0 otherwise
  */
 uint32_t OMF::sendToServer(const vector<Reading *>& readings,
-			   bool skipSentDataTypes)
+			   bool compression, bool skipSentDataTypes)
 {
 	/*
 	 * Iterate over readings:
@@ -211,7 +275,7 @@ uint32_t OMF::sendToServer(const vector<Reading *>& readings,
 	ostringstream jsonData;
 	jsonData << "[";
 
-	// Fecth Reading* data
+	// Fetch Reading* data
 	for (vector<Reading *>::const_iterator elem = readings.begin();
 						    elem != readings.end();
 						    ++elem)
@@ -241,8 +305,12 @@ uint32_t OMF::sendToServer(const vector<Reading *>& readings,
 
 	jsonData << "]";
 
+	string json = jsonData.str();
+	if (compression)
+		json = compress_string(json);
+
 	/**
-	 * Types messages sent, now transorm ech reading to OMF format.
+	 * Types messages sent, now transform each reading to OMF format.
 	 *
 	 * After formatting the new vector of data can be sent
 	 * with one message only
@@ -250,13 +318,22 @@ uint32_t OMF::sendToServer(const vector<Reading *>& readings,
 
 	// Create header for Readings data
 	vector<pair<string, string>> readingData = OMF::createMessageHeader("Data");
+	if (compression)
+		readingData.push_back(pair<string, string>("compression", "gzip"));
 
 	// Build an HTTPS POST with 'readingData headers
 	// and 'allReadings' JSON payload
 	// Then get HTTPS POST ret code and return 0 to client on error
 	try
 	{
-		int res = m_sender.sendRequest("POST", m_path, readingData, jsonData.str());
+		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+		int res = m_sender.sendRequest("POST", m_path, readingData, json);
+		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+ 		auto usecs = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+		//Logger::getLogger()->info("OMF::sendToServer(): HTTP request sent buffer with buffer size %d bytes, res=%d", json.size(), res);
+                m_readings += readings.size();
+                m_usecs += usecs;
+
 		if (res != 200 && res != 204)
 		{
 			Logger::getLogger()->error("Sending JSON readings data error: %d", res);
@@ -266,7 +343,7 @@ uint32_t OMF::sendToServer(const vector<Reading *>& readings,
 
 		m_lastError = false;
 
-		// Return number of sen t readings to the caller
+		// Return number of sent readings to the caller
 		return readings.size();
 	}
 	catch (const std::exception& e)
@@ -675,7 +752,7 @@ bool OMF::handleDataTypes(const Reading& row,
  */
 bool OMF::setCreatedTypes(const string& key)
 {
-	return m_createdTypes[key] = true;
+	return OMFcreatedTypes[key] = true;
 }
 
 /**
@@ -687,7 +764,7 @@ bool OMF::setCreatedTypes(const string& key)
  */
 bool OMF::getCreatedTypes(const string& key)
 {
-	return m_createdTypes[key];
+	return OMFcreatedTypes[key];
 }
 
 /**

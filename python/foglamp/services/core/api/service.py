@@ -6,16 +6,18 @@
 
 import datetime
 from aiohttp import web
+
+from foglamp.common import utils
+from foglamp.common import logger
 from foglamp.common.service_record import ServiceRecord
-from foglamp.services.core.service_registry.service_registry import ServiceRegistry
 from foglamp.common.storage_client.payload_builder import PayloadBuilder
+from foglamp.common.storage_client.exceptions import StorageServerError
 from foglamp.common.configuration_manager import ConfigurationManager
 from foglamp.services.core import server
 from foglamp.services.core import connect
-from foglamp.services.core.scheduler.entities import StartUpSchedule
-from foglamp.common.storage_client.exceptions import StorageServerError
-from foglamp.common import utils
 from foglamp.services.core.api import utils as apiutils
+from foglamp.services.core.scheduler.entities import StartUpSchedule
+from foglamp.services.core.service_registry.service_registry import ServiceRegistry
 
 __author__ = "Mark Riddoch, Ashwin Gopalakrishnan, Amarendra K Sinha"
 __copyright__ = "Copyright (c) 2018 OSIsoft, LLC"
@@ -28,6 +30,7 @@ _help = """
     -------------------------------------------------------------------------------
 """
 
+_logger = logger.setup()
 
 #################################
 #  Service
@@ -72,17 +75,19 @@ async def add_service(request):
 
     :Example:
              curl -X POST http://localhost:8081/foglamp/service -d '{"name": "DHT 11", "plugin": "dht11", "type": "south", "enabled": true}'
+             curl -sX POST http://localhost:8081/foglamp/service -d '{"name": "Sine", "plugin": "sinusoid", "type": "south", "enabled": true, "config": {"dataPointsPerSec": {"value": "10"}}}' | jq
     """
 
     try:
         data = await request.json()
         if not isinstance(data, dict):
-            raise ValueError('Data payload must be a dictionary')
+            raise ValueError('Data payload must be a valid JSON')
 
         name = data.get('name', None)
         plugin = data.get('plugin', None)
         service_type = data.get('type', None)
         enabled = data.get('enabled', None)
+        config = data.get('config', None)
 
         if name is None:
             raise web.HTTPBadRequest(reason='Missing name property in payload.')
@@ -119,20 +124,36 @@ async def add_service(request):
             script = '["services/south"]' if service_type == 'south' else '["services/north"]'
             # Fetch configuration from the configuration defined in the plugin
             plugin_info = _plugin.plugin_info()
+            if plugin_info['type'] != service_type:
+                msg = "Plugin of {} type is not supported".format(plugin_info['type'])
+                _logger.exception(msg)
+                return web.HTTPBadRequest(reason=msg)
             plugin_config = plugin_info['config']
             process_name = 'south'
         except ImportError as ex:
             # Checking for C-type plugins
             script = '["services/south_c"]' if service_type == 'south' else '["services/north_c"]'
             plugin_info = apiutils.get_plugin_info(plugin)
+            if plugin_info['type'] != service_type:
+                msg = "Plugin of {} type is not supported".format(plugin_info['type'])
+                _logger.exception(msg)
+                return web.HTTPBadRequest(reason=msg)
             plugin_config = plugin_info['config']
             process_name = 'south_c'
             if not plugin_config:
-                raise web.HTTPNotFound(reason='Plugin "{}" import problem from path "{}". {}'.format(plugin, plugin_module_path, str(ex)))
+                _logger.exception("Plugin %s import problem from path %s. %s", plugin, plugin_module_path, str(ex))
+                raise web.HTTPNotFound(reason='Plugin "{}" import problem from path "{}".'.format(plugin, plugin_module_path))
         except Exception as ex:
-            raise web.HTTPInternalServerError(reason='Failed to fetch plugin configuration. {}'.format(str(ex)))
+            _logger.exception("Failed to fetch plugin configuration. %s", str(ex))
+            raise web.HTTPInternalServerError(reason='Failed to fetch plugin configuration')
 
         storage = connect.get_storage_async()
+        config_mgr = ConfigurationManager(storage)
+
+        # Check that the schedule name is not already registered
+        count = await check_schedules(storage, name)
+        if count != 0:
+            raise web.HTTPBadRequest(reason='A service with this name already exists.')
 
         # Check that the process name is not already registered
         count = await check_scheduled_processes(storage, process_name)
@@ -142,21 +163,16 @@ async def add_service(request):
             try:
                 res = await storage.insert_into_tbl("scheduled_processes", payload)
             except StorageServerError as ex:
-                err_response = ex.error
-                raise web.HTTPInternalServerError(reason='Failed to created scheduled process. {}'.format(err_response))
-            except Exception as ins_ex:
-                raise web.HTTPInternalServerError(reason='Failed to created scheduled process. {}'.format(str(ins_ex)))
-
-        # Check that the schedule name is not already registered
-        count = await check_schedules(storage, name)
-        if count != 0:
-            raise web.HTTPBadRequest(reason='A schedule with that name already exists')
+                _logger.exception("Failed to create scheduled process. %s", ex.error)
+                raise web.HTTPInternalServerError(reason='Failed to create service.')
+            except Exception as ex:
+                _logger.exception("Failed to create scheduled process. %s", str(ex))
+                raise web.HTTPInternalServerError(reason='Failed to create service.')
 
         # If successful then create a configuration entry from plugin configuration
         try:
             # Create a configuration category from the configuration defined in the plugin
             category_desc = plugin_config['plugin']['description']
-            config_mgr = ConfigurationManager(storage)
             await config_mgr.create_category(category_name=name,
                                              category_description=category_desc,
                                              category_value=plugin_config,
@@ -164,10 +180,19 @@ async def add_service(request):
             # Create the parent category for all South services
             await config_mgr.create_category("South", {}, "South microservices", True)
             await config_mgr.create_child_category("South", [name])
+
+            # If config is in POST data, then update the value for each config item
+            if config is not None:
+                if not isinstance(config, dict):
+                    raise ValueError('Config must be a JSON object')
+                for k, v in config.items():
+                    await config_mgr.set_category_item_value_entry(name, k, v['value'])
+
         except Exception as ex:
             await revert_configuration(storage, name)  # Revert configuration entry
             await revert_parent_child_configuration(storage, name)
-            raise web.HTTPInternalServerError(reason='Failed to create plugin configuration. {}'.format(str(ex)))
+            _logger.exception("Failed to create plugin configuration. %s", str(ex))
+            raise web.HTTPInternalServerError(reason='Failed to create plugin configuration.')
 
         # If all successful then lastly add a schedule to run the new service at startup
         try:
@@ -185,16 +210,18 @@ async def add_service(request):
         except StorageServerError as ex:
             await revert_configuration(storage, name)  # Revert configuration entry
             await revert_parent_child_configuration(storage, name)
-            raise web.HTTPInternalServerError(reason='Failed to created schedule. {}'.format(ex.error))
-        except Exception as ins_ex:
+            _logger.exception("Failed to create schedule. %s", ex.error)
+            raise web.HTTPInternalServerError(reason='Failed to create service.')
+        except Exception as ex:
             await revert_configuration(storage, name)  # Revert configuration entry
             await revert_parent_child_configuration(storage, name)
-            raise web.HTTPInternalServerError(reason='Failed to created schedule. {}'.format(str(ins_ex)))
+            _logger.exception("Failed to create service. %s", str(ex))
+            raise web.HTTPInternalServerError(reason='Failed to create service.')
 
+    except ValueError as e:
+        raise web.HTTPBadRequest(reason=str(e))
+    else:
         return web.json_response({'name': name, 'id': str(schedule.schedule_id)})
-
-    except ValueError as ex:
-        raise web.HTTPNotFound(reason=str(ex))
 
 
 async def check_scheduled_processes(storage, process_name):
@@ -212,6 +239,9 @@ async def check_schedules(storage, schedule_name):
 async def revert_configuration(storage, key):
     payload = PayloadBuilder().WHERE(['key', '=', key]).payload()
     await storage.delete_from_tbl('configuration', payload)
+    # Removed key from configuration cache
+    config_mgr = ConfigurationManager(storage)
+    config_mgr._cacheManager.remove(key)
 
 
 async def revert_parent_child_configuration(storage, key):
