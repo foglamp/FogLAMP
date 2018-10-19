@@ -30,6 +30,30 @@
 #define TASK_SEND_SLEEP 500
 #define TASK_SLEEP_MAX_INCREMENTS 4 // Currently not used
 
+// FIXME::
+#include <fstream>
+inline std::string tmpGetCurrentDateTime( std::string s ){
+	time_t now = time(0);
+	struct tm  tstruct;
+	char  buf[80];
+	tstruct = *localtime(&now);
+	if(s=="now")
+		strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+	else if(s=="date")
+		strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+	return std::string(buf);
+};
+inline void tmpLogger( std::string logMsg ){
+
+	std::string filePath = "/tmp/log_"+tmpGetCurrentDateTime("date")+".txt";
+	std::string now = tmpGetCurrentDateTime("now");
+	std::ofstream ofsw(filePath.c_str(), std::ios_base::out | std::ios_base::app );
+	ofsw << now << '\t' << logMsg << '\n';
+	ofsw.close();
+}
+// FIXME::
+
+
 using namespace std;
 using namespace std::chrono;
 
@@ -359,12 +383,20 @@ static void sendDataThread(SendingProcess *sendData)
 			 * transformed using historian protocol and then sent to destination.
 			 */
 
+			tmpLogger ("DBG  START ---  -----------------------------------------------------------------------------------------:");
+
 			const vector<Reading *> &readingData = sendData->m_buffer.at(sendIdx)->getAllReadings();
 
 			uint32_t sentReadings = sendData->m_plugin->send(readingData);
 
 			if (sentReadings)
 			{
+
+				// FIXME::
+				char tmpMsg[100];
+				sprintf(tmpMsg, "DBG  OK -%lu- -%lu-", readingData[0]->getId(), readingData.back()->getId());
+				tmpLogger (tmpMsg);
+
 				/** Sending done */
 				sendData->setUpdateDb(true);
 
@@ -396,6 +428,11 @@ static void sendDataThread(SendingProcess *sendData)
 			}
 			else
 			{
+				// FIXME::
+				char tmpMsg[100];
+				sprintf(tmpMsg, "DBG  ERROR -%lu-  -%lu-", readingData[0]->getId(), readingData.back()->getId());
+				tmpLogger (tmpMsg);
+
 				Logger::getLogger()->error("SendingProcess sendDataThread: Error while sending" \
 							   "('%s' stream id %d), sendIdx %u. N. (%d readings)",
 							   sendData->getDataSourceType().c_str(),
@@ -419,6 +456,8 @@ static void sendDataThread(SendingProcess *sendData)
 				// TODO: add increments from 1 to TASK_SLEEP_MAX_INCREMENTS
 				this_thread::sleep_for(chrono::milliseconds(TASK_SEND_SLEEP));
 			}
+			tmpLogger ("DBG  END ---  -----------------------------------------------------------------------------------------:");
+
                 }
         }
 	Logger::getLogger()->info("SendingProcess sendData thread: sent %lu total '%s'",

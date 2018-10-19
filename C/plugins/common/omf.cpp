@@ -19,6 +19,30 @@
 #define REDEFINITION_TYPE_MESSAGE	"Redefinition of the type with the same ID is not allowed"
 #define INVALID_VALUE_TYPE		"Invalid value type for the property"
 
+// FIXME::
+#include <fstream>
+inline std::string tmpGetCurrentDateTime( std::string s ){
+	time_t now = time(0);
+	struct tm  tstruct;
+	char  buf[80];
+	tstruct = *localtime(&now);
+	if(s=="now")
+		strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+	else if(s=="date")
+		strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+	return std::string(buf);
+};
+inline void tmpLogger( std::string logMsg ){
+
+	std::string filePath = "/tmp/log_"+tmpGetCurrentDateTime("date")+".txt";
+	std::string now = tmpGetCurrentDateTime("now");
+	std::ofstream ofsw(filePath.c_str(), std::ios_base::out | std::ios_base::app );
+	ofsw << now << '\t' << logMsg << '\n';
+	ofsw.close();
+}
+// FIXME::
+
+
 using namespace std;
 
 // Cache for OMF data types
@@ -418,10 +442,18 @@ uint32_t OMF::sendToServer(const vector<Reading *>& readings,
 	// Then get HTTPS POST ret code and return 0 to client on error
 	try
 	{
+		// FIXME::
+		char tmpMsg[100000];
+		sprintf(tmpMsg, "DBG - OMG MESSAGE -%s-", json.c_str());
+		tmpLogger (tmpMsg);
+
+
 		int res = m_sender.sendRequest("POST",
 					       m_path,
 					       readingData,
 					       json);
+
+
 		if (res != 200 && res != 204)
 		{
 			Logger::getLogger()->error("Sending JSON readings, HTTP code %d", res);
