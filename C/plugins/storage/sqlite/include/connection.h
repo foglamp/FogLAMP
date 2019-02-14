@@ -44,7 +44,8 @@ class Connection {
 		bool		m_logSQL;
 		void		raiseError(const char *operation, const char *reason,...);
 		sqlite3		*dbHandle;
-		int		mapResultSet(void *res, std::string& resultSet);
+		sqlite3		*dbHandleReadings;
+		int		mapResultSet(sqlite3 *dbHndl, void *res, std::string& resultSet);
 		bool		jsonWhereClause(const rapidjson::Value& whereClause, SQLBuffer&, bool convertLocaltime = false);
 		bool		jsonModifiers(const rapidjson::Value&, SQLBuffer&);
 		bool		jsonAggregates(const rapidjson::Value&,
@@ -55,7 +56,7 @@ class Connection {
 		char		*trim(char *str);
 		const char	*escape(const char *);
 		const std::string	escape(const std::string&);
-		bool applyColumnDateTimeFormat(sqlite3_stmt *pStmt,
+		bool applyColumnDateTimeFormat(sqlite3 *dbHndl, sqlite3_stmt *pStmt,
 						int i,
 						std::string& newDate);
 		void		logSQL(const char *, const char *);
