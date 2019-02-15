@@ -599,6 +599,28 @@ Connection::Connection()
 
 	sqlite3_extended_result_codes(dbHandle, 1);
 	sqlite3_extended_result_codes(dbHandleReadings, 1);
+	sqlite3_exec(dbHandle, "PRAGMA journal_mode = WAL", NULL, NULL, NULL);
+	int rc;
+	char *zErrMsg = NULL;
+	rc = sqlite3_exec(dbHandleReadings, "PRAGMA journal_mode = WAL;", NULL, NULL, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		const char* errMsg = "Failed to set PRAGMA journal_mode = WAL";
+		Logger::getLogger()->error("%s '%s': error %s",
+					   errMsg,
+					   "PRAGMA journal_mode = WAL",
+					   zErrMsg);
+		connectErrorTime = time(0);
+
+		sqlite3_free(zErrMsg);
+		//sqlite3_close_v2(dbHandleReadings);
+		//sqlite3_close_v2(dbHandle);
+	}
+	else
+	{
+		Logger::getLogger()->info("PRAGMA journal_mode = WAL set successfully");
+	}
+	//sqlite3_exec(dbHandle, "PRAGMA synchronous = OFF", NULL, NULL, NULL);
 }
 
 /**
@@ -607,8 +629,10 @@ Connection::Connection()
  */
 Connection::~Connection()
 {
-	sqlite3_close_v2(dbHandleReadings);
-	sqlite3_close_v2(dbHandle);
+	if (dbHandleReadings)
+		sqlite3_close_v2(dbHandleReadings);
+	if (dbHandle)
+		sqlite3_close_v2(dbHandle);
 }
 
 /**
@@ -1753,7 +1777,7 @@ bool 		add_row = false;
 		return -1;
 	}
 	{
-	START_TIME;
+	//START_TIME;
 	for (Value::ConstValueIterator itr = rdings.Begin(); itr != rdings.End(); ++itr)
 	{
 		if (!itr->IsObject())
@@ -1839,7 +1863,7 @@ bool 		add_row = false;
 
 	}
 	sql.append(';');
-	PRINT_TIME("appendReading for loop");
+	//PRINT_TIME("appendReading for loop");
 	}
 	
 	const char *query = sql.coalesce();
@@ -1848,7 +1872,7 @@ bool 		add_row = false;
 	int rc;
 
 	//PRINT_FUNC;
-	START_TIME;
+	//START_TIME;
 	// Exec the INSERT statement: no callback, no result set
 	rc = SQLexec(dbHandleReadings,
 		     query,
@@ -1859,7 +1883,7 @@ bool 		add_row = false;
 	// Release memory for 'query' var
 	delete[] query;
 	//PRINT_FUNC;
-	PRINT_TIME("SQLexec");
+	//PRINT_TIME("SQLexec");
 
 	// Check result code
 	if (rc == SQLITE_OK)
@@ -2547,7 +2571,7 @@ int blocks = 0;
 		sqlite3_free(zErrMsg);
 	}
 
-	logger->info("Got retained unsetn row count");
+	logger->info("Got retained unsent row count");
 
 	int readings_num = 0;
 	// Exec query and get result in 'readings_num' via 'countCallback'
@@ -3584,7 +3608,7 @@ int retries = 0, rc;
 			m_qMutex.unlock();
 			//usleep(retries * RETRY_BACKOFF);	// sleep retries milliseconds
 			std::this_thread::sleep_for(std::chrono::milliseconds(retries * RETRY_BACKOFF/1000));
-			Logger::getLogger()->info("retry %d of %d, rc=%s, errmsg=%s", retries, MAX_RETRIES, (rc==SQLITE_LOCKED)?"SQLITE_LOCKED":"SQLITE_BUSY", sqlite3_errmsg(dbHandleReadings));
+			Logger::getLogger()->info("retry %d of %d, rc=%s, errmsg=%s", retries, MAX_RETRIES, (rc==SQLITE_LOCKED)?"SQLITE_LOCKED":"SQLITE_BUSY", sqlite3_errmsg(db));
 			m_qMutex.lock();
 			m_queuing--;
 			m_qMutex.unlock();
