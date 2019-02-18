@@ -56,7 +56,7 @@ using namespace rapidjson;
  * run by the storage plugin and the number of times a particular statement has to
  * be retried because of the database being busy./
  */
-#define DO_PROFILE		0
+#define DO_PROFILE		1
 #define DO_PROFILE_RETRIES	0
 #if DO_PROFILE
 #include <profile.h>
@@ -99,6 +99,14 @@ map<string, string> sqliteDateFormat = {
 							F_DATEH24_H},
 						{"", ""}
 					};
+
+inline std::string getThreadIdStr()
+{
+        std::thread::id thread_id = std::this_thread::get_id();
+        ostringstream ss;
+        ss << thread_id;
+        return ss.str();
+}
 
 /**
  * This SQLIte3 query callback returns a formatted date
@@ -437,6 +445,7 @@ Connection::Connection()
 
 	// Allow usage of URI for filename
 	sqlite3_config(SQLITE_CONFIG_URI, 1);
+	//Logger::getLogger()->info("sqlite3_threadsafe()=%d", sqlite3_threadsafe());
 
 	/**
 	 * Make a connection to the database
@@ -447,7 +456,7 @@ Connection::Connection()
 	 */
 	if (sqlite3_open_v2(dbPath.c_str(),
 			    &dbHandle,
-			    SQLITE_OPEN_READWRITE,
+			    SQLITE_OPEN_READWRITE | SQLITE_OPEN_NOMUTEX, // SQLITE_OPEN_FULLMUTEX,
 			    NULL) != SQLITE_OK)
 	{
 		const char* dbErrMsg = sqlite3_errmsg(dbHandle);
@@ -508,6 +517,24 @@ Connection::Connection()
 		}
 		//Release sqlStmt buffer
 		delete[] sqlStmt;
+
+		sqlite3_extended_result_codes(dbHandle, 1);
+
+		rc = sqlite3_exec(dbHandle, "PRAGMA page_size = 4096; PRAGMA cache_size = 5000; PRAGMA journal_mode = WAL;", NULL, NULL, &zErrMsg);
+		if (rc != SQLITE_OK)
+		{
+			const char* errMsg = "Failed to set 'PRAGMA page_size = 4096; PRAGMA cache_size = 5000; PRAGMA journal_mode = WAL;'";
+			Logger::getLogger()->error("%s : error %s",
+						   errMsg,
+						   zErrMsg);
+			connectErrorTime = time(0);
+
+			sqlite3_free(zErrMsg);
+		}
+		else
+		{
+			Logger::getLogger()->info("'PRAGMA page_size = 4096; PRAGMA cache_size = 5000; PRAGMA journal_mode = WAL;' set successfully");
+		}
 	}
 }
 
@@ -751,6 +778,8 @@ Document	document;
 SQLBuffer	sql;
 // Extra constraints to add to where clause
 SQLBuffer	jsonConstraints;
+
+	//Logger::getLogger()->info("%s:%d: threadId=%s", __FUNCTION__, __LINE__, getThreadIdStr().c_str());
 
 	try {
 		if (dbHandle == NULL)
@@ -1105,7 +1134,7 @@ SQLBuffer	sql;
 			return -1;
 		}
 		
-		sql.append("BEGIN TRANSACTION;");
+		//sql.append("BEGIN TRANSACTION;");
 		int i=0;
 		for (Value::ConstValueIterator iter = updates.Begin(); iter != updates.End(); ++iter,++i)
 		{
@@ -1376,7 +1405,7 @@ SQLBuffer	sql;
 		sql.append(';');
 		}
 	}
-	sql.append("COMMIT TRANSACTION;");
+	//sql.append("COMMIT TRANSACTION;");
 	
 	const char *query = sql.coalesce();
 	logSQL("CommonUpdate", query);
@@ -1626,6 +1655,8 @@ bool Connection::formatDate(char *formatted_date, size_t buffer_size, const char
  */
 int Connection::appendReadings(const char *readings)
 {
+	//PRINT_FUNC;
+	//Logger::getLogger()->info("%s:%d: threadId=%s", __FUNCTION__, __LINE__, getThreadIdStr().c_str());
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document 	doc;
 SQLBuffer	sql;
@@ -1652,6 +1683,8 @@ bool 		add_row = false;
 		raiseError("appendReadings", "Payload is missing the readings array");
 		return -1;
 	}
+	{
+	//START_TIME;
 	for (Value::ConstValueIterator itr = rdings.Begin(); itr != rdings.End(); ++itr)
 	{
 		if (!itr->IsObject())
@@ -1737,8 +1770,11 @@ bool 		add_row = false;
 
 	}
 	sql.append(';');
-
+	//PRINT_TIME("appendReading for loop");
+	}
+	
 	const char *query = sql.coalesce();
+	Logger::getLogger()->info("appendReading(): SQL query length=%d", strlen(query));
 	logSQL("ReadingsAppend", query);
 	char *zErrMsg = NULL;
 	int rc;
@@ -1783,6 +1819,7 @@ bool Connection::fetchReadings(unsigned long id,
 			       unsigned int blksize,
 			       std::string& resultSet)
 {
+	//PRINT_FUNC;
 char sqlbuffer[1100];
 char *zErrMsg = NULL;
 int rc;
@@ -1857,6 +1894,7 @@ int retrieve;
  */
 bool Connection::retrieveReadings(const string& condition, string& resultSet)
 {
+	//PRINT_FUNC;
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document	document;
 SQLBuffer	sql;
@@ -2190,6 +2228,7 @@ unsigned int  Connection::purgeReadings(unsigned long age,
 					unsigned long sent,
 					std::string& result)
 {
+	PRINT_FUNC;
 long unsentPurged = 0;
 long unsentRetained = 0;
 long numReadings = 0;
@@ -2214,6 +2253,7 @@ int blocks = 0;
 	 * This provents us looping in the purge process if new readings become
 	 * eligible for purging at a rate that is faster than we can purge them.
 	 */
+	 PRINT_FUNC;
 	{
 		char *zErrMsg = NULL;
 		int rc;
@@ -2231,6 +2271,7 @@ int blocks = 0;
 		}
 	}
 
+	PRINT_FUNC;
 	if (age == 0)
 	{
 		/*
@@ -2254,6 +2295,7 @@ int blocks = 0;
 			     &zErrMsg);
 		// Release memory for 'query' var
 		delete[] query;
+		PRINT_FUNC;
 
 		if (rc == SQLITE_OK)
 		{
@@ -2266,6 +2308,7 @@ int blocks = 0;
 			return 0;
 		}
 	}
+	PRINT_FUNC;
 	{
 		/*
 		 * Refine rowid limit to just those rows older than age hours
@@ -2283,12 +2326,14 @@ int blocks = 0;
 		}
 		sqlBuffer.append(';');
 		const char *query = sqlBuffer.coalesce();
+		PRINT_FUNC;
 		rc = SQLexec(dbHandle,
 		     query,
 	  	     rowidCallback,
 		     &rowidLimit,
 		     &zErrMsg);
 		delete query;
+		PRINT_FUNC;
 
 		if (rowidLimit == 0)
 		{
@@ -2315,6 +2360,7 @@ int blocks = 0;
 			return 0;
 		}
 	}
+	PRINT_FUNC;
 	logger->info("Purge collecting unsent row count");
 	if ((flags & 0x01) == 0)
 	{
@@ -2392,12 +2438,20 @@ int blocks = 0;
 		// Get db changes
 		rowsAffected = sqlite3_changes(dbHandle);
 		deletedRows += rowsAffected;
-		Logger::getLogger()->info("Purge delete block of %d readings", rowsAffected);
+		Logger::getLogger()->info("Purge delete block of %d readings till rowId %d", rowsAffected, rowidMin);
 
 		// Sleep for a while to release locks on the database if anybody is waiting
 		if (m_queuing)
 		{
+			Logger::getLogger()->info("Purge loop sleeping", rowsAffected);
 			std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
+			Logger::getLogger()->info("Purge loop woken up", rowsAffected);
+		}
+		else if ( blocks % 5 == 4)
+		{
+			//Logger::getLogger()->info("Purge loop sleeping", rowsAffected);
+			std::this_thread::sleep_for(std::chrono::milliseconds(2));
+			//Logger::getLogger()->info("Purge loop woken up", rowsAffected);
 		}
 	} while (rowidMin  < rowidLimit);
 
@@ -3465,7 +3519,9 @@ int retries = 0, rc;
 				maxQueue = m_queuing;
 #endif
 			m_qMutex.unlock();
-			usleep(retries * RETRY_BACKOFF);	// sleep retries milliseconds
+			//usleep(retries * RETRY_BACKOFF);	// sleep retries milliseconds
+			std::this_thread::sleep_for(std::chrono::milliseconds(retries * RETRY_BACKOFF/200));
+			Logger::getLogger()->info("retry %d of %d, rc=%s, errmsg=%s, DB connection @ %p", retries, MAX_RETRIES, (rc==SQLITE_LOCKED)?"SQLITE_LOCKED":"SQLITE_BUSY", sqlite3_errmsg(db), this);
 			m_qMutex.lock();
 			m_queuing--;
 			m_qMutex.unlock();

@@ -15,6 +15,7 @@
 #include <rapidjson/document.h>
 #include <sqlite3.h>
 #include <mutex>
+#include <logger.h>
 
 class Connection {
 	public:

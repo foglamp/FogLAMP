@@ -101,6 +101,7 @@ HttpClient *StorageClient::getHttpClient(void) {
  */
 bool StorageClient::readingAppend(Reading& reading)
 {
+	PRINT_FUNC;
 	try {
 		ostringstream convert;
 
@@ -110,6 +111,7 @@ bool StorageClient::readingAppend(Reading& reading)
 		auto res = this->getHttpClient()->request("POST", "/storage/reading", convert.str());
 		if (res->status_code.compare("200 OK") == 0)
 		{
+			PRINT_FUNC_DONE;
 			return true;
 		}
 		ostringstream resultPayload;
@@ -119,6 +121,7 @@ bool StorageClient::readingAppend(Reading& reading)
 	} catch (exception& ex) {
 		m_logger->error("Failed to append reading: %s", ex.what());
 	}
+	PRINT_FUNC_DONE;
 	return false;
 }
 
@@ -127,6 +130,7 @@ bool StorageClient::readingAppend(Reading& reading)
  */
 bool StorageClient::readingAppend(const vector<Reading *>& readings)
 {
+	PRINT_FUNC;
 	static HttpClient *httpClient = this->getHttpClient(); // to initialize m_seqnum_map[thread_id] for this thread
 	try {
 		std::thread::id thread_id = std::this_thread::get_id();
@@ -153,6 +157,7 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 		auto res = this->getHttpClient()->request("POST", "/storage/reading", convert.str(), headers);
 		if (res->status_code.compare("200 OK") == 0)
 		{
+			PRINT_FUNC_DONE;
 			return true;
 		}
 		ostringstream resultPayload;
@@ -311,6 +316,7 @@ PurgeResult StorageClient::readingPurgeBySize(unsigned long size, unsigned long 
  */
 ResultSet *StorageClient::queryTable(const std::string& tableName, const Query& query)
 {
+	PRINT_FUNC;
 	try {
 		ostringstream convert;
 
@@ -323,6 +329,7 @@ ResultSet *StorageClient::queryTable(const std::string& tableName, const Query& 
 		if (res->status_code.compare("200 OK") == 0)
 		{
 			ResultSet *result = new ResultSet(resultPayload.str().c_str());
+			PRINT_FUNC_DONE;
 			return result;
 		}
 		handleUnexpectedResponse("Query table", res->status_code, resultPayload.str());
@@ -385,6 +392,7 @@ ReadingSet* StorageClient::queryTableToReadings(const std::string& tableName,
  */
 int StorageClient::insertTable(const string& tableName, const InsertValues& values)
 {
+	PRINT_FUNC;
 	try {
 		ostringstream convert;
 
@@ -412,6 +420,7 @@ int StorageClient::insertTable(const string& tableName, const InsertValues& valu
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		handleUnexpectedResponse("Insert table", res->status_code, resultPayload.str());
@@ -419,6 +428,7 @@ int StorageClient::insertTable(const string& tableName, const InsertValues& valu
 		m_logger->error("Failed to insert into table %s: %s", tableName.c_str(), ex.what());
 		throw;
 	}
+	PRINT_FUNC_DONE;
 	return 0;
 }
 
@@ -432,6 +442,7 @@ int StorageClient::insertTable(const string& tableName, const InsertValues& valu
  */
 int StorageClient::updateTable(const string& tableName, const InsertValues& values, const Where& where)
 {
+	PRINT_FUNC;
 	static HttpClient *httpClient = this->getHttpClient(); // to initialize m_seqnum_map[thread_id] for this thread
 	try {
 		std::thread::id thread_id = std::this_thread::get_id();
@@ -475,6 +486,7 @@ int StorageClient::updateTable(const string& tableName, const InsertValues& valu
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		ostringstream resultPayload;
@@ -484,6 +496,7 @@ int StorageClient::updateTable(const string& tableName, const InsertValues& valu
 		m_logger->error("Failed to update table %s: %s", tableName.c_str(), ex.what());
 		throw;
 	}
+	PRINT_FUNC_DONE;
 	return -1;
 }
 
@@ -497,6 +510,7 @@ int StorageClient::updateTable(const string& tableName, const InsertValues& valu
  */
 int StorageClient::updateTable(const string& tableName, const ExpressionValues& values, const Where& where)
 {
+	PRINT_FUNC;
 	static HttpClient *httpClient = this->getHttpClient(); // to initialize m_seqnum_map[thread_id] for this thread
 	try {
 		std::thread::id thread_id = std::this_thread::get_id();
@@ -540,6 +554,7 @@ int StorageClient::updateTable(const string& tableName, const ExpressionValues& 
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		ostringstream resultPayload;
@@ -549,6 +564,7 @@ int StorageClient::updateTable(const string& tableName, const ExpressionValues& 
 		m_logger->error("Failed to update table %s: %s", tableName.c_str(), ex.what());
 		throw;
 	}
+	PRINT_FUNC_DONE;
 	return -1;
 }
 
@@ -561,6 +577,7 @@ int StorageClient::updateTable(const string& tableName, const ExpressionValues& 
  */
 int StorageClient::updateTable(const string& tableName, vector<pair<ExpressionValues *, Where *>>& updates)
 {
+	PRINT_FUNC;
 	static HttpClient *httpClient = this->getHttpClient(); // to initialize m_seqnum_map[thread_id] for this thread
 	try {
 		std::thread::id thread_id = std::this_thread::get_id();
@@ -611,6 +628,7 @@ int StorageClient::updateTable(const string& tableName, vector<pair<ExpressionVa
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		ostringstream resultPayload;
@@ -635,6 +653,7 @@ int StorageClient::updateTable(const string& tableName, vector<pair<ExpressionVa
  */
 int StorageClient::updateTable(const string& tableName, const InsertValues& values, const ExpressionValues& expressions, const Where& where)
 {
+	PRINT_FUNC;
 	try {
 		ostringstream convert;
 
@@ -670,6 +689,7 @@ int StorageClient::updateTable(const string& tableName, const InsertValues& valu
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		ostringstream resultPayload;
@@ -692,6 +712,7 @@ int StorageClient::updateTable(const string& tableName, const InsertValues& valu
  */
 int StorageClient::updateTable(const string& tableName, const JSONProperties& values, const Where& where)
 {
+	PRINT_FUNC;
 	try {
 		ostringstream convert;
 
@@ -725,6 +746,7 @@ int StorageClient::updateTable(const string& tableName, const JSONProperties& va
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		ostringstream resultPayload;
@@ -748,6 +770,7 @@ int StorageClient::updateTable(const string& tableName, const JSONProperties& va
  */
 int StorageClient::updateTable(const string& tableName, const InsertValues& values, const JSONProperties& jsonProp, const Where& where)
 {
+	PRINT_FUNC;
 	try {
 		ostringstream convert;
 
@@ -783,6 +806,7 @@ int StorageClient::updateTable(const string& tableName, const InsertValues& valu
 					doc["message"].GetString());
 				return -1;
 			}
+			PRINT_FUNC_DONE;
 			return doc["rows_affected"].GetInt();
 		}
 		ostringstream resultPayload;

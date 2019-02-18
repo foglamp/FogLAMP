@@ -109,6 +109,7 @@ Connection *conn = 0;
 	if (idle.empty())
 	{
 		conn = new Connection();
+		Logger::getLogger()->info("ConnectionManager::allocate(): Allocated new connection #%d", inUse.size()+1);
 	}
 	else
 	{

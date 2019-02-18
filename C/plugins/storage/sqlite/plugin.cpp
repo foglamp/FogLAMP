@@ -26,6 +26,10 @@
 using namespace std;
 using namespace rapidjson;
 
+#define CONN_ALLOC Logger::getLogger()->info("Allocated DB connection in %s @ %p", __FUNCTION__, connection);
+#define CONN_REL Logger::getLogger()->info("Released DB connection in %s @ %p", __FUNCTION__, connection);
+
+
 /**
  * The SQLite3 plugin interface
  */
@@ -70,9 +74,11 @@ int plugin_common_insert(PLUGIN_HANDLE handle, char *table, char *data)
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+	CONN_ALLOC;
 
 	int result = connection->insert(std::string(table), std::string(data));
 	manager->release(connection);
+	CONN_REL;
 	return result;
 }
 
@@ -83,10 +89,13 @@ const char *plugin_common_retrieve(PLUGIN_HANDLE handle, char *table, char *quer
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+CONN_ALLOC;
+
 std::string results;
 
 	bool rval = connection->retrieve(std::string(table), std::string(query), results);
 	manager->release(connection);
+	CONN_REL;
 	if (rval)
 	{
 		return strdup(results.c_str());
@@ -101,9 +110,12 @@ int plugin_common_update(PLUGIN_HANDLE handle, char *table, char *data)
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+	CONN_ALLOC;
+
 
 	int result = connection->update(std::string(table), std::string(data));
 	manager->release(connection);
+	CONN_REL;
 	return result;
 }
 
@@ -114,9 +126,12 @@ int plugin_common_delete(PLUGIN_HANDLE handle, char *table, char *condition)
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+	CONN_ALLOC;
+
 
 	int result = connection->deleteRows(std::string(table), std::string(condition));
 	manager->release(connection);
+	CONN_REL;
 	return result;
 }
 
@@ -127,9 +142,12 @@ int plugin_reading_append(PLUGIN_HANDLE handle, char *readings)
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+	CONN_ALLOC;
+
 
 	int result = connection->appendReadings(readings);
 	manager->release(connection);
+	CONN_REL;
 	return result;;
 }
 
@@ -140,10 +158,13 @@ char *plugin_reading_fetch(PLUGIN_HANDLE handle, unsigned long id, unsigned int 
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+CONN_ALLOC;
+
 std::string	  resultSet;
 
 	connection->fetchReadings(id, blksize, resultSet);
 	manager->release(connection);
+	CONN_REL;
 	return strdup(resultSet.c_str());
 }
 
@@ -154,10 +175,13 @@ char *plugin_reading_retrieve(PLUGIN_HANDLE handle, char *condition)
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+CONN_ALLOC;
+
 std::string results;
 
 	connection->retrieveReadings(std::string(condition), results);
 	manager->release(connection);
+	CONN_REL;
 	return strdup(results.c_str());
 }
 
@@ -168,6 +192,8 @@ char *plugin_reading_purge(PLUGIN_HANDLE handle, unsigned long param, unsigned i
 {
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
+CONN_ALLOC;
+
 std::string 	  results;
 unsigned long	  age, size;
 
@@ -178,6 +204,7 @@ unsigned long	  age, size;
 		 * Throw PluginNotImplementedException for purge by size in SQLite 
 		 */
 		manager->release(connection);
+		CONN_REL;
 		throw PluginNotImplementedException("Purge by size is not supported by 'SQLite' storage engine.");
 	}
 	else
@@ -186,6 +213,7 @@ unsigned long	  age, size;
 		(void)connection->purgeReadings(age, flags, sent, results);
 	}
 	manager->release(connection);
+	CONN_REL;
 	return strdup(results.c_str());
 }
 
