@@ -1440,11 +1440,6 @@ SQLBuffer	sql;
 		// Release memory for 'query' var
 		delete[] query;
 		update = sqlite3_changes(dbHandle);
-		if (update == 0)
-		{
- 			raiseError("update", "No rows where updated");
-			return -1;
-		}
 
 		// Return success
 		return update;
@@ -3511,7 +3506,6 @@ int retries = 0, rc;
 			m_qMutex.unlock();
 			if (sqlite3_get_autocommit(db)==0) // if transaction is still open, do rollback
 			{
-				Logger::getLogger()->info("SQLexec: rollback failed transaction before retry");
 				char *zErrMsg = NULL;
 				rc=SQLexec(db,
 					"ROLLBACK TRANSACTION;",
