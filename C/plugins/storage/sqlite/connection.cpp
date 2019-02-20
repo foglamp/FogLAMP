@@ -29,6 +29,7 @@
 #include <chrono>
 #include <thread>
 #include <atomic>
+#include <condition_variable>
 #include <sys/time.h>
 
 /*
@@ -38,7 +39,7 @@
  * to have access to the database between blocks.
  */
 #define PURGE_SLEEP_MS 2500
-#define PURGE_DELETE_BLOCK_SIZE	1000
+#define PURGE_DELETE_BLOCK_SIZE	500
 
 #define PURGE_SLOWDOWN_AFTER_BLOCKS 5
 #define PURGE_SLOWDOWN_SLEEP_MS 500
@@ -75,6 +76,9 @@ int	      maxQueue = 0;
 #endif
 
 static std::atomic<int> m_waiting(0);
+static std::mutex	db_mutex;
+static std::condition_variable	db_cv;
+
 
 #define _DB_NAME              "/foglamp.sqlite"
 
@@ -1758,7 +1762,12 @@ bool 		add_row = false;
 	logSQL("ReadingsAppend", query);
 	char *zErrMsg = NULL;
 	int rc;
-
+	
+	{
+	unique_lock<mutex> lck(db_mutex);
+	if (m_waiting) db_cv.wait(lck);
+	Logger::getLogger()->info("appendReadings acquired db_cv");
+	
 	// Exec the INSERT statement: no callback, no result set
 	rc = SQLexec(dbHandle,
 		     query,
@@ -1766,6 +1775,10 @@ bool 		add_row = false;
 		     NULL,
 		     &zErrMsg);
 
+	db_cv.notify_all();
+	Logger::getLogger()->info("appendReadings released db_cv");
+	}
+	
 	// Release memory for 'query' var
 	delete[] query;
 
@@ -2395,13 +2408,23 @@ int blocks = 0;
 		sql.append(';');
 		const char *query = sql.coalesce();
 		logSQL("ReadingsPurge", query);
+
+		int rc;
+		{
+		unique_lock<mutex> lck(db_mutex);
+		if (m_waiting) db_cv.wait(lck);
+		Logger::getLogger()->info("Purge loop acquired db_cv");
+		
 		// Exec DELETE query: no callback, no resultset
-		int rc = SQLexec(dbHandle,
+		rc = SQLexec(dbHandle,
 			     query,
 			     NULL,
 			     NULL,
 			     &zErrMsg);
 
+		db_cv.notify_all();
+		Logger::getLogger()->info("Purge loop released db_cv");
+		}
 
 		if (rc != SQLITE_OK)
 		{
