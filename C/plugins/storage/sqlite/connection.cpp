@@ -61,7 +61,7 @@ using namespace rapidjson;
  * run by the storage plugin and the number of times a particular statement has to
  * be retried because of the database being busy./
  */
-#define DO_PROFILE		0
+#define DO_PROFILE		1
 #define DO_PROFILE_RETRIES	0
 #if DO_PROFILE
 #include <profile.h>
@@ -1446,7 +1446,7 @@ SQLBuffer	sql;
 		update = sqlite3_changes(dbHandle);
 
 		// Return success
-		return update;
+		return 1; // sqlite3_changes doesn't return the correct number of rows for explicit transaction case
 	}
 
 	// Return failure
@@ -1762,11 +1762,16 @@ bool 		add_row = false;
 	logSQL("ReadingsAppend", query);
 	char *zErrMsg = NULL;
 	int rc;
-	
+
+	Logger::getLogger()->info("appendReadings : About to acquire db_cv");
+	START_TIME;
 	{
+	m_waiting.fetch_add(1);
 	unique_lock<mutex> lck(db_mutex);
-	if (m_waiting) db_cv.wait(lck);
-	Logger::getLogger()->info("appendReadings acquired db_cv");
+	//if (m_waiting) db_cv.wait(lck);
+	END_TIME;
+	if (usecs > 1000)
+		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>150000)?"  <<<<<<<------------" : "");
 	
 	// Exec the INSERT statement: no callback, no result set
 	rc = SQLexec(dbHandle,
@@ -1775,6 +1780,7 @@ bool 		add_row = false;
 		     NULL,
 		     &zErrMsg);
 
+	m_waiting.fetch_sub(1);
 	db_cv.notify_all();
 	Logger::getLogger()->info("appendReadings released db_cv");
 	}
@@ -2409,11 +2415,15 @@ int blocks = 0;
 		const char *query = sql.coalesce();
 		logSQL("ReadingsPurge", query);
 
+		Logger::getLogger()->info("Purge loop : About to acquire db_cv");
+		START_TIME;
 		int rc;
 		{
 		unique_lock<mutex> lck(db_mutex);
 		if (m_waiting) db_cv.wait(lck);
-		Logger::getLogger()->info("Purge loop acquired db_cv");
+		END_TIME;
+		if (usecs > 1000)
+			Logger::getLogger()->info("Purge loop acquired db_cv in %lld usecs %s", usecs, (usecs>150000)?"  ------------>>>>>>>" : "");
 		
 		// Exec DELETE query: no callback, no resultset
 		rc = SQLexec(dbHandle,
@@ -2425,6 +2435,8 @@ int blocks = 0;
 		db_cv.notify_all();
 		Logger::getLogger()->info("Purge loop released db_cv");
 		}
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::yield();
 
 		if (rc != SQLITE_OK)
 		{
@@ -2440,20 +2452,24 @@ int blocks = 0;
 		deletedRows += rowsAffected;
 		Logger::getLogger()->info("Purge delete block #%d with %d readings", blocks, rowsAffected);
 
+#if 0
 		// Sleep for a while to release locks on the database if anybody is waiting
 		if (m_waiting)
 		{
-			//Logger::getLogger()->info("Purge loop sleeping");
+			Logger::getLogger()->info("Purge loop sleeping");
 			while (m_waiting)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
 			}
-			//Logger::getLogger()->info("Purge loop woken up");
+			Logger::getLogger()->info("Purge loop woken up");
 		}
 		else if ( blocks % PURGE_SLOWDOWN_AFTER_BLOCKS == (PURGE_SLOWDOWN_AFTER_BLOCKS-1) )
 		{
+			Logger::getLogger()->info("Purge loop 'after N blocks' sleep");
 			std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLOWDOWN_SLEEP_MS));
+			Logger::getLogger()->info("Purge loop 'after N blocks' sleep done");
 		}
+#endif
 	} while (rowidMin  < rowidLimit);
 
 	SQLBuffer retainedBuffer;
@@ -3522,7 +3538,7 @@ int retries = 0, rc;
 			m_qMutex.unlock();
 			int interval = (retries * RETRY_BACKOFF);
 			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-			if (retries > 5) Logger::getLogger()->info("SQLexec: retry %d of %d, rc=%s, errmsg=%s, DB connection @ %p, slept for %d msecs", 
+			if (retries > 0) Logger::getLogger()->info("SQLexec: retry %d of %d, rc=%s, errmsg=%s, DB connection @ %p, slept for %d msecs", 
 						retries, MAX_RETRIES, (rc==SQLITE_LOCKED)?"SQLITE_LOCKED":"SQLITE_BUSY", sqlite3_errmsg(db), this, interval);
 			m_qMutex.lock();
 			m_waiting.fetch_sub(1);
