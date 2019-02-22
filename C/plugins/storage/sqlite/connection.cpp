@@ -38,7 +38,7 @@
  * between deletes. The idea is to not keep the database locked too long and allow other threads
  * to have access to the database between blocks.
  */
-#define PURGE_SLEEP_MS 2500
+#define PURGE_SLEEP_MS 500
 #define PURGE_DELETE_BLOCK_SIZE	500
 
 #define PURGE_SLOWDOWN_AFTER_BLOCKS 5
@@ -2394,8 +2394,8 @@ int blocks = 0;
 	{
 		while (m_waiting)
 		{
-			//std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
-			std::this_thread::yield();
+			std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
+			//std::this_thread::yield();
 		}
 	}
 
@@ -2440,8 +2440,12 @@ int blocks = 0;
 		db_cv.notify_all();
 		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>150000)?"  ------------>>>>>>>" : "");
 		}
+		START_TIME2;
 		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		std::this_thread::yield();
+		//std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
+		//std::this_thread::yield();
+		END_TIME2;
+		Logger::getLogger()->info("Purge loop completed %lld usecs sleep after removal of 1 block", usecs2, (usecs2>150000)?"  ------------>>>>>>>" : "");
 
 		if (rc != SQLITE_OK)
 		{
