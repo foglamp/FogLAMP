@@ -18,6 +18,11 @@
 #define END_TIME std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now(); \
 				 auto usecs = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
 
+#define START_TIME2 std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+#define END_TIME2 std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now(); \
+				 auto usecs2 = std::chrono::duration_cast<std::chrono::microseconds>( t4 - t3 ).count();
+
+
 /**
  * FogLAMP Logger class used to log to syslog
  *

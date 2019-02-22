@@ -1770,9 +1770,10 @@ bool 		add_row = false;
 	unique_lock<mutex> lck(db_mutex);
 	//if (m_waiting) db_cv.wait(lck);
 	END_TIME;
-	if (usecs > 1000)
+	if (usecs > 10)
 		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>150000)?"  <<<<<<<------------" : "");
-	
+
+	START_TIME2;
 	// Exec the INSERT statement: no callback, no result set
 	rc = SQLexec(dbHandle,
 		     query,
@@ -1780,9 +1781,10 @@ bool 		add_row = false;
 		     NULL,
 		     &zErrMsg);
 
+	END_TIME2;
 	m_waiting.fetch_sub(1);
 	db_cv.notify_all();
-	Logger::getLogger()->info("appendReadings released db_cv");
+	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>150000)?"  <<<<<<<------------" : "");
 	}
 	
 	// Release memory for 'query' var
@@ -2392,7 +2394,8 @@ int blocks = 0;
 	{
 		while (m_waiting)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
+			//std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
+			std::this_thread::yield();
 		}
 	}
 
@@ -2422,18 +2425,20 @@ int blocks = 0;
 		unique_lock<mutex> lck(db_mutex);
 		if (m_waiting) db_cv.wait(lck);
 		END_TIME;
-		if (usecs > 1000)
+		if (usecs > 10)
 			Logger::getLogger()->info("Purge loop acquired db_cv in %lld usecs %s", usecs, (usecs>150000)?"  ------------>>>>>>>" : "");
-		
+
+		START_TIME2;
 		// Exec DELETE query: no callback, no resultset
 		rc = SQLexec(dbHandle,
 			     query,
 			     NULL,
 			     NULL,
 			     &zErrMsg);
+		END_TIME2;
 
 		db_cv.notify_all();
-		Logger::getLogger()->info("Purge loop released db_cv");
+		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>150000)?"  ------------>>>>>>>" : "");
 		}
 		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		std::this_thread::yield();
