@@ -76,6 +76,7 @@ int	      maxQueue = 0;
 #endif
 
 static std::atomic<int> m_waiting(0);
+static std::atomic<int> m_writeAccessOngoing(0);
 static std::mutex	db_mutex;
 static std::condition_variable	db_cv;
 
@@ -1766,12 +1767,12 @@ bool 		add_row = false;
 	Logger::getLogger()->info("appendReadings : About to acquire db_cv");
 	START_TIME;
 	{
-	m_waiting.fetch_add(1);
+	m_writeAccessOngoing.fetch_add(1);
 	unique_lock<mutex> lck(db_mutex);
-	//if (m_waiting) db_cv.wait(lck);
+	//if (m_writeAccessOngoing) db_cv.wait(lck);
 	END_TIME;
 	if (usecs > 10)
-		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>150000)?"  <<<<<<<------------" : "");
+		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>250000)?"  <<<<<<<------------" : "");
 
 	START_TIME2;
 	// Exec the INSERT statement: no callback, no result set
@@ -1782,9 +1783,9 @@ bool 		add_row = false;
 		     &zErrMsg);
 
 	END_TIME2;
-	m_waiting.fetch_sub(1);
+	m_writeAccessOngoing.fetch_sub(1);
 	db_cv.notify_all();
-	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>150000)?"  <<<<<<<------------" : "");
+	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>250000)?"  <<<<<<<------------" : "");
 	}
 	
 	// Release memory for 'query' var
@@ -2390,9 +2391,9 @@ int blocks = 0;
 			return 0;
 		}
 	}
-	if (m_waiting)
+	if (m_writeAccessOngoing)
 	{
-		while (m_waiting)
+		while (m_writeAccessOngoing)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
 			//std::this_thread::yield();
@@ -2423,10 +2424,10 @@ int blocks = 0;
 		int rc;
 		{
 		unique_lock<mutex> lck(db_mutex);
-		if (m_waiting) db_cv.wait(lck);
+		if (m_writeAccessOngoing) db_cv.wait(lck);
 		END_TIME;
 		if (usecs > 10)
-			Logger::getLogger()->info("Purge loop acquired db_cv in %lld usecs %s", usecs, (usecs>150000)?"  ------------>>>>>>>" : "");
+			Logger::getLogger()->info("Purge loop acquired db_cv in %lld usecs %s", usecs, (usecs>250000)?"  ------------>>>>>>>" : "");
 
 		START_TIME2;
 		// Exec DELETE query: no callback, no resultset
@@ -2438,14 +2439,15 @@ int blocks = 0;
 		END_TIME2;
 
 		db_cv.notify_all();
-		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>150000)?"  ------------>>>>>>>" : "");
+		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
 		}
 		START_TIME2;
 		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		//std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
 		//std::this_thread::yield();
 		END_TIME2;
-		Logger::getLogger()->info("Purge loop completed %lld usecs sleep after removal of 1 block", usecs2, (usecs2>150000)?"  ------------>>>>>>>" : "");
+		if (usecs2 > 10)
+			Logger::getLogger()->info("Purge loop completed %lld usecs sleep after removal of 1 block", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
 
 		if (rc != SQLITE_OK)
 		{
@@ -2463,10 +2465,10 @@ int blocks = 0;
 
 #if 0
 		// Sleep for a while to release locks on the database if anybody is waiting
-		if (m_waiting)
+		if (m_writeAccessOngoing)
 		{
 			Logger::getLogger()->info("Purge loop sleeping");
-			while (m_waiting)
+			while (m_writeAccessOngoing)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
 			}
