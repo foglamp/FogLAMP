@@ -3540,20 +3540,22 @@ int retries = 0, rc;
 		retries++;
 		if (rc == SQLITE_LOCKED || rc == SQLITE_BUSY)
 		{
+#if DO_PROFILE_RETRIES
 			m_qMutex.lock();
 			m_waiting.fetch_add(1);
-#if DO_PROFILE_RETRIES
 			if (maxQueue < m_waiting)
 				maxQueue = m_waiting;
-#endif
 			m_qMutex.unlock();
+#endif
 			int interval = (retries * RETRY_BACKOFF);
 			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
 			if (retries > 0) Logger::getLogger()->info("SQLexec: retry %d of %d, rc=%s, errmsg=%s, DB connection @ %p, slept for %d msecs", 
 						retries, MAX_RETRIES, (rc==SQLITE_LOCKED)?"SQLITE_LOCKED":"SQLITE_BUSY", sqlite3_errmsg(db), this, interval);
+#if DO_PROFILE_RETRIES
 			m_qMutex.lock();
 			m_waiting.fetch_sub(1);
 			m_qMutex.unlock();
+#endif
 			if (sqlite3_get_autocommit(db)==0) // if transaction is still open, do rollback
 			{
 				char *zErrMsg = NULL;
