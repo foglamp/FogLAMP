@@ -448,6 +448,7 @@ Connection::Connection()
 
 	// Allow usage of URI for filename
 	sqlite3_config(SQLITE_CONFIG_URI, 1);
+	//sqlite3_enable_shared_cache(1);
 
 	/**
 	 * Make a connection to the database
@@ -485,10 +486,10 @@ Connection::Connection()
 
 		sqlite3_extended_result_codes(dbHandle, 1);
 
-		rc = sqlite3_exec(dbHandle, "PRAGMA page_size = 4096; PRAGMA cache_size = 5000; PRAGMA journal_mode = WAL;", NULL, NULL, &zErrMsg);
+		rc = sqlite3_exec(dbHandle, "PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;", NULL, NULL, &zErrMsg);
 		if (rc != SQLITE_OK)
 		{
-			const char* errMsg = "Failed to set 'PRAGMA page_size = 4096; PRAGMA cache_size = 5000; PRAGMA journal_mode = WAL;'";
+			const char* errMsg = "Failed to set 'PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;'";
 			Logger::getLogger()->error("%s : error %s",
 						   errMsg,
 						   zErrMsg);
@@ -1400,6 +1401,7 @@ SQLBuffer	sql;
 				}
 			}
 		sql.append(';');
+		row++;
 		}
 	}
 	sql.append("COMMIT TRANSACTION;");
@@ -1447,7 +1449,7 @@ SQLBuffer	sql;
 		update = sqlite3_changes(dbHandle);
 
 		// Return success
-		return 1; // sqlite3_changes doesn't return the correct number of rows for explicit transaction case
+		return row; // sqlite3_changes doesn't return the correct number of rows for explicit transaction case
 	}
 
 	// Return failure
