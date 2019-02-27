@@ -2289,7 +2289,7 @@ int blocks = 0;
 		char *zErrMsg = NULL;
 		int rc;
 		SQLBuffer sqlBuffer;
-		sqlBuffer.append("select max(rowid) from foglamp.readings where user_ts < datetime('now' , '-");
+		sqlBuffer.append("select rowid from foglamp.readings where user_ts < datetime('now' , '-");
 		sqlBuffer.append(age);
 		sqlBuffer.append(" hours', 'utc')");
 		if ((flags & 0x01) == 0x01)	// Don't delete unsent rows
@@ -2297,7 +2297,7 @@ int blocks = 0;
 			sqlBuffer.append(" AND id < ");
 			sqlBuffer.append(sent);
 		}
-		sqlBuffer.append(';');
+		sqlBuffer.append(" order by rowid desc limit 1;");
 		const char *query = sqlBuffer.coalesce();
 		rc = SQLexec(dbHandle,
 		     query,
