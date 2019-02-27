@@ -2254,7 +2254,7 @@ int blocks = 0;
 		 * So set age based on the data we have and continue.
 		 */
 		SQLBuffer oldest;
-		oldest.append("SELECT (strftime('%s','now', 'localtime') - strftime('%s', MIN(user_ts)))/360 FROM foglamp.readings where rowid <= ");
+		oldest.append("SELECT (strftime('%s','now', 'utc') - strftime('%s', MIN(user_ts)))/360 FROM foglamp.readings where rowid <= ");
 		oldest.append(rowidLimit);
 		oldest.append(';');
 		const char *query = oldest.coalesce();
@@ -2284,14 +2284,14 @@ int blocks = 0;
 	}
 	{
 		/*
-		 * Refine rowid limit to just those rows older than age hours
+		 * Refine rowid limit to just those rows older than age hours.
 		 */
 		char *zErrMsg = NULL;
 		int rc;
 		SQLBuffer sqlBuffer;
 		sqlBuffer.append("select max(rowid) from foglamp.readings where user_ts < datetime('now' , '-");
 		sqlBuffer.append(age);
-		sqlBuffer.append(" hours', 'localtime')");
+		sqlBuffer.append(" hours', 'utc')");
 		if ((flags & 0x01) == 0x01)	// Don't delete unsent rows
 		{
 			sqlBuffer.append(" AND id < ");
@@ -2334,39 +2334,53 @@ int blocks = 0;
 	logger->info("Purge collecting unsent row count");
 	if ((flags & 0x01) == 0)
 	{
-		// Get number of unsent rows we are about to remove
-		SQLBuffer unsentBuffer;
-		unsentBuffer.append("SELECT count(ROWID) FROM foglamp.readings WHERE  user_ts < datetime('now', '-");
-		unsentBuffer.append(age);
-		unsentBuffer.append(" hours', 'localtime') AND id > ");
-		unsentBuffer.append(sent);
-		unsentBuffer.append(" AND rowid <= ");
-		unsentBuffer.append(rowidLimit);
-		unsentBuffer.append(';');
-		const char *query = unsentBuffer.coalesce();
 		char *zErrMsg = NULL;
 		int rc;
-		int unsent = 0;
-
-		// Exec query and get result in 'unsent' via 'countCallback'
+		int lastPurgedId;
 		rc = SQLexec(dbHandle,
-			     query,
-		  	     countCallback,
-			     &unsent,
-			     &zErrMsg);
+		     "select id from foglamp.readings where rowid = rowidLimit;",
+	  	     rowidCallback,
+		     &lastPurgedId,
+		     &zErrMsg);
 
-		// Release memory for 'query' var
-		delete[] query;
-
-		if (rc == SQLITE_OK)
+		if (rc != SQLITE_OK)
 		{
-			unsentPurged = unsent;
-		}
-		else
-		{
- 			raiseError("purge - phaase 2", zErrMsg);
+ 			raiseError("purge - phaase 0, fetching rowid limit ", zErrMsg);
 			sqlite3_free(zErrMsg);
 			return 0;
+		}
+		if (lastPurgedId > sent)	// Unsent readings will be purged
+		{
+			// Get number of unsent rows we are about to remove
+			SQLBuffer unsentBuffer;
+			unsentBuffer.append("SELECT count(ROWID) FROM foglamp.readings WHERE id > ");
+			unsentBuffer.append(sent);
+			unsentBuffer.append(" AND rowid <= ");
+			unsentBuffer.append(rowidLimit);
+			unsentBuffer.append(';');
+			const char *query = unsentBuffer.coalesce();
+			int unsent = 0;
+
+			// Exec query and get result in 'unsent' via 'countCallback'
+			rc = SQLexec(dbHandle,
+				     query,
+				     countCallback,
+				     &unsent,
+				     &zErrMsg);
+
+			// Release memory for 'query' var
+			delete[] query;
+
+			if (rc == SQLITE_OK)
+			{
+				unsentPurged = unsent;
+			}
+			else
+			{
+				raiseError("purge - phaase 2", zErrMsg);
+				sqlite3_free(zErrMsg);
+				return 0;
+			}
 		}
 	}
 	if (m_waiting)
