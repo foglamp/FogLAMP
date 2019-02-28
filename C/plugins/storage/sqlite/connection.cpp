@@ -2285,6 +2285,11 @@ int blocks = 0;
 	{
 		/*
 		 * Refine rowid limit to just those rows older than age hours.
+		 *
+		 * Using the max function with a where clause is slow in SQLite,
+		 * it results in a table scan. Therefore we do a select query that
+		 * will use an index and then sort and use limit 1 to get the maximum
+		 * value of rowid.
 		 */
 		char *zErrMsg = NULL;
 		int rc;
@@ -2337,8 +2342,13 @@ int blocks = 0;
 		char *zErrMsg = NULL;
 		int rc;
 		int lastPurgedId;
+		SQLBuffer idBuffer;
+		idBuffer.append("select id from foglamp.readings where rowid = ");
+		idBuffer.append(rowidLimit);
+		idBuffer.append(';');
+		const char *idQuery = idBuffer.coalesce();
 		rc = SQLexec(dbHandle,
-		     "select id from foglamp.readings where rowid = rowidLimit;",
+		     idQuery,
 	  	     rowidCallback,
 		     &lastPurgedId,
 		     &zErrMsg);
@@ -2347,9 +2357,11 @@ int blocks = 0;
 		{
  			raiseError("purge - phaase 0, fetching rowid limit ", zErrMsg);
 			sqlite3_free(zErrMsg);
+			delete[] idQuery;
 			return 0;
 		}
-		if (lastPurgedId > sent)	// Unsent readings will be purged
+		delete[] idQuery;
+		if (sent != 0 && lastPurgedId > sent)	// Unsent readings will be purged
 		{
 			// Get number of unsent rows we are about to remove
 			SQLBuffer unsentBuffer;
@@ -2475,7 +2487,7 @@ int blocks = 0;
 		sqlite3_free(zErrMsg);
 	}
 
-	logger->info("Got retained unsetn row count");
+	logger->info("Got retained unsent row count");
 
 	int readings_num = 0;
 	// Exec query and get result in 'readings_num' via 'countCallback'
@@ -2493,6 +2505,11 @@ int blocks = 0;
 	{
  		raiseError("purge - phase 5", zErrMsg);
 		sqlite3_free(zErrMsg);
+	}
+
+	if (sent == 0)	// Special case when not north process is used
+	{
+		unsentPurged = deletedRows;
 	}
 
 	ostringstream convert;
