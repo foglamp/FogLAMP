@@ -28,8 +28,8 @@
  * in the translation process.
  */
 
-#define TASK_FETCH_SLEEP 500
-#define TASK_SEND_SLEEP 500
+#define TASK_FETCH_SLEEP 2000
+#define TASK_SEND_SLEEP 2000
 #define TASK_SLEEP_MAX_INCREMENTS 7 // from 0,5 secs to up to 32 secs
 
 using namespace std;
@@ -160,7 +160,7 @@ static void loadDataThread(SendingProcess *loadData)
 						  readIdx);
 #endif
 
-	                Logger::getLogger()->warn("SendingProcess is faster to load data than the destination to process them,"
+	                Logger::getLogger()->info("SendingProcess is faster to load data than the destination to process them,"
 	                                          " so all the %lu in memory buffers are full and the load thread should wait until at least a buffer is freed.",
 	                                          loadData->getMemoryBufferSize());
 

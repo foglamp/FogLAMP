@@ -60,7 +60,7 @@ int StoragePlugin::commonInsert(const string& table, const string& payload)
 	int rv = this->commonInsertPtr(instance, table.c_str(), payload.c_str());
 	END_TIME;
 	Logger::getLogger()->info("%s:%d: commonInsert for %d row(s) in %s table done in %lld usecs", __FUNCTION__, __LINE__, rv, table.c_str(), usecs);
-	//Logger::getLogger()->info("%s:%d: commonInsert payload=%s", __FUNCTION__, __LINE__, payload.c_str());
+	//Logger::getLogger()->info("%s:%d: payload=%s", __FUNCTION__, __LINE__, payload.c_str());
 	return rv;
 }
 
@@ -73,6 +73,7 @@ char *StoragePlugin::commonRetrieve(const string& table, const string& payload)
 	char *rv = this->commonRetrievePtr(instance, table.c_str(), payload.c_str());
 	END_TIME;
 	Logger::getLogger()->info("%s:%d: commonRetrieve for %s table done in %lld usecs", __FUNCTION__, __LINE__, table.c_str(), usecs);
+	//Logger::getLogger()->info("%s:%d: payload=%s", __FUNCTION__, __LINE__, payload.c_str());
 	return rv;
 }
 
@@ -85,7 +86,7 @@ int StoragePlugin::commonUpdate(const string& table, const string& payload)
 	int rv = this->commonUpdatePtr(instance, table.c_str(), payload.c_str());
 	END_TIME;
 	Logger::getLogger()->info("%s:%d: commonUpdate for %d row(s) in %s table done in %lld usecs", __FUNCTION__, __LINE__, rv, table.c_str(), usecs);
-	//Logger::getLogger()->info("%s:%d: commonUpdate payload=%s", __FUNCTION__, __LINE__, payload.c_str());
+	//Logger::getLogger()->info("%s:%d: payload=%s", __FUNCTION__, __LINE__, payload.c_str());
 	return rv;
 }
 
@@ -105,7 +106,7 @@ int StoragePlugin::readingsAppend(const string& payload)
 	START_TIME;
 	int rv = this->readingsAppendPtr(instance, payload.c_str());
 	END_TIME;
-	Logger::getLogger()->info("%s:%d: %d rows added in %lld usecs", __FUNCTION__, __LINE__, rv, usecs);
+	Logger::getLogger()->info("%s:%d: %d rows added in %lld usecs %s", __FUNCTION__, __LINE__, rv, usecs, (usecs>700000)?"  <<<<<<<------------" : "");
 	return rv;
 }
 
@@ -114,7 +115,11 @@ int StoragePlugin::readingsAppend(const string& payload)
  */
 char * StoragePlugin::readingsFetch(unsigned long id, unsigned int blksize)
 {
-	return this->readingsFetchPtr(instance, id, blksize);
+	START_TIME;
+	char *rv = this->readingsFetchPtr(instance, id, blksize);
+	END_TIME;
+	Logger::getLogger()->info("%s:%d: upto %d readings fetched in %lld usecs %s", __FUNCTION__, __LINE__, blksize, usecs, (usecs>700000)?"  <<<<<<<------------" : "");
+	return rv;
 }
 
 /**
@@ -122,7 +127,11 @@ char * StoragePlugin::readingsFetch(unsigned long id, unsigned int blksize)
  */
 char *StoragePlugin::readingsRetrieve(const string& payload)
 {
-	return this->readingsRetrievePtr(instance, payload.c_str());
+	START_TIME;
+	char *rv = this->readingsRetrievePtr(instance, payload.c_str());
+	END_TIME;
+	Logger::getLogger()->info("%s:%d: completed in %lld usecs %s", __FUNCTION__, __LINE__, usecs, (usecs>700000)?"  <<<<<<<------------" : "");
+	return rv;
 }
 
 /**

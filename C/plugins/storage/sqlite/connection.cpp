@@ -39,7 +39,7 @@
  * to have access to the database between blocks.
  */
 #define PURGE_SLEEP_MS 500
-#define PURGE_DELETE_BLOCK_SIZE	500
+#define PURGE_DELETE_BLOCK_SIZE	200
 
 #define PURGE_SLOWDOWN_AFTER_BLOCKS 5
 #define PURGE_SLOWDOWN_SLEEP_MS 500
@@ -486,10 +486,12 @@ Connection::Connection()
 
 		sqlite3_extended_result_codes(dbHandle, 1);
 
-		rc = sqlite3_exec(dbHandle, "PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;", NULL, NULL, &zErrMsg);
+#define SQLITE_PRAGMAS "PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;"
+
+		rc = sqlite3_exec(dbHandle, "PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off;", NULL, NULL, &zErrMsg);
 		if (rc != SQLITE_OK)
 		{
-			const char* errMsg = "Failed to set 'PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;'";
+			const char* errMsg = "Failed to set 'PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off;'";
 			Logger::getLogger()->error("%s : error %s",
 						   errMsg,
 						   zErrMsg);
@@ -673,6 +675,9 @@ unsigned long nRows = 0, nCols = 0;
 
 	// All rows added: update rows count
 	count.SetInt(nRows);
+
+	if (nRows>=100)
+		Logger::getLogger()->info("mapResultSet: nRows=%d", nRows);
 
 	// Add 'rows' and 'count' to the final JSON document
 	doc.AddMember("count", count, allocator);
@@ -1675,6 +1680,8 @@ bool 		add_row = false;
 		raiseError("appendReadings", "Payload is missing the readings array");
 		return -1;
 	}
+	{
+	START_TIME;
 	for (Value::ConstValueIterator itr = rdings.Begin(); itr != rdings.End(); ++itr)
 	{
 		if (!itr->IsObject())
@@ -1759,6 +1766,9 @@ bool 		add_row = false;
 		}
 
 	}
+	END_TIME;
+	Logger::getLogger()->info("appendReadings SQL query formation took %lld usecs %s", usecs, (usecs>500000)?"  <<<<<<<------------" : "");
+	}
 	sql.append(';');
 
 	const char *query = sql.coalesce();
@@ -1774,7 +1784,7 @@ bool 		add_row = false;
 	//if (m_writeAccessOngoing) db_cv.wait(lck);
 	END_TIME;
 	if (usecs > 10)
-		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>250000)?"  <<<<<<<------------" : "");
+		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>500000)?"  <<<<<<<------------" : "");
 
 	START_TIME2;
 	// Exec the INSERT statement: no callback, no result set
@@ -1787,7 +1797,7 @@ bool 		add_row = false;
 	END_TIME2;
 	m_writeAccessOngoing.fetch_sub(1);
 	db_cv.notify_all();
-	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>250000)?"  <<<<<<<------------" : "");
+	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>500000)?"  <<<<<<<------------" : "");
 	}
 	
 	// Release memory for 'query' var
@@ -2372,6 +2382,8 @@ int blocks = 0;
 		int rc;
 		int unsent = 0;
 
+		logger->info("Purge: query=%s", query);
+
 		// Exec query and get result in 'unsent' via 'countCallback'
 		rc = SQLexec(dbHandle,
 			     query,
@@ -2393,6 +2405,7 @@ int blocks = 0;
 			return 0;
 		}
 	}
+	PRINT_FUNC;
 	if (m_writeAccessOngoing)
 	{
 		while (m_writeAccessOngoing)
@@ -2401,6 +2414,7 @@ int blocks = 0;
 			//std::this_thread::yield();
 		}
 	}
+	PRINT_FUNC;
 
 	unsigned int deletedRows = 0;
 	char *zErrMsg = NULL;
@@ -2485,6 +2499,8 @@ int blocks = 0;
 #endif
 	} while (rowidMin  < rowidLimit);
 
+	PRINT_FUNC;
+
 	SQLBuffer retainedBuffer;
 	retainedBuffer.append("SELECT count(ROWID) FROM foglamp.readings WHERE id > ");
 	retainedBuffer.append(sent);
@@ -2492,6 +2508,8 @@ int blocks = 0;
 	const char *query_r = retainedBuffer.coalesce();
 	logSQL("ReadingsPurge", query_r);
 	int retained_unsent = 0;
+
+	logger->info("Purge: query_r=%s", query_r);
 
 	// Exec query and get result in 'retained_unsent' via 'countCallback'
 	int rc = SQLexec(dbHandle,
@@ -2513,7 +2531,7 @@ int blocks = 0;
 		sqlite3_free(zErrMsg);
 	}
 
-	logger->info("Got retained unsetn row count");
+	logger->info("Got retained unsent row count");
 
 	int readings_num = 0;
 	// Exec query and get result in 'readings_num' via 'countCallback'
@@ -2532,6 +2550,8 @@ int blocks = 0;
  		raiseError("purge - phase 5", zErrMsg);
 		sqlite3_free(zErrMsg);
 	}
+
+	PRINT_FUNC;
 
 	ostringstream convert;
 
