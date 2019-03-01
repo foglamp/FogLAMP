@@ -39,7 +39,7 @@
  * to have access to the database between blocks.
  */
 #define PURGE_SLEEP_MS 500
-#define PURGE_DELETE_BLOCK_SIZE	200
+#define PURGE_DELETE_BLOCK_SIZE	1000
 
 #define PURGE_SLOWDOWN_AFTER_BLOCKS 5
 #define PURGE_SLOWDOWN_SLEEP_MS 500
@@ -675,9 +675,6 @@ unsigned long nRows = 0, nCols = 0;
 
 	// All rows added: update rows count
 	count.SetInt(nRows);
-
-	if (nRows>=100)
-		Logger::getLogger()->info("mapResultSet: nRows=%d", nRows);
 
 	// Add 'rows' and 'count' to the final JSON document
 	doc.AddMember("count", count, allocator);
@@ -1767,7 +1764,7 @@ bool 		add_row = false;
 
 	}
 	END_TIME;
-	Logger::getLogger()->info("appendReadings SQL query formation took %lld usecs %s", usecs, (usecs>500000)?"  <<<<<<<------------" : "");
+	Logger::getLogger()->info("appendReadings SQL query formation took %lld usecs %s", usecs, (usecs>300000)?"  <<<<<<<------------" : "");
 	}
 	sql.append(';');
 
@@ -1784,7 +1781,7 @@ bool 		add_row = false;
 	//if (m_writeAccessOngoing) db_cv.wait(lck);
 	END_TIME;
 	if (usecs > 10)
-		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>500000)?"  <<<<<<<------------" : "");
+		Logger::getLogger()->info("appendReadings acquired db_cv in %lld usecs %s", usecs, (usecs>300000)?"  <<<<<<<------------" : "");
 
 	START_TIME2;
 	// Exec the INSERT statement: no callback, no result set
@@ -1797,7 +1794,7 @@ bool 		add_row = false;
 	END_TIME2;
 	m_writeAccessOngoing.fetch_sub(1);
 	db_cv.notify_all();
-	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>500000)?"  <<<<<<<------------" : "");
+	Logger::getLogger()->info("appendReadings query took %lld usecs %s", usecs2, (usecs2>300000)?"  <<<<<<<------------" : "");
 	}
 	
 	// Release memory for 'query' var
@@ -2296,12 +2293,16 @@ int blocks = 0;
 		int rc;
 		int purge_readings = 0;
 
+		logger->info("1. query=%s", query);
+
 		// Exec query and get result in 'purge_readings' via 'selectCallback'
 		rc = SQLexec(dbHandle,
 			     query,
 			     selectCallback,
 			     &purge_readings,
 			     &zErrMsg);
+
+		logger->info("1. query completed", query);
 		// Release memory for 'query' var
 		delete[] query;
 
@@ -2333,11 +2334,13 @@ int blocks = 0;
 		}
 		sqlBuffer.append(" order by rowid desc limit 1;");
 		const char *query = sqlBuffer.coalesce();
+		logger->info("2. query=%s", query);
 		rc = SQLexec(dbHandle,
 		     query,
 	  	     rowidCallback,
 		     &rowidLimit,
 		     &zErrMsg);
+		logger->info("2. query completed", query);
 		delete query;
 
 		if (rowidLimit == 0)
@@ -2372,12 +2375,20 @@ int blocks = 0;
 		int rc;
 		int lastPurgedId;
 
+		SQLBuffer unsentBuffer1;
+		unsentBuffer1.append("select id from foglamp.readings where rowid = ");
+		unsentBuffer1.append(rowidLimit);
+		const char *query = unsentBuffer1.coalesce();
+		logger->info("3. query=%s", query);
+
 		// Exec query and get result in 'unsent' via 'countCallback'
 		rc = SQLexec(dbHandle,
-		     "select id from foglamp.readings where rowid = rowidLimit;",
+		     query,
 	  	     rowidCallback,
 		     &lastPurgedId,
 		     &zErrMsg);
+
+		logger->info("3. query completed", query);
 
 		if (rc != SQLITE_OK)
 		{
@@ -2395,6 +2406,7 @@ int blocks = 0;
 			unsentBuffer.append(rowidLimit);
 			unsentBuffer.append(';');
 			const char *query = unsentBuffer.coalesce();
+			logger->info("4. query=%s", query);
 			int unsent = 0;
 
 			// Exec query and get result in 'unsent' via 'countCallback'
@@ -2403,6 +2415,8 @@ int blocks = 0;
 				     countCallback,
 				     &unsent,
 				     &zErrMsg);
+
+			logger->info("4. query completed", query);
 
 			// Release memory for 'query' var
 			delete[] query;
@@ -2413,7 +2427,7 @@ int blocks = 0;
 			}
 			else
 			{
-				raiseError("purge - phaase 2", zErrMsg);
+				raiseError("purge - phase 2", zErrMsg);
 				sqlite3_free(zErrMsg);
 				return 0;
 			}
@@ -2424,7 +2438,7 @@ int blocks = 0;
 	{
 		while (m_writeAccessOngoing)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			//std::this_thread::yield();
 		}
 	}
@@ -2433,7 +2447,7 @@ int blocks = 0;
 	unsigned int deletedRows = 0;
 	char *zErrMsg = NULL;
 	unsigned int rowsAffected;
-	logger->info("Purge about to delete the readings %ld to %ld in blocks", rowidMin, rowidLimit);
+	logger->info("Purge about to delete the readings %ld to %ld in blocks of %d rows each", rowidMin, rowidLimit, PURGE_DELETE_BLOCK_SIZE);
 	while (rowidMin < rowidLimit)
 	{
 		blocks++;
@@ -2468,16 +2482,21 @@ int blocks = 0;
 			     &zErrMsg);
 		END_TIME2;
 
-		db_cv.notify_all();
+		//db_cv.notify_all();
 		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
+		if(usecs2>200000)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(100+usecs2/10000));
+			Logger::getLogger()->info("Purge loop slept for %lld usecs since removal of a block took %lld usecs", (100+usecs2/10000), usecs2);
 		}
-		START_TIME2;
-		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		}
+		//START_TIME2;
+		//std::this_thread::sleep_for(std::chrono::milliseconds(50));
 		//std::this_thread::sleep_for(std::chrono::milliseconds(PURGE_SLEEP_MS));
 		//std::this_thread::yield();
-		END_TIME2;
-		if (usecs2 > 10)
-			Logger::getLogger()->info("Purge loop completed %lld usecs sleep after removal of 1 block", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
+		//END_TIME2;
+		//if (usecs2 > 10)
+			//Logger::getLogger()->info("Purge loop completed %lld usecs sleep after removal of 1 block", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
 
 		if (rc != SQLITE_OK)
 		{
