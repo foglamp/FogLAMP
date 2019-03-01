@@ -2302,7 +2302,7 @@ int blocks = 0;
 			     &purge_readings,
 			     &zErrMsg);
 
-		logger->info("1. query completed", query);
+		logger->info("1. query completed");
 		// Release memory for 'query' var
 		delete[] query;
 
@@ -2320,11 +2320,16 @@ int blocks = 0;
 	{
 		/*
 		 * Refine rowid limit to just those rows older than age hours.
+		 *
+		 * Using the max function with a where clause is slow in SQLite,
+		 * it results in a table scan. Therefore we do a select query that
+		 * will use an index and then sort and use limit 1 to get the maximum
+		 * value of rowid.
 		 */
 		char *zErrMsg = NULL;
 		int rc;
 		SQLBuffer sqlBuffer;
-		sqlBuffer.append("select rowid from foglamp.readings where user_ts < datetime('now' , '-");
+		sqlBuffer.append("select max(rowid) from foglamp.readings where user_ts < datetime('now' , '-");
 		sqlBuffer.append(age);
 		sqlBuffer.append(" hours', 'utc')");
 		if ((flags & 0x01) == 0x01)	// Don't delete unsent rows
@@ -2332,7 +2337,7 @@ int blocks = 0;
 			sqlBuffer.append(" AND id < ");
 			sqlBuffer.append(sent);
 		}
-		sqlBuffer.append(" order by rowid desc limit 1;");
+		sqlBuffer.append(";");
 		const char *query = sqlBuffer.coalesce();
 		logger->info("2. query=%s", query);
 		rc = SQLexec(dbHandle,
@@ -2340,7 +2345,7 @@ int blocks = 0;
 	  	     rowidCallback,
 		     &rowidLimit,
 		     &zErrMsg);
-		logger->info("2. query completed", query);
+		logger->info("2. query completed");
 		delete query;
 
 		if (rowidLimit == 0)
@@ -2374,29 +2379,29 @@ int blocks = 0;
 		char *zErrMsg = NULL;
 		int rc;
 		int lastPurgedId;
-
-		SQLBuffer unsentBuffer1;
-		unsentBuffer1.append("select id from foglamp.readings where rowid = ");
-		unsentBuffer1.append(rowidLimit);
-		const char *query = unsentBuffer1.coalesce();
-		logger->info("3. query=%s", query);
-
-		// Exec query and get result in 'unsent' via 'countCallback'
+		SQLBuffer idBuffer;
+		idBuffer.append("select id from foglamp.readings where rowid = ");
+		idBuffer.append(rowidLimit);
+		idBuffer.append(';');
+		const char *idQuery = idBuffer.coalesce();
+		logger->info("3. idQuery=%s", idQuery);
 		rc = SQLexec(dbHandle,
-		     query,
+		     idQuery,
 	  	     rowidCallback,
 		     &lastPurgedId,
 		     &zErrMsg);
 
-		logger->info("3. query completed", query);
+		logger->info("3. query completed");
 
 		if (rc != SQLITE_OK)
 		{
- 			raiseError("purge - phaase 0, fetching rowid limit ", zErrMsg);
+ 			raiseError("purge - phase 0, fetching rowid limit ", zErrMsg);
 			sqlite3_free(zErrMsg);
+			delete[] idQuery;
 			return 0;
 		}
-		if (lastPurgedId > sent)	// Unsent readings will be purged
+		delete[] idQuery;
+		if (sent != 0 && lastPurgedId > sent)	// Unsent readings will be purged
 		{
 			// Get number of unsent rows we are about to remove
 			SQLBuffer unsentBuffer;
@@ -2416,7 +2421,7 @@ int blocks = 0;
 				     &unsent,
 				     &zErrMsg);
 
-			logger->info("4. query completed", query);
+			logger->info("4. query completed");
 
 			// Release memory for 'query' var
 			delete[] query;
@@ -2584,6 +2589,10 @@ int blocks = 0;
 		sqlite3_free(zErrMsg);
 	}
 
+	if (sent == 0)	// Special case when not north process is used
+	{
+		unsentPurged = deletedRows;
+	}
 	PRINT_FUNC;
 
 	ostringstream convert;
