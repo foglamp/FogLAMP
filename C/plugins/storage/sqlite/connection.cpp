@@ -488,10 +488,10 @@ Connection::Connection()
 
 #define SQLITE_PRAGMAS "PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;"
 
-		rc = sqlite3_exec(dbHandle, "PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off;", NULL, NULL, &zErrMsg);
+		rc = sqlite3_exec(dbHandle, "PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off; PRAGMA journal_size_limit = 4096000;", NULL, NULL, &zErrMsg);
 		if (rc != SQLITE_OK)
 		{
-			const char* errMsg = "Failed to set 'PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off;'";
+			const char* errMsg = "Failed to set 'PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off; PRAGMA journal_size_limit = 4096000;'";
 			Logger::getLogger()->error("%s : error %s",
 						   errMsg,
 						   zErrMsg);
@@ -2487,6 +2487,9 @@ int blocks = 0;
 			     &zErrMsg);
 		END_TIME2;
 
+		// Release memory for 'query' var
+		delete[] query;
+
 		//db_cv.notify_all();
 		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
 		if(usecs2>200000)
@@ -2508,7 +2511,7 @@ int blocks = 0;
 			raiseError("purge - phase 3", zErrMsg);
 			sqlite3_free(zErrMsg);
 			// Release memory for 'query' var
-			delete[] query;
+			// delete[] query;
 			return 0;
 		}
 
