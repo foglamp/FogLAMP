@@ -484,8 +484,6 @@ Connection::Connection()
 		int rc;
 		char *zErrMsg = NULL;
 
-		sqlite3_extended_result_codes(dbHandle, 1);
-
 #define SQLITE_PRAGMAS "PRAGMA page_size = 4096; PRAGMA cache_size = 2000; PRAGMA temp_store = 2; PRAGMA synchronous = 1; PRAGMA journal_mode = WAL; PRAGMA wal_autocheckpoint = 512; PRAGMA secure_delete = off;"
 
 		rc = sqlite3_exec(dbHandle, "PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off; PRAGMA journal_size_limit = 4096000;", NULL, NULL, &zErrMsg);
@@ -2495,7 +2493,7 @@ int blocks = 0;
 		if(usecs2>200000)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(100+usecs2/10000));
-			Logger::getLogger()->info("Purge loop slept for %lld usecs since removal of a block took %lld usecs", (100+usecs2/10000), usecs2);
+			Logger::getLogger()->info("Purge loop slept for %lld msecs since removal of a block took %lld usecs", (100+usecs2/10000), usecs2);
 		}
 		}
 		//START_TIME2;
@@ -2510,8 +2508,6 @@ int blocks = 0;
 		{
 			raiseError("purge - phase 3", zErrMsg);
 			sqlite3_free(zErrMsg);
-			// Release memory for 'query' var
-			// delete[] query;
 			return 0;
 		}
 
