@@ -851,7 +851,7 @@ ConfigCategory SendingProcess::fetchConfiguration(const std::string& defaultConf
 		{
 			m_memory_buffer_size = 1;
 		}
-		m_memory_buffer_size = 2;
+		//m_memory_buffer_size = 2;
 
 #if VERBOSE_LOG
 		Logger::getLogger()->info("SendingProcess configuration parameters: "
