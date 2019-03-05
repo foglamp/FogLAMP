@@ -536,6 +536,8 @@ Connection::Connection()
 		//Release sqlStmt buffer
 		delete[] sqlStmt;
 	}
+	//std::string result;
+	//purgeReadings(20, /*STORAGE_PURGE_RETAIN*/ 0, 0, result);
 }
 
 /**
@@ -2314,7 +2316,7 @@ unsigned int  Connection::purgeReadings(unsigned long age,
 long unsentPurged = 0;
 long unsentRetained = 0;
 long numReadings = 0;
-unsigned long rowidLimit = 0, rowidMin;
+unsigned long rowidLimit = 0, minrowidLimit = 0, rowidMin;
 struct timeval startTv, endTv;
 int blocks = 0;
 
@@ -2344,12 +2346,35 @@ int blocks = 0;
 		     &rowidLimit,
 		     &zErrMsg);
 
+		logger->info("1. query=select max(rowid) from foglamp.readings;");
+
 		if (rc != SQLITE_OK)
 		{
  			raiseError("purge - phaase 0, fetching rowid limit ", zErrMsg);
 			sqlite3_free(zErrMsg);
 			return 0;
 		}
+		logger->info("purgeReadings: rowidLimit=%u", rowidLimit);
+	}
+
+	{
+		char *zErrMsg = NULL;
+		int rc;
+		rc = SQLexec(dbHandle,
+		     "select min(rowid) from foglamp.readings;",
+	  	     rowidCallback,
+		     &minrowidLimit,
+		     &zErrMsg);
+
+		logger->info("1.1. query=select min(rowid) from foglamp.readings;");
+
+		if (rc != SQLITE_OK)
+		{
+ 			raiseError("purge - phaase 0, fetching minrowid limit ", zErrMsg);
+			sqlite3_free(zErrMsg);
+			return 0;
+		}
+		logger->info("purgeReadings: minrowidLimit=%u", minrowidLimit);
 	}
 
 	if (age == 0)
@@ -2383,6 +2408,7 @@ int blocks = 0;
 		if (rc == SQLITE_OK)
 		{
 			age = purge_readings;
+			logger->info("purgeReadings: purge_readings=%d", purge_readings);
 		}
 		else
 		{
@@ -2402,26 +2428,90 @@ int blocks = 0;
 		 */
 		char *zErrMsg = NULL;
 		int rc;
+#if 0
 		SQLBuffer sqlBuffer;
 		sqlBuffer.append("select max(rowid) from foglamp.readings where user_ts < datetime('now' , '-");
 		sqlBuffer.append(age);
 		sqlBuffer.append(" hours', 'utc')");
+		string suffix("");
 		if ((flags & 0x01) == 0x01)	// Don't delete unsent rows
 		{
 			sqlBuffer.append(" AND id < ");
 			sqlBuffer.append(sent);
+			suffix = " AND id < " + to_string(sent);
 		}
 		sqlBuffer.append(";");
 		const char *query = sqlBuffer.coalesce();
 		logger->info("2. query=%s", query);
+#endif
+		unsigned long l = minrowidLimit;
+		unsigned long r = sent ? min(sent, rowidLimit) : rowidLimit;
+		logger->info("%s:%d: l=%u, r=%u", __FUNCTION__, __LINE__, l, r);
+		if (l == r)
+		{
+ 			logger->info("No data to purge: min_id == max_id == %u", minrowidLimit);
+			//delete[] query;
+			return 0;
+		}
+		
+		while (l <= r)
+		{
+			unsigned long midRowId = 0;
+		    unsigned long m = l + (r - l) / 2;
+
+			logger->info("2.1 search in range [%u..%u], m=%u", l, r, m);
+
+			// e.g. select id from readings where rowid = 219867307 AND user_ts < datetime('now' , '-17 hours', 'utc');
+			SQLBuffer sqlBuffer;
+			sqlBuffer.append("select id from foglamp.readings where rowid = ");
+			sqlBuffer.append(m);
+			sqlBuffer.append(" AND user_ts < datetime('now' , '-");
+			sqlBuffer.append(age);
+			sqlBuffer.append(" hours', 'utc');");
+			const char *query = sqlBuffer.coalesce();
+			
+			rc = SQLexec(dbHandle,
+		     query,
+	  	     rowidCallback,
+		     &midRowId,
+		     &zErrMsg);
+
+			if (rc != SQLITE_OK)
+			{
+	 			raiseError("purge - phaase 0, fetching midRowId ", zErrMsg);
+				sqlite3_free(zErrMsg);
+				return 0;
+			}
+
+			//logger->info("2.1 query=%s, midRowId=%u", query, midRowId);
+
+			if (midRowId == 0) // mid row doesn't satisfy given conditions, so discard right/later half and look in left/earlier half
+			{
+				//logger->info("2.1 search in earlier/left half");
+				r = m - 1; 
+			}
+			else
+			{
+				//logger->info("2.1 search in later/right half");
+		        l = m + 1;
+			}
+		} 
+
+		logger->info("%s:%d: l=%u, r=%u", __FUNCTION__, __LINE__, l, r);
+		//sleep(1000);
+		rowidLimit = min(l, r);
+
+#if 0		
 		rc = SQLexec(dbHandle,
 		     query,
 	  	     rowidCallback,
 		     &rowidLimit,
 		     &zErrMsg);
 		logger->info("2. query completed");
+		logger->info("purgeReadings: rowidLimit=%u", rowidLimit);
 		delete query;
-
+#endif
+		
 		if (rowidLimit == 0)
 		{
  			logger->info("No data to purge");
@@ -2446,6 +2536,8 @@ int blocks = 0;
 			sqlite3_free(zErrMsg);
 			return 0;
 		}
+		logger->info("purgeReadings: rowidMin=%u", rowidMin);
+
 	}
 	logger->info("Purge collecting unsent row count");
 	if ((flags & 0x01) == 0)
@@ -2474,6 +2566,7 @@ int blocks = 0;
 			delete[] idQuery;
 			return 0;
 		}
+		logger->info("purgeReadings: lastPurgedId=%d", lastPurgedId);
 		delete[] idQuery;
 		if (sent != 0 && lastPurgedId > sent)	// Unsent readings will be purged
 		{
@@ -2503,6 +2596,7 @@ int blocks = 0;
 			if (rc == SQLITE_OK)
 			{
 				unsentPurged = unsent;
+				logger->info("purgeReadings: unsent=%d", unsent);
 			}
 			else
 			{
@@ -2637,6 +2731,7 @@ int blocks = 0;
 	if (rc == SQLITE_OK)
 	{
 		unsentRetained = retained_unsent;
+		logger->info("purgeReadings: retained_unsent=%d", retained_unsent);
 	}
 	else
 	{
@@ -2675,7 +2770,7 @@ int blocks = 0;
 	convert << "{ \"removed\" : " << deletedRows << ", ";
 	convert << " \"unsentPurged\" : " << unsentPurged << ", ";
 	convert << " \"unsentRetained\" : " << unsentRetained << ", ";
-    	convert << " \"readings\" : " << numReadings << " }";
+    convert << " \"readings\" : " << numReadings << " }";
 
 	result = convert.str();
 
