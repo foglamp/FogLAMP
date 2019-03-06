@@ -2613,7 +2613,7 @@ int blocks = 0;
 
 	PRINT_FUNC;
 
-	unsentRetained = maxrowidLimit - sent;
+	unsentRetained = maxrowidLimit - rowidLimit;
 	logger->info("purgeReadings: Got retained unsent row count = %ld", unsentRetained);
 
 	numReadings = maxrowidLimit - minrowidLimit;
