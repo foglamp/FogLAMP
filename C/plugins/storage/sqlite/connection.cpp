@@ -2616,7 +2616,7 @@ int blocks = 0;
 	unsentRetained = maxrowidLimit - rowidLimit;
 	logger->info("purgeReadings: Got retained unsent row count = %ld", unsentRetained);
 
-	numReadings = maxrowidLimit - minrowidLimit;
+	numReadings = maxrowidLimit - minrowidLimit - deletedRows;
 
 	if (sent == 0)	// Special case when not north process is used
 	{
