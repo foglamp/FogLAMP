@@ -2457,7 +2457,7 @@ int blocks = 0;
 			sqlBuffer.append(m);
 			sqlBuffer.append(" AND user_ts < datetime('now' , '-");
 			sqlBuffer.append(age);
-			sqlBuffer.append(" hours', 'utc');");
+			sqlBuffer.append(" hours');");
 			const char *query = sqlBuffer.coalesce();
 			
 			rc = SQLexec(dbHandle,
@@ -2549,6 +2549,7 @@ int blocks = 0;
 	unsigned int deletedRows = 0;
 	char *zErrMsg = NULL;
 	unsigned int rowsAffected;
+	unsigned int totTime=0;
 	logger->info("Purge about to delete readings # %ld to %ld in %d blocks of %d rows max each", rowidMin, rowidLimit, (rowidLimit-rowidMin+PURGE_DELETE_BLOCK_SIZE-1)/PURGE_DELETE_BLOCK_SIZE, PURGE_DELETE_BLOCK_SIZE);
 	while (rowidMin < rowidLimit)
 	{
@@ -2587,6 +2588,8 @@ int blocks = 0;
 		// Release memory for 'query' var
 		delete[] query;
 
+		totTime += usecs2;
+
 		//db_cv.notify_all();
 		Logger::getLogger()->info("Purge loop query took %lld usecs %s", usecs2, (usecs2>250000)?"  ------------>>>>>>>" : "");
 		if(usecs2>200000)
@@ -2617,6 +2620,8 @@ int blocks = 0;
 	} while (rowidMin  < rowidLimit);
 
 	PRINT_FUNC;
+
+	Logger::getLogger()->info("Avg block deletion time=%d usecs for block size %d", totTime/blocks, PURGE_DELETE_BLOCK_SIZE);
 
 	unsentRetained = maxrowidLimit - rowidLimit;
 	logger->info("purgeReadings: Got retained unsent row count = %ld", unsentRetained);
