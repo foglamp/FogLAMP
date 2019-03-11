@@ -629,8 +629,16 @@ unsigned long nRows = 0, nCols = 0;
 					Value value;
 					if (!d.Parse(str).HasParseError())
 					{
-						// JSON parsing ok, use the document
-						value = Value(d, allocator);
+						if (d.IsNumber())
+						{
+							// Set string
+							value = Value(str, allocator);
+						}
+						else
+						{
+							// JSON parsing ok, use the document
+							value = Value(d, allocator);
+						}
 					}
 					else
 					{
@@ -881,7 +889,7 @@ SQLBuffer	jsonConstraints;
 								}
 								else
 								{
-									sql.append("strftime('%Y-%m-%d %H:%M:%f', ");
+									sql.append("strftime('" F_DATEH24_MS "', ");
 									sql.append((*itr)["column"].GetString());
 									sql.append(", 'utc')");
 								}
@@ -1639,14 +1647,14 @@ bool Connection::formatDate(char *formatted_date, size_t buffer_size, const char
 
 	// Extract up to seconds
 	memset(&tm, 0, sizeof(tm));
-	valid_date = strptime(date, "%Y-%m-%d %H:%M:%S", &tm);
+	valid_date = strptime(date, F_DATEH24_SEC, &tm);
 
 	if (! valid_date)
 	{
 		return (false);
 	}
 
-	strftime (formatted_date, buffer_size, "%Y-%m-%d %H:%M:%S", &tm);
+	strftime (formatted_date, buffer_size, F_DATEH24_SEC, &tm);
 
 	// Work out the microseconds from the fractional part of the seconds
 	char fractional[10] = {0};
@@ -1902,6 +1910,8 @@ bool 		add_row = false;
  * Fetch a block of readings from the reading table
  * It might not work with SQLite 3
  *
+ * Fetch, used by the north side, returns timestamp in UTC.
+ *
  * NOTE : it expects to handle a date having a fixed format
  * with milliseconds, microseconds and timezone expressed,
  * like for example :
@@ -1912,7 +1922,7 @@ bool Connection::fetchReadings(unsigned long id,
 			       unsigned int blksize,
 			       std::string& resultSet)
 {
-char sqlbuffer[1100];
+char sqlbuffer[512];
 char *zErrMsg = NULL;
 int rc;
 int retrieve;
@@ -1941,7 +1951,6 @@ int retrieve;
 		 sql_cmd,
 		 id,
 		 blksize);
-
 	logSQL("ReadingsFetch", sqlbuffer);
 	sqlite3_stmt *stmt;
 	// Prepare the SQL statement and get the result set
@@ -1983,6 +1992,8 @@ int retrieve;
 /**
  * Perform a query against the readings table
  *
+ * retrieveReadings, used by the API, returns timestamp in localtime.
+ *
  */
 bool Connection::retrieveReadings(const string& condition, string& resultSet)
 {
@@ -2008,9 +2019,9 @@ bool		isAggregate = false;
 						asset_code,
 						read_key,
 						reading,
-						strftime('%Y-%m-%d %H:%M:%S', user_ts, 'localtime')  ||
+						strftime(')" F_DATEH24_SEC R"(', user_ts, 'localtime')  ||
 						substr(user_ts, instr(user_ts, '.'), 7) AS user_ts,
-						strftime('%Y-%m-%d %H:%M:%f', ts, 'localtime') AS ts
+						strftime(')" F_DATEH24_MS R"(', ts, 'localtime') AS ts
 					FROM foglamp.readings)";
 
 			sql.append(sql_cmd);
@@ -2031,7 +2042,7 @@ bool		isAggregate = false;
 					sql.append(document["modifier"].GetString());
 					sql.append(' ');
 				}
-				if (!jsonAggregates(document, document["aggregate"], sql, jsonConstraints))
+				if (!jsonAggregates(document, document["aggregate"], sql, jsonConstraints, true))
 				{
 					return false;
 				}
@@ -2058,7 +2069,23 @@ bool		isAggregate = false;
 						sql.append(", ");
 					if (!itr->IsObject())	// Simple column name
 					{
-						sql.append(itr->GetString());
+						if (strcmp(itr->GetString() ,"user_ts") == 0)
+						{
+							// Display without TZ expression and microseconds also
+							sql.append(" strftime('" F_DATEH24_SEC "', user_ts, 'localtime') ");
+							sql.append(" || substr(user_ts, instr(user_ts, '.'), 7) ");
+							sql.append(" as  user_ts ");
+						}
+						else if (strcmp(itr->GetString() ,"ts") == 0)
+						{
+							// Display without TZ expression and microseconds also
+							sql.append(" strftime('" F_DATEH24_MS "', ts, 'localtime') ");
+							sql.append(" as ts ");
+						}
+						else
+						{
+							sql.append(itr->GetString());
+						}
 					}
 					else
 					{
@@ -2104,7 +2131,7 @@ bool		isAggregate = false;
 									{
 										// Extract milliseconds and microseconds for the user_ts fields
 
-										sql.append("strftime('%Y-%m-%d %H:%M:%S', user_ts, 'utc') ");
+										sql.append("strftime('" F_DATEH24_SEC "', user_ts, 'utc') ");
 										sql.append(" || substr(user_ts, instr(user_ts, '.'), 7) ");
 										if (! itr->HasMember("alias"))
 										{
@@ -2114,7 +2141,7 @@ bool		isAggregate = false;
 									}
 									else
 									{
-										sql.append("strftime('%Y-%m-%d %H:%M:%f', ");
+										sql.append("strftime('" F_DATEH24_MS "', ");
 										sql.append((*itr)["column"].GetString());
 										sql.append(", 'utc')");
 										if (! itr->HasMember("alias"))
@@ -2130,7 +2157,7 @@ bool		isAggregate = false;
 									{
 										// Extract milliseconds and microseconds for the user_ts fields
 
-										sql.append("strftime('%Y-%m-%d %H:%M:%S', user_ts, 'localtime') ");
+										sql.append("strftime('" F_DATEH24_SEC "', user_ts, 'localtime') ");
 										sql.append(" || substr(user_ts, instr(user_ts, '.'), 7) ");
 										if (! itr->HasMember("alias"))
 										{
@@ -2140,7 +2167,7 @@ bool		isAggregate = false;
 									}
 									else
 									{
-										sql.append("strftime('%Y-%m-%d %H:%M:%f', ");
+										sql.append("strftime('" F_DATEH24_MS "', ");
 										sql.append((*itr)["column"].GetString());
 										sql.append(", 'localtime')");
 										if (! itr->HasMember("alias"))
@@ -2164,7 +2191,7 @@ bool		isAggregate = false;
 								{
 									// Extract milliseconds and microseconds for the user_ts fields
 
-									sql.append("strftime('%Y-%m-%d %H:%M:%S', user_ts, 'localtime') ");
+									sql.append("strftime('" F_DATEH24_SEC "', user_ts, 'localtime') ");
 									sql.append(" || substr(user_ts, instr(user_ts, '.'), 7) ");
 									if (! itr->HasMember("alias"))
 									{
@@ -2174,7 +2201,7 @@ bool		isAggregate = false;
 								}
 								else
 								{
-									sql.append("strftime('%Y-%m-%d %H:%M:%f', ");
+									sql.append("strftime('" F_DATEH24_MS "', ");
 									sql.append((*itr)["column"].GetString());
 									sql.append(", 'localtime')");
 									if (! itr->HasMember("alias"))
@@ -2224,9 +2251,9 @@ bool		isAggregate = false;
 						asset_code,
 						read_key,
 						reading,
-						strftime('%Y-%m-%d %H:%M:%S', user_ts, 'localtime')  ||
+						strftime(')" F_DATEH24_SEC R"(', user_ts, 'localtime')  ||
 						substr(user_ts, instr(user_ts, '.'), 7) AS user_ts,
-						strftime('%Y-%m-%d %H:%M:%f', ts, 'localtime') AS ts
+						strftime(')" F_DATEH24_MS R"(', ts, 'localtime') AS ts
 					FROM foglamp.)";
 
 				sql.append(sql_cmd);
@@ -2658,7 +2685,8 @@ int blocks = 0;
 bool Connection::jsonAggregates(const Value& payload,
 				const Value& aggregates,
 				SQLBuffer& sql,
-				SQLBuffer& jsonConstraint)
+				SQLBuffer& jsonConstraint,
+				bool isTableReading)
 {
 	if (aggregates.IsObject())
 	{
@@ -2685,7 +2713,18 @@ bool Connection::jsonAggregates(const Value& payload,
 			}
 			else
 			{
-				sql.append(col);
+				// an operation different from the 'count' is requested
+				if (isTableReading && (col.compare("user_ts") == 0) )
+				{
+					sql.append("strftime('" F_DATEH24_SEC "', user_ts, 'localtime') ");
+					sql.append(" || substr(user_ts, instr(user_ts, '.'), 7) ");
+				}
+				else
+				{
+					sql.append("\"");
+					sql.append(col);
+					sql.append("\"");
+				}
 			}
 		}
 		else if (aggregates.HasMember("json"))
@@ -2818,7 +2857,19 @@ bool Connection::jsonAggregates(const Value& payload,
 			sql.append('(');
 			if (itr->HasMember("column"))
 			{
-				sql.append((*itr)["column"].GetString());
+				string column_name= (*itr)["column"].GetString();
+				if (isTableReading && (column_name.compare("user_ts") == 0) )
+				{
+					sql.append("strftime('" F_DATEH24_SEC "', user_ts, 'localtime') ");
+					sql.append(" || substr(user_ts, instr(user_ts, '.'), 7) ");
+				}
+				else
+				{
+					sql.append("\"");
+					sql.append(column_name);
+					sql.append("\"");
+				}
+
 			}
 			else if (itr->HasMember("json"))
 			{
