@@ -39,7 +39,11 @@
  * to have access to the database between blocks.
  */
 #define PURGE_SLEEP_MS 500
-#define PURGE_DELETE_BLOCK_SIZE	500
+#define PURGE_DELETE_BLOCK_SIZE	100
+#define TARGET_PURGE_BLOCK_DEL_TIME	(70*1000) 	// 80 msec
+#define PURGE_BLOCK_SZ_GRANULARITY	50 	// 50 readings/rows
+#define MIN_PURGE_DELETE_BLOCK_SIZE	50
+#define MAX_PURGE_DELETE_BLOCK_SIZE	1500
 
 #define PURGE_SLOWDOWN_AFTER_BLOCKS 5
 #define PURGE_SLOWDOWN_SLEEP_MS 500
@@ -79,6 +83,7 @@ static std::atomic<int> m_waiting(0);
 static std::atomic<int> m_writeAccessOngoing(0);
 static std::mutex	db_mutex;
 static std::condition_variable	db_cv;
+static int purgeBlockSize = PURGE_DELETE_BLOCK_SIZE;
 
 #define START_TIME std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 #define END_TIME std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now(); \
@@ -2537,12 +2542,12 @@ int blocks = 0;
 
 	unsigned int deletedRows = 0;
 	char *zErrMsg = NULL;
-	unsigned int rowsAffected;
+	unsigned int rowsAffected, totTime=0;
 	logger->info("Purge about to delete readings # %ld to %ld in %d blocks of %d rows each", rowidMin, rowidLimit, (rowidLimit-rowidMin+PURGE_DELETE_BLOCK_SIZE-1)/PURGE_DELETE_BLOCK_SIZE, PURGE_DELETE_BLOCK_SIZE);
 	while (rowidMin < rowidLimit)
 	{
 		blocks++;
-		rowidMin += PURGE_DELETE_BLOCK_SIZE;
+		rowidMin += purgeBlockSize;
 		if (rowidMin > rowidLimit)
 		{
 			rowidMin = rowidLimit;
@@ -2571,6 +2576,8 @@ int blocks = 0;
 		// Release memory for 'query' var
 		delete[] query;
 
+		totTime += usecs;
+
 		if(usecs>150000)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(100+usecs/10000));
@@ -2588,7 +2595,28 @@ int blocks = 0;
 		// Get db changes
 		rowsAffected = sqlite3_changes(dbHandle);
 		deletedRows += rowsAffected;
-		//Logger::getLogger()->info("Purge delete block #%d with %d readings", blocks, rowsAffected);
+		Logger::getLogger()->info("Purge delete block #%d with %d readings", blocks, rowsAffected);
+
+		if(blocks % 20 == 0)
+		{
+			int avg = totTime/blocks;
+			int deviation = abs(avg - TARGET_PURGE_BLOCK_DEL_TIME);
+			Logger::getLogger()->info("blocks=%d, numBlocks=%d, totTime=%d usecs, avg=%d usecs, TARGET_PURGE_BLOCK_DEL_TIME=%d usecs, deviation=%d usecs", blocks, numBlocks, totTime, avg, TARGET_PURGE_BLOCK_DEL_TIME, deviation);
+			if (deviation > TARGET_PURGE_BLOCK_DEL_TIME/10)
+			{
+				Logger::getLogger()->info("Changing purgeBlockSize from %d to %d", purgeBlockSize, purgeBlockSize * TARGET_PURGE_BLOCK_DEL_TIME / avg);
+				purgeBlockSize = purgeBlockSize * TARGET_PURGE_BLOCK_DEL_TIME / avg;
+				purgeBlockSize = purgeBlockSize / PURGE_BLOCK_SZ_GRANULARITY * PURGE_BLOCK_SZ_GRANULARITY; // round down to nearest multiple of 50
+				if (purgeBlockSize < MIN_PURGE_DELETE_BLOCK_SIZE) purgeBlockSize = MIN_PURGE_DELETE_BLOCK_SIZE;
+				if (purgeBlockSize > MAX_PURGE_DELETE_BLOCK_SIZE) purgeBlockSize = MAX_PURGE_DELETE_BLOCK_SIZE;
+				Logger::getLogger()->info("Changed purgeBlockSize to %d", purgeBlockSize);
+			}
+			else
+				Logger::getLogger()->info("No change in purgeBlockSize = %d", purgeBlockSize);
+			//totTime = 0;
+			//numBlocks = blocks;
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}
 	} while (rowidMin  < rowidLimit);
 
 	unsentRetained = maxrowidLimit - rowidLimit;
