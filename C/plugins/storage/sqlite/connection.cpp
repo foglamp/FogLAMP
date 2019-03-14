@@ -39,11 +39,12 @@
  * to have access to the database between blocks.
  */
 #define PURGE_SLEEP_MS 500
-#define PURGE_DELETE_BLOCK_SIZE	100
-#define TARGET_PURGE_BLOCK_DEL_TIME	(70*1000) 	// 80 msec
-#define PURGE_BLOCK_SZ_GRANULARITY	50 	// 50 readings/rows
-#define MIN_PURGE_DELETE_BLOCK_SIZE	50
+#define PURGE_DELETE_BLOCK_SIZE	20
+#define TARGET_PURGE_BLOCK_DEL_TIME	(100*1000) 	// 70 msec
+#define PURGE_BLOCK_SZ_GRANULARITY	5 	// 5 rows
+#define MIN_PURGE_DELETE_BLOCK_SIZE	20
 #define MAX_PURGE_DELETE_BLOCK_SIZE	1500
+#define RECALC_PURGE_BLOCK_SIZE_NUM_BLOCKS	20	// recalculate purge block size after every 20 blocks
 
 #define PURGE_SLOWDOWN_AFTER_BLOCKS 5
 #define PURGE_SLOWDOWN_SLEEP_MS 500
@@ -2542,7 +2543,7 @@ int blocks = 0;
 
 	unsigned int deletedRows = 0;
 	char *zErrMsg = NULL;
-	unsigned int rowsAffected, totTime=0;
+	unsigned int rowsAffected, totTime=0, prevBlocks=0, prevTotTime=0;
 	logger->info("Purge about to delete readings # %ld to %ld in %d blocks of %d rows each", rowidMin, rowidLimit, (rowidLimit-rowidMin+PURGE_DELETE_BLOCK_SIZE-1)/PURGE_DELETE_BLOCK_SIZE, PURGE_DELETE_BLOCK_SIZE);
 	while (rowidMin < rowidLimit)
 	{
@@ -2582,6 +2583,7 @@ int blocks = 0;
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(100+usecs/10000));
 			Logger::getLogger()->info("Purge loop slept for %lld msecs since removal of a block took %lld usecs", (100+usecs/10000), usecs);
+			//totTime += 100 + usecs/10000;
 		}
 		}
 		
@@ -2597,24 +2599,32 @@ int blocks = 0;
 		deletedRows += rowsAffected;
 		Logger::getLogger()->info("Purge delete block #%d with %d readings", blocks, rowsAffected);
 
-		if(blocks % 20 == 0)
+		if(blocks % RECALC_PURGE_BLOCK_SIZE_NUM_BLOCKS == 0)
 		{
-			int avg = totTime/blocks;
+			int olderCalcAvg = totTime/blocks;
+			int prevAvg = prevTotTime/(prevBlocks?prevBlocks:1);
+			int currAvg = (totTime-prevTotTime)/(blocks-prevBlocks);
+			int avg = ((prevAvg?prevAvg:currAvg)*5 + currAvg*5) / 10; // 50% weightage for long term avg and 50% weightage for current avg
+			prevBlocks = blocks;
+			prevTotTime = totTime;
 			int deviation = abs(avg - TARGET_PURGE_BLOCK_DEL_TIME);
-			Logger::getLogger()->info("blocks=%d, numBlocks=%d, totTime=%d usecs, avg=%d usecs, TARGET_PURGE_BLOCK_DEL_TIME=%d usecs, deviation=%d usecs", blocks, numBlocks, totTime, avg, TARGET_PURGE_BLOCK_DEL_TIME, deviation);
+			int rowDelTime = currAvg/purgeBlockSize;
+			Logger::getLogger()->info("blocks=%d, totTime=%d usecs, olderCalcAvg=%d usecs, prevAvg=%d usecs, currAvg=%d usecs, rowDelTIme=%d usecs, avg=%d usecs, TARGET_PURGE_BLOCK_DEL_TIME=%d usecs, deviation=%d usecs", blocks, totTime, olderCalcAvg, prevAvg, currAvg, rowDelTime, avg, TARGET_PURGE_BLOCK_DEL_TIME, deviation);
 			if (deviation > TARGET_PURGE_BLOCK_DEL_TIME/10)
 			{
 				Logger::getLogger()->info("Changing purgeBlockSize from %d to %d", purgeBlockSize, purgeBlockSize * TARGET_PURGE_BLOCK_DEL_TIME / avg);
-				purgeBlockSize = purgeBlockSize * TARGET_PURGE_BLOCK_DEL_TIME / avg;
-				purgeBlockSize = purgeBlockSize / PURGE_BLOCK_SZ_GRANULARITY * PURGE_BLOCK_SZ_GRANULARITY; // round down to nearest multiple of 50
+				float ratio = (float)TARGET_PURGE_BLOCK_DEL_TIME / (float)avg;
+				if (ratio > 2.0) ratio = 2.0;
+				if (ratio < 0.5) ratio = 0.5;
+				purgeBlockSize = (float)purgeBlockSize * ratio;
+				Logger::getLogger()->info("ratio=%f, purgeBlockSize=%d", ratio, purgeBlockSize);
+				purgeBlockSize = purgeBlockSize / PURGE_BLOCK_SZ_GRANULARITY * PURGE_BLOCK_SZ_GRANULARITY;
 				if (purgeBlockSize < MIN_PURGE_DELETE_BLOCK_SIZE) purgeBlockSize = MIN_PURGE_DELETE_BLOCK_SIZE;
 				if (purgeBlockSize > MAX_PURGE_DELETE_BLOCK_SIZE) purgeBlockSize = MAX_PURGE_DELETE_BLOCK_SIZE;
 				Logger::getLogger()->info("Changed purgeBlockSize to %d", purgeBlockSize);
 			}
 			else
 				Logger::getLogger()->info("No change in purgeBlockSize = %d", purgeBlockSize);
-			//totTime = 0;
-			//numBlocks = blocks;
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
 	} while (rowidMin  < rowidLimit);
