@@ -1143,6 +1143,8 @@ bool stdInsert = (arr == std::string::npos || arr > 8);
 		     NULL,
 		     &zErrMsg);
 	m_writeAccessOngoing.fetch_sub(1);
+	if (m_writeAccessOngoing == 0)
+		db_cv.notify_all();
 
 	// Check exec result
 	if (rc != SQLITE_OK )
@@ -1514,6 +1516,8 @@ SQLBuffer	sql;
 		     NULL,
 		     &zErrMsg);
 	m_writeAccessOngoing.fetch_sub(1);
+	if (m_writeAccessOngoing == 0)
+		db_cv.notify_all();
 
 	// Check result code
 	if (rc != SQLITE_OK)
@@ -1609,6 +1613,8 @@ SQLBuffer	sql;
 		     NULL,
 		     &zErrMsg);
 	m_writeAccessOngoing.fetch_sub(1);
+	if (m_writeAccessOngoing == 0)
+		db_cv.notify_all();
 
 	// Check result code
 	if (rc == SQLITE_OK)
