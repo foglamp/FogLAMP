@@ -458,6 +458,9 @@ Connection::Connection()
 	// Allow usage of URI for filename
 	sqlite3_config(SQLITE_CONFIG_URI, 1);
 
+	Logger *logger = Logger::getLogger();
+	logger->setMinLevel("info");
+
 	/**
 	 * Make a connection to the database
 	 * and check backend connection was successfully made
@@ -2355,7 +2358,6 @@ struct timeval startTv, endTv;
 int blocks = 0;
 
 	Logger *logger = Logger::getLogger();
-
 
 	result = "{ \"removed\" : 0, ";
 	result += " \"unsentPurged\" : 0, ";
