@@ -170,6 +170,9 @@ else
     exit 1
   fi
 
+  # Combine .key + .cert to .pem
+  cat "${SSL_LOCATION}/${SSL_NAME}.key" "${SSL_LOCATION}/${SSL_NAME}.cert" >"${SSL_LOCATION}/${SSL_NAME}.pem"
+
   certificate_log "info" "${AUTH_TYPE} certificate created successfully for ${SSL_NAME}, and placed in ${SSL_LOCATION}" "outonly" "pretty"
 fi
 

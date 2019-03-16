@@ -61,14 +61,18 @@ async def login(request):
 
     :Example:
         curl -d '{"username": "user", "password": "foglamp"}' -X POST http://localhost:8081/foglamp/login
-        curl -T data/etc/certs/user.cert -X POST http://localhost:8081/foglamp/login --insecure (--insecure or -k)
+
+    Login is not required if certificate is supplied:
+        curl -X POST http://localhost:8081/foglamp/schedule -k  -E data/etc/certs/user.pem
+    However, if login page is attempted with certificate, then a token is generated and used for next hits
     """
     auth_method = request.auth_method if 'auth_method' in dir(request) else "any"
+    peercert = request.transport.get_extra_info('peercert')
     data = await request.text()
 
     # Check for appropriate payload per auth_method
     if auth_method == 'certificate':
-        if not data.startswith("-----BEGIN CERTIFICATE-----"):
+        if peercert is None:
             raise web.HTTPBadRequest(reason="Use a valid certificate to login.")
     elif auth_method == 'password':
         try:
@@ -76,13 +80,13 @@ async def login(request):
         except json.JSONDecodeError:
             raise web.HTTPBadRequest(reason="Use a valid username and password to login.")
 
-    if data.startswith("-----BEGIN CERTIFICATE-----"):
+    if auth_method == 'certificate' or (auth_method == 'any' and peercert is not None):
         peername = request.transport.get_extra_info('peername')
         if peername is not None:
             host, port = peername
 
         try:
-            await User.Objects.verify_certificate(data)
+            await User.Objects.verify_certificate(data)  # verification for auth_method = any
             username = SSLVerifier.get_subject()['commonName']
             uid, token, is_admin = await User.Objects.certificate_login(username, host)
             # set the user to request object

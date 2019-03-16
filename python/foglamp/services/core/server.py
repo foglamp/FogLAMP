@@ -161,7 +161,7 @@ class Server:
         'certificateName': {
             'description': 'Certificate file name',
             'type': 'string',
-            'default': 'foglamp',
+            'default': 'server',
             'displayName': 'Certificate Name',
             'order': '4'
         },
@@ -299,16 +299,18 @@ class Server:
         """
         cert = certs_dir + '/{}.cert'.format(cls.cert_file_name)
         key = certs_dir + '/{}.key'.format(cls.cert_file_name)
+        ca = certs_dir + '/ca.cert'
 
-        if not os.path.isfile(cert) or not os.path.isfile(key):
+        if not os.path.isfile(cert) or not os.path.isfile(key) or not os.path.isfile(ca):
             _logger.warning("%s certificate files are missing. Hence using default certificate.", cls.cert_file_name)
             cert = certs_dir + '/foglamp.cert'
             key = certs_dir + '/foglamp.key'
-            if not os.path.isfile(cert) or not os.path.isfile(key):
+            ca = certs_dir + '/ca.cert'
+            if not os.path.isfile(cert) or not os.path.isfile(key) or not os.path.isfile(ca):
                 _logger.error("Certificates are missing")
                 raise RuntimeError
 
-        return cert, key
+        return cert, key, ca
 
     @classmethod
     async def rest_api_config(cls):
@@ -342,7 +344,7 @@ class Server:
                 raise
 
             try:
-                cls.is_rest_server_http_enabled = False if config['enableHttp']['value'] == 'false' else True
+                cls.is_rest_server_http_enabled = False if config['enableHttp']['value'] == 'false' or config['authMethod']['value'] == 'certificate' else True
             except KeyError:
                 cls.is_rest_server_http_enabled = False
 
@@ -691,8 +693,9 @@ class Server:
             if not cls.is_rest_server_http_enabled:
                 # ensure TLS 1.2 and SHA-256
                 # handle expiry?
-                ssl_ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-                cert, key = cls.get_certificates()
+                cert, key, ca = cls.get_certificates()
+                ssl_ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH, cafile=ca)
+                ssl_ctx.verify_mode = ssl.CERT_OPTIONAL
                 _logger.info('Loading certificates %s and key %s', cert, key)
                 ssl_ctx.load_cert_chain(cert, key)
 

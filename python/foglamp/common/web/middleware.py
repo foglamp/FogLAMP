@@ -62,6 +62,28 @@ async def auth_middleware(app, handler):
         if request.method == 'OPTIONS':
             return await handler(request)
 
+        try:
+            peercert = request.transport.get_extra_info('peercert')
+        except:
+            peercert = None
+        auth_method = request.auth_method if 'auth_method' in dir(request) else "any"
+
+        if auth_method == 'certificate':
+            if str(handler).startswith("<function ping"):
+                pass
+            elif peercert is None:
+                raise web.HTTPBadRequest(
+                    reason="Use a valid certificate to login.")
+        elif auth_method == 'password':
+            if str(handler).startswith("<function ping"):
+                pass
+            elif peercert is not None:
+                raise web.HTTPBadRequest(
+                    reason="Certificate is not required for password login.")
+
+        if peercert is not None:
+            return await handler(request)
+
         token = request.headers.get('authorization', None)
         if token:
             try:
