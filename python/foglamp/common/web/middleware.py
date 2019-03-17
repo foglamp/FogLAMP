@@ -82,6 +82,11 @@ async def auth_middleware(app, handler):
                     reason="Certificate is not required for password login.")
 
         if peercert is not None:
+            subj = {z[0][0]: z[0][1] for z in list(peercert['subject'])}
+            try:
+                request.user = await User.Objects.get(username=subj['commonName'])
+            except User.DoesNotExist as e:
+                raise web.HTTPUnauthorized(reason=e)
             return await handler(request)
 
         token = request.headers.get('authorization', None)

@@ -66,68 +66,37 @@ async def login(request):
         curl -X POST http://localhost:8081/foglamp/schedule -k  -E data/etc/certs/user.pem
     However, if login page is attempted with certificate, then a token is generated and used for next hits
     """
-    auth_method = request.auth_method if 'auth_method' in dir(request) else "any"
-    peercert = request.transport.get_extra_info('peercert')
     data = await request.text()
+    try:
+        data = json.loads(data)
+    except json.JSONDecodeError:
+        raise web.HTTPBadRequest(reason="Invalid username and/or password.")
 
-    # Check for appropriate payload per auth_method
-    if auth_method == 'certificate':
-        if peercert is None:
-            raise web.HTTPBadRequest(reason="Use a valid certificate to login.")
-    elif auth_method == 'password':
-        try:
-            user_data = json.loads(data)
-        except json.JSONDecodeError:
-            raise web.HTTPBadRequest(reason="Use a valid username and password to login.")
+    username = data.get('username')
+    password = data.get('password')
 
-    if auth_method == 'certificate' or (auth_method == 'any' and peercert is not None):
-        peername = request.transport.get_extra_info('peername')
-        if peername is not None:
-            host, port = peername
+    if not username or not password:
+        _logger.warning("Username and password are required to login")
+        raise web.HTTPBadRequest(reason="Username or password is missing")
 
-        try:
-            await User.Objects.verify_certificate(data)  # verification for auth_method = any
-            username = SSLVerifier.get_subject()['commonName']
-            uid, token, is_admin = await User.Objects.certificate_login(username, host)
-            # set the user to request object
-            request.user = await User.Objects.get(uid=uid)
-            # set the token to request
-            request.token = token
-        except (SSLVerifier.VerificationError, User.DoesNotExist, OSError) as e:
-            raise web.HTTPUnauthorized(reason="Authentication failed")
-        except ValueError as ex:
-            raise web.HTTPUnauthorized(reason="Authentication failed: {}".format(str(ex)))
-    else:
-        try:
-            data = json.loads(data)
-        except json.JSONDecodeError:
-            raise web.HTTPBadRequest(reason="Invalid username and/or password.")
+    username = str(username).lower()
 
-        username = data.get('username')
-        password = data.get('password')
+    peername = request.transport.get_extra_info('peername')
+    host = '0.0.0.0'
+    if peername is not None:
+        host, port = peername
+    try:
+        uid, token, is_admin = await User.Objects.login(username, password, host)
+    except (User.DoesNotExist, User.PasswordDoesNotMatch, ValueError) as ex:
+        _logger.warning(str(ex))
+        return web.HTTPNotFound(reason=str(ex))
+    except User.PasswordExpired as ex:
+        # delete all user token for this user
+        await User.Objects.delete_user_tokens(str(ex))
 
-        if not username or not password:
-            _logger.warning("Username and password are required to login")
-            raise web.HTTPBadRequest(reason="Username or password is missing")
-
-        username = str(username).lower()
-
-        peername = request.transport.get_extra_info('peername')
-        host = '0.0.0.0'
-        if peername is not None:
-            host, port = peername
-        try:
-            uid, token, is_admin = await User.Objects.login(username, password, host)
-        except (User.DoesNotExist, User.PasswordDoesNotMatch, ValueError) as ex:
-            _logger.warning(str(ex))
-            return web.HTTPNotFound(reason=str(ex))
-        except User.PasswordExpired as ex:
-            # delete all user token for this user
-            await User.Objects.delete_user_tokens(str(ex))
-
-            msg = 'Your password has been expired. Please set your password again'
-            _logger.warning(msg)
-            return web.HTTPUnauthorized(reason=msg)
+        msg = 'Your password has been expired. Please set your password again'
+        _logger.warning(msg)
+        return web.HTTPUnauthorized(reason=msg)
 
     _logger.info("User with username:<{}> has been logged in successfully".format(username))
     return web.json_response({"message": "Logged in successfully", "uid": uid, "token": token, "admin": is_admin})
