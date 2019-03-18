@@ -41,6 +41,7 @@
 #   $5 - State
 #   $6 - Country
 #   $7 - Email
+#   $8 - Certificate Serial No.
 #
 # The script is executed from the project directory
 #
@@ -131,6 +132,13 @@ else
   SSL_EMAIL="$7"
 fi
 
+# Certificate serial
+if [ -z ${8+x} ]; then
+  CERT_SRL="$RANDOM"
+else
+  CERT_SRL="$8"
+fi
+
 # OpenSSL command
 if ! [ -x "$(command -v openssl)" ]; then
   certificate_log "err" "Missing openssl command or package" "all" "pretty"
@@ -149,6 +157,7 @@ if [[ "$AUTH_TYPE" = "ca" ]]; then
 
   openssl genrsa -out "${SSL_LOCATION}/${AUTH_NAME}.key" 4096 2> /dev/null
   openssl req -new -x509 -days "${SSL_EXPIRATION_DAYS}" -key "${SSL_LOCATION}/${AUTH_NAME}.key" -out "${SSL_LOCATION}/${AUTH_NAME}.cert" -subj '/C=US/CN=MY-CA' 2> /dev/null
+  openssl pkcs12 -export -out "${SSL_LOCATION}/${AUTH_NAME}.pfx" -inkey "${SSL_LOCATION}/${AUTH_NAME}.key" -in "${SSL_LOCATION}/${AUTH_NAME}.cert"
 
   certificate_log "info" "${AUTH_TYPE} certificate created successfully, and placed in ${SSL_LOCATION}" "outonly" "pretty"
 else
@@ -157,7 +166,8 @@ else
 
   openssl genrsa -out "${SSL_LOCATION}/${SSL_NAME}.key" 1024 2> /dev/null
   openssl req -new -key "${SSL_LOCATION}/${SSL_NAME}.key" -subj "${SUBJ}" -out "${SSL_LOCATION}/${SSL_NAME}.csr" 2> /dev/null
-  openssl x509 -req -days "${SSL_EXPIRATION_DAYS}" -in "${SSL_LOCATION}/${SSL_NAME}.csr" -CA "${SSL_LOCATION}/${AUTH_NAME}.cert" -CAkey "${SSL_LOCATION}/${AUTH_NAME}.key" -set_serial 01 -out "${SSL_LOCATION}/${SSL_NAME}.cert" 2> /dev/null
+  openssl x509 -req -days "${SSL_EXPIRATION_DAYS}" -in "${SSL_LOCATION}/${SSL_NAME}.csr" -CA "${SSL_LOCATION}/${AUTH_NAME}.cert" -CAkey "${SSL_LOCATION}/${AUTH_NAME}.key" -set_serial "${CERT_SRL}" -out "${SSL_LOCATION}/${SSL_NAME}.cert" 2> /dev/null
+  openssl pkcs12 -export -out "${SSL_LOCATION}/${SSL_NAME}.pfx" -inkey "${SSL_LOCATION}/${SSL_NAME}.key" -in "${SSL_LOCATION}/${SSL_NAME}.cert"
 
   # Check key and certificate files
   if [ ! -f "${SSL_LOCATION}/${SSL_NAME}.key" ]; then
