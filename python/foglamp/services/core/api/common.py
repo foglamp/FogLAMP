@@ -10,6 +10,7 @@ import json
 import logging
 import socket
 import subprocess
+import os
 
 from aiohttp import web
 
@@ -39,6 +40,36 @@ _help = """
 """
 
 
+def get_since_started():
+    try:
+        # Full command is:
+        #      PID=$(ps -ef | grep foglamp.services.core | grep -v grep | awk '{print $2}'); ps -o etimes= -p $PID | awk '{print $1}'
+        cmd = "ps -o etimes= -p $PID"
+
+        # Get PID
+        _FOGLAMP_DATA = os.getenv("FOGLAMP_DATA", default=None)
+        _FOGLAMP_ROOT = os.getenv("FOGLAMP_ROOT", default='/usr/local/foglamp')
+        path = _FOGLAMP_ROOT + "/data" if _FOGLAMP_DATA is None else _FOGLAMP_DATA
+        pid_file_name = "{}/var/run/foglamp.core.pid".format(path)
+        with open(pid_file_name, 'r') as content_file:
+            content = content_file.read()
+            foglamp_pid = json.loads(content).get("processID")
+
+        # Get uptime
+        a = subprocess.Popen(["ps", "-o", "etimes=", "-p", "{}".format(foglamp_pid)], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        outs, errs = a.communicate()
+        if outs is None and errs is None:
+            raise OSError('Error in executing command "{}"'.format(cmd))
+        if a.returncode != 0:
+            raise OSError('Error in executing command "{}". Error: {}, return code: {}'.format(cmd,
+                                                                                     errs.decode('utf-8').replace('\n', ''),
+                                                                                     a.returncode))
+        d = [b for b in outs.decode('utf-8').split('\n') if b != '']
+        return d[0].strip()
+    except Exception as ex:
+        _logger.exception("Error in getting uptime: {}".format(str(ex)))
+
+
 async def ping(request):
     """
     Args:
@@ -62,8 +93,6 @@ async def ping(request):
                 _logger.warning("Permission denied for Ping when Auth is mandatory.")
                 raise web.HTTPForbidden
 
-    since_started = time.time() - __start_time
-
     stats_request = request.clone(rel_url='foglamp/statistics')
     data_read, data_sent, data_purged = await get_stats(stats_request)
 
@@ -86,7 +115,7 @@ async def ping(request):
     status_color = services_health_litmus_test()
     safe_mode = True if server.Server.running_in_safe_mode else False
 
-    return web.json_response({'uptime': int(since_started),
+    return web.json_response({'uptime': get_since_started(),
                               'dataRead': data_read,
                               'dataSent': data_sent,
                               'dataPurged': data_purged,
