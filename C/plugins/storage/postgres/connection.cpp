@@ -31,6 +31,9 @@ using namespace rapidjson;
 static time_t connectErrorTime = 0;
 #define CONNECT_ERROR_THRESHOLD		5*60	// 5 minutes
 
+// FIXME::
+#include <tmp_log.hpp>
+
 /**
  * Create a database connection
  */
@@ -77,6 +80,15 @@ bool Connection::retrieve(const string& table, const string& condition, string& 
 Document document;  // Default template parameter uses UTF8 and MemoryPoolAllocator.
 SQLBuffer	sql;
 SQLBuffer	jsonConstraints;	// Extra constraints to add to where clause
+
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug(
+		"DBG retrieve 1.0 : table |%s| condition |%s|  ",
+		table.c_str(),
+		condition.c_str());
+
 
 	try {
 		if (condition.empty())
@@ -243,6 +255,14 @@ SQLBuffer	jsonConstraints;	// Extra constraints to add to where clause
 
 		const char *query = sql.coalesce();
 		logSQL("CommonRetrieve", query);
+
+
+		// FIXME: Fast
+		char tmp_buffer[10000];
+		sprintf (tmp_buffer,"DBG : query |%s| ", query);
+		string str_buffer(tmp_buffer);
+		tmpLogger (str_buffer);
+
 
 		PGresult *res = PQexec(dbConnection, query);
 		delete[] query;
