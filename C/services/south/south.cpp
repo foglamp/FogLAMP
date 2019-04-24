@@ -404,6 +404,10 @@ void SouthService::start(string& coreAddress, unsigned short corePort)
 
 		if (southPlugin)
 			southPlugin->shutdown();
+
+		//Unregister interest in categories
+		m_mgtClient->unregisterCategory(m_name);
+		m_mgtClient->unregisterCategory(m_name+"Advanced");
 		
 		// Clean shutdown, unregister the storage service
 		m_mgtClient->unregisterService();
