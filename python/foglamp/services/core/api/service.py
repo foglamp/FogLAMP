@@ -31,7 +31,7 @@ __version__ = "${VERSION}"
 
 _help = """
     -------------------------------------------------------------------------------
-    | GET POST            | /foglamp/service                                      |
+    | GET POST DELETE           | /foglamp/service                                 |
     -------------------------------------------------------------------------------
 """
 
@@ -95,7 +95,8 @@ async def delete_service(request):
             notf_children = await config_mgr.get_category_child(category_name="Notifications")
             children = [x['key'] for x in notf_children]
             if len(notf_children) > 0:
-                return web.HTTPBadRequest(reason='Notification service `{}` can not be deleted, as {} notification instances exist.'.format(svc, children))
+                return web.HTTPBadRequest(reason='Notification service `{}` can not be deleted, as '
+                                                 '{} notification instances exist.'.format(svc, children))
 
         # First disable the schedule
         svc_schedule = result['rows'][0]
@@ -106,13 +107,20 @@ async def delete_service(request):
         # Delete all configuration for the service name
         await config_mgr.delete_category_and_children_recursively(svc)
 
-        # Remove from registry as it has been already shutdown via disable_schedule() and since
+        # Allow some time for graceful shutdown and check, Remove from registry
         # we intend to delete the schedule also, there is no use of its Service registry entry
-        try:
-            services = ServiceRegistry.get(name=svc)
+        retries = 2
+        while retries:
+            try:
+                services = ServiceRegistry.get(name=svc)
+            except service_registry_exceptions.DoesNotExist:
+                services = list()
+                break
+            asyncio.wait(2.0)
+            retries -= 1
+
+        if len(services):
             ServiceRegistry.remove_from_registry(services[0]._id)
-        except service_registry_exceptions.DoesNotExist:
-            pass
 
         # Delete schedule
         await server.Server.scheduler.delete_schedule(sch_id)
