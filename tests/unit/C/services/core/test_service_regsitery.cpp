@@ -24,6 +24,14 @@ TEST(ServiceRegistryTest, Register)
 	ASSERT_EQ(registry->registerService(record), true);
 }
 
+TEST(ServiceRegistryTest, RegisterQuotes)
+{
+	ServiceRecord *record = new ServiceRecord("test\"11\"", "south", "http", "hostname", 1234, 4321);
+	
+	ServiceRegistry *registry = ServiceRegistry::getInstance();
+	ASSERT_EQ(registry->registerService(record), true);
+}
+
 TEST(ServiceRegistryTest, DupRegister)
 {
 	ServiceRecord *record = new ServiceRecord("test1", "south", "http", "hostname", 1234, 4321);
@@ -52,6 +60,14 @@ TEST(ServiceRegistryTest, Find)
 	ASSERT_NE(registry->findService("findtest"), (ServiceRecord *)0);
 }
 
+TEST(ServiceRegistryTest, FindQuotes)
+{
+	ServiceRecord *record = new ServiceRecord("find\"test\"", "south", "http", "hostname", 1234, 4321);
+	ServiceRegistry *registry = ServiceRegistry::getInstance();
+	ASSERT_EQ(registry->registerService(record), true);
+	ASSERT_NE(registry->findService("find\"test\""), (ServiceRecord *)0);
+}
+
 TEST(ServiceRegistryTest, NotFind)
 {
 	ServiceRegistry *registry = ServiceRegistry::getInstance();
@@ -61,6 +77,15 @@ TEST(ServiceRegistryTest, NotFind)
 TEST(ServiceRegistryTest, Unregister)
 {
 	ServiceRecord *record = new ServiceRecord("unregisterme", "south", "http", "hostname", 1234, 4321);
+	
+	ServiceRegistry *registry = ServiceRegistry::getInstance();
+	ASSERT_EQ(true, registry->registerService(record));
+	ASSERT_EQ(true, registry->unRegisterService(record));
+}
+
+TEST(ServiceRegistryTest, UnregisterQuotes)
+{
+	ServiceRecord *record = new ServiceRecord("unregister\"me\"", "south", "http", "hostname", 1234, 4321);
 	
 	ServiceRegistry *registry = ServiceRegistry::getInstance();
 	ASSERT_EQ(true, registry->registerService(record));

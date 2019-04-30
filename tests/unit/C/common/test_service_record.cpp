@@ -19,3 +19,13 @@ string expected("{ \"name\" : \"test1\",\"type\" : \"testType\",\"protocol\" : \
 	ASSERT_EQ(json.compare(expected), 0);
 }
 
+TEST(ServiceRecordTest, JSONQuotes)
+{
+ServiceRecord serviceRecord("test\"1\"", "testType", "http", "localhost", 1234, 4321);
+string json;
+string expected("{ \"name\" : \"test\\\"1\\\"\",\"type\" : \"testType\",\"protocol\" : \"http\",\"address\" : \"localhost\",\"management_port\" : 4321,\"service_port\" : 1234 }");
+
+	serviceRecord.asJSON(json);
+
+	ASSERT_EQ(json.compare(expected), 0);
+}
