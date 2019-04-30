@@ -10,6 +10,7 @@
 #include <service_record.h>
 #include <string>
 #include <sstream>
+#include <json_utils.h>
 
 using namespace std;
 
@@ -63,7 +64,7 @@ void ServiceRecord::asJSON(string& json) const
 ostringstream convert;
 
 	convert << "{ ";
-	convert << "\"name\" : \"" << m_name << "\",";
+	convert << "\"name\" : \"" << JSONescape(m_name) << "\",";
 	convert << "\"type\" : \"" << m_type << "\",";
 	convert << "\"protocol\" : \"" << m_protocol << "\",";
 	convert << "\"address\" : \"" << m_address << "\",";

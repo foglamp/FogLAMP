@@ -7,8 +7,11 @@
  *
  * Released under the Apache 2.0 Licence
  *
- * Author: Stefano Simonelli
+ * Author: Stefano Simonelli, Massimiliano Pinto
  */
+
+#include<vector>
+#include<string>
 
 bool JSONStringToVectorString(std::vector<std::string>& vectorString,
                               const std::string& JSONString,
