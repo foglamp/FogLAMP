@@ -11,6 +11,12 @@
 #include <connection_manager.h>
 #include <common.h>
 #include <utils.h>
+#include <sqlite3.h>
+
+extern "C" {
+typedef struct sqlite3_api_routines sqlite3_api_routines;
+int sqlite3_json_init( sqlite3 *db, char **error, const sqlite3_api_routines *api );
+};
 
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
@@ -412,6 +418,8 @@ Connection::Connection()
 	// Allow usage of URI for filename
 	sqlite3_config(SQLITE_CONFIG_URI, 1);
 
+	sqlite3_auto_extension( (void(*)(void))sqlite3_json_init);
+
 	Logger *logger = Logger::getLogger();
 
 	/**
@@ -447,6 +455,8 @@ Connection::Connection()
 	{
 		int rc;
 		char *zErrMsg = NULL;
+
+		//sqlite3_auto_extension( (void(*)(void))sqlite3_json_init);
 
 		rc = sqlite3_exec(dbHandle, "PRAGMA cache_size = -4000; PRAGMA journal_mode = WAL; PRAGMA secure_delete = off; PRAGMA journal_size_limit = 4096000;", NULL, NULL, &zErrMsg);
 		if (rc != SQLITE_OK)
@@ -866,9 +876,11 @@ SQLBuffer	jsonConstraints;
 						}
 						else if (itr->HasMember("json"))
 						{
+							PRINT_FUNC;
 							const Value& json = (*itr)["json"];
 							if (! returnJson(json, sql, jsonConstraints))
 								return false;
+							PRINT_FUNC;
 						}
 						else
 						{
@@ -1665,6 +1677,7 @@ bool Connection::jsonAggregates(const Value& payload,
 				SQLBuffer& jsonConstraint,
 				bool isTableReading)
 {
+	PRINT_FUNC;
 	if (aggregates.IsObject())
 	{
 		if (! aggregates.HasMember("operation"))
@@ -1722,6 +1735,7 @@ bool Connection::jsonAggregates(const Value& payload,
 			}
 			// Use json_extract(field, '$.key1.key2') AS value
 			sql.append("json_extract(");
+	PRINT_FUNC;
 			sql.append(json["column"].GetString());
 			sql.append(", '$.");
 
@@ -1873,6 +1887,7 @@ bool Connection::jsonAggregates(const Value& payload,
 				}
 				// Use json_extract(field, '$.key1.key2') AS value
 				sql.append("json_extract(");
+	PRINT_FUNC;
 				sql.append(json["column"].GetString());
 				sql.append(", '$.");
 
@@ -2096,6 +2111,7 @@ bool Connection::jsonAggregates(const Value& payload,
 		}
 		sql.append('"');
 	}
+	PRINT_FUNC;
 	return true;
 }
 
@@ -2463,6 +2479,7 @@ bool Connection::returnJson(const Value& json,
 	// Call JSON1 SQLite3 extension routine 'json_extract'
 	// json_extract(field, '$.key1.key2') AS value
 	sql.append("json_extract(");
+	PRINT_FUNC;
 	sql.append(json["column"].GetString());
 	sql.append(", '$.");
 	if (!json.HasMember("properties"))
@@ -2527,6 +2544,7 @@ bool Connection::returnJson(const Value& json,
 		jsonConstraint.append("') IS NOT NULL");
 	}
 	sql.append("') ");
+	PRINT_FUNC;
 
 	return true;
 }

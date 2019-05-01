@@ -12,7 +12,7 @@
 
 #include <string>
 
-#define PRINT_FUNC	Logger::getLogger()->info("%s:%d", __FUNCTION__, __LINE__);
+#define PRINT_FUNC	Logger::getLogger()->error("%s:%d", __FUNCTION__, __LINE__);
 
 /**
  * FogLAMP Logger class used to log to syslog

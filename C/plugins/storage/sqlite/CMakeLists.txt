@@ -3,11 +3,13 @@ cmake_minimum_required(VERSION 2.6.0)
 project(sqlite)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0")
 set(STORAGE_COMMON_LIB storage-common-lib)
 
 # Find source files
-file(GLOB SOURCES ./common/*.cpp *.cpp)
+file(GLOB SOURCES ./common/*.cpp ./common/*.c *.cpp)
+
+message("SOURCES: ${SOURCES}")
 
 # Include header files
 include_directories(./include)
