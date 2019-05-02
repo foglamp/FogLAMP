@@ -423,7 +423,7 @@ void SouthService::stop()
 /**
  * Creates config categories and sub categories recursively, along with their parent-child relations
  */
-void SouthService::createConfigCategories(DefaultConfigCategory configCategory, std::string parent_name, std::string current_name)
+bool SouthService::createConfigCategories(DefaultConfigCategory configCategory, std::string parent_name, std::string current_name)
 {
 
 	// Deal with registering and fetching the configuration
@@ -435,7 +435,13 @@ void SouthService::createConfigCategories(DefaultConfigCategory configCategory, 
 	defConfig.removeItemsType(ConfigCategory::ItemType::CategoryType);
 
 	// Create/Update category name (we pass keep_original_items=true)
-	m_mgtClient->addCategory(defConfig, true);
+	if (!m_mgtClient->addCategory(defConfig, true))
+	{
+		logger->fatal("Failed to add category %s for %s",
+			      current_name.c_str(),
+			      parent_name.c_str());
+		return false;
+	}
 
 	// Add this service under 'South' parent category
 	vector<string> children;
@@ -460,6 +466,7 @@ void SouthService::createConfigCategories(DefaultConfigCategory configCategory, 
 		}
 	}
 
+	return true;
 }
 
 /**
@@ -484,7 +491,10 @@ bool SouthService::loadPlugin()
 		{
 			// Adds categories and sub categories to the configuration
 			DefaultConfigCategory defConfig(m_name, manager->getInfo(handle)->config);
-			createConfigCategories(defConfig, string("South"), m_name);
+			if (!createConfigCategories(defConfig, string("South"), m_name))
+			{
+				return false;
+			}
 
 			// Must now reload the configuration to obtain any items added from
 			// the plugin
