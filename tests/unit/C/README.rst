@@ -25,6 +25,7 @@ Unfortunately this does not install the libraries and a manual build set is requ
 Red Hat Enterprise Linux:
 -------------------------
 
+- sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 - sudo yum install gtest gtest-devel
 - cd /tmp
 
