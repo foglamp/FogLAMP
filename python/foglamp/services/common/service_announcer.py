@@ -8,7 +8,7 @@
 
 
 import socket
-from zeroconf import ServiceInfo, Zeroconf
+from zeroconf import ServiceInfo, Zeroconf, NonUniqueNameException, ZeroconfServiceTypes
 
 from foglamp.common import logger
 
@@ -33,6 +33,7 @@ class ServiceAnnouncer:
             except:
                 pass
         desc = {'description': desc_txt}
+
         """ Create a service description.
                 type_: fully qualified service type name
                 name: fully qualified service name
@@ -44,17 +45,32 @@ class ServiceAnnouncer:
                             bytes for the text field)
                 server: fully qualified name for service host (defaults to name)
                 host_ttl: ttl used for A/SRV records
-                other_ttl: ttl used for PTR/TXT records"""
-        info = ServiceInfo(
-            stype,
-            service_name,
-            socket.inet_aton(host),
-            port,
-            properties=desc,
-            server="{}.local.".format(host_name)
-        )
+                other_ttl: ttl used for PTR/TXT records
+        """
+
         zeroconf = Zeroconf()
-        zeroconf.register_service(info, allow_name_change=True)
+        next_instance_srl = 0
+        while True:
+            try:
+                info = ServiceInfo(
+                    stype,
+                    service_name,
+                    socket.inet_aton(host),
+                    port,
+                    0,
+                    0,
+                    desc,
+                    "{}.local.".format(host_name),
+                )
+                if zeroconf.get_service_info(info.type, info.name) is not None:
+                    raise NonUniqueNameException
+            except NonUniqueNameException:
+                _LOGGER.error("Duplicate service entry found for %s, %s", stype, sname)
+                next_instance_srl += 1
+                service_name = "{}-{}.{}".format(sname, next_instance_srl, stype)
+            else:
+                zeroconf.register_service(info, allow_name_change=True)
+                break
 
     def get_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -67,3 +83,8 @@ class ServiceAnnouncer:
         finally:
             s.close()
         return ip
+
+    def get_service_types(self):
+        zeroconf = Zeroconf()
+        return  ZeroconfServiceTypes.find()
+
