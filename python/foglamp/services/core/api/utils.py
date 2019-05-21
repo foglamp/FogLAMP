@@ -66,8 +66,8 @@ def find_c_plugin_libs(direction):
 
 
 def _find_plugins_from_env(_plugin_path: list) -> list:
-    if FOGLAMP_PLUGIN_PATH:
-        plugin_paths = FOGLAMP_PLUGIN_PATH.split(";")
+    if _FOGLAMP_PLUGIN_PATH:
+        plugin_paths = _FOGLAMP_PLUGIN_PATH.split(";")
         for pp in plugin_paths:
             if not os.path.isdir(pp):
                 _logger.warning("{} is not a directory!".format(pp))
