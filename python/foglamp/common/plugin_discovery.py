@@ -7,8 +7,7 @@
 """Common Plugin Discovery Class"""
 
 import os
-import importlib.util
-from typing import Dict
+
 
 from foglamp.common import logger
 from foglamp.services.core.api import utils
@@ -63,37 +62,32 @@ class PluginDiscovery(object):
 
     @classmethod
     def get_plugin_folders(cls, plugin_type):
-        directories = []
         dir_name = utils._FOGLAMP_ROOT + "/python/foglamp/plugins/" + plugin_type
         dir_path = []
-        l1 = [plugin_type]
         if utils._FOGLAMP_PLUGIN_PATH:
-            my_list = utils._FOGLAMP_PLUGIN_PATH.split(";")
-            for l in my_list:
-                dir_found = os.path.isdir(l)
-                if dir_found:
-                    subdirs = [dirs for x, dirs, files in os.walk(l)]
-                    if subdirs[0]:
-                        result = any(elem in l1 for elem in subdirs[0])
-                        if result:
-                            dir_path.append(l)
-                    else:
-                        _logger.warning("{} subdir type not found".format(l))
+            plugin_paths = utils._FOGLAMP_PLUGIN_PATH.split(";")
+            for pp in plugin_paths:
+                if not os.path.isdir(pp):
+                    _logger.warning("{} is not a directory!".format(pp))
                 else:
-                    _logger.warning("{} dir path not found".format(l))
+                    subdirs = [dirs for rt, dirs, files in os.walk(pp)]
+                    if not len(subdirs):
+                        _logger.warning("{} - no sub directories found".format(pp))
+                    else:
+                        dir_path.append(any(elem in [plugin_type] for elem in subdirs[0]))
+
         try:
             directories = [dir_name + '/' + d for d in os.listdir(dir_name) if os.path.isdir(dir_name + "/" + d) and
                            not d.startswith("__") and d != "empty" and d != "common"]
-            if dir_path:
+            if len(dir_path):
                 temp_list = []
                 for fp in dir_path:
                     for root, dirs, files in os.walk(fp + "/" + plugin_type):
                         for name in dirs:
                             if not name.startswith("__"):
-                                # temp_list.append(name)
                                 p = os.path.join(root, name)
                                 temp_list.append(p)
-                directories = directories + temp_list
+                directories += temp_list
         except FileNotFoundError:
             pass
         else:
@@ -127,47 +121,21 @@ class PluginDiscovery(object):
 
         # Now load the plugin to fetch its configuration
         try:
-            plugin_info = load_python_plugin(plugin_module_path,  plugin_module_path.split('/')[-1], plugin_type)
-            # Fetch configuration from the configuration defined in the plugin
-            if plugin_info['type'] == plugin_type:
-                plugin_config = {
-                    'name': plugin_info['config']['plugin']['default'],
-                    'type': plugin_info['type'],
-                    'description': plugin_info['config']['plugin']['description'],
-                    'version': plugin_info['version']
-                }
-            else:
-                _logger.warning("Plugin {} is discarded due to invalid type".format(plugin_dir))
-
+            plugin_info = utils.load_and_fetch_python_plugin_info(plugin_module_path,
+                                                                  plugin_module_path.split('/')[-1], plugin_type)
+            plugin_config = {
+                'name': plugin_info['config']['plugin']['default'],
+                'type': plugin_info['type'],
+                'description': plugin_info['config']['plugin']['description'],
+                'version': plugin_info['version']
+            }
             if is_config:
                 plugin_config.update({'config': plugin_info['config']})
+        except TypeError as e:
+            _logger.error("Plugin {} is discarded due to invalid type".format(plugin_dir))
         except FileNotFoundError as ex:
             _logger.error('Plugin "{}" import problem from path "{}". {}'.format(plugin_dir, plugin_module_path, str(ex)))
         except Exception as ex:
             _logger.exception('Plugin "{}" raised exception "{}" while fetching config'.format(plugin_dir, str(ex)))
 
         return plugin_config
-
-
-def load_python_plugin(plugin_module_path: str, plugin: str, service_type: str) -> Dict:
-    _plugin = None
-    try:
-        spec = importlib.util.spec_from_file_location("module.name", "{}/{}.py".format(plugin_module_path, plugin))
-        _plugin = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(_plugin)
-    except FileNotFoundError as ex:
-        if utils._FOGLAMP_PLUGIN_PATH:
-            my_list = utils._FOGLAMP_PLUGIN_PATH.split(";")
-            for l in my_list:
-                dir_found = os.path.isdir(l)
-                if dir_found:
-                    plugin_module_path = "{}/{}/{}".format(l, service_type, plugin)
-                    spec = importlib.util.spec_from_file_location("module.name", "{}/{}.py".format(plugin_module_path, plugin))
-                    _plugin = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(_plugin)
-    # Fetch configuration from the configuration defined in the plugin
-    plugin_info = _plugin.plugin_info()
-    if plugin_info['type'] != service_type:
-        msg = "Plugin of {} type is not supported".format(plugin_info['type'])
-        raise TypeError(msg)
-    return plugin_info

@@ -6,8 +6,6 @@
 
 """shim layer between Python and C++"""
 
-import os
-import importlib.util
 import sys
 import json
 import logging
@@ -24,22 +22,10 @@ _LOGGER.info("Loading shim layer for python plugin '{}' ".format(sys.argv[1]))
 
 def _plugin_obj():
     plugin = sys.argv[1]
-    plugin_module_path = "{}/python/foglamp/plugins/south/{}".format(_FOGLAMP_ROOT, plugin)
-    try:
-        spec = importlib.util.spec_from_file_location("module.name", "{}/{}.py".format(plugin_module_path, plugin))
-        _plugin = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(_plugin)
-    except FileNotFoundError as ex:
-        if utils._FOGLAMP_PLUGIN_PATH:
-            my_list = utils._FOGLAMP_PLUGIN_PATH.split(";")
-            for l in my_list:
-                dir_found = os.path.isdir(l)
-                if dir_found:
-                    plugin_module_path = "{}/south/{}".format(l, plugin)
-                    spec = importlib.util.spec_from_file_location("module.name", "{}/{}.py".format(plugin_module_path, plugin))
-                    _plugin = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(_plugin)
-    return _plugin
+    plugin_type = "south"
+    plugin_module_path = "{}/python/foglamp/plugins/{}/{}".format(_FOGLAMP_ROOT, plugin_type, plugin)
+    a_plugin = utils.load_python_plugin(plugin_module_path, plugin, plugin_type)
+    return a_plugin
 
 
 _plugin = _plugin_obj()

@@ -4,13 +4,11 @@
 # See: http://foglamp.readthedocs.io/
 # FOGLAMP_END
 
-import os
-import importlib.util
+
 import datetime
 import uuid
 
 from aiohttp import web
-from typing import Dict
 
 from foglamp.common import utils
 from foglamp.common import logger
@@ -154,7 +152,7 @@ async def add_task(request):
             # folder, within the plugin_module_path.
             # if multiple plugin with same name are found, then python plugin import will be tried first
             plugin_module_path = "{}/python/foglamp/plugins/{}/{}".format(_FOGLAMP_ROOT, task_type, plugin)
-            plugin_info = load_python_plugin(plugin_module_path, plugin, task_type)
+            plugin_info = apiutils.load_and_fetch_python_plugin_info(plugin_module_path, plugin, task_type)
             plugin_config = plugin_info['config']
             if plugin_info['type'] != task_type:
                 msg = "Plugin of {} type is not supported".format(plugin_info['type'])
@@ -332,27 +330,3 @@ async def check_schedules(storage, schedule_name):
 async def delete_statistics_key(storage, key):
     payload = PayloadBuilder().WHERE(['key', '=', key]).payload()
     await storage.delete_from_tbl('statistics', payload)
-
-
-def load_python_plugin(plugin_module_path: str, plugin: str, service_type: str) -> Dict:
-    _plugin = None
-    try:
-        spec = importlib.util.spec_from_file_location("module.name", "{}/{}.py".format(plugin_module_path, plugin))
-        _plugin = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(_plugin)
-    except FileNotFoundError as ex:
-        if apiutils._FOGLAMP_PLUGIN_PATH:
-            my_list = apiutils._FOGLAMP_PLUGIN_PATH.split(";")
-            for l in my_list:
-                dir_found = os.path.isdir(l)
-                if dir_found:
-                    plugin_module_path = "{}/{}/{}".format(l, service_type, plugin)
-                    spec = importlib.util.spec_from_file_location("module.name", "{}/{}.py".format(plugin_module_path, plugin))
-                    _plugin = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(_plugin)
-    # Fetch configuration from the configuration defined in the plugin
-    plugin_info = _plugin.plugin_info()
-    if plugin_info['type'] != service_type:
-        msg = "Plugin of {} type is not supported".format(plugin_info['type'])
-        raise TypeError(msg)
-    return plugin_info
