@@ -111,3 +111,18 @@ elif apt --version 2>/dev/null; then
 else
 	echo "Requirements cannot be automatically installed, please refer README.rst to install requirements manually"
 fi
+
+arch=`arch`
+if [[  $arch == "aarch64" ]]; then
+	echo The aarch64 version of RapidJSON is too old, building from source
+	cd /tmp
+	git clone https://github.com/Tencent/rapidjson.git
+	cd rapidjson
+	mkdir build
+	cd build
+	cmake ..
+	make
+	make install
+	cd /tmp
+	rm -rf rapidjson
+fi
