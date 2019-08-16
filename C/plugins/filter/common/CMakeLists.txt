@@ -22,7 +22,6 @@ file(GLOB SOURCES *.cpp)
 # Include header files
 include_directories(include ../../../common/include ../../../services/common/include)
 include_directories(../../../thirdparty/Simple-Web-Server)
-include_directories(../../../thirdparty/rapidjson/include)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../../../lib)
 

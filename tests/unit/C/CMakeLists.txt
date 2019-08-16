@@ -22,7 +22,6 @@ pkg_check_modules(PYTHON REQUIRED python3)
 include_directories(../../../C/common/include)
 include_directories(../../../C/plugins/common/include)
 include_directories(../../../C/services/common/include)
-include_directories(../../../C/thirdparty/rapidjson/include)
 include_directories(../../../C/thirdparty/Simple-Web-Server)
 include_directories(../../../C/plugins/storage/common/include)
 

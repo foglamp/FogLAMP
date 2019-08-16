@@ -8,7 +8,6 @@ include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(../../../../../../C/services/storage/include)
 include_directories(../../../../../../C/services/common/include)
 include_directories(../../../../../../C/common/include)
-include_directories(../../../../../../C/thirdparty/rapidjson/include)
 
 file(GLOB test_sources "../../../../../../C/services/storage/configuration.cpp")
 file(GLOB logger_sources "../../../../../../C/common/logger.cpp")

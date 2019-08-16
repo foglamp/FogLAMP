@@ -67,6 +67,9 @@ FogLAMP is currently based on C/C++ and Python code. The packages needed to buil
 - uuid-dev
 - sqlite3
 - libsqlite3-dev
+- rapidjson-dev
+
+These may be installed by runnign the scripts requirements.sh.
 
 
 Linux distributions
@@ -75,7 +78,8 @@ Linux distributions
 FogLAMP can be built or installed in one of the following Linux distributions :
 
 - Ubuntu 16.04 and Ubuntu 18.04
-- Raspbian
+- Raspbian Stretch and Buster
+- Coral Mandel
 - Red Hat 7.6
 - CentOS 7.6
 
@@ -90,6 +94,7 @@ On Ubuntu-based Linux distributions the packages can be installed with given `re
    apt-get install python-dev python3-dev python3-pip
    apt-get install postgresql
    apt-get install sqlite3 libsqlite3-dev
+   apt-get install rapidjson-dev
 
 You may need to use *sudo* to allow *apt-get* to install packages dependent upon your access rights.
 

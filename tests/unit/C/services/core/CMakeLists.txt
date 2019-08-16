@@ -22,7 +22,6 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 include_directories(../../../../../C/common/include)
 include_directories(../../../../../C/services/common/include)
 include_directories(../../../../../C/services/core/include)
-include_directories(../../../../../C/thirdparty/rapidjson/include)
 include_directories(../../../../../C/thirdparty/Simple-Web-Server)
 
 set(COMMON_LIB common-lib)

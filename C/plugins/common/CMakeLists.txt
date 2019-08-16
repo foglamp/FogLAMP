@@ -26,7 +26,6 @@ include_directories(include)
 include_directories(../../common/include)
 include_directories(../../services/common/include)
 include_directories(../../thirdparty/Simple-Web-Server)
-include_directories(../../thirdparty/rapidjson/include)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../../lib)
 

@@ -26,7 +26,6 @@ include_directories(../../../../../../C/common/include)
 include_directories(../../../../../../C/services/common/include)
 include_directories(../../../../../../C/plugins/storage/common/include)
 include_directories(../../../../../../C/plugins/storage/postgres/include)
-include_directories(../../../../../../C/thirdparty/rapidjson/include)
 
 # Handle Postgres on RedHat/CentOS
 if(${RH_POSTGRES_FOUND} EQUAL 1)

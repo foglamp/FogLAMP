@@ -20,7 +20,6 @@ include_directories(include)
 include_directories(../../../../common/include)
 include_directories(../../../../services/common/include)
 include_directories(../../../../services/south/include)
-include_directories(../../../../thirdparty/rapidjson/include)
 
 # Add Python 3.x header files
 include_directories(${PYTHON_INCLUDE_DIRS})

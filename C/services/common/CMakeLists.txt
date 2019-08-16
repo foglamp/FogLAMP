@@ -13,7 +13,7 @@ file(GLOB SOURCES *.cpp)
 pkg_check_modules(PYTHON REQUIRED python3)
 
 # Include header files
-include_directories(include ../../common/include ../../thirdparty/Simple-Web-Server  ../../thirdparty/rapidjson/include)
+include_directories(include ../../common/include ../../thirdparty/Simple-Web-Server)
 
 # Add Python 3.x header files
 include_directories(${PYTHON_INCLUDE_DIRS})

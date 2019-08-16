@@ -18,7 +18,6 @@ include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(../../../../../../C/common/include)
 include_directories(../../../../../../C/services/common/include)
 include_directories(../../../../../../C/plugins/storage/common/include)
-include_directories(../../../../../../C/thirdparty/rapidjson/include)
 include_directories(../../../../../../C/plugins/storage/sqlite/include)
 include_directories(../../../../../../C/plugins/storage/sqlite/common/include)
 

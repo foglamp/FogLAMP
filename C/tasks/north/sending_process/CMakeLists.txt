@@ -9,7 +9,7 @@ set(COMMON_LIB common-lib)
 set(SERVICE_COMMON_LIB services-common-lib)
 set(PLUGINS_COMMON_LIB plugins-common-lib)
 
-include_directories(. include ../../../thirdparty/Simple-Web-Server ../../../thirdparty/rapidjson/include  ../../../common/include ../../../services/common/include ../../../plugins/common/include)
+include_directories(. include ../../../thirdparty/Simple-Web-Server ../../../common/include ../../../services/common/include ../../../plugins/common/include)
 
 find_package(Threads REQUIRED)
 

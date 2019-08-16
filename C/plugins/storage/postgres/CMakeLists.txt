@@ -15,7 +15,6 @@ file(GLOB SOURCES *.cpp)
 
 # Include header files
 include_directories(include ../../../common/include ../../../services/common/include ../common/include)
-include_directories(../../../thirdparty/rapidjson/include)
 link_directories(${PROJECT_BINARY_DIR}/../../../lib)
 
 if(${RH_POSTGRES_FOUND} EQUAL 1)

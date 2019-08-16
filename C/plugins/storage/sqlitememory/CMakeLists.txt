@@ -19,7 +19,6 @@ file(GLOB SOURCES *.cpp)
 include_directories(../../../common/include)
 include_directories(../../../services/common/include)
 include_directories(../common/include)
-include_directories(../../../thirdparty/rapidjson/include)
 # Add sqlite plugin header files
 include_directories(../sqlite/include)
 include_directories(../sqlite/common/include)

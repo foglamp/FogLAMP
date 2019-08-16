@@ -9,7 +9,7 @@ set(COMMON_LIB common-lib)
 set(SERVICE_COMMON_LIB services-common-lib)
 set(EXEC foglamp.services.south)
 
-include_directories(. include ../../thirdparty/Simple-Web-Server ../../thirdparty/rapidjson/include  ../common/include ../../common/include)
+include_directories(. include ../../thirdparty/Simple-Web-Server ../common/include ../../common/include)
 
 find_package(Threads REQUIRED)
 

@@ -21,7 +21,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 file(GLOB SOURCES *.cpp)
 
 # Include header files
-include_directories(include ../services/common/include ../common/include ../thirdparty/rapidjson/include ../thirdparty/Simple-Web-Server)
+include_directories(include ../services/common/include ../common/include ../thirdparty/Simple-Web-Server)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../lib)
 

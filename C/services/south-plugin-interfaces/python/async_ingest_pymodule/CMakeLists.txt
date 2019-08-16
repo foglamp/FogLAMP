@@ -16,7 +16,7 @@ file(GLOB SOURCES ingest_callback_pymodule.cpp ../../../common-plugin-interfaces
 pkg_check_modules(PYTHON REQUIRED python3)
 
 # Include header files
-include_directories(include ../../../../common/include ../../../../services/common/include ../../../../services/south/include ../../../../thirdparty/rapidjson/include)
+include_directories(include ../../../../common/include ../../../../services/common/include ../../../../services/south/include)
 
 # Add Python 3.x header files
 include_directories(${PYTHON_INCLUDE_DIRS})

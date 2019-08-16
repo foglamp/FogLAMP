@@ -18,7 +18,6 @@ include_directories(./common/include)
 include_directories(../../../common/include)
 include_directories(../../../services/common/include)
 include_directories(../common/include)
-include_directories(../../../thirdparty/rapidjson/include)
 link_directories(${PROJECT_BINARY_DIR}/../../../lib)
 
 # Create shared library

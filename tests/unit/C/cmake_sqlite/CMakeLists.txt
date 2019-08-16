@@ -10,7 +10,6 @@ set(STORAGE_COMMON_LIB storage-common-lib)
 set(FOGLAMP_SQLITE3_LIBS "/tmp/foglamp-sqlite3-pkg/src" CACHE INTERNAL "")
 
 ## sqlitememory plugin
-include_directories(../../../../C/thirdparty/rapidjson/include)
 include_directories(../../../../C/common/include)
 include_directories(../../../../C/services/common/include)
 include_directories(../../../../C/plugins/storage/common/include)

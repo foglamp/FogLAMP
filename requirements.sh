@@ -48,6 +48,7 @@ if [[ ( $os_name == *"Red Hat"* || $os_name == *"CentOS"* ) &&  $os_version == *
 	yum install -y git
 	yum install -y cmake
 	yum install -y libuuid-devel
+	yum install -y rapidjson-devel
 	echo "source scl_source enable rh-python36" >> /home/${SUDO_USER}/.bashrc
 	service rsyslog start
 
@@ -105,6 +106,7 @@ elif apt --version 2>/dev/null; then
 	apt install -y python-dev python3-dev python3-pip
 	apt install -y sqlite3 libsqlite3-dev
 	apt install -y pkg-config
+	apt install -y rapidjson-dev
 	# sudo apt install -y postgresql
 else
 	echo "Requirements cannot be automatically installed, please refer README.rst to install requirements manually"

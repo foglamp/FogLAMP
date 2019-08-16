@@ -15,7 +15,7 @@ file(GLOB SOURCES python_plugin_interface.cpp)
 pkg_check_modules(PYTHON REQUIRED python3)
 
 # Include header files
-include_directories(include ../../../common/include ../../../services/common/include ../../../services/south/include ../../../thirdparty/rapidjson/include)
+include_directories(include ../../../common/include ../../../services/common/include ../../../services/south/include)
 include_directories(../../../services/common-plugin-interfaces/python/include)
 
 # Add Python 3.x header files
