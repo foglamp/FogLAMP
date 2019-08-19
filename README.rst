@@ -79,7 +79,7 @@ FogLAMP can be built or installed in one of the following Linux distributions :
 
 - Ubuntu 16.04 and Ubuntu 18.04
 - Raspbian Stretch and Buster
-- Coral Mandel
+- Coral Mendel
 - Red Hat 7.6
 - CentOS 7.6
 
