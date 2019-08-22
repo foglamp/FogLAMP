@@ -330,10 +330,12 @@ vector<Reading *>* newQ = new vector<Reading *>();
 		FilterPlugin *firstFilter = filterPipeline->getFirstFilterPlugin();
 		if (firstFilter)
 		{
+			// Check whether filters are set before calling ingest
 			while (!filterPipeline->isReady())
 			{
-				Logger::getLogger()->error("Ingest before filter pipeline is ready");
-				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				Logger::getLogger()->warn("Ingest called "
+							  "before filter pipeline is ready");
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
 			ReadingSet *readingSet = new ReadingSet(m_data);
 			m_data->clear();
