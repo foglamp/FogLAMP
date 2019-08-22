@@ -324,6 +324,7 @@ bool FilterPipeline::setupFiltersPipeline(void *passToOnwardFilter, void *useFil
 		return false;
 	}
 
+	m_ready = true;
 	//Success
 	return true;
 }
@@ -370,7 +371,6 @@ void FilterPipeline::cleanupFilters(const string& categoryName)
 		// Free filter
 		delete filter;
 	}
-	m_ready = true;
 }
 
 /**
