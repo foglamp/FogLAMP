@@ -29,7 +29,7 @@ using namespace std;
  * @param serviceName	Name of the service to which this pipeline applies
  */
 FilterPipeline::FilterPipeline(ManagementClient* mgtClient, StorageClient& storage, string serviceName) : 
-			mgtClient(mgtClient), storage(storage), serviceName(serviceName)
+			mgtClient(mgtClient), storage(storage), serviceName(serviceName), m_ready(false)
 {
 }
 
@@ -370,6 +370,7 @@ void FilterPipeline::cleanupFilters(const string& categoryName)
 		// Free filter
 		delete filter;
 	}
+	m_ready = true;
 }
 
 /**

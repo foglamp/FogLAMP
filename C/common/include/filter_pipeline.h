@@ -40,9 +40,11 @@ public:
 	bool		loadFilters(const std::string& categoryName);
 	// Setup the filter pipeline
 	bool		setupFiltersPipeline(void *passToOnwardFilter, void *useFilteredData, void *ingest);
+	bool		isReady() { return m_ready; };
 
 private:
 	PLUGIN_HANDLE	loadFilterPlugin(const std::string& filterName);
+	bool		m_ready;
 
 protected:
 	ManagementClient*	mgtClient;
