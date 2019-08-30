@@ -511,7 +511,7 @@ void Ingest::passToOnwardFilter(OUTPUT_HANDLE *outHandle,
  *	1. The filtering has all been done in place. In which case
  *	the m_data vector is in the ReadingSet passed in here.
  *
- *	2. The filttering has created new ReadingSet in which case
+ *	2. The filtering has created new ReadingSet in which case
  *	the reading vector must be copied into m_data from the
  *	ReadingSet.
  *
