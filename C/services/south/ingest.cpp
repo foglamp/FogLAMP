@@ -327,8 +327,8 @@ vector<Reading *>* newQ = new vector<Reading *>();
 	 *
 	 * We lock the filter pipeline here to prevent it being reconfigured whilst we
 	 * process the data. We do this because the qMutex is not good enough here as we
-	 * do not hold it, by deliberate policy. As we copy the queue holdign the qMutex
-	 * and then release it to enabl emore data to be queued while we process the previous
+	 * do not hold it, by deliberate policy. As we copy the queue holding the qMutex
+	 * and then release it to enable more data to be queued while we process the previous
 	 * queue via the filter pipeline and up to the storage layer.
 	 */
 	{
