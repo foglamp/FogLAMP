@@ -451,7 +451,7 @@ bool Ingest::loadFilters(const string& categoryName)
 {
 	Logger::getLogger()->info("Ingest::loadFilters(): categoryName=%s", categoryName.c_str());
 	/*
-	 * We do everything to setup the pipeline using a local FitlerPipeline and then assign it
+	 * We do everything to setup the pipeline using a local FilterPipeline and then assign it
 	 * to the service m_filterPipeline once it is setup to guard against access to the pipeline
 	 * during setup.
 	 * This should not be an issue if the mutex is held, however this approach lessens the risk
@@ -476,7 +476,7 @@ bool Ingest::loadFilters(const string& categoryName)
 	}
 	else
 	{
-		Logger::getLogger()->error("Failed to setup the filter pipeline, the fitlers are not attached tp the service");
+		Logger::getLogger()->error("Failed to setup the filter pipeline, the filters are not attached to the service");
 		filterPipeline->cleanupFilters(categoryName);
 	}
 	return rval;
@@ -511,7 +511,7 @@ void Ingest::passToOnwardFilter(OUTPUT_HANDLE *outHandle,
  *	1. The filtering has all been done in place. In which case
  *	the m_data vector is in the ReadingSet passed in here.
  *
- *	2. The fitlering has created new ReadingSet in which case
+ *	2. The filttering has created new ReadingSet in which case
  *	the reading vector must be copied into m_data from the
  *	ReadingSet.
  *
