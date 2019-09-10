@@ -377,6 +377,19 @@ vector<Reading *>* newQ = new vector<Reading *>();
 		}
 		++statsEntriesCurrQueue[reading->getAssetName()];
 	}
+
+	/*
+	 * Check the first reading in the list to see if we are meeting the
+	 * latency configuration we have been set
+	 */
+	const vector<Reading *>::const_iterator itr = m_data->cbegin();
+	const Reading *firstReading = *itr;
+	time_t now = time(0);
+	unsigned long latency = now - firstReading->getUserTimestamp();
+	if (latency > m_timeout)
+	{
+		m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout);
+	}
 		
 	/**
 	 * 'm_data' vector is ready to be sent to storage service.
@@ -396,7 +409,7 @@ vector<Reading *>* newQ = new vector<Reading *>();
 		m_logger->error("Failed to write readings to storage layer, buffering");
 		lock_guard<mutex> guard(m_qMutex);
 
-		// BUffer current data in m_data
+		// Buffer current data in m_data
 		m_queue->insert(m_queue->begin(),
 				m_data->begin(),
 				m_data->end());
