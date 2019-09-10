@@ -141,6 +141,10 @@ StorageRegistry::run()
 			while (m_queue.size() == 0)
 			{
 				m_cv.wait_for(mlock, std::chrono::seconds(5));
+				if (!m_running)
+				{
+					return;
+				}
 			}
 			Item item = m_queue.front();
 			m_queue.pop();

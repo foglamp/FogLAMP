@@ -289,8 +289,28 @@ void Ingest::waitForQueue()
 {
 	mutex mtx;
 	unique_lock<mutex> lck(mtx);
-	if (m_running)
-		m_cv.wait_for(lck,chrono::milliseconds(m_timeout));
+	if (m_running && m_queue->size() < m_queueSizeThreshold)
+	{
+		// Work out how long to wait based on age of oldest queued reading
+		long timeout = m_timeout;
+		if (!m_queue->empty())
+		{
+			Reading *reading = (*m_queue)[0];
+			struct timeval tm, now;
+			reading->getUserTimestamp(&tm);
+			gettimeofday(&now, NULL);
+			long ageMS = (now.tv_sec - tm.tv_sec) * 1000 +
+				(now.tv_usec - tm.tv_usec) / 1000;
+			timeout = m_timeout - ageMS;
+			if (ageMS > 5000 || ageMS < 0)
+				Logger::getLogger()->error("Old reading is %dms old", ageMS);
+			Logger::getLogger()->warn("calculated timeout is %dms", timeout);
+		}
+		if (timeout > 0)
+		{
+			m_cv.wait_for(lck,chrono::milliseconds(timeout));
+		}
+	}
 }
 
 /**
@@ -386,7 +406,7 @@ vector<Reading *>* newQ = new vector<Reading *>();
 	const Reading *firstReading = *itr;
 	time_t now = time(0);
 	unsigned long latency = now - firstReading->getUserTimestamp();
-	if (latency > m_timeout)
+	if (latency > m_timeout / 1000)	// m_timeout is in milliseconds
 	{
 		m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout);
 	}
