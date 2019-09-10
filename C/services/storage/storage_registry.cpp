@@ -153,9 +153,9 @@ StorageRegistry::run()
 		}
 		if (data)
 		{
-			if (time(0) - qTime > 5)
+			if (time(0) - qTime > 3)
 			{
-				Logger::getLogger()->warn("Data has been queued for %d seconds to be sent to registered party", (time(0) - qTime));
+				Logger::getLogger()->error("Data has been queued for %d seconds to be sent to registered party", (time(0) - qTime));
 			}
 			processPayload(data);
 			free(data);

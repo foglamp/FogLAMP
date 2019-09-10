@@ -302,9 +302,6 @@ void Ingest::waitForQueue()
 			long ageMS = (now.tv_sec - tm.tv_sec) * 1000 +
 				(now.tv_usec - tm.tv_usec) / 1000;
 			timeout = m_timeout - ageMS;
-			if (ageMS > 5000 || ageMS < 0)
-				Logger::getLogger()->error("Old reading is %dms old", ageMS);
-			Logger::getLogger()->warn("calculated timeout is %dms", timeout);
 		}
 		if (timeout > 0)
 		{
@@ -403,12 +400,15 @@ vector<Reading *>* newQ = new vector<Reading *>();
 	 * latency configuration we have been set
 	 */
 	const vector<Reading *>::const_iterator itr = m_data->cbegin();
-	const Reading *firstReading = *itr;
-	time_t now = time(0);
-	unsigned long latency = now - firstReading->getUserTimestamp();
-	if (latency > m_timeout / 1000)	// m_timeout is in milliseconds
+	if (itr != m_data->cend())
 	{
-		m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout);
+		const Reading *firstReading = *itr;
+		time_t now = time(0);
+		unsigned long latency = now - firstReading->getUserTimestamp();
+		if (latency > m_timeout / 1000)	// m_timeout is in milliseconds
+		{
+			m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout);
+		}
 	}
 		
 	/**
