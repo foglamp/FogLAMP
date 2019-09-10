@@ -17,6 +17,7 @@
 #include "logger.h"
 #include "strings.h"
 #include "client_http.hpp"
+#include <chrono>
 
 using namespace std;
 using namespace rapidjson;
@@ -78,8 +79,10 @@ StorageRegistry::process(const string& payload)
 		char *data = NULL;
 		if ((data = strdup(payload.c_str())) != NULL)
 		{
+			time_t now = time(0);
+			Item item = make_pair(now, data);
 			lock_guard<mutex> guard(m_qMutex);
-			m_queue.push(data);
+			m_queue.push(item);
 			m_cv.notify_all();
 		}
 	}
@@ -132,14 +135,24 @@ StorageRegistry::run()
 	while (m_running)
 	{
 		char *data = NULL;
+		time_t qTime;
 		{
 			unique_lock<mutex> mlock(m_cvMutex);
-			m_cv.wait(mlock);
-			data = m_queue.front();
+			while (m_queue.size() == 0)
+			{
+				m_cv.wait_for(mlock, std::chrono::seconds(5));
+			}
+			Item item = m_queue.front();
 			m_queue.pop();
+			data = item.second;
+			qTime = item.first;
 		}
 		if (data)
 		{
+			if (time(0) - qTime > 5)
+			{
+				Logger::getLogger()->warn("Data has been queued for %d seconds to be sent to registered party", (time(0) - qTime));
+			}
 			processPayload(data);
 			free(data);
 		}
