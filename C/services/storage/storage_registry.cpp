@@ -22,6 +22,9 @@
 #define CHECK_QTIMES	0	// Turn on to check length of time data is queued
 #define QTIME_THRESHOLD 3	// Threshold to report long queue times
 
+#define REGISTRY_SLEEP_TIME	5	// Time to sleep in the register process thread
+					// between checks for chutdown
+
 using namespace std;
 using namespace rapidjson;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
@@ -143,7 +146,7 @@ StorageRegistry::run()
 			unique_lock<mutex> mlock(m_cvMutex);
 			while (m_queue.size() == 0)
 			{
-				m_cv.wait_for(mlock, std::chrono::seconds(5));
+				m_cv.wait_for(mlock, std::chrono::seconds(REGISTRY_SLEEP_TIME));
 				if (!m_running)
 				{
 					return;
