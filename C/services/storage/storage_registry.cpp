@@ -19,6 +19,9 @@
 #include "client_http.hpp"
 #include <chrono>
 
+#define CHECK_QTIMES	0	// Turn on to check length of time data is queued
+#define QTIME_THRESHOLD 3	// Threshold to report long queue times
+
 using namespace std;
 using namespace rapidjson;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
@@ -153,10 +156,12 @@ StorageRegistry::run()
 		}
 		if (data)
 		{
-			if (time(0) - qTime > 3)
+#if CHECK_QTIMES
+			if (time(0) - qTime > QTIME_THRESHOLD)
 			{
 				Logger::getLogger()->error("Data has been queued for %d seconds to be sent to registered party", (time(0) - qTime));
 			}
+#endif
 			processPayload(data);
 			free(data);
 		}
