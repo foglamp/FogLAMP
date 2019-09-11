@@ -135,7 +135,7 @@ async def add_plugin(request: web.Request) -> web.Response:
         msg = "Plugin installation request failed"
         raise web.HTTPBadRequest(body=json.dumps({"message": msg, "link": str(e)}), reason=msg)
     except Exception as ex:
-        raise web.HTTPException(reason=str(ex))
+        raise web.HTTPInternalServerError(reason=str(ex))
     else:
         return web.json_response(result_payload)
 
@@ -258,7 +258,7 @@ async def install_package_from_repo(name: str, pkg_mgt: str, version: str) -> tu
     cat_item = await check_upgrade_on_install()
     if 'value' in cat_item:
         if cat_item['value'] == "true":
-            cmd = "sudo {} -y upgrade".format(pkg_mgt)
+            cmd = "sudo {} -y upgrade".format(pkg_mgt) if pkg_mgt == 'apt' else "sudo {} -y update".format(pkg_mgt)
             ret_code = os.system(cmd + " > {} 2>&1".format(stdout_file_path))
             if ret_code != 0:
                 raise PackageError(link)
