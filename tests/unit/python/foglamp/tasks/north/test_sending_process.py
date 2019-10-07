@@ -359,9 +359,7 @@ class TestSendingProcess:
             assert SendingProcess._logger.error.called
 
     @pytest.mark.parametrize("plugin_file, plugin_type, plugin_name, expected_result", [
-        ("pi_server", "north", "PI Server North", True),
-        ("pi_server", "north", "Empty North Plugin", False),
-        ("pi_server", "south", "PI Server North", False)
+        ("empty", "north", "Empty North Plugin", False)
     ])
     async def test_is_north_valid(self,  plugin_file, plugin_type, plugin_name, expected_result, event_loop):
         """Tests the possible cases of the function is_north_valid """
@@ -2222,9 +2220,7 @@ class TestSendingProcess:
         mock_audit_information.assert_called_with(SendingProcess._AUDIT_CODE, {"sentRows": 100})
 
     @pytest.mark.parametrize("plugin_file, plugin_type, plugin_name", [
-        ("empty",      "north", "Empty North Plugin"),
-        ("pi_server",  "north", "PI Server North"),
-        ("ocs",        "north", "OCS North")
+        ("empty",      "north", "Empty North Plugin")
     ])
     async def test_standard_plugins(self, plugin_file, plugin_type, plugin_name, event_loop):
         """Tests if the standard plugins are available and loadable and if they have the required methods """

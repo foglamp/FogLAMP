@@ -436,15 +436,15 @@ class TestPluginDiscovery:
 
     @pytest.mark.parametrize("info, exc_count", [
         ({}, 0),
-        ({"interface": "1.0.0", "version": "1.0.0", "type": "north", "name": "PI_Server", "config": "(null)"}, 1),
-        ({"interface": "1.0.0", "version": "1.0.0", "type": "north", "name": "PI_Server", "config": {}}, 1)
+        ({"interface": "1.0.0", "version": "1.0.0", "type": "north", "name": "pi_server", "config": "(null)"}, 1),
+        ({"interface": "1.0.0", "version": "1.0.0", "type": "north", "name": "pi_server", "config": {}}, 1)
     ])
     def test_bad_fetch_c_north_plugin_installed(self, info, exc_count):
         with patch.object(_logger, "exception") as patch_log_exc:
-            with patch.object(utils, "find_c_plugin_libs", return_value=[("PI_Server", "binary")]) as patch_plugin_lib:
+            with patch.object(utils, "find_c_plugin_libs", return_value=[("pi_server", "binary")]) as patch_plugin_lib:
                 with patch.object(utils, "get_plugin_info", return_value=info) as patch_plugin_info:
                     PluginDiscovery.fetch_c_plugins_installed("north", False)
-                patch_plugin_info.assert_called_once_with('PI_Server', dir='north')
+                patch_plugin_info.assert_called_once_with('pi_server', dir='north')
             patch_plugin_lib.assert_called_once_with('north')
             assert exc_count == patch_log_exc.call_count
 
