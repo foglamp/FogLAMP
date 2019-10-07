@@ -25,7 +25,7 @@
 using namespace std;
 using namespace rapidjson;
 
-#define PLUGIN_NAME "ocs_V2"
+#define PLUGIN_NAME "ocs"
 #define TYPE_ID_KEY "type-id"
 #define TYPE_ID_DEFAULT 1
 

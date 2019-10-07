@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6.0)
 
-project(PI_Server_V2)
+project(pi_server)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -O3")
 # Add here all needed FogLAMP libraries as list

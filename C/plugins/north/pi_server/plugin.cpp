@@ -34,7 +34,7 @@ using namespace std;
 using namespace rapidjson;
 using namespace SimpleWeb;
 
-#define PLUGIN_NAME "PI_Server_V2"
+#define PLUGIN_NAME "pi_server"
 #define TYPE_ID_KEY "type-id"
 #define SENT_TYPES_KEY "sentDataTypes"
 #define DATA_KEY "dataTypes"
@@ -258,7 +258,7 @@ extern "C" {
  */
 static PLUGIN_INFORMATION info = {
 	PLUGIN_NAME,		   // Name
-	"1.0.0",		   // Version
+	"1.7.0",		   // Version
 	SP_PERSIST_DATA,	   // Flags
 	PLUGIN_TYPE_NORTH,	   // Type
 	"1.0.0",		   // Interface version
