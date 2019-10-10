@@ -275,6 +275,9 @@ void plugin_start(const PLUGIN_HANDLE handle,
 	Logger* logger = Logger::getLogger();
 	CONNECTOR_INFO* connInfo = (CONNECTOR_INFO *)handle;
 
+        if (storedData.compare("{}") == 0)
+                return;
+
 	// Parse JSON plugin_data
 	Document JSONData;
 	JSONData.Parse(storedData.c_str());
