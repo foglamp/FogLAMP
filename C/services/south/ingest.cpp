@@ -353,7 +353,7 @@ vector<Reading *>* newQ = new vector<Reading *>();
 	{
 		if (m_storage.readingAppend(*m_resendQueue) == false)
 		{
-			m_logger->error("Still unable to resend buffered data");
+			m_logger->error("Still unable to resend buffered data, leaving on resend queue. Queuse size now %d", m_resendQueue->size());
 		}
 		else
 		{
@@ -473,13 +473,14 @@ vector<Reading *>* newQ = new vector<Reading *>();
 	{
 		if (m_storage.readingAppend(*m_data) == false)
 		{
-			m_logger->error("Failed to write readings to storage layer, buffering");
 			if (m_resendQueue == NULL)
 			{
+				m_logger->warn("Failed to write readings to storage layer, queue for resend");
 				m_resendQueue = m_data;
 			}
 			else
 			{
+				m_logger->warn("Failed to write readings to storage layer, appending to resend queue. Resend queue is now %s", m_resendQueue->size());
 				m_resendQueue->insert(m_resendQueue->end(),
 						m_data->begin(), m_data->end());
 				m_data->erase(m_data->begin(), m_data->end());
