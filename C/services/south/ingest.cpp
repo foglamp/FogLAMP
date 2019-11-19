@@ -205,7 +205,8 @@ Ingest::Ingest(StorageClient& storage,
 			m_queueSizeThreshold(threshold),
 			m_serviceName(serviceName),
 			m_pluginName(pluginName),
-			m_mgtClient(mgmtClient)
+			m_mgtClient(mgmtClient),
+			m_resendQueue(0)
 {
 	m_shutdown = false;
 	m_running = true;
@@ -342,8 +343,29 @@ void Ingest::waitForQueue()
  */
 void Ingest::processQueue()
 {
-bool requeue = false;
 vector<Reading *>* newQ = new vector<Reading *>();
+
+	/*
+	 * If we ave some data that has been previously filtered but failed to send,
+	 * then first try to send that data.
+	 */
+	if (m_resendQueue && m_resendQueue->size() > 0)
+	{
+		if (m_storage.readingAppend(*m_resendQueue) == false)
+		{
+			m_logger->error("Still unable to resend buffered data");
+		}
+		else
+		{
+			for (vector<Reading *>::iterator it = m_resendQueue->begin();
+						 it != m_resendQueue->end(); ++it)
+			{
+				Reading *reading = *it;
+				delete reading;
+			}
+			m_resendQueue = 0;
+		}
+	}
 
 	// Block of code to execute holding the mutex
 	{
@@ -447,44 +469,45 @@ vector<Reading *>* newQ = new vector<Reading *>();
 	 *	2- some readings removed
 	 *	3- New set of readings
 	 */
-	int rv = 0;
-	if ((!m_data->empty()) &&
-			(rv = m_storage.readingAppend(*m_data)) == false && requeue == true)
+	if (!m_data->empty())
 	{
-		m_logger->error("Failed to write readings to storage layer, buffering");
-		lock_guard<mutex> guard(m_qMutex);
-
-		// Buffer current data in m_data
-		m_queue->insert(m_queue->begin(),
-				m_data->begin(),
-				m_data->end());
-		// Is it possible that some of the readings are stored in DB, and others are not?
-	}
-	else
-	{	
-		if (!m_data->empty() && rv==false) // m_data had some (possibly filtered) readings, but they couldn't be sent successfully to storage service
+		if (m_storage.readingAppend(*m_data) == false)
+		{
+			m_logger->error("Failed to write readings to storage layer, buffering");
+			if (m_resendQueue == NULL)
 			{
-			m_logger->info("%s:%d, Couldn't send %d readings to storage service", __FUNCTION__, __LINE__, m_data->size());
-			m_discardedReadings += m_data->size();
+				m_resendQueue = m_data;
 			}
-		else
+			else
 			{
+				m_resendQueue->insert(m_resendQueue->end(),
+						m_data->begin(), m_data->end());
+				m_data->erase(m_data->begin(), m_data->end());
+				delete m_data;
+			}
+			m_data = NULL;
+		}
+		else
+		{
 			unique_lock<mutex> lck(m_statsMutex);
 			for (auto &it : statsEntriesCurrQueue)
 				statsPendingEntries[it.first] += it.second;
-			}
 		
-		// Remove the Readings in the vector
-		for (vector<Reading *>::iterator it = m_data->begin();
+			// Remove the Readings in the vector
+			for (vector<Reading *>::iterator it = m_data->begin();
 						 it != m_data->end(); ++it)
-		{
-			Reading *reading = *it;
-			delete reading;
+			{
+				Reading *reading = *it;
+				delete reading;
+			}
 		}
 	}
 
-	delete m_data;
-	m_data = NULL;
+	if (m_data)
+	{
+		delete m_data;
+		m_data = NULL;
+	}
 	
 	// Signal stats thread to update stats
 	lock_guard<mutex> guard(m_statsMutex);

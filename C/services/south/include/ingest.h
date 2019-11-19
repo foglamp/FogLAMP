@@ -85,6 +85,7 @@ private:
 	std::condition_variable		m_statsCv;
 	// Data ready to be filtered/sent
 	std::vector<Reading *>*		m_data;
+	std::vector<Reading *>*		m_resendQueue;
 	unsigned int			m_discardedReadings; // discarded readings since last update to statistics table
 	FilterPipeline*			m_filterPipeline;
 	

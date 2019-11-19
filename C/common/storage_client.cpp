@@ -161,7 +161,7 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 		handleUnexpectedResponse("Append readings", res->status_code, resultPayload.str());
 		return false;
 	} catch (exception& ex) {
-		m_logger->error("Failed to append reading: %s", ex.what());
+		m_logger->error("Failed to append readings: %s", ex.what());
 	}
 	return false;
 }

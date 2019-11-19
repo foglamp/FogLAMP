@@ -319,7 +319,7 @@ bool 		add_row = false;
 		return -1;
 	}
 
-	sql.append("INSERT INTO foglamp.readings ( user_ts, asset_code, read_key, reading ) VALUES ");
+	sql.append("INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES ");
 
 	if (!doc.HasMember("readings"))
 	{
@@ -390,20 +390,7 @@ bool 		add_row = false;
 			// Handles - asset_code
 			sql.append(",\'");
 			sql.append((*itr)["asset_code"].GetString());
-
-			// Handles - read_key
-			// Python code is passing the string None when here is no read_key in the payload
-			if (itr->HasMember("read_key") && strcmp((*itr)["read_key"].GetString(), "None") != 0)
-			{
-				sql.append("', \'");
-				sql.append((*itr)["read_key"].GetString());
-				sql.append("', \'");
-			}
-			else
-			{
-				// No "read_key" in this reading, insert NULL
-				sql.append("', NULL, '");
-			}
+			sql.append("', '");
 
 			// Handles - reading
 			StringBuffer buffer;
@@ -484,7 +471,6 @@ int retrieve;
 	SELECT
 		id,
 		asset_code,
-		read_key,
 		reading,
 		strftime('%%Y-%%m-%%d %%H:%%M:%%S', user_ts, 'utc')  ||
 		substr(user_ts, instr(user_ts, '.'), 7) AS user_ts,
@@ -569,7 +555,6 @@ bool		isAggregate = false;
 					SELECT
 						id,
 						asset_code,
-						read_key,
 						reading,
 						strftime(')" F_DATEH24_SEC R"(', user_ts, 'localtime')  ||
 						substr(user_ts, instr(user_ts, '.'), 7) AS user_ts,
@@ -808,7 +793,6 @@ bool		isAggregate = false;
 				const char *sql_cmd = R"(
 						id,
 						asset_code,
-						read_key,
 						reading,
 						strftime(')" F_DATEH24_SEC R"(', user_ts, 'localtime')  ||
 						substr(user_ts, instr(user_ts, '.'), 7) AS user_ts,
