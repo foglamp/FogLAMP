@@ -148,7 +148,7 @@ Datapoint *rval;
  * Return the asset reading as a JSON structure encoded in a
  * C++ string.
  */
-string Reading::toJSON() const
+string Reading::toJSON(bool minimal) const
 {
 ostringstream convert;
 
@@ -159,11 +159,14 @@ ostringstream convert;
 	// Add date_time with microseconds + timezone UTC:
 	// YYYY-MM-DD HH24:MM:SS.MS+00:00
 	convert << getAssetDateUserTime(FMT_DEFAULT) << "+00:00";
-	convert << "\", \"ts\" : \"";
+	if (!minimal)
+	{
+		convert << "\", \"ts\" : \"";
 
-	// Add date_time with microseconds + timezone UTC:
-	// YYYY-MM-DD HH24:MM:SS.MS+00:00
-	convert << getAssetDateTime(FMT_DEFAULT) << "+00:00";
+		// Add date_time with microseconds + timezone UTC:
+		// YYYY-MM-DD HH24:MM:SS.MS+00:00
+		convert << getAssetDateTime(FMT_DEFAULT) << "+00:00";
+	}
 
 	// Add values
 	convert << "\", \"reading\" : { ";

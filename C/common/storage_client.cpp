@@ -20,6 +20,12 @@
 #include <map>
 #include <string_utils.h>
 
+#define INSTRUMENT	1
+
+#if INSTRUMENT
+#include <sys/time.h>
+#endif
+
 using namespace std;
 using namespace rapidjson;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
@@ -128,6 +134,9 @@ bool StorageClient::readingAppend(Reading& reading)
  */
 bool StorageClient::readingAppend(const vector<Reading *>& readings)
 {
+#if INSTRUMENT
+	struct timeval	start, t1, t2;
+#endif
 	static HttpClient *httpClient = this->getHttpClient(); // to initialize m_seqnum_map[thread_id] for this thread
 	try {
 		std::thread::id thread_id = std::this_thread::get_id();
@@ -139,6 +148,9 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 
 		SimpleWeb::CaseInsensitiveMultimap headers = {{"SeqNum", ss.str()}};
 
+#if INSTRUMENT
+		gettimeofday(&start, NULL);
+#endif
 		ostringstream convert;
 		convert << "{ \"readings\" : [ ";
 		for (vector<Reading *>::const_iterator it = readings.cbegin();
@@ -151,9 +163,27 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 			convert << (*it)->toJSON();
 		}
 		convert << " ] }";
+#if INSTRUMENT
+		gettimeofday(&t1, NULL);
+#endif
 		auto res = this->getHttpClient()->request("POST", "/storage/reading", convert.str(), headers);
+#if INSTRUMENT
+		gettimeofday(&t2, NULL);
+#endif
 		if (res->status_code.compare("200 OK") == 0)
 		{
+#if INSTRUMENT
+			struct timeval tm;
+			timersub(&t1, &start, &tm);
+			double buildTime, requestTime;
+			buildTime = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+			timersub(&t2, &t1, &tm);
+			requestTime = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+			m_logger->warn("Appended %d readings in %.3f seconds. Took %.3f seconds to build request", readings.size(), requestTime, buildTime);
+			m_logger->warn("%.1f Readings per second, request building %.2f%% of time", readings.size() / (buildTime + requestTime),
+					(buildTime * 100) / (requestTime + buildTime));
+			m_logger->warn("Request block size %dK", strlen(convert.str().c_str())/1024);
+#endif
 			return true;
 		}
 		ostringstream resultPayload;

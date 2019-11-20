@@ -357,13 +357,24 @@ vector<Reading *>* newQ = new vector<Reading *>();
 		}
 		else
 		{
+			std::map<std::string, int>		statsEntriesCurrQueue;
 			for (vector<Reading *>::iterator it = m_resendQueue->begin();
 						 it != m_resendQueue->end(); ++it)
 			{
 				Reading *reading = *it;
+				string assetName = reading->getAssetName();
+				AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+				if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+				{
+					AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+				}
+				++statsEntriesCurrQueue[assetName];
 				delete reading;
 			}
 			m_resendQueue = 0;
+			unique_lock<mutex> lck(m_statsMutex);
+			for (auto &it : statsEntriesCurrQueue)
+				statsPendingEntries[it.first] += it.second;
 		}
 	}
 
@@ -423,18 +434,6 @@ vector<Reading *>* newQ = new vector<Reading *>();
 		}
 	}
 
-	std::map<std::string, int>		statsEntriesCurrQueue;
-	// check if this requires addition of a new asset tracker tuple
-	for (vector<Reading *>::iterator it = m_data->begin(); it != m_data->end(); ++it)
-	{
-		Reading *reading = *it;
-		AssetTrackingTuple tuple(m_serviceName, m_pluginName, reading->getAssetName(), "Ingest");
-		if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
-		{
-			AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
-		}
-		++statsEntriesCurrQueue[reading->getAssetName()];
-	}
 
 	/*
 	 * Check the first reading in the list to see if we are meeting the
@@ -490,16 +489,25 @@ vector<Reading *>* newQ = new vector<Reading *>();
 		}
 		else
 		{
-			unique_lock<mutex> lck(m_statsMutex);
-			for (auto &it : statsEntriesCurrQueue)
-				statsPendingEntries[it.first] += it.second;
-		
+			std::map<std::string, int>		statsEntriesCurrQueue;
+			// check if this requires addition of a new asset tracker tuple
 			// Remove the Readings in the vector
-			for (vector<Reading *>::iterator it = m_data->begin();
-						 it != m_data->end(); ++it)
+			for (vector<Reading *>::iterator it = m_data->begin(); it != m_data->end(); ++it)
 			{
 				Reading *reading = *it;
+				string	assetName = reading->getAssetName();
+				AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+				if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+				{
+					AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+				}
+				++statsEntriesCurrQueue[assetName];
 				delete reading;
+			}
+			{
+				unique_lock<mutex> lck(m_statsMutex);
+				for (auto &it : statsEntriesCurrQueue)
+					statsPendingEntries[it.first] += it.second;
 			}
 		}
 	}
