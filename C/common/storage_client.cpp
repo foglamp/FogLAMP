@@ -179,10 +179,10 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 			buildTime = tm.tv_sec + ((double)tm.tv_usec / 1000000);
 			timersub(&t2, &t1, &tm);
 			requestTime = tm.tv_sec + ((double)tm.tv_usec / 1000000);
-			m_logger->warn("Appended %d readings in %.3f seconds. Took %.3f seconds to build request", readings.size(), requestTime, buildTime);
-			m_logger->warn("%.1f Readings per second, request building %.2f%% of time", readings.size() / (buildTime + requestTime),
+			m_logger->info("Appended %d readings in %.3f seconds. Took %.3f seconds to build request", readings.size(), requestTime, buildTime);
+			m_logger->info("%.1f Readings per second, request building %.2f%% of time", readings.size() / (buildTime + requestTime),
 					(buildTime * 100) / (requestTime + buildTime));
-			m_logger->warn("Request block size %dK", strlen(convert.str().c_str())/1024);
+			m_logger->info("Request block size %dK", strlen(convert.str().c_str())/1024);
 #endif
 			return true;
 		}
