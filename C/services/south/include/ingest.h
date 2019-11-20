@@ -13,6 +13,7 @@
 #include <reading.h>
 #include <logger.h>
 #include <vector>
+#include <queue>
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -85,7 +86,11 @@ private:
 	std::condition_variable		m_statsCv;
 	// Data ready to be filtered/sent
 	std::vector<Reading *>*		m_data;
-	std::vector<Reading *>*		m_resendQueue;
+	std::vector<std::vector<Reading *>*>
+					m_resendQueues;
+	std::queue<std::vector<Reading *>*>
+					m_fullQueues;
+	std::mutex			m_fqMutex;
 	unsigned int			m_discardedReadings; // discarded readings since last update to statistics table
 	FilterPipeline*			m_filterPipeline;
 	

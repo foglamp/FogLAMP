@@ -205,8 +205,7 @@ Ingest::Ingest(StorageClient& storage,
 			m_queueSizeThreshold(threshold),
 			m_serviceName(serviceName),
 			m_pluginName(pluginName),
-			m_mgtClient(mgmtClient),
-			m_resendQueue(0)
+			m_mgtClient(mgmtClient)
 {
 	m_shutdown = false;
 	m_running = true;
@@ -282,10 +281,23 @@ bool Ingest::isStopping()
  */
 void Ingest::ingest(const Reading& reading)
 {
-	lock_guard<mutex> guard(m_qMutex);
-	m_queue->push_back(new Reading(reading));
-	if (m_queue->size() >= m_queueSizeThreshold || m_running == false)
+vector<Reading *> *fullQueue = 0;
+
+	{
+		lock_guard<mutex> guard(m_qMutex);
+		m_queue->push_back(new Reading(reading));
+		if (m_queue->size() >= m_queueSizeThreshold || m_running == false)
+		{
+			fullQueue = m_queue;
+			m_queue = new vector<Reading *>;
+		}
+	}
+	if (fullQueue)
+	{
+		lock_guard<mutex> guard(m_fqMutex);
+		m_fullQueues.push(fullQueue);
 		m_cv.notify_all();
+	}
 }
 
 /**
@@ -293,15 +305,28 @@ void Ingest::ingest(const Reading& reading)
  */
 void Ingest::ingest(const vector<Reading *> *vec)
 {
-	lock_guard<mutex> guard(m_qMutex);
-	
-	// Get the readings in the set
-	for (auto & rdng : *vec)
+vector<Reading *> *fullQueue = 0;
+
 	{
-		m_queue->push_back(rdng);
+		lock_guard<mutex> guard(m_qMutex);
+		
+		// Get the readings in the set
+		for (auto & rdng : *vec)
+		{
+			m_queue->push_back(rdng);
+		}
+		if (m_queue->size() >= m_queueSizeThreshold || m_running == false)
+		{
+			fullQueue = m_queue;
+			m_queue = new vector<Reading *>;
+		}
 	}
-	if (m_queue->size() >= m_queueSizeThreshold || m_running == false)
+	if (fullQueue)
+	{
+		lock_guard<mutex> guard(m_fqMutex);
+		m_fullQueues.push(fullQueue);
 		m_cv.notify_all();
+	}
 }
 
 
@@ -309,6 +334,8 @@ void Ingest::waitForQueue()
 {
 	mutex mtx;
 	unique_lock<mutex> lck(mtx);
+	if (!m_fullQueues.empty())
+		return;
 	if (m_running && m_queue->size() < m_queueSizeThreshold)
 	{
 		// Work out how long to wait based on age of oldest queued reading
@@ -343,184 +370,185 @@ void Ingest::waitForQueue()
  */
 void Ingest::processQueue()
 {
-vector<Reading *>* newQ = new vector<Reading *>();
-
-	/*
-	 * If we ave some data that has been previously filtered but failed to send,
-	 * then first try to send that data.
-	 */
-	if (m_resendQueue && m_resendQueue->size() > 0)
-	{
-		if (m_storage.readingAppend(*m_resendQueue) == false)
+	do {
+		/*
+		 * If we have some data that has been previously filtered but failed to send,
+		 * then first try to send that data.
+		 */
+		while (m_resendQueues.size() > 0)
 		{
-			m_logger->error("Still unable to resend buffered data, leaving on resend queue. Queuse size now %d", m_resendQueue->size());
-		}
-		else
-		{
-			std::map<std::string, int>		statsEntriesCurrQueue;
-			for (vector<Reading *>::iterator it = m_resendQueue->begin();
-						 it != m_resendQueue->end(); ++it)
+			vector<Reading *> *q = *m_resendQueues.begin();
+			if (m_storage.readingAppend(*q) == false)
 			{
-				Reading *reading = *it;
-				string assetName = reading->getAssetName();
-				AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
-				if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
-				{
-					AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
-				}
-				++statsEntriesCurrQueue[assetName];
-				delete reading;
-			}
-			m_resendQueue = 0;
-			unique_lock<mutex> lck(m_statsMutex);
-			for (auto &it : statsEntriesCurrQueue)
-				statsPendingEntries[it.first] += it.second;
-		}
-	}
-
-	// Block of code to execute holding the mutex
-	{
-		lock_guard<mutex> guard(m_qMutex);
-		m_data = m_queue;
-		m_queue = newQ;
-	}
-	
-	/*
-	 * Create a ReadingSet from m_data readings if we have filters.
-	 *
-	 * At this point the m_data vector is cleared so that the only reference to
-	 * the readings is in the ReadingSet that is passed along the filter pipeline
-	 *
-	 * The final filter in the pipeline will pass the ReadingSet back into the
-	 * ingest class where it will repopulate the m_data member.
-	 *
-	 * We lock the filter pipeline here to prevent it being reconfigured whilst we
-	 * process the data. We do this because the qMutex is not good enough here as we
-	 * do not hold it, by deliberate policy. As we copy the queue holding the qMutex
-	 * and then release it to enable more data to be queued while we process the previous
-	 * queue via the filter pipeline and up to the storage layer.
-	 */
-	{
-		lock_guard<mutex> guard(m_pipelineMutex);
-		if (m_filterPipeline)
-		{
-			FilterPlugin *firstFilter = m_filterPipeline->getFirstFilterPlugin();
-			if (firstFilter)
-			{
-				// Check whether filters are set before calling ingest
-				while (!m_filterPipeline->isReady())
-				{
-					Logger::getLogger()->warn("Ingest called before "
-								  "filter pipeline is ready");
-					std::this_thread::sleep_for(std::chrono::milliseconds(150));
-				}
-
-				ReadingSet *readingSet = new ReadingSet(m_data);
-				m_data->clear();
-				// Pass readingSet to filter chain
-				firstFilter->ingest(readingSet);
-
-				/*
-				 * If filtering removed all the readings then simply clean up m_data and
-				 * return.
-				 */
-				if (m_data->size() == 0)
-				{
-					delete m_data;
-					m_data = NULL;
-					return;
-				}
-			}
-		}
-	}
-
-
-	/*
-	 * Check the first reading in the list to see if we are meeting the
-	 * latency configuration we have been set
-	 */
-	const vector<Reading *>::const_iterator itr = m_data->cbegin();
-	if (itr != m_data->cend())
-	{
-		const Reading *firstReading = *itr;
-		time_t now = time(0);
-		unsigned long latency = now - firstReading->getUserTimestamp();
-		if (latency > m_timeout / 1000 && m_highLatency == false)	// m_timeout is in milliseconds
-		{
-			m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout / 1000);
-			m_highLatency = true;
-		}
-		else if (latency <= m_timeout / 1000 && m_highLatency)
-		{
-			m_logger->warn("Send latency now within requested limits");
-			m_highLatency = false;
-		}
-	}
-		
-	/**
-	 * 'm_data' vector is ready to be sent to storage service.
-	 *
-	 * Note: m_data might contain:
-	 * - Readings set by the configured service "plugin" 
-	 * OR
-	 * - filtered readings by filter plugins in 'readingSet' object:
-	 *	1- values only
-	 *	2- some readings removed
-	 *	3- New set of readings
-	 */
-	if (!m_data->empty())
-	{
-		if (m_storage.readingAppend(*m_data) == false)
-		{
-			if (m_resendQueue == NULL)
-			{
-				m_logger->warn("Failed to write readings to storage layer, queue for resend");
-				m_resendQueue = m_data;
+				m_logger->error("Still unable to resend buffered data, leaving on resend queue.");
 			}
 			else
 			{
-				m_logger->warn("Failed to write readings to storage layer, appending to resend queue. Resend queue is now %s", m_resendQueue->size());
-				m_resendQueue->insert(m_resendQueue->end(),
-						m_data->begin(), m_data->end());
-				m_data->erase(m_data->begin(), m_data->end());
-				delete m_data;
-			}
-			m_data = NULL;
-		}
-		else
-		{
-			std::map<std::string, int>		statsEntriesCurrQueue;
-			// check if this requires addition of a new asset tracker tuple
-			// Remove the Readings in the vector
-			for (vector<Reading *>::iterator it = m_data->begin(); it != m_data->end(); ++it)
-			{
-				Reading *reading = *it;
-				string	assetName = reading->getAssetName();
-				AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
-				if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+				std::map<std::string, int>		statsEntriesCurrQueue;
+				for (vector<Reading *>::iterator it = q->begin();
+							 it != q->end(); ++it)
 				{
-					AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+					Reading *reading = *it;
+					string assetName = reading->getAssetName();
+					AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+					if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+					{
+						AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+					}
+					++statsEntriesCurrQueue[assetName];
+					delete reading;
 				}
-				++statsEntriesCurrQueue[assetName];
-				delete reading;
-			}
-			{
+				delete q;
+				m_resendQueues.erase(m_resendQueues.begin());
 				unique_lock<mutex> lck(m_statsMutex);
 				for (auto &it : statsEntriesCurrQueue)
 					statsPendingEntries[it.first] += it.second;
 			}
 		}
-	}
 
-	if (m_data)
-	{
-		delete m_data;
-		m_data = NULL;
-	}
-	
-	// Signal stats thread to update stats
-	lock_guard<mutex> guard(m_statsMutex);
-	m_statsCv.notify_all();
+		{
+			lock_guard<mutex> fqguard(m_fqMutex);
+			if (m_fullQueues.empty())
+			{
+				// Block of code to execute holding the mutex
+				lock_guard<mutex> guard(m_qMutex);
+				std::vector<Reading *> *newQ = new vector<Reading *>;
+				m_data = m_queue;
+				m_queue = newQ;
+			}
+			else
+			{
+				m_data = m_fullQueues.front();
+				m_fullQueues.pop();
+			}
+		}
+		
+		/*
+		 * Create a ReadingSet from m_data readings if we have filters.
+		 *
+		 * At this point the m_data vector is cleared so that the only reference to
+		 * the readings is in the ReadingSet that is passed along the filter pipeline
+		 *
+		 * The final filter in the pipeline will pass the ReadingSet back into the
+		 * ingest class where it will repopulate the m_data member.
+		 *
+		 * We lock the filter pipeline here to prevent it being reconfigured whilst we
+		 * process the data. We do this because the qMutex is not good enough here as we
+		 * do not hold it, by deliberate policy. As we copy the queue holding the qMutex
+		 * and then release it to enable more data to be queued while we process the previous
+		 * queue via the filter pipeline and up to the storage layer.
+		 */
+		{
+			lock_guard<mutex> guard(m_pipelineMutex);
+			if (m_filterPipeline)
+			{
+				FilterPlugin *firstFilter = m_filterPipeline->getFirstFilterPlugin();
+				if (firstFilter)
+				{
+					// Check whether filters are set before calling ingest
+					while (!m_filterPipeline->isReady())
+					{
+						Logger::getLogger()->warn("Ingest called before "
+									  "filter pipeline is ready");
+						std::this_thread::sleep_for(std::chrono::milliseconds(150));
+					}
+
+					ReadingSet *readingSet = new ReadingSet(m_data);
+					m_data->clear();
+					// Pass readingSet to filter chain
+					firstFilter->ingest(readingSet);
+
+					/*
+					 * If filtering removed all the readings then simply clean up m_data and
+					 * return.
+					 */
+					if (m_data->size() == 0)
+					{
+						delete m_data;
+						m_data = NULL;
+						return;
+					}
+				}
+			}
+		}
+
+
+		/*
+		 * Check the first reading in the list to see if we are meeting the
+		 * latency configuration we have been set
+		 */
+		const vector<Reading *>::const_iterator itr = m_data->cbegin();
+		if (itr != m_data->cend())
+		{
+			const Reading *firstReading = *itr;
+			time_t now = time(0);
+			unsigned long latency = now - firstReading->getUserTimestamp();
+			if (latency > m_timeout / 1000 && m_highLatency == false)	// m_timeout is in milliseconds
+			{
+				m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout / 1000);
+				m_highLatency = true;
+			}
+			else if (latency <= m_timeout / 1000 && m_highLatency)
+			{
+				m_logger->warn("Send latency now within requested limits");
+				m_highLatency = false;
+			}
+		}
+			
+		/**
+		 * 'm_data' vector is ready to be sent to storage service.
+		 *
+		 * Note: m_data might contain:
+		 * - Readings set by the configured service "plugin" 
+		 * OR
+		 * - filtered readings by filter plugins in 'readingSet' object:
+		 *	1- values only
+		 *	2- some readings removed
+		 *	3- New set of readings
+		 */
+		if (!m_data->empty())
+		{
+			if (m_storage.readingAppend(*m_data) == false)
+			{
+				m_logger->warn("Failed to write readings to storage layer, queue for resend");
+				m_resendQueues.push_back(m_data);
+				m_data = NULL;
+			}
+			else
+			{
+				std::map<std::string, int>		statsEntriesCurrQueue;
+				// check if this requires addition of a new asset tracker tuple
+				// Remove the Readings in the vector
+				for (vector<Reading *>::iterator it = m_data->begin(); it != m_data->end(); ++it)
+				{
+					Reading *reading = *it;
+					string	assetName = reading->getAssetName();
+					AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+					if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+					{
+						AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+					}
+					++statsEntriesCurrQueue[assetName];
+					delete reading;
+				}
+				{
+					unique_lock<mutex> lck(m_statsMutex);
+					for (auto &it : statsEntriesCurrQueue)
+						statsPendingEntries[it.first] += it.second;
+				}
+			}
+		}
+
+		if (m_data)
+		{
+			delete m_data;
+			m_data = NULL;
+		}
+		
+		// Signal stats thread to update stats
+		lock_guard<mutex> guard(m_statsMutex);
+		m_statsCv.notify_all();
+	} while (!m_fullQueues.empty());
 }
 
 /**
