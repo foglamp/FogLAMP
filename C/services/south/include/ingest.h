@@ -66,6 +66,12 @@ public:
 	void		shutdown() {};	// Satisfy ServiceHandler
 
 private:
+	void				signalStatsUpdate() {
+						// Signal stats thread to update stats
+						std::lock_guard<std::mutex> guard(m_statsMutex);
+						m_statsCv.notify_all();
+					};
+
 	StorageClient&			m_storage;
 	unsigned long			m_timeout;
 	bool				m_shutdown;

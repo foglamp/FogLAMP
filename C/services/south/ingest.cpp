@@ -296,8 +296,9 @@ vector<Reading *> *fullQueue = 0;
 	{
 		lock_guard<mutex> guard(m_fqMutex);
 		m_fullQueues.push(fullQueue);
-		m_cv.notify_all();
 	}
+	if (m_fullQueues.size())
+		m_cv.notify_all();
 }
 
 /**
@@ -325,8 +326,9 @@ vector<Reading *> *fullQueue = 0;
 	{
 		lock_guard<mutex> guard(m_fqMutex);
 		m_fullQueues.push(fullQueue);
-		m_cv.notify_all();
 	}
+	if (m_fullQueues.size())
+		m_cv.notify_all();
 }
 
 
@@ -334,7 +336,7 @@ void Ingest::waitForQueue()
 {
 	mutex mtx;
 	unique_lock<mutex> lck(mtx);
-	if (!m_fullQueues.empty())
+	if (m_fullQueues.size() > 0 || m_resendQueues.size() > 0)
 		return;
 	if (m_running && m_queue->size() < m_queueSizeThreshold)
 	{
@@ -544,11 +546,8 @@ void Ingest::processQueue()
 			delete m_data;
 			m_data = NULL;
 		}
-		
-		// Signal stats thread to update stats
-		lock_guard<mutex> guard(m_statsMutex);
-		m_statsCv.notify_all();
-	} while (!m_fullQueues.empty());
+		signalStatsUpdate();
+	} while (! m_fullQueues.empty());
 }
 
 /**
