@@ -11,6 +11,12 @@
 #include <connection_manager.h>
 #include <common.h>
 
+#define INSTRUMENT	0
+
+#if INSTRUMENT
+#include <sys/time.h>
+#endif
+
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
  * get deleted in each call, whilst the sleep interval controls how long the thread sleeps
@@ -307,10 +313,25 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
 int Connection::appendReadings(const char *readings)
 {
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
-Document 	doc;
-SQLBuffer	sql;
-int		row = 0;
-bool 		add_row = false;
+Document doc;
+int      row = 0;
+bool     add_row = false;
+
+// Variables related to the SQLite insert using prepared command
+const char   *user_ts;
+const char   *asset_code;
+string        reading;
+sqlite3_stmt *stmt;
+int           sqlite3_resut;
+string        now;
+
+#if INSTRUMENT
+	struct timeval	start, t1, t2, t3, t4, t5;
+#endif
+
+#if INSTRUMENT
+	gettimeofday(&start, NULL);
+#endif
 
 	ParseResult ok = doc.Parse(readings);
 	if (!ok)
@@ -319,129 +340,154 @@ bool 		add_row = false;
 		return -1;
 	}
 
-	sql.append("INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES ");
-
 	if (!doc.HasMember("readings"))
 	{
  		raiseError("appendReadings", "Payload is missing a readings array");
-	        return -1;
+		return -1;
 	}
-	Value &rdings = doc["readings"];
-	if (!rdings.IsArray())
+	Value &readingsValue = doc["readings"];
+	if (!readingsValue.IsArray())
 	{
 		raiseError("appendReadings", "Payload is missing the readings array");
 		return -1;
 	}
-	for (Value::ConstValueIterator itr = rdings.Begin(); itr != rdings.End(); ++itr)
+
+	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+
+	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
+	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
+
+#if INSTRUMENT
+		gettimeofday(&t1, NULL);
+#endif
+
+	for (Value::ConstValueIterator itr = readingsValue.Begin(); itr != readingsValue.End(); ++itr)
 	{
 		if (!itr->IsObject())
 		{
-			raiseError("appendReadings",
-				   "Each reading in the readings array must be an object");
+			raiseError("appendReadings","Each reading in the readings array must be an object");
+			sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION;", NULL, NULL, NULL);
 			return -1;
 		}
 
 		add_row = true;
 
 		// Handles - user_ts
-		const char *str = (*itr)["user_ts"].GetString();
-		if (strcmp(str, "now()") == 0)
+		char formatted_date[LEN_BUFFER_DATE] = {0};
+		user_ts = (*itr)["user_ts"].GetString();
+		if (strcmp(user_ts, "now()") == 0)
 		{
-			if (row)
-			{
-				sql.append(", (");
-			}
-			else
-			{
-				sql.append('(');
-			}
-
-			sql.append(SQLITE3_NOW_READING);
+			getNow(now);
+			user_ts = now.c_str();
 		}
 		else
 		{
-			char formatted_date[LEN_BUFFER_DATE] = {0};
-			if (! formatDate(formatted_date, sizeof(formatted_date), str) )
+			if (! formatDate(formatted_date, sizeof(formatted_date), user_ts) )
 			{
-				raiseError("appendReadings", "Invalid date |%s|", str);
+				raiseError("appendReadings", "Invalid date |%s|", user_ts);
 				add_row = false;
 			}
 			else
 			{
-				if (row)
-				{
-					sql.append(", (");
-				}
-				else
-				{
-					sql.append('(');
-				}
-
-				sql.append('\'');
-				sql.append(formatted_date);
-				sql.append('\'');
+				user_ts = formatted_date;
 			}
 		}
 
 		if (add_row)
 		{
-			row++;
-
 			// Handles - asset_code
-			sql.append(",\'");
-			sql.append((*itr)["asset_code"].GetString());
-			sql.append("', '");
+			asset_code = (*itr)["asset_code"].GetString();
 
 			// Handles - reading
 			StringBuffer buffer;
 			Writer<StringBuffer> writer(buffer);
 			(*itr)["reading"].Accept(writer);
-			sql.append(escape(buffer.GetString()));
-			sql.append('\'');
+			reading = escape(buffer.GetString());
 
-			sql.append(')');
+			if(stmt != NULL) {
+
+				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+
+				// Insert the row using a lock to ensure one insert at time
+				{
+					m_writeAccessOngoing.fetch_add(1);
+					unique_lock<mutex> lck(db_mutex);
+
+					sqlite3_resut = sqlite3_step(stmt);
+
+					m_writeAccessOngoing.fetch_sub(1);
+					db_cv.notify_all();
+				}
+
+				if (sqlite3_resut == SQLITE_DONE)
+				{
+					row++;
+
+					sqlite3_clear_bindings(stmt);
+					sqlite3_reset(stmt);
+				}
+				else
+				{
+					raiseError("appendReadings","Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
+						asset_code,
+						sqlite3_errmsg(dbHandle),
+						reading.c_str());
+
+					sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+					return -1;
+				}
+			}
 		}
-
 	}
-	sql.append(';');
 
-	const char *query = sql.coalesce();
-	logSQL("ReadingsAppend", query);
-	char *zErrMsg = NULL;
-	int rc;
-
+	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+	if (sqlite3_resut != SQLITE_OK)
 	{
-	m_writeAccessOngoing.fetch_add(1);
-	unique_lock<mutex> lck(db_mutex);
-
-	// Exec the INSERT statement: no callback, no result set
-	rc = SQLexec(dbHandle,
-		     query,
-		     NULL,
-		     NULL,
-		     &zErrMsg);
-
-	m_writeAccessOngoing.fetch_sub(1);
-	db_cv.notify_all();
+		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
+		row = -1;
 	}
 
-	// Release memory for 'query' var
-	delete[] query;
+#if INSTRUMENT
+		gettimeofday(&t2, NULL);
+#endif
 
-	// Check result code
-	if (rc == SQLITE_OK)
+	if(stmt != NULL)
 	{
-		// Success
-		return sqlite3_changes(dbHandle);
+		if (sqlite3_finalize(stmt) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
 	}
-	else
-	{
-	 	raiseError("appendReadings", zErrMsg);
-		sqlite3_free(zErrMsg);
 
-		// Failure
-		return -1;
-	}
+#if INSTRUMENT
+		gettimeofday(&t3, NULL);
+#endif
+
+#if INSTRUMENT
+		struct timeval tm;
+		double timeT1, timeT2, timeT3;
+
+		timersub(&t1, &start, &tm);
+		timeT1 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+		timersub(&t2, &t1, &tm);
+		timeT2 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+		timersub(&t3, &t2, &tm);
+		timeT3 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+		Logger::getLogger()->debug("Appended readings buffer size :%d:", strlen(readings));
+
+		Logger::getLogger()->debug("Timing - JSON handling %.3f seconds - inserts execution %.3f seconds - sqlite3_finalize %.3f seconds",
+		                           timeT1,
+		                           timeT2,
+		                           timeT3
+		);
+#endif
+
+	return row;
 }
 #endif
 
@@ -1207,3 +1253,4 @@ int blocks = 0;
 
 	return deletedRows;
 }
+

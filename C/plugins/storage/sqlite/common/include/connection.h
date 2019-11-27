@@ -90,6 +90,7 @@ class Connection {
 		void		setTrace(bool);
 		bool		formatDate(char *formatted_date, size_t formatted_date_size, const char *date);
 		bool		aggregateQuery(const rapidjson::Value& payload, std::string& resultSet);
+		bool        getNow(std::string& Now);
 
 	private:
 		int		m_queuing;
