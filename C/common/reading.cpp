@@ -152,16 +152,16 @@ string Reading::toJSON(bool minimal) const
 {
 ostringstream convert;
 
-	convert << "{ \"asset_code\" : \"";
+	convert << "{\"asset_code\":\"";
 	convert << m_asset;
-	convert << "\", \"user_ts\" : \"";
+	convert << "\",\"user_ts\":\"";
 
 	// Add date_time with microseconds + timezone UTC:
 	// YYYY-MM-DD HH24:MM:SS.MS+00:00
 	convert << getAssetDateUserTime(FMT_DEFAULT) << "+00:00";
 	if (!minimal)
 	{
-		convert << "\", \"ts\" : \"";
+		convert << "\",\"ts\":\"";
 
 		// Add date_time with microseconds + timezone UTC:
 		// YYYY-MM-DD HH24:MM:SS.MS+00:00
@@ -169,16 +169,37 @@ ostringstream convert;
 	}
 
 	// Add values
-	convert << "\", \"reading\" : { ";
+	convert << "\",\"reading\":{";
 	for (auto it = m_values.cbegin(); it != m_values.cend(); it++)
 	{
 		if (it != m_values.cbegin())
 		{
-			convert << ", ";
+			convert << ",";
 		}
 		convert << (*it)->toJSONProperty();
 	}
-	convert << " } }";
+	convert << "}}";
+	return convert.str();
+}
+
+/**
+ * Return the asset reading as a JSON structure encoded in a
+ * C++ string.
+ */
+string Reading::getDatapointsJSON() const
+{
+ostringstream convert;
+
+	convert << "{";
+	for (auto it = m_values.cbegin(); it != m_values.cend(); it++)
+	{
+		if (it != m_values.cbegin())
+		{
+			convert << ",";
+		}
+		convert << (*it)->toJSONProperty();
+	}
+	convert << "}";
 	return convert.str();
 }
 

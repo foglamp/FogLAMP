@@ -10,6 +10,7 @@
 #include <storage_client.h>
 #include <reading.h>
 #include <reading_set.h>
+#include <reading_stream.h>
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 #include <service_record.h>
@@ -19,6 +20,7 @@
 #include <thread>
 #include <map>
 #include <string_utils.h>
+#include <sys/uio.h>
 
 #define INSTRUMENT	1
 
@@ -36,8 +38,9 @@ std::mutex sto_mtx_client_map;
 /**
  * Storage Client constructor
  */
-StorageClient::StorageClient(const string& hostname, const unsigned short port)
+StorageClient::StorageClient(const string& hostname, const unsigned short port) : m_streaming(false)
 {
+	m_host = hostname;
 	m_pid = getpid();
 	m_logger = Logger::getLogger();
 	m_urlbase << hostname << ":" << port;
@@ -47,7 +50,8 @@ StorageClient::StorageClient(const string& hostname, const unsigned short port)
  * Storage Client constructor
  * stores the provided HttpClient into the map
  */
-StorageClient::StorageClient(HttpClient *client) {
+StorageClient::StorageClient(HttpClient *client) : m_streaming(false)
+{
 
 	std::thread::id thread_id = std::this_thread::get_id();
 
@@ -131,12 +135,35 @@ bool StorageClient::readingAppend(Reading& reading)
 
 /**
  * Append multiple readings
+ *
+ * TODO implement a mechanism to force streamed or non-streamed mode
  */
 bool StorageClient::readingAppend(const vector<Reading *>& readings)
 {
 #if INSTRUMENT
 	struct timeval	start, t1, t2;
 #endif
+	if (m_streaming)
+	{
+		return streamReadings(readings);
+	}
+	// See if we should switch to stream mode
+	struct timeval tmFirst, tmLast, dur;
+	readings[0]->getUserTimestamp(&tmFirst);
+	readings[readings.size()-1]->getUserTimestamp(&tmLast);
+	timersub(&tmLast, &tmFirst, &dur);
+	double timeSpan = dur.tv_sec + ((double)dur.tv_usec / 1000000);
+	double rate = (double)readings.size() / timeSpan;
+	if (rate > STREAM_THRESHOLD)
+	{
+		m_logger->info("Reading rate %.1f readings per second above threshold, attmempting to switch to stream mode", rate);
+		if (openStream())
+		{
+			m_logger->info("Successfully switch to stream mode for readings");
+			return streamReadings(readings);
+		}
+		m_logger->warn("Failed to switch to streaming mode");
+	}
 	static HttpClient *httpClient = this->getHttpClient(); // to initialize m_seqnum_map[thread_id] for this thread
 	try {
 		std::thread::id thread_id = std::this_thread::get_id();
@@ -982,4 +1009,126 @@ bool StorageClient::unregisterAssetNotification(const string& assetName,
 				ex.what());
 	}
 	return false;
+}
+
+bool StorageClient::openStream()
+{
+	try {
+		auto res = this->getHttpClient()->request("POST", "/storage/reading/stream");
+		m_logger->info("POST /storage/reading/stream returned: %s", res->status_code.c_str());
+		if (res->status_code.compare("200 OK") == 0)
+		{
+			ostringstream resultPayload;
+			resultPayload << res->content.rdbuf();
+			Document doc;
+			doc.Parse(resultPayload.str().c_str());
+			if (doc.HasParseError())
+			{
+				m_logger->info("POST result %s.", res->status_code.c_str());
+				m_logger->error("Failed to parse result of createStream. %s. Document is %s",
+						GetParseError_En(doc.GetParseError()),
+						resultPayload.str().c_str());
+				return false;
+			}
+			else if (doc.HasMember("message"))
+			{
+				m_logger->error("Failed to switch to stream mode: %s",
+					doc["message"].GetString());
+				return false;
+			}
+			int port, token;
+			if ((!doc.HasMember("port")) || (!doc.HasMember("token")))
+			{
+				m_logger->error("Missing items in stream creation response");
+				return false;
+			}
+		       	port = doc["port"].GetInt();
+			token = doc["token"].GetInt();
+			if ((m_stream = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+        		{
+				m_logger->error("Unable to create socket");
+				return false;
+			}
+			struct sockaddr_in serv_addr;
+			hostent *server;
+			if ((server = gethostbyname(m_host.c_str())) == NULL)
+			{
+				m_logger->error("Unable to resolve hostname for reading stream: %s", m_host.c_str());
+				return false;
+			}
+			bzero((char *) &serv_addr, sizeof(serv_addr));
+			serv_addr.sin_family = AF_INET;
+			bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+			serv_addr.sin_port = htons(port);
+			if (connect(m_stream, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+			{
+				Logger::getLogger()->warn("Unable to connect to storage streaming server: %s, %d", m_host.c_str(), port);
+				return false;
+			}
+			RDSConnectHeader conhdr;
+			conhdr.magic = RDS_CONNECTION_MAGIC;
+			conhdr.token = token;
+			write(m_stream, &conhdr, sizeof(conhdr));
+			m_streaming = true;
+			m_logger->info("Storage stream succesfully created");
+			return true;
+		}
+		ostringstream resultPayload;
+		resultPayload << res->content.rdbuf();
+		handleUnexpectedResponse("Create reading stream", res->status_code, resultPayload.str());
+		return false;
+	} catch (exception& ex) {
+		m_logger->error("Failed to create reading stream: %s", ex.what());
+	}
+	m_logger->error("Fallen through!");
+	return false;
+}
+
+/**
+ * Stream a set of readings to the storage service.
+ *
+ * TODO Deal with acknowledgements, add error checking/recovery
+ *
+ * @param readings	The readings to stream
+ * @return bool		True if the readings have been sent
+ */
+bool StorageClient::streamReadings(const std::vector<Reading *> & readings)
+{
+RDSBlockHeader   	blkhdr;
+RDSReadingHeader 	rdhdrs[STREAM_BLK_SIZE];
+struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 3];
+string			payloads[STREAM_BLK_SIZE];
+
+	if (!m_streaming)
+	{
+		return false;
+	}
+	blkhdr.magic = RDS_BLOCK_MAGIC;
+	blkhdr.blockNumber = m_readingBlock++;
+	blkhdr.count = readings.size();
+	write(m_stream, &blkhdr, sizeof(blkhdr));
+	for (int i = 0; i < readings.size(); i++)
+	{
+		int offset = i % STREAM_BLK_SIZE;
+		rdhdrs[offset].magic = RDS_READING_MAGIC;
+		rdhdrs[offset].readingNo = i;
+		rdhdrs[offset].assetLength = readings[i]->getAssetName().length() + 1;
+		payloads[offset] = readings[i]->getDatapointsJSON();
+		rdhdrs[offset].payloadLength = payloads[offset].length() + 1;
+		iovs[offset * 3].iov_base = &rdhdrs[offset];
+		iovs[offset * 3].iov_len = sizeof(RDSReadingHeader);
+		iovs[(offset * 3) + 1].iov_base = readings[i]->getAssetName().c_str();
+		iovs[(offset * 3) + 1].iov_len = rdhdrs[offset].assetLength;
+		iovs[(offset * 3) + 2].iov_base = payloads[offset].c_str();
+		iovs[(offset * 3) + 2].iov_len = rdhdrs[offset].payloadLength;
+		if (offset == STREAM_BLK_SIZE - 1)
+		{
+			writev(m_stream, (const iovec *)iovs, STREAM_BLK_SIZE * 3);
+		}
+	}
+	if (readings.size() % STREAM_BLK_SIZE)
+	{
+		writev(m_stream, (const iovec *)iovs, (readings.size() % STREAM_BLK_SIZE) * 3);
+	}
+	return true;
 }
