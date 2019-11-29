@@ -9,6 +9,7 @@
  */
 #include <stream_handler.h>
 #include <storage_api.h>
+#include <storage_api.h>
 #include <reading_stream.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -36,7 +37,7 @@ static void threadWrapper(void *handler)
 /**
  * Constructor for the StreamHandler class
  */
-StreamHandler::StreamHandler() : m_running(true)
+StreamHandler::StreamHandler(StorageApi *api) : m_api(api), m_running(true)
 {
 	m_pollfd = epoll_create(1);
 	m_handlerThread = thread(threadWrapper, this);
@@ -67,7 +68,7 @@ void StreamHandler::handler()
 		std::unique_lock<std::mutex> lock(m_streamsMutex);
 		if (m_streams.size() == 0)
 		{
-			Logger::getLogger()->warn("Waiting for first stream to be created");
+			Logger::getLogger()->info("Waiting for first stream to be created");
 			m_streamsCV.wait_for(lock, chrono::milliseconds(500));
 		}
 		else
@@ -76,7 +77,7 @@ void StreamHandler::handler()
 			for (int i = 0; i < nfds; i++)
 			{
 				Stream *stream = (Stream *)events[i].data.ptr;
-				stream->handleEvent(m_pollfd);
+				stream->handleEvent(m_pollfd, m_api);
 			}
 		}
 	}
@@ -191,7 +192,7 @@ void StreamHandler::Stream::setNonBlocking(int fd)
  *
  * @param epollfd	The epoll file descriptor
  */
-void StreamHandler::Stream::handleEvent(int epollfd)
+void StreamHandler::Stream::handleEvent(int epollfd, StorageApi *api)
 {
 ssize_t n;
 
@@ -203,12 +204,12 @@ ssize_t n;
 		if ((conn_sock = accept(m_socket,
                                           (struct sockaddr *)&addr, &addrlen)) == -1)
 		{
-			Logger::getLogger()->warn("Accept failed for streaming socket: %s", sys_errlist[errno]);
+			Logger::getLogger()->info("Accept failed for streaming socket: %s", sys_errlist[errno]);
 			return;
 		}
 		epoll_ctl(epollfd, EPOLL_CTL_DEL, m_socket, &m_event);
 		close(m_socket);
-		Logger::getLogger()->warn("Stream connection established");
+		Logger::getLogger()->info("Stream connection established");
 		m_socket = conn_sock;
 		m_status = AwaitingToken;
 		setNonBlocking(m_socket);
@@ -231,7 +232,7 @@ ssize_t n;
 			m_blockNo = 0;
 			m_readingNo = 0;
 			m_protocolState = BlkHdr;
-			Logger::getLogger()->warn("Token for streaming socket exchanged");
+			Logger::getLogger()->info("Token for streaming socket exchanged");
 		}
 		else
 		{
@@ -243,20 +244,21 @@ ssize_t n;
 	{
 		while (1)
 		{
-			Logger::getLogger()->warn("Connected in protocol state %d, readingNo %d", m_protocolState, m_readingNo);
+			Logger::getLogger()->debug("Connected in protocol state %d, readingNo %d", m_protocolState, m_readingNo);
 			if (m_protocolState == BlkHdr)
 			{
 				RDSBlockHeader blkHdr;
 				if (available(m_socket) < sizeof(blkHdr))
 				{
-					Logger::getLogger()->warn("Not enough bytes for block header");
+					Logger::getLogger()->debug("Not enough bytes for block header");
 					return;
 				}
 				if ((n = read(m_socket, &blkHdr, sizeof(blkHdr))) != sizeof(blkHdr))
 					Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
 				if (blkHdr.magic != RDS_BLOCK_MAGIC)
 				{
-					Logger::getLogger()->error("Expected block header, but incorrect header found");
+					Logger::getLogger()->error("Expected block header, but incorrect header found 0x%x", blkHdr.magic);
+					close(m_socket);
 					return;
 				}
 				if (blkHdr.blockNumber != m_blockNo)
@@ -264,38 +266,41 @@ ssize_t n;
 				}
 				m_blockSize = blkHdr.count;
 				m_protocolState = RdHdr;
+				m_readingNo = 0;
+				Logger::getLogger()->info("New block %d of %d readings", blkHdr.blockNumber, blkHdr.count);
 			}
 			else if (m_protocolState == RdHdr)
 			{
 				RDSReadingHeader rdhdr;
 				if (available(m_socket) < sizeof(rdhdr))
 				{
-					Logger::getLogger()->warn("Not enough bytes for reading header");
+					Logger::getLogger()->debug("Not enough bytes for reading header");
 					return;
 				}
 				if (read(m_socket, &rdhdr, sizeof(rdhdr)) != sizeof(rdhdr))
 					Logger::getLogger()->warn("Not enough bytes for reading header");
 				if (rdhdr.magic != RDS_READING_MAGIC)
 				{
-					Logger::getLogger()->error("Expected reading header, but incorrect header found");
+					Logger::getLogger()->error("Expected reading header, but incorrect header found 0x%x", rdhdr.magic);
+					close(m_socket);
 					return;
 				}
-				Logger::getLogger()->warn("Reading Header: assetCodeLngth %d, payloadLength %d", rdhdr.assetLength, rdhdr.payloadLength);
+				Logger::getLogger()->debug("Reading Header: assetCodeLngth %d, payloadLength %d", rdhdr.assetLength, rdhdr.payloadLength);
 				m_readingSize = sizeof(uint32_t) * 2 + sizeof(struct timeval)
 					+ rdhdr.assetLength + rdhdr.payloadLength;
-				Logger::getLogger()->warn("Reading Size: %d", m_readingSize);
+				Logger::getLogger()->debug("Reading Size: %d", m_readingSize);
 				m_readings[m_readingNo % RDS_BLOCK] = (ReadingStream *)malloc(m_readingSize);
 				m_readings[m_readingNo % RDS_BLOCK]->assetCodeLength = rdhdr.assetLength;
 				m_readings[m_readingNo % RDS_BLOCK]->payloadLength = rdhdr.payloadLength;
 				m_readingSize -= 2 * sizeof(uint32_t);
 				m_protocolState = RdBody;
-				close(m_socket);
 			}
 			else if (m_protocolState == RdBody)
 			{
 				if (available(m_socket) < m_readingSize)
 				{
-					Logger::getLogger()->warn("Not enough bytes for reading %d", m_readingSize);
+					Logger::getLogger()->info("Not enough bytes for reading %d", m_readingSize);
+					close(m_socket);
 					return;
 				}
 				if ((n = read(m_socket, &m_readings[m_readingNo % RDS_BLOCK]->userTs, m_readingSize)) != m_readingSize)
@@ -303,17 +308,26 @@ ssize_t n;
 				m_readingNo++;
 				if ((m_readingNo % RDS_BLOCK) == 0)
 				{
-					queueInsert(RDS_BLOCK, false);
+					queueInsert(api, RDS_BLOCK, false);
 					for (int i = 0; i < RDS_BLOCK; i++)
 						free(m_readings[i]);
 				}
 				else if (m_readingNo == m_blockSize)
 				{
-					queueInsert(m_readingNo % RDS_BLOCK, true);
+					// We have complete the block, insert readings and wait
+					// for a block header
+					queueInsert(api, m_readingNo % RDS_BLOCK, true);
 					for (uint32_t i = 0; i < m_readingNo % RDS_BLOCK; i++)
 						free(m_readings[i]);
 				}
-				m_protocolState = RdHdr;
+				if (m_readingNo >= m_blockSize)
+				{
+					m_protocolState = BlkHdr;
+				}
+				else
+				{
+					m_protocolState = RdHdr;
+				}
 			}
 		}
 	}
@@ -326,10 +340,8 @@ ssize_t n;
  * @param nReadings	The number of readings to insert
  * @param commit	Perform commit at end of this block
  */
-void StreamHandler::Stream::queueInsert(unsigned int nReadings, bool commit)
+void StreamHandler::Stream::queueInsert(StorageApi *api, unsigned int nReadings, bool commit)
 {
-	StorageApi *api = StorageApi::getInstance();
-	// TODO write to the StorageAPI
 	m_readings[nReadings] = NULL;
 	api->readingStream(m_readings, commit);
 }

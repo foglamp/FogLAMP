@@ -1069,7 +1069,11 @@ bool StorageClient::openStream()
 			RDSConnectHeader conhdr;
 			conhdr.magic = RDS_CONNECTION_MAGIC;
 			conhdr.token = token;
-			write(m_stream, &conhdr, sizeof(conhdr));
+			if (write(m_stream, &conhdr, sizeof(conhdr)) != sizeof(conhdr))
+			{
+				Logger::getLogger()->warn("Failed to write connection header: %s", strerror(errno));
+				return false;
+			}
 			m_streaming = true;
 			m_logger->info("Storage stream succesfully created");
 			return true;
@@ -1097,7 +1101,7 @@ bool StorageClient::streamReadings(const std::vector<Reading *> & readings)
 {
 RDSBlockHeader   	blkhdr;
 RDSReadingHeader 	rdhdrs[STREAM_BLK_SIZE];
-struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 4];
+struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 4], *iovp;
 string			payloads[STREAM_BLK_SIZE];
 struct timeval		tm[STREAM_BLK_SIZE];
 ssize_t			n, length = 0;
@@ -1118,39 +1122,51 @@ ssize_t			n, length = 0;
 		}
 		return false;
 	}
+	iovp = iovs;
 	for (int i = 0; i < readings.size(); i++)
 	{
 		int offset = i % STREAM_BLK_SIZE;
+
 		rdhdrs[offset].magic = RDS_READING_MAGIC;
 		rdhdrs[offset].readingNo = i;
 		rdhdrs[offset].assetLength = readings[i]->getAssetName().length() + 1;
 		payloads[offset] = readings[i]->getDatapointsJSON();
 		rdhdrs[offset].payloadLength = payloads[offset].length() + 1;
-		iovs[offset * 3].iov_base = &rdhdrs[offset];
-		iovs[offset * 3].iov_len = sizeof(RDSReadingHeader);
-		length += iovs[offset * 3].iov_len;
+
+		iovp->iov_base = &rdhdrs[offset];
+		iovp->iov_len = sizeof(RDSReadingHeader);
+		length += iovp->iov_len;
+		iovp++;
+
 		readings[i]->getUserTimestamp(&tm[offset]);
-		iovs[(offset * 3) + 1].iov_base = &tm[offset];
-		iovs[(offset * 3) + 1].iov_len = sizeof(struct timeval);
-		length += iovs[(offset * 3) + 1].iov_len;
-		iovs[(offset * 3) + 2].iov_base = readings[i]->getAssetName().c_str();
-		iovs[(offset * 3) + 2].iov_len = rdhdrs[offset].assetLength;
-		length += iovs[(offset * 3) + 2].iov_len;
-		iovs[(offset * 3) + 3].iov_base = payloads[offset].c_str();
-		iovs[(offset * 3) + 3].iov_len = rdhdrs[offset].payloadLength;
-		length += iovs[(offset * 3) + 3].iov_len;
+		iovp->iov_base = &tm[offset];
+		iovp->iov_len = sizeof(struct timeval);
+		length += iovp->iov_len;
+		iovp++;
+
+		iovp->iov_base = readings[i]->getAssetName().c_str();
+		iovp->iov_len = rdhdrs[offset].assetLength;
+		length += iovp->iov_len;
+		iovp++;
+
+		iovp->iov_base = payloads[offset].c_str();
+		iovp->iov_len = rdhdrs[offset].payloadLength;
+		length += iovp->iov_len;
+		iovp++;
+
 		if (offset == STREAM_BLK_SIZE - 1)
 		{
-			n = writev(m_stream, (const iovec *)iovs, STREAM_BLK_SIZE * 4);
+			n = writev(m_stream, (const iovec *)iovs, iovp - iovs);
 			if (n < length)
 				Logger::getLogger()->error("Write of block short, %d < %d: %s",
 						n, length, sys_errlist[errno]);
 			length = 0;
+			iovp = iovs;
 		}
 	}
 	if (readings.size() % STREAM_BLK_SIZE)
 	{
-		n = writev(m_stream, (const iovec *)iovs, (readings.size() % STREAM_BLK_SIZE) * 4);
+		n = writev(m_stream, (const iovec *)iovs, iovp - iovs);
 		if (n < length)
 			Logger::getLogger()->error("Write of block short, %d < %d: %s",
 						n, length, sys_errlist[errno]);
