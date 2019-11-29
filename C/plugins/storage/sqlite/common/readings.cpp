@@ -10,6 +10,7 @@
 #include <connection.h>
 #include <connection_manager.h>
 #include <common.h>
+#include <reading_stream.h>
 
 #define INSTRUMENT	0
 
@@ -304,6 +305,87 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
 	}
 
 	return true;
+}
+
+// FIXME_I:
+
+/**
+ * Append a stream of readings to the readings buffer
+ */
+#define	RDS_USER_TIMESTAMP(stream, x) 	stream[x]->userTs
+#define	RDS_ASSET_CODE(stream, x)		stream[x]->assetCode
+// FIXME_I:
+//#define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[stream[x]->assetCodeLength])
+#define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
+
+int readingStream(ReadingStream **readings, bool commit)
+{
+	int i;
+	int rowNumber = -1;
+	const char   *user_ts;
+	const char   *asset_code;
+	const char   *payload;
+
+	char	ts[60], micro_s[10];
+	struct tm timeinfo;
+
+#if INSTRUMENT
+	struct timeval	start, t1, t2, t3, t4, t5;
+#endif
+
+#if INSTRUMENT
+	gettimeofday(&start, NULL);
+#endif
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx readingStream");
+
+	for (i = 0; readings[i]; i++)
+	{
+		// FIXME_I:
+		//user_ts = RDS_USER_TIMESTAMP(readings, i);
+		memset(&timeinfo, 0, sizeof(struct tm));
+		gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
+		std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
+		snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
+
+		asset_code = RDS_ASSET_CODE(readings, i);
+		payload = RDS_PAYLOAD(readings, i);
+
+		Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: ",ts, micro_s  ,asset_code, payload);
+
+	}
+	rowNumber = i;
+
+#if INSTRUMENT
+	gettimeofday(&t1, NULL);
+#endif
+
+#if INSTRUMENT
+	gettimeofday(&t2, NULL);
+#endif
+
+
+#if INSTRUMENT
+	struct timeval tm;
+	double timeT1, timeT2, timeT3;
+
+	timersub(&t1, &start, &tm);
+	timeT1 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+	timersub(&t2, &t1, &tm);
+	timeT2 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+	Logger::getLogger()->debug("Appended readings stream  size :%d:", rowNumber);
+
+	Logger::getLogger()->debug("Timing - stream handling %.3f seconds - TBD %.3f seconds",
+							   timeT1,
+							   timeT2
+	);
+#endif
+
+	return rowNumber;
 }
 
 #ifndef SQLITE_SPLIT_READINGS
