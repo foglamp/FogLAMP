@@ -131,7 +131,7 @@ struct sockaddr_in	address;
 
 	if ((m_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
-		Logger::getLogger()->error("Failed to create socket");
+		Logger::getLogger()->error("Failed to create socket: %s", sys_errlist[errno]);
 		return 0;
 	}
 	address.sin_family = AF_INET;
@@ -140,19 +140,19 @@ struct sockaddr_in	address;
 
 	if (bind(m_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
 	{
-		Logger::getLogger()->error("Failed to bind socket");
+		Logger::getLogger()->error("Failed to bind socket: %s", sys_errlist[errno]);
 		return 0;
 	}
 	socklen_t len = sizeof(address);
 	if (getsockname(m_socket, (struct sockaddr *)&address, &len) == -1)
-		Logger::getLogger()->error("Failed to get socket name");
+		Logger::getLogger()->error("Failed to get socket name, %s", sys_errlist[errno]);
 	m_port = ntohs(address.sin_port);
 	Logger::getLogger()->info("Stream port bound to %d", m_port);
 	setNonBlocking(m_socket);
 
 	if (listen(m_socket, 3) < 0)
 	{
-		Logger::getLogger()->error("Failed to listen");
+		Logger::getLogger()->error("Failed to listen: %s", sys_errlist[errno]);
 		return 0;
     	}
 	m_status = Listen;
@@ -166,7 +166,7 @@ struct sockaddr_in	address;
 	m_event.events = EPOLLIN | EPOLLRDHUP;
 	if (epoll_ctl(epollfd, EPOLL_CTL_ADD, m_socket, &m_event) < 0)
 	{
-		Logger::getLogger()->error("Failed to add listening port %d to epoll fileset", m_port);
+		Logger::getLogger()->error("Failed to add listening port %d to epoll fileset, %s", m_port, sys_errlist[errno]);
 	}
 
 	return m_port;
@@ -193,18 +193,22 @@ void StreamHandler::Stream::setNonBlocking(int fd)
  */
 void StreamHandler::Stream::handleEvent(int epollfd)
 {
+ssize_t n;
+
 	if (m_status == Listen)
 	{
 		int conn_sock;
-		struct sockaddr_in	addr;
-		socklen_t	addrlen;
+		struct sockaddr	addr;
+		socklen_t	addrlen = sizeof(addr);
 		if ((conn_sock = accept(m_socket,
                                           (struct sockaddr *)&addr, &addrlen)) == -1)
 		{
 			Logger::getLogger()->warn("Accept failed for streaming socket: %s", sys_errlist[errno]);
+			return;
 		}
 		epoll_ctl(epollfd, EPOLL_CTL_DEL, m_socket, &m_event);
 		close(m_socket);
+		Logger::getLogger()->warn("Stream connection established");
 		m_socket = conn_sock;
 		m_status = AwaitingToken;
 		setNonBlocking(m_socket);
@@ -219,7 +223,8 @@ void StreamHandler::Stream::handleEvent(int epollfd)
 		{
 			return;
 		}
-		read(m_socket, &hdr, sizeof(hdr));
+		if ((n = read(m_socket, &hdr, sizeof(hdr))) != sizeof(hdr))
+			Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
 		if (hdr.magic == RDS_CONNECTION_MAGIC && hdr.token == m_token)
 		{
 			m_status = Connected;
@@ -247,10 +252,12 @@ void StreamHandler::Stream::handleEvent(int epollfd)
 					Logger::getLogger()->warn("Not enough bytes for block header");
 					return;
 				}
-				read(m_socket, &blkHdr, sizeof(blkHdr));
+				if ((n = read(m_socket, &blkHdr, sizeof(blkHdr))) != sizeof(blkHdr))
+					Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
 				if (blkHdr.magic != RDS_BLOCK_MAGIC)
 				{
-
+					Logger::getLogger()->error("Expected block header, but incorrect header found");
+					return;
 				}
 				if (blkHdr.blockNumber != m_blockNo)
 				{
@@ -266,10 +273,23 @@ void StreamHandler::Stream::handleEvent(int epollfd)
 					Logger::getLogger()->warn("Not enough bytes for reading header");
 					return;
 				}
-				read(m_socket, &rdhdr, sizeof(rdhdr));
+				if (read(m_socket, &rdhdr, sizeof(rdhdr)) != sizeof(rdhdr))
+					Logger::getLogger()->warn("Not enough bytes for reading header");
+				if (rdhdr.magic != RDS_READING_MAGIC)
+				{
+					Logger::getLogger()->error("Expected reading header, but incorrect header found");
+					return;
+				}
+				Logger::getLogger()->warn("Reading Header: assetCodeLngth %d, payloadLength %d", rdhdr.assetLength, rdhdr.payloadLength);
 				m_readingSize = sizeof(uint32_t) * 2 + sizeof(struct timeval)
 					+ rdhdr.assetLength + rdhdr.payloadLength;
+				Logger::getLogger()->warn("Reading Size: %d", m_readingSize);
+				m_readings[m_readingNo % RDS_BLOCK] = (ReadingStream *)malloc(m_readingSize);
+				m_readings[m_readingNo % RDS_BLOCK]->assetCodeLength = rdhdr.assetLength;
+				m_readings[m_readingNo % RDS_BLOCK]->payloadLength = rdhdr.payloadLength;
+				m_readingSize -= 2 * sizeof(uint32_t);
 				m_protocolState = RdBody;
+				close(m_socket);
 			}
 			else if (m_protocolState == RdBody)
 			{
@@ -278,8 +298,8 @@ void StreamHandler::Stream::handleEvent(int epollfd)
 					Logger::getLogger()->warn("Not enough bytes for reading %d", m_readingSize);
 					return;
 				}
-				m_readings[m_readingNo % RDS_BLOCK] = (ReadingStream *)malloc(m_readingSize);
-				read(m_socket, m_readings[m_readingNo % RDS_BLOCK], m_readingSize);
+				if ((n = read(m_socket, &m_readings[m_readingNo % RDS_BLOCK]->userTs, m_readingSize)) != m_readingSize)
+					Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
 				m_readingNo++;
 				if ((m_readingNo % RDS_BLOCK) == 0)
 				{
@@ -325,6 +345,9 @@ size_t StreamHandler::Stream::available(int fd)
 size_t	avail;
 
 	if (ioctl(fd, FIONREAD, &avail) < 0)
+	{
+		Logger::getLogger()->warn("FIONREAD failed: %s", sys_errlist[errno]);
 		return 0;
+	}
 	return avail;
 }

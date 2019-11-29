@@ -21,6 +21,7 @@
 #include <map>
 #include <string_utils.h>
 #include <sys/uio.h>
+#include <errno.h>
 
 #define INSTRUMENT	1
 
@@ -1096,8 +1097,10 @@ bool StorageClient::streamReadings(const std::vector<Reading *> & readings)
 {
 RDSBlockHeader   	blkhdr;
 RDSReadingHeader 	rdhdrs[STREAM_BLK_SIZE];
-struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 3];
+struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 4];
 string			payloads[STREAM_BLK_SIZE];
+struct timeval		tm[STREAM_BLK_SIZE];
+ssize_t			n, length = 0;
 
 	if (!m_streaming)
 	{
@@ -1106,7 +1109,15 @@ string			payloads[STREAM_BLK_SIZE];
 	blkhdr.magic = RDS_BLOCK_MAGIC;
 	blkhdr.blockNumber = m_readingBlock++;
 	blkhdr.count = readings.size();
-	write(m_stream, &blkhdr, sizeof(blkhdr));
+	if ((n = write(m_stream, &blkhdr, sizeof(blkhdr))) != sizeof(blkhdr))
+	{
+		Logger::getLogger()->error("Failed to write block header: %s", sys_errlist[errno]);
+		if (errno == EPIPE || errno == ECONNRESET)
+		{
+			m_streaming = false;
+		}
+		return false;
+	}
 	for (int i = 0; i < readings.size(); i++)
 	{
 		int offset = i % STREAM_BLK_SIZE;
@@ -1117,18 +1128,32 @@ string			payloads[STREAM_BLK_SIZE];
 		rdhdrs[offset].payloadLength = payloads[offset].length() + 1;
 		iovs[offset * 3].iov_base = &rdhdrs[offset];
 		iovs[offset * 3].iov_len = sizeof(RDSReadingHeader);
-		iovs[(offset * 3) + 1].iov_base = readings[i]->getAssetName().c_str();
-		iovs[(offset * 3) + 1].iov_len = rdhdrs[offset].assetLength;
-		iovs[(offset * 3) + 2].iov_base = payloads[offset].c_str();
-		iovs[(offset * 3) + 2].iov_len = rdhdrs[offset].payloadLength;
+		length += iovs[offset * 3].iov_len;
+		readings[i]->getUserTimestamp(&tm[offset]);
+		iovs[(offset * 3) + 1].iov_base = &tm[offset];
+		iovs[(offset * 3) + 1].iov_len = sizeof(struct timeval);
+		length += iovs[(offset * 3) + 1].iov_len;
+		iovs[(offset * 3) + 2].iov_base = readings[i]->getAssetName().c_str();
+		iovs[(offset * 3) + 2].iov_len = rdhdrs[offset].assetLength;
+		length += iovs[(offset * 3) + 2].iov_len;
+		iovs[(offset * 3) + 3].iov_base = payloads[offset].c_str();
+		iovs[(offset * 3) + 3].iov_len = rdhdrs[offset].payloadLength;
+		length += iovs[(offset * 3) + 3].iov_len;
 		if (offset == STREAM_BLK_SIZE - 1)
 		{
-			writev(m_stream, (const iovec *)iovs, STREAM_BLK_SIZE * 3);
+			n = writev(m_stream, (const iovec *)iovs, STREAM_BLK_SIZE * 4);
+			if (n < length)
+				Logger::getLogger()->error("Write of block short, %d < %d: %s",
+						n, length, sys_errlist[errno]);
+			length = 0;
 		}
 	}
 	if (readings.size() % STREAM_BLK_SIZE)
 	{
-		writev(m_stream, (const iovec *)iovs, (readings.size() % STREAM_BLK_SIZE) * 3);
+		n = writev(m_stream, (const iovec *)iovs, (readings.size() % STREAM_BLK_SIZE) * 4);
+		if (n < length)
+			Logger::getLogger()->error("Write of block short, %d < %d: %s",
+						n, length, sys_errlist[errno]);
 	}
 	return true;
 }
