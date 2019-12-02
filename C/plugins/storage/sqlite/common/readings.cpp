@@ -323,139 +323,214 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 {
 
 	// FIXME_I:
+	ostringstream ss;
+	ss << std::this_thread::get_id();
 	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xx2 plugin - readingStream");
+	Logger::getLogger()->debug("DBG xx2 plugin - readingStream thread Id :%s: ", ss.str().c_str());
+
+	// FIXME_I:
+	//return(10);
 
 	// Row defintion related
-	int           i;
-	bool          add_row = false;
-	const char   *user_ts;
-	string        now;
-	char          ts[60], micro_s[10];
-	char          formatted_date[LEN_BUFFER_DATE] = {0};
-	struct tm     timeinfo;
-	const char   *asset_code;
-	const char   *payload;
-	string        reading;
+	int i;
+	bool add_row = false;
+	const char *user_ts;
+	string now;
+	char ts[60], micro_s[10];
+	char formatted_date[LEN_BUFFER_DATE] = {0};
+	struct tm timeinfo;
+	const char *asset_code;
+	const char *payload;
+	string reading;
 
 	// SQLite related
 	sqlite3_stmt *stmt;
-	int           sqlite3_resut;
-	int           rowNumber = -1;
+	int sqlite3_resut;
+	int rowNumber = -1;
 
 #if INSTRUMENT
-	struct timeval	start, t1, t2, t3, t4, t5;
+	struct timeval start, t1, t2, t3, t4, t5;
 #endif
 
 #if INSTRUMENT
 	gettimeofday(&start, NULL);
 #endif
 
-	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+	const char *sql_cmd = "INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
 
-	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
-	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
-
-	for (i = 0; readings[i]; i++)
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL) != SQLITE_OK)
 	{
-		add_row = true;
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
 
-		// FIXME_I:
-		//user_ts = RDS_USER_TIMESTAMP(readings, i);
-		memset(&timeinfo, 0, sizeof(struct tm));
-		gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
-		std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
-		snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
+	// FIXME_I:
+	Logger::getLogger()->debug("DBG xxx sqlite3_get_autocommit :%d: ", sqlite3_get_autocommit(dbHandle) );
+	//	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
 
-		// Handles - asset_code
-		asset_code = RDS_ASSET_CODE(readings, i);
 
-		// Handles - reading
-		payload = RDS_PAYLOAD(readings, i);
-		// FIXME_I:// FIXME_I:
-		// Handles - reading
-//		StringBuffer buffer;
-//		Writer<StringBuffer> writer(buffer);
-//		(*itr)["reading"].Accept(writer);
-//		reading = escape(buffer.GetString());
-		reading = string (payload);
+	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+	// FIXME_I:
+	Logger::getLogger()->debug("DBG xxx sqlite3_get_autocommit :%d: ", sqlite3_get_autocommit(dbHandle) );
+	//	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
 
-		Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: ",ts, micro_s  ,asset_code, payload);
-
-		// Handles - user_ts
-		formatted_date[0] = {0};
-		strncat(ts,micro_s, 10);
-		user_ts = ts;
-		Logger::getLogger()->debug("DBG xxx readingStream - user_ts :%s:",user_ts);
-		// FIXME_I:
-		if (0)
+	try
+	{
+		for (i = 0; readings[i]; i++)
 		{
-			getNow(now);
-			user_ts = now.c_str();
-		}
-		else
-		{
-			if (! formatDate(formatted_date, sizeof(formatted_date), user_ts) )
+			add_row = true;
+
+			// FIXME_I:
+			//user_ts = RDS_USER_TIMESTAMP(readings, i);
+			memset(&timeinfo, 0, sizeof(struct tm));
+			gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
+			std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
+			snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
+
+			// Handles - asset_code
+			asset_code = RDS_ASSET_CODE(readings, i);
+
+			// Handles - reading
+			payload = RDS_PAYLOAD(readings, i);
+			// FIXME_I:// FIXME_I:
+			// Handles - reading
+			//		StringBuffer buffer;
+			//		Writer<StringBuffer> writer(buffer);
+			//		(*itr)["reading"].Accept(writer);
+			//		reading = escape(buffer.GetString());
+			reading = string(payload);
+
+			Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: ", ts, micro_s, asset_code, payload);
+
+			// Handles - user_ts
+			formatted_date[0] = {0};
+			strncat(ts, micro_s, 10);
+			user_ts = ts;
+			Logger::getLogger()->debug("DBG xxx readingStream - user_ts :%s:", user_ts);
+			// FIXME_I:
+			if (0)
 			{
-				raiseError("appendReadings", "Invalid date |%s|", user_ts);
-				add_row = false;
+				getNow(now);
+				user_ts = now.c_str();
 			}
 			else
 			{
-				user_ts = formatted_date;
-			}
-		}
-		Logger::getLogger()->debug("DBG xxx readingStream - formatted_date :%s:",user_ts);
-
-		if (add_row)
-		{
-			if(stmt != NULL) {
-
-				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
-
-				// Insert the row using a lock to ensure one insert at time
+				if (!formatDate(formatted_date, sizeof(formatted_date), user_ts))
 				{
-					m_writeAccessOngoing.fetch_add(1);
-					unique_lock<mutex> lck(db_mutex);
-
-					sqlite3_resut = sqlite3_step(stmt);
-
-					m_writeAccessOngoing.fetch_sub(1);
-					db_cv.notify_all();
-				}
-
-				if (sqlite3_resut == SQLITE_DONE)
-				{
-					rowNumber++;
-
-					sqlite3_clear_bindings(stmt);
-					sqlite3_reset(stmt);
-
-					// FIXME_I:
-					Logger::getLogger()->debug("DBG xxx readingStream  success insert :%s: :%s: :%s: ",asset_code, reading.c_str()  ,user_ts);
+					raiseError("appendReadings", "Invalid date |%s|", user_ts);
+					add_row = false;
 				}
 				else
 				{
-					raiseError("appendReadings","Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
-							   asset_code,
-							   sqlite3_errmsg(dbHandle),
-							   reading.c_str());
+					user_ts = formatted_date;
+				}
+			}
+			Logger::getLogger()->debug("DBG xxx readingStream - formatted_date :%s:", user_ts);
 
-					sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
-					return -1;
+			if (add_row)
+			{
+				if (stmt != NULL)
+				{
+					Logger::getLogger()->debug("DBG xxx4  step 0");
+
+					sqlite3_bind_text(stmt, 1, user_ts, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 2, asset_code, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+
+					int retries =0;
+					int interval = 0;
+#define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_RETRY_BACKOFF		100	// Multipler to backoff DB retry on lock
+
+					do {
+						// Insert the row using a lock to ensure one insert at time
+						{
+							Logger::getLogger()->debug("DBG xxx4  step 1");
+							std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+							//m_writeAccessOngoing.fetch_add(1);
+							//unique_lock<mutex> lck(db_mutex);
+
+							Logger::getLogger()->debug("DBG xxx4  step 2");
+							sqlite3_resut = sqlite3_step(stmt);
+
+							Logger::getLogger()->debug("DBG xxx4  step 3");
+							//m_writeAccessOngoing.fetch_sub(1);
+							//db_cv.notify_all();
+						}
+						if (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY)
+						{
+							// FIXME_I:
+							interval = (1 * PREP_CMD_RETRY_BACKOFF);
+							retries++;
+
+							Logger::getLogger()->debug("DBG xxx4 SQLITE_LOCKED :%d: interval :%d:", retries, interval);
+
+							std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+
+							Logger::getLogger()->debug("DBG xxx4 after sleep");
+							std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+						}
+					} while (retries < PREP_CMD_MAX_RETRIES && (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
+
+
+					Logger::getLogger()->debug("DBG xxx4 after loop");
+
+					if (sqlite3_resut == SQLITE_DONE)
+					{
+						rowNumber++;
+
+						sqlite3_clear_bindings(stmt);
+						sqlite3_reset(stmt);
+
+						// FIXME_I:
+						Logger::getLogger()->debug("DBG xxx readingStream  success insert :%s: :%s: :%s: ", asset_code,
+												   reading.c_str(), user_ts);
+					}
+					else
+					{
+						// FIXME_I:
+						Logger::getLogger()->error("DBG xx3 appendReadings");
+
+						raiseError("appendReadings",
+								   "Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
+								   asset_code,
+								   sqlite3_errmsg(dbHandle),
+								   reading.c_str());
+
+						sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+
+						return -1;
+					}
 				}
 			}
 		}
+		rowNumber = i;
+
+	} catch (exception e) {
+
+		// FIXME_I:
+		Logger::getLogger()->error("DBG xx3 ROLLBACK");
+
+		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command :%s:", e.what());
+
+		sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+		return -1;
 	}
-	rowNumber = i;
 
 	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
 	if (sqlite3_resut != SQLITE_OK)
 	{
 		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
 		rowNumber = -1;
+	}
+	else
+	{
+		// FIXME_I:
+		Logger::getLogger()->debug("DBG xxx TRANSACTION successed");
 	}
 
 	if(stmt != NULL)
@@ -464,7 +539,18 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		{
 			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
 		}
+		else
+		{
+			// FIXME_I:
+			Logger::getLogger()->debug ("DBG xxx sqlite3_finalize OK");
+		}
 	}
+	else
+	{
+		// FIXME_I:
+		Logger::getLogger()->error("DBG xxx  stmt NULL ");
+	}
+
 
 #if INSTRUMENT
 	gettimeofday(&t1, NULL);
@@ -492,6 +578,8 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 							   timeT2
 	);
 #endif
+	// FIXME_I:
+	Logger::getLogger()->debug("DBG xxx  return :%d: ", rowNumber);
 
 	return rowNumber;
 }
