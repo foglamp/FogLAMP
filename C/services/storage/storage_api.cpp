@@ -1035,7 +1035,7 @@ string	responsePayload;
 	try {
 		if (!streamHandler)
 		{
-			streamHandler = new StreamHandler();
+			streamHandler = new StreamHandler(this);
 		}
 		uint32_t token;
 		uint32_t port = streamHandler->createStream(&token);
@@ -1068,10 +1068,10 @@ bool StorageApi::readingStream(ReadingStream **readings, bool commit)
 {
 	int c;
 	for (c = 0; readings[c]; c++);
-	Logger::getLogger()->warn("ReadingStream called with %d", c);
-	if (readingPlugin->hasStreamSupport())
+	Logger::getLogger()->info("ReadingStream called with %d", c);
+	if ((readingPlugin ? readingPlugin : plugin)->hasStreamSupport())
 	{
-		return readingPlugin->readingStream(readings, commit);
+		return (readingPlugin ? readingPlugin : plugin)->readingStream(readings, commit);
 	}
 	else
 	{
@@ -1083,6 +1083,8 @@ bool StorageApi::readingStream(ReadingStream **readings, bool commit)
 		convert << "{\"readings\":[";
 		for (int i = 0; readings[i]; i++)
 		{
+			if (i > 0)
+				convert << ",";
 			convert << "{\"asset_code\":\"";
 			convert << readings[i]->assetCode;
 			convert << "\",\"user_ts\":\"";
@@ -1092,12 +1094,12 @@ bool StorageApi::readingStream(ReadingStream **readings, bool commit)
 			snprintf(micro_s, sizeof(micro_s), ".%06lu", readings[i]->userTs.tv_usec);
 			convert << ts << micro_s;
 			convert << "\",\"reading\":";
-			convert << &(readings[i]->assetCode[0]) + readings[i]->assetCodeLength;
+			convert << &(readings[i]->assetCode[readings[i]->assetCodeLength]);
 			convert << "}";
 		}
 		convert << "]}";
-		Logger::getLogger()->warn("Fallback created payload: %s", convert.str().c_str());
-		readingPlugin->readingsAppend(convert.str());
+		Logger::getLogger()->debug("Fallback created payload: %s", convert.str().c_str());
+		(readingPlugin ? readingPlugin : plugin)->readingsAppend(convert.str());
 	}	
 	return false;
 }

@@ -19,9 +19,11 @@
 #define MAX_EVENTS	40	// Number of epoll events in one epoll_wait call
 #define RDS_BLOCK	50	// Number of readings to insert in each call to the storage plugin
 
+class StorageApi;
+
 class StreamHandler {
 	public:
-		StreamHandler();
+		StreamHandler(StorageApi *);
 		~StreamHandler();
 		void			handler();
 		uint32_t		createStream(uint32_t *token);
@@ -31,11 +33,11 @@ class StreamHandler {
 					Stream();
 					~Stream();
 					uint32_t	create(int epollfd, uint32_t *token);
-					void		handleEvent(int epollfd);
+					void		handleEvent(int epollfd, StorageApi *api);
 			private:
 					void		setNonBlocking(int fd);
 					size_t		available(int fd);
-					void		queueInsert(unsigned int nReadings, bool commit);
+					void		queueInsert(StorageApi *api, unsigned int nReadings, bool commit);
 					enum { Closed, Listen, AwaitingToken, Connected }
 				       			m_status;
 					int		m_socket;
@@ -51,6 +53,7 @@ class StreamHandler {
 							m_event;
 					ReadingStream	*m_readings[RDS_BLOCK+1];
 		};
+		StorageApi		*m_api;
 		std::thread		m_handlerThread;
 		int			m_tokens;
 		std::condition_variable	m_streamsCV;
