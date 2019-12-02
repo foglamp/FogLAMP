@@ -190,6 +190,8 @@ void StreamHandler::Stream::setNonBlocking(int fd)
  * Handle an epoll event. The precise handling will depend
  * on the state of the stream.
  *
+ * TODO Improve memory handling, use seperate threads for inserts, send acknowledgements
+ *
  * @param epollfd	The epoll file descriptor
  */
 void StreamHandler::Stream::handleEvent(int epollfd, StorageApi *api)
