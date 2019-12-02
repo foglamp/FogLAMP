@@ -12,7 +12,8 @@
 #include <common.h>
 #include <reading_stream.h>
 
-#define INSTRUMENT	0
+// FIXME_I:
+#define INSTRUMENT	1
 
 #if INSTRUMENT
 #include <sys/time.h>
@@ -318,16 +319,29 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
 //#define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[stream[x]->assetCodeLength])
 #define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
 
-int readingStream(ReadingStream **readings, bool commit)
+int Connection::readingStream(ReadingStream **readings, bool commit)
 {
-	int i;
-	int rowNumber = -1;
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xx2 plugin - readingStream");
+
+	// Row defintion related
+	int           i;
+	bool          add_row = false;
 	const char   *user_ts;
+	string        now;
+	char          ts[60], micro_s[10];
+	char          formatted_date[LEN_BUFFER_DATE] = {0};
+	struct tm     timeinfo;
 	const char   *asset_code;
 	const char   *payload;
+	string        reading;
 
-	char	ts[60], micro_s[10];
-	struct tm timeinfo;
+	// SQLite related
+	sqlite3_stmt *stmt;
+	int           sqlite3_resut;
+	int           rowNumber = -1;
 
 #if INSTRUMENT
 	struct timeval	start, t1, t2, t3, t4, t5;
@@ -337,12 +351,15 @@ int readingStream(ReadingStream **readings, bool commit)
 	gettimeofday(&start, NULL);
 #endif
 
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xxx readingStream");
+	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+
+	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
+	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
 
 	for (i = 0; readings[i]; i++)
 	{
+		add_row = true;
+
 		// FIXME_I:
 		//user_ts = RDS_USER_TIMESTAMP(readings, i);
 		memset(&timeinfo, 0, sizeof(struct tm));
@@ -350,13 +367,104 @@ int readingStream(ReadingStream **readings, bool commit)
 		std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
 		snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
 
+		// Handles - asset_code
 		asset_code = RDS_ASSET_CODE(readings, i);
+
+		// Handles - reading
 		payload = RDS_PAYLOAD(readings, i);
+		// FIXME_I:// FIXME_I:
+		// Handles - reading
+//		StringBuffer buffer;
+//		Writer<StringBuffer> writer(buffer);
+//		(*itr)["reading"].Accept(writer);
+//		reading = escape(buffer.GetString());
+		reading = string (payload);
 
 		Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: ",ts, micro_s  ,asset_code, payload);
 
+		// Handles - user_ts
+		formatted_date[0] = {0};
+		strncat(ts,micro_s, 10);
+		user_ts = ts;
+		Logger::getLogger()->debug("DBG xxx readingStream - user_ts :%s:",user_ts);
+		// FIXME_I:
+		if (0)
+		{
+			getNow(now);
+			user_ts = now.c_str();
+		}
+		else
+		{
+			if (! formatDate(formatted_date, sizeof(formatted_date), user_ts) )
+			{
+				raiseError("appendReadings", "Invalid date |%s|", user_ts);
+				add_row = false;
+			}
+			else
+			{
+				user_ts = formatted_date;
+			}
+		}
+		Logger::getLogger()->debug("DBG xxx readingStream - formatted_date :%s:",user_ts);
+
+		if (add_row)
+		{
+			if(stmt != NULL) {
+
+				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+
+				// Insert the row using a lock to ensure one insert at time
+				{
+					m_writeAccessOngoing.fetch_add(1);
+					unique_lock<mutex> lck(db_mutex);
+
+					sqlite3_resut = sqlite3_step(stmt);
+
+					m_writeAccessOngoing.fetch_sub(1);
+					db_cv.notify_all();
+				}
+
+				if (sqlite3_resut == SQLITE_DONE)
+				{
+					rowNumber++;
+
+					sqlite3_clear_bindings(stmt);
+					sqlite3_reset(stmt);
+
+					// FIXME_I:
+					Logger::getLogger()->debug("DBG xxx readingStream  success insert :%s: :%s: :%s: ",asset_code, reading.c_str()  ,user_ts);
+				}
+				else
+				{
+					raiseError("appendReadings","Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
+							   asset_code,
+							   sqlite3_errmsg(dbHandle),
+							   reading.c_str());
+
+					sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+					return -1;
+				}
+			}
+		}
 	}
 	rowNumber = i;
+
+	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+	if (sqlite3_resut != SQLITE_OK)
+	{
+		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
+		rowNumber = -1;
+	}
+
+	if(stmt != NULL)
+	{
+		if (sqlite3_finalize(stmt) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
 
 #if INSTRUMENT
 	gettimeofday(&t1, NULL);
