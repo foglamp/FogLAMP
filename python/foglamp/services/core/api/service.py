@@ -439,7 +439,7 @@ async def update_service(request: web.Request) -> web.Response:
         result = await storage_client.query_tbl_with_payload('schedules', payload)
         sch_info = result['rows']
         sch_list = []
-        if sch_info[0]['enabled'] == 't':
+        if sch_info and sch_info[0]['enabled'] == 't':
             status, reason = await server.Server.scheduler.disable_schedule(uuid.UUID(sch_info[0]['id']))
             if status:
                 _logger.warning("{} service is disabled as {} service is updating..".format(
