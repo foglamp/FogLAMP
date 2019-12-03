@@ -444,7 +444,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					int retries =0;
 					int interval = 0;
 #define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
-#define PREP_CMD_RETRY_BACKOFF		100	// Multipler to backoff DB retry on lock
+#define PREP_CMD_RETRY_BACKOFF		10	// Multipler to backoff DB retry on lock
 
 					do {
 						// Insert the row using a lock to ensure one insert at time
