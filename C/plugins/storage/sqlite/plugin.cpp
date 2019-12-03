@@ -143,16 +143,7 @@ int plugin_readingStream(PLUGIN_HANDLE handle, ReadingStream **readings, bool co
 	ConnectionManager *manager = (ConnectionManager *)handle;
 	Connection        *connection = manager->allocate();
 
-
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xxx plugin - plugin_readingStream V2 - start");
-
 	result = connection->readingStream(readings, commit);
-
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xxx plugin - plugin_readingStream - end :%d:", result);
 
 	manager->release(connection);
 	return result;;
