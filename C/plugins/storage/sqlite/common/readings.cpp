@@ -13,11 +13,21 @@
 #include <reading_stream.h>
 
 // FIXME_I:
+// 1 enable performance tracking
 #define INSTRUMENT	1
 
 #if INSTRUMENT
 #include <sys/time.h>
 #endif
+
+// Decode stream data
+#define	RDS_USER_TIMESTAMP(stream, x) 	stream[x]->userTs
+#define	RDS_ASSET_CODE(stream, x)		stream[x]->assetCode
+#define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
+
+// Retry mechanism
+#define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_RETRY_BACKOFF		10	// Multipler to backoff DB retry on lock
 
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
@@ -308,29 +318,11 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
 	return true;
 }
 
-// FIXME_I:
-
 /**
  * Append a stream of readings to the readings buffer
  */
-#define	RDS_USER_TIMESTAMP(stream, x) 	stream[x]->userTs
-#define	RDS_ASSET_CODE(stream, x)		stream[x]->assetCode
-// FIXME_I:
-//#define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[stream[x]->assetCodeLength])
-#define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
-
 int Connection::readingStream(ReadingStream **readings, bool commit)
 {
-
-	// FIXME_I:
-	ostringstream ss;
-	ss << std::this_thread::get_id();
-	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xx2 plugin - readingStream thread Id :%s: ", ss.str().c_str());
-
-	// FIXME_I:
-	//return(10);
-
 	// Row defintion related
 	int i;
 	bool add_row = false;
@@ -343,6 +335,10 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	const char *payload;
 	string reading;
 
+	// Retry mechanism
+	int retries =0;
+	int sleep_time_ms = 0;
+
 	// SQLite related
 	sqlite3_stmt *stmt;
 	int sqlite3_resut;
@@ -352,11 +348,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	struct timeval start, t1, t2, t3, t4, t5;
 #endif
 
-#if INSTRUMENT
-	gettimeofday(&start, NULL);
-#endif
-
-	const char *sql_cmd = "INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+	const char *sql_cmd = "INSERT INTO foglamp.readings ( asset_code, reading, user_ts ) VALUES  (?,?,?)";
 
 	if (sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL) != SQLITE_OK)
 	{
@@ -368,28 +360,21 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	Logger::getLogger()->debug("DBG xxx sqlite3_get_autocommit :%d: ", sqlite3_get_autocommit(dbHandle) );
 	//	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
 
-
 	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
 	{
 		raiseError("readingStream", sqlite3_errmsg(dbHandle));
 		return -1;
 	}
-	// FIXME_I:
-	Logger::getLogger()->debug("DBG xxx sqlite3_get_autocommit :%d: ", sqlite3_get_autocommit(dbHandle) );
-	//	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+
+#if INSTRUMENT
+	gettimeofday(&start, NULL);
+#endif
 
 	try
 	{
 		for (i = 0; readings[i]; i++)
 		{
 			add_row = true;
-
-			// FIXME_I:
-			//user_ts = RDS_USER_TIMESTAMP(readings, i);
-			memset(&timeinfo, 0, sizeof(struct tm));
-			gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
-			std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
-			snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
 
 			// Handles - asset_code
 			asset_code = RDS_ASSET_CODE(readings, i);
@@ -404,13 +389,17 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 			//		reading = escape(buffer.GetString());
 			reading = string(payload);
 
-			Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: ", ts, micro_s, asset_code, payload);
+			// FIXME_I:
+			//user_ts = RDS_USER_TIMESTAMP(readings, i);
+			memset(&timeinfo, 0, sizeof(struct tm));
+			gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
+			std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
+			snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
 
 			// Handles - user_ts
 			formatted_date[0] = {0};
 			strncat(ts, micro_s, 10);
 			user_ts = ts;
-			Logger::getLogger()->debug("DBG xxx readingStream - user_ts :%s:", user_ts);
 			// FIXME_I:
 			if (0)
 			{
@@ -429,55 +418,42 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					user_ts = formatted_date;
 				}
 			}
-			Logger::getLogger()->debug("DBG xxx readingStream - formatted_date :%s:", user_ts);
+			// FIXME_I:
+			//Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: %s:", asset_code, payload, user_ts, ts, micro_s);
 
 			if (add_row)
 			{
 				if (stmt != NULL)
 				{
-					Logger::getLogger()->debug("DBG xxx4  step 0");
+					sqlite3_bind_text(stmt, 1, asset_code, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 3, user_ts, -1, SQLITE_STATIC);
 
-					sqlite3_bind_text(stmt, 1, user_ts, -1, SQLITE_STATIC);
-					sqlite3_bind_text(stmt, 2, asset_code, -1, SQLITE_STATIC);
-					sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+					retries =0;
+					sleep_time_ms = 0;
 
-					int retries =0;
-					int interval = 0;
-#define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
-#define PREP_CMD_RETRY_BACKOFF		10	// Multipler to backoff DB retry on lock
-
+					// Retry mechanism in case SQLlite DB is locked
 					do {
 						// Insert the row using a lock to ensure one insert at time
 						{
-							Logger::getLogger()->debug("DBG xxx4  step 1");
-							std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-							//m_writeAccessOngoing.fetch_add(1);
-							//unique_lock<mutex> lck(db_mutex);
+							m_writeAccessOngoing.fetch_add(1);
+							unique_lock<mutex> lck(db_mutex);
 
-							Logger::getLogger()->debug("DBG xxx4  step 2");
 							sqlite3_resut = sqlite3_step(stmt);
 
-							Logger::getLogger()->debug("DBG xxx4  step 3");
-							//m_writeAccessOngoing.fetch_sub(1);
-							//db_cv.notify_all();
+							m_writeAccessOngoing.fetch_sub(1);
+							db_cv.notify_all();
 						}
 						if (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY)
 						{
-							// FIXME_I:
-							interval = (1 * PREP_CMD_RETRY_BACKOFF);
+							sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 							retries++;
 
-							Logger::getLogger()->debug("DBG xxx4 SQLITE_LOCKED :%d: interval :%d:", retries, interval);
+							Logger::getLogger()->debug("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
 
-							std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-
-							Logger::getLogger()->debug("DBG xxx4 after sleep");
-							std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+							std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 						}
 					} while (retries < PREP_CMD_MAX_RETRIES && (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
-
-
-					Logger::getLogger()->debug("DBG xxx4 after loop");
 
 					if (sqlite3_resut == SQLITE_DONE)
 					{
@@ -486,15 +462,9 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 						sqlite3_clear_bindings(stmt);
 						sqlite3_reset(stmt);
 
-						// FIXME_I:
-						Logger::getLogger()->debug("DBG xxx readingStream  success insert :%s: :%s: :%s: ", asset_code,
-												   reading.c_str(), user_ts);
 					}
 					else
 					{
-						// FIXME_I:
-						Logger::getLogger()->error("DBG xx3 appendReadings");
-
 						raiseError("appendReadings",
 								   "Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
 								   asset_code,
@@ -502,7 +472,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 								   reading.c_str());
 
 						sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
-
 						return -1;
 					}
 				}
@@ -512,25 +481,21 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 	} catch (exception e) {
 
-		// FIXME_I:
-		Logger::getLogger()->error("DBG xx3 ROLLBACK");
-
 		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command :%s:", e.what());
 
 		sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
 		return -1;
 	}
 
+#if INSTRUMENT
+	gettimeofday(&t1, NULL);
+#endif
+
 	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
 	if (sqlite3_resut != SQLITE_OK)
 	{
 		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
 		rowNumber = -1;
-	}
-	else
-	{
-		// FIXME_I:
-		Logger::getLogger()->debug("DBG xxx TRANSACTION successed");
 	}
 
 	if(stmt != NULL)
@@ -539,22 +504,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		{
 			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
 		}
-		else
-		{
-			// FIXME_I:
-			Logger::getLogger()->debug ("DBG xxx sqlite3_finalize OK");
-		}
 	}
-	else
-	{
-		// FIXME_I:
-		Logger::getLogger()->error("DBG xxx  stmt NULL ");
-	}
-
-
-#if INSTRUMENT
-	gettimeofday(&t1, NULL);
-#endif
 
 #if INSTRUMENT
 	gettimeofday(&t2, NULL);
@@ -573,13 +523,11 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 	Logger::getLogger()->debug("Appended readings stream  size :%d:", rowNumber);
 
-	Logger::getLogger()->debug("Timing - stream handling %.3f seconds - TBD %.3f seconds",
+	Logger::getLogger()->debug("Timing - stream handling %.3f seconds - commit/finalize %.3f seconds",
 							   timeT1,
 							   timeT2
 	);
 #endif
-	// FIXME_I:
-	Logger::getLogger()->debug("DBG xxx  return :%d: ", rowNumber);
 
 	return rowNumber;
 }
