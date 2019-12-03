@@ -467,7 +467,7 @@ async def asset_datapoints_with_bucket_size(request: web.Request) -> web.Respons
                 start = float(request.query['start'])
                 datetime.datetime.fromtimestamp(start)
             except Exception as e:
-                raise ValueError('Invalid start: {}'.format(str(e)))
+                raise ValueError('Invalid value for start. Error: {}'.format(str(e)))
 
         _aggregate = PayloadBuilder().AGGREGATE(["all"]).chain_payload()
         _and_where = PayloadBuilder(_aggregate).WHERE(["asset_code", "in", asset_code_list]).AND_WHERE([
@@ -538,7 +538,7 @@ async def asset_readings_with_bucket_size(request: web.Request) -> web.Response:
                 start = float(request.query['start'])
                 datetime.datetime.fromtimestamp(start)
             except Exception as e:
-                raise ValueError('Invalid start: {}'.format(str(e)))
+                raise ValueError('Invalid value for start. Error: {}'.format(str(e)))
         _where = PayloadBuilder(_aggregate).WHERE(["asset_code", "=", asset_code]).AND_WHERE(["user_ts", ">=",
                                                                                               str(start)]).chain_payload()
         _bucket = PayloadBuilder(_where).TIMEBUCKET('user_ts', bucket_size, 'YYYY-MM-DD HH24:MI:SS',

@@ -397,11 +397,12 @@ class TestBrowserAssets:
          {'rows': [{'reading': {'temp': 13.45}}], 'count': 1}, "length must be a positive integer",
          "?length=-10", False),
         ('foglamp/asset/fogbench%2ftemp/bucket/10', 400,
-         {'rows': [{'reading': {'temp': 13.45}}], 'count': 1}, "Invalid start: year is out of range",
+         {'rows': [{'reading': {'temp': 13.45}}], 'count': 1}, "Invalid value for start. Error: year is out of range",
          "?start=1491613677888", False),
         ('foglamp/asset/fogbench%2ftemp/bucket/10', 400,
          {'rows': [{'reading': {'temp': 13.45}}], 'count': 1},
-         "Invalid start: [Errno 75] Value too large for defined data type", "?start=567199223456346457", False),
+         "Invalid value for start. Error: [Errno 75] Value too large for defined data type",
+         "?start=567199223456346457", False),
         ('foglamp/asset/fogbench%2ftemp/temperature/bucket/60', 404, {'rows': [], 'count': 0},
          "'fogbench/temp asset code not found'", "", True),
         ('foglamp/asset/fogbench%2ftemp/temperature/bucket/60', 400,
@@ -409,7 +410,7 @@ class TestBrowserAssets:
          "?length=-10", True),
         ('foglamp/asset/fogbench%2ftemp/temperature/bucket/60', 400,
          {'rows': [{'reading': {'temperature': 13.45}}], 'count': 1},
-         "Invalid start: timestamp out of range for platform time_t", "?start=149199235346457788234", True)
+         "Invalid value for start. Error: timestamp out of range for platform time_t", "?start=149199235346457788234", True)
     ])
     async def test_bad_asset_bucket_size_and_optional_params(self, client, url, code, storage_result, message,
                                                              request_params, with_readings):
