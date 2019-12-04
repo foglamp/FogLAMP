@@ -713,7 +713,7 @@ string        now;
 		timersub(&t3, &t2, &tm);
 		timeT3 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
 
-		Logger::getLogger()->debug("Appended readings buffer size :%d:", strlen(readings));
+		Logger::getLogger()->debug("Appended readings buffer size :%d: row count :%d:", strlen(readings), row);
 
 		Logger::getLogger()->debug("Timing - JSON handling %.3f seconds - inserts execution %.3f seconds - sqlite3_finalize %.3f seconds",
 		                           timeT1,
