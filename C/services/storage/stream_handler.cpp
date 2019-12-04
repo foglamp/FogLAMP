@@ -68,12 +68,12 @@ void StreamHandler::handler()
 		std::unique_lock<std::mutex> lock(m_streamsMutex);
 		if (m_streams.size() == 0)
 		{
-			Logger::getLogger()->info("Waiting for first stream to be created");
+			Logger::getLogger()->debug("Waiting for first stream to be created");
 			m_streamsCV.wait_for(lock, chrono::milliseconds(500));
 		}
 		else
 		{
-			int nfds = epoll_wait(m_pollfd, events, MAX_EVENTS, 1);
+			int nfds = epoll_wait(m_pollfd, events, MAX_EVENTS, 100);
 			for (int i = 0; i < nfds; i++)
 			{
 				Stream *stream = (Stream *)events[i].data.ptr;
@@ -131,7 +131,7 @@ uint32_t StreamHandler::Stream::create(int epollfd, uint32_t *token)
 {
 struct sockaddr_in	address;
 
-	if ((m_blockPool = new MemoryPool(512)) == NULL)
+	if ((m_blockPool = new MemoryPool(BLOCK_POOL_SIZES)) == NULL)
 	{
 		Logger::getLogger()->error("Failed to create memory block pool");
 		return 0;
@@ -278,7 +278,7 @@ ssize_t n;
 					m_blockSize = blkHdr.count;
 					m_protocolState = RdHdr;
 					m_readingNo = 0;
-					Logger::getLogger()->info("New block %d of %d readings", blkHdr.blockNumber, blkHdr.count);
+					Logger::getLogger()->debug("New block %d of %d readings", blkHdr.blockNumber, blkHdr.count);
 				}
 				else if (m_protocolState == RdHdr)
 				{
@@ -310,7 +310,7 @@ ssize_t n;
 				{
 					if (available(m_socket) < m_readingSize)
 					{
-						Logger::getLogger()->info("Not enough bytes for reading %d", m_readingSize);
+						Logger::getLogger()->warn("Not enough bytes for reading %d", m_readingSize);
 						close(m_socket);
 						return;
 					}
@@ -348,7 +348,7 @@ ssize_t n;
 		// TODO mark this stream for destruction
 		epoll_ctl(epollfd, EPOLL_CTL_DEL, m_socket, &m_event);
 		close(m_socket);
-		Logger::getLogger()->info("Closing stream...");
+		Logger::getLogger()->warn("Closing stream...");
 	}
 }
 
