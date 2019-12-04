@@ -17,7 +17,7 @@
 #include <reading_stream.h>
 
 #define MAX_EVENTS	40	// Number of epoll events in one epoll_wait call
-#define RDS_BLOCK	50	// Number of readings to insert in each call to the storage plugin
+#define RDS_BLOCK	1000	// Number of readings to insert in each call to the storage plugin
 
 class StorageApi;
 
