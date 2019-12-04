@@ -205,6 +205,13 @@ void StreamHandler::Stream::handleEvent(int epollfd, StorageApi *api, uint32_t e
 {
 ssize_t n;
 
+	if (events & EPOLLRDHUP)
+	{
+		// TODO mark this stream for destruction
+		epoll_ctl(epollfd, EPOLL_CTL_DEL, m_socket, &m_event);
+		close(m_socket);
+		Logger::getLogger()->warn("Closing stream...");
+	}
 	if (events & EPOLLIN)
 	{
 		if (m_status == Listen)
@@ -342,13 +349,6 @@ ssize_t n;
 				}
 			}
 		}
-	}
-	else if (events & EPOLLRDHUP)
-	{
-		// TODO mark this stream for destruction
-		epoll_ctl(epollfd, EPOLL_CTL_DEL, m_socket, &m_event);
-		close(m_socket);
-		Logger::getLogger()->warn("Closing stream...");
 	}
 }
 
