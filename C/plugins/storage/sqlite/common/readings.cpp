@@ -344,10 +344,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	int sqlite3_resut;
 	int rowNumber = -1;
 
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	//Logger::getLogger()->setMinLevel("warning");
-
 #if INSTRUMENT
 	struct timeval start, t1, t2, t3, t4, t5;
 #endif

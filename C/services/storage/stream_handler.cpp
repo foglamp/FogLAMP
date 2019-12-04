@@ -306,8 +306,15 @@ ssize_t n;
 					Logger::getLogger()->debug("Reading Header: assetCodeLngth %d, payloadLength %d", rdhdr.assetLength, rdhdr.payloadLength);
 					m_readingSize = sizeof(uint32_t) * 2 + sizeof(struct timeval)
 						+ rdhdr.assetLength + rdhdr.payloadLength;
+					int extra = 0;
+					m_sameAsset = true;
+					if (rdhdr.assetLength)
+					{
+						extra = m_lastAsset.length() + 1;
+						m_sameAsset = false;
+					}
 					Logger::getLogger()->debug("Reading Size: %d", m_readingSize);
-					m_readings[m_readingNo % RDS_BLOCK] = (ReadingStream *)m_blockPool->allocate(m_readingSize);
+					m_readings[m_readingNo % RDS_BLOCK] = (ReadingStream *)m_blockPool->allocate(m_readingSize + extra);
 					m_readings[m_readingNo % RDS_BLOCK]->assetCodeLength = rdhdr.assetLength;
 					m_readings[m_readingNo % RDS_BLOCK]->payloadLength = rdhdr.payloadLength;
 					m_readingSize -= 2 * sizeof(uint32_t);
@@ -321,8 +328,22 @@ ssize_t n;
 						close(m_socket);
 						return;
 					}
-					if ((n = read(m_socket, &m_readings[m_readingNo % RDS_BLOCK]->userTs, m_readingSize)) != m_readingSize)
-						Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
+					if (m_sameAsset)
+					{
+						if ((n = read(m_socket, &m_readings[m_readingNo % RDS_BLOCK]->userTs, sizeof(struct timeval))) != sizeof(struct timeval))
+							Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
+						int plen = m_readingSize - sizeof(struct timeval);
+						int assetLen = m_lastAsset.length() + 1;
+						if ((n = read(m_socket, &m_readings[m_readingNo % RDS_BLOCK]->assetCode[0] + assetLen, plen)) != plen)
+							Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
+						memcpy(&m_readings[m_readingNo % RDS_BLOCK]->assetCode[0], m_lastAsset.c_str(), assetLen);
+					}
+					else
+					{
+						if ((n = read(m_socket, &m_readings[m_readingNo % RDS_BLOCK]->userTs, m_readingSize)) != m_readingSize)
+							Logger::getLogger()->warn("Short read of %d bytes: %s", n, sys_errlist[errno]);
+						m_lastAsset = m_readings[m_readingNo % RDS_BLOCK]->assetCode;
+					}
 					m_readingNo++;
 					if ((m_readingNo % RDS_BLOCK) == 0)
 					{

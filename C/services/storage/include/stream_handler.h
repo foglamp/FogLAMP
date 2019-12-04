@@ -79,6 +79,8 @@ class StreamHandler {
 							m_event;
 					ReadingStream	*m_readings[RDS_BLOCK+1];
 					MemoryPool	*m_blockPool;
+					std::string	m_lastAsset;
+					bool		m_sameAsset;
 		};
 		StorageApi		*m_api;
 		std::thread		m_handlerThread;

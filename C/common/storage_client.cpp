@@ -1105,6 +1105,7 @@ struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 4], *iovp
 string			payloads[STREAM_BLK_SIZE];
 struct timeval		tm[STREAM_BLK_SIZE];
 ssize_t			n, length = 0;
+string			lastAsset;
 
 	if (!m_streaming)
 	{
@@ -1129,7 +1130,16 @@ ssize_t			n, length = 0;
 
 		rdhdrs[offset].magic = RDS_READING_MAGIC;
 		rdhdrs[offset].readingNo = i;
-		rdhdrs[offset].assetLength = readings[i]->getAssetName().length() + 1;
+		string assetCode = readings[i]->getAssetName();
+		if (i > 0 && assetCode.compare(lastAsset) == 0)
+		{
+			rdhdrs[offset].assetLength = 0;
+		}
+		else
+		{
+			lastAsset = assetCode;
+			rdhdrs[offset].assetLength = assetCode.length() + 1;
+		}
 		payloads[offset] = readings[i]->getDatapointsJSON();
 		rdhdrs[offset].payloadLength = payloads[offset].length() + 1;
 
@@ -1144,10 +1154,13 @@ ssize_t			n, length = 0;
 		length += iovp->iov_len;
 		iovp++;
 
-		iovp->iov_base = readings[i]->getAssetName().c_str();
-		iovp->iov_len = rdhdrs[offset].assetLength;
-		length += iovp->iov_len;
-		iovp++;
+		if (rdhdrs[offset].assetLength)
+		{
+			iovp->iov_base = readings[i]->getAssetName().c_str();
+			iovp->iov_len = rdhdrs[offset].assetLength;
+			length += iovp->iov_len;
+			iovp++;
+		}
 
 		iovp->iov_base = payloads[offset].c_str();
 		iovp->iov_len = rdhdrs[offset].payloadLength;
