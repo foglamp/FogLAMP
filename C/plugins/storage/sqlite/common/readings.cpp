@@ -344,6 +344,10 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	int sqlite3_resut;
 	int rowNumber = -1;
 
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	//Logger::getLogger()->setMinLevel("warning");
+
 #if INSTRUMENT
 	struct timeval start, t1, t2, t3, t4, t5;
 #endif
@@ -510,7 +514,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	gettimeofday(&t2, NULL);
 #endif
 
-
 #if INSTRUMENT
 	struct timeval tm;
 	double timeT1, timeT2, timeT3;
@@ -521,13 +524,16 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	timersub(&t2, &t1, &tm);
 	timeT2 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
 
-	Logger::getLogger()->debug("Appended readings stream  size :%d:", rowNumber);
+	Logger::getLogger()->debug("readingStream row count :%d:", rowNumber);
 
-	Logger::getLogger()->debug("Timing - stream handling %.3f seconds - commit/finalize %.3f seconds",
+	Logger::getLogger()->debug("readingStream Timing - stream handling %.3f seconds - commit/finalize %.3f seconds",
 							   timeT1,
 							   timeT2
 	);
 #endif
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("warning");
 
 	return rowNumber;
 }
@@ -550,6 +556,9 @@ string        reading;
 sqlite3_stmt *stmt;
 int           sqlite3_resut;
 string        now;
+
+// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
 
 #if INSTRUMENT
 	struct timeval	start, t1, t2, t3, t4, t5;

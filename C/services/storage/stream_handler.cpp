@@ -267,7 +267,7 @@ ssize_t n;
 				m_blockSize = blkHdr.count;
 				m_protocolState = RdHdr;
 				m_readingNo = 0;
-				Logger::getLogger()->info("New block %d of %d readings", blkHdr.blockNumber, blkHdr.count);
+				Logger::getLogger()->debug("New block %d of %d readings", blkHdr.blockNumber, blkHdr.count);
 			}
 			else if (m_protocolState == RdHdr)
 			{
