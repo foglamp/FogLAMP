@@ -12,9 +12,8 @@
 #include <common.h>
 #include <reading_stream.h>
 
-// FIXME_I:
 // 1 enable performance tracking
-#define INSTRUMENT	1
+#define INSTRUMENT	0
 
 #if INSTRUMENT
 #include <sys/time.h>
@@ -344,10 +343,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	int sqlite3_resut;
 	int rowNumber = -1;
 
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	//Logger::getLogger()->setMinLevel("warning");
-
 #if INSTRUMENT
 	struct timeval start, t1, t2, t3, t4, t5;
 #endif
@@ -360,9 +355,11 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		return -1;
 	}
 
+	//---  -----------------------------------------------------------------------------------------:
 	// FIXME_I:
-	Logger::getLogger()->debug("DBG xxx sqlite3_get_autocommit :%d: ", sqlite3_get_autocommit(dbHandle) );
-	//	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG - readingStream commit 1.0  |%s| ",commit ? "true" : "false");
+	//---  -----------------------------------------------------------------------------------------:
 
 	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
 	{
@@ -385,27 +382,18 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 			// Handles - reading
 			payload = RDS_PAYLOAD(readings, i);
-			// FIXME_I:// FIXME_I:
-			// Handles - reading
-			//		StringBuffer buffer;
-			//		Writer<StringBuffer> writer(buffer);
-			//		(*itr)["reading"].Accept(writer);
-			//		reading = escape(buffer.GetString());
-			reading = string(payload);
+			reading = escape(payload);
 
-			// FIXME_I:
-			//user_ts = RDS_USER_TIMESTAMP(readings, i);
+			// Handles - user_ts
 			memset(&timeinfo, 0, sizeof(struct tm));
 			gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
 			std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
 			snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
 
-			// Handles - user_ts
 			formatted_date[0] = {0};
 			strncat(ts, micro_s, 10);
 			user_ts = ts;
-			// FIXME_I:
-			if (0)
+			if (strcmp(user_ts, "now()") == 0)
 			{
 				getNow(now);
 				user_ts = now.c_str();
@@ -422,16 +410,14 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					user_ts = formatted_date;
 				}
 			}
-			// FIXME_I:
-			//Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: %s:", asset_code, payload, user_ts, ts, micro_s);
 
 			if (add_row)
 			{
 				if (stmt != NULL)
 				{
-					sqlite3_bind_text(stmt, 1, asset_code, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 1, asset_code,      -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
-					sqlite3_bind_text(stmt, 3, user_ts, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
 
 					retries =0;
 					sleep_time_ms = 0;
@@ -465,7 +451,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 						sqlite3_clear_bindings(stmt);
 						sqlite3_reset(stmt);
-
 					}
 					else
 					{
@@ -485,7 +470,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 	} catch (exception e) {
 
-		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command :%s:", e.what());
+		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command - error :%s:", e.what());
 
 		sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
 		return -1;
@@ -498,7 +483,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
 	if (sqlite3_resut != SQLITE_OK)
 	{
-		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
+		raiseError("appendReadings", "Executing the commit of the transaction - error :%s:", sqlite3_errmsg(dbHandle));
 		rowNumber = -1;
 	}
 
@@ -532,9 +517,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	);
 #endif
 
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("warning");
-
 	return rowNumber;
 }
 
@@ -556,9 +538,6 @@ string        reading;
 sqlite3_stmt *stmt;
 int           sqlite3_resut;
 string        now;
-
-// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
 
 #if INSTRUMENT
 	struct timeval	start, t1, t2, t3, t4, t5;
