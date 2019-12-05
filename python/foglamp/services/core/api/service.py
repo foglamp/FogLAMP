@@ -418,7 +418,7 @@ async def update_service(request: web.Request) -> web.Response:
     """ update service
 
     :Example:
-        curl -sX PUT http://localhost:8081/foglamp/service/Notification/notification/update
+        curl -sX PUT http://localhost:8081/foglamp/service/notification/notification/update
     """
     _type = request.match_info.get('type', None)
     name = request.match_info.get('name', None)
@@ -430,7 +430,7 @@ async def update_service(request: web.Request) -> web.Response:
         # Check requested service name is installed or not
         installed_services = get_service_installed()
         if name not in installed_services:
-            raise KeyError("{} service is not yet installed. So update is not possible.".format(name))
+            raise KeyError("{} service is not installed yet. Hence update is not possible.".format(name))
 
         storage_client = connect.get_storage_async()
         # TODO: process_name ends with "_c" suffix
@@ -442,8 +442,9 @@ async def update_service(request: web.Request) -> web.Response:
         if sch_info and sch_info[0]['enabled'] == 't':
             status, reason = await server.Server.scheduler.disable_schedule(uuid.UUID(sch_info[0]['id']))
             if status:
-                _logger.warning("{} service is disabled as {} service is updating..".format(
-                    sch_info[0]['schedule_name'], name))
+                _logger.warning("Schedule is disabled for {}, as {} service of type {} is being updated...".format(
+                    sch_info[0]['schedule_name'], name, _type))
+                # TODO: SCHCH Audit log entry
                 sch_list.append(sch_info[0]['id'])
 
         # service update is running as a background task
@@ -464,10 +465,10 @@ async def update_service(request: web.Request) -> web.Response:
 
 
 def do_update(request):
-    _logger.info("{} service update starts...".format(request._name))
+    _logger.info("{} service update started...".format(request._name))
     name = "foglamp-service-{}".format(request._name.lower())
     _platform = platform.platform()
-    stdout_file_path = common.create_log_file(action="update", plugin_name=name)
+    stdout_file_path = common.create_log_file("update", name)
     pkg_mgt = 'apt'
     cmd = "sudo {} -y update > {} 2>&1".format(pkg_mgt, stdout_file_path)
     if 'centos' in _platform or 'redhat' in _platform:
@@ -485,6 +486,11 @@ def do_update(request):
         _logger.error("{} service update failed. Logs available at {}".format(request._name, link))
     else:
         _logger.info("{} service update completed. Logs available at {}".format(request._name, link))
+        # PKGUP audit log entry
+        storage_client = connect.get_storage_async()
+        audit = AuditLogger(storage_client)
+        audit_detail = {'packageName': name}
+        asyncio.ensure_future(audit.information('PKGUP', audit_detail))
 
     # Restart the service which was disabled before update
     for s in request._sch_list:
