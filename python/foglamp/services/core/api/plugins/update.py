@@ -18,6 +18,7 @@ from foglamp.services.core import server
 from foglamp.common.plugin_discovery import PluginDiscovery
 from foglamp.services.core.api.plugins import common
 from foglamp.common.configuration_manager import ConfigurationManager
+from foglamp.common.audit_logger import AuditLogger
 
 
 __author__ = "Ashish Jabble"
@@ -177,6 +178,13 @@ def do_update(request):
         _logger.error("{} plugin update failed. Logs available at {}".format(request._name, link))
     else:
         _logger.info("{} plugin update completed. Logs available at {}".format(request._name, link))
+        # PKGUP audit log entry
+        storage_client = connect.get_storage_async()
+        audit = AuditLogger(storage_client)
+        if "_" in request._name:
+            request._name = request._name.replace("_", "-")
+        audit_detail = {'packageName': "foglamp-{}-{}".format(request._type, request._name)}
+        asyncio.ensure_future(audit.information('PKGUP', audit_detail))
 
     # Restart the services which were disabled before plugin update
     for s in request._sch_list:
