@@ -58,7 +58,7 @@ async def update_plugin(request: web.Request) -> web.Response:
             raise KeyError("{} plugin is not yet installed. So update is not possible.".format(name))
 
         sch_list = []
-        notify_list = []
+        notification_list = []
         if _type in ['notificationDelivery', 'notificationRule']:
             # Check Notification service is enabled or not
             payload = PayloadBuilder().SELECT("id", "enabled", "schedule_name").WHERE(['process_name', '=',
@@ -78,10 +78,11 @@ async def update_plugin(request: web.Request) -> web.Response:
                     rule = notification_config['rule']['value']
                     is_enabled = True if notification_config['enable']['value'] == 'true' else False
                     if (channel == name and is_enabled) or (rule == name and is_enabled):
-                        _logger.warning("{} notification instance is disabled as {} {} plugin is updating..".format(
+                        _logger.warning("Disabling {} notification instance, as {} {} plugin is updating...".format(
                             notification_name, name, _type))
                         await config_mgr.set_category_item_value_entry(notification_name, "enable", "false")
-                        notify_list.append(notification_name)
+                        notification_list.append(notification_name)
+            _type = "notify"
         else:
             # Tracked plugins from asset tracker
             tracked_plugins = await _get_plugin_and_sch_name_from_asset_tracker(_type)
@@ -109,7 +110,7 @@ async def update_plugin(request: web.Request) -> web.Response:
         request._type = _type
         request._name = name
         request._sch_list = sch_list
-        request._notify_list = notify_list
+        request._notification_list = notification_list
         loop.call_later(1, do_update, request)
     except KeyError as ex:
         raise web.HTTPNotFound(reason=str(ex))
@@ -186,5 +187,5 @@ def do_update(request):
     if request._type in ['notificationDelivery', 'notificationRule']:
         storage_client = connect.get_storage_async()
         config_mgr = ConfigurationManager(storage_client)
-        for n in request._notify_list:
+        for n in request._notification_list:
             asyncio.ensure_future(config_mgr.set_category_item_value_entry(n, "enable", "true"))
