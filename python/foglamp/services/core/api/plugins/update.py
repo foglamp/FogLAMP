@@ -82,7 +82,7 @@ async def update_plugin(request: web.Request) -> web.Response:
                             notification_name, name, _type))
                         await config_mgr.set_category_item_value_entry(notification_name, "enable", "false")
                         notification_list.append(notification_name)
-            _type = "notify"
+            _type = "notify" if _type == 'notificationDelivery' else "rule"
         else:
             # Tracked plugins from asset tracker
             tracked_plugins = await _get_plugin_and_sch_name_from_asset_tracker(_type)
