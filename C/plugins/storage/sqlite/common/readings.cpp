@@ -25,8 +25,8 @@
 #define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
 
 // Retry mechanism
-#define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
-#define PREP_CMD_RETRY_BACKOFF		10	// Multipler to backoff DB retry on lock
+#define PREP_CMD_MAX_RETRIES		20	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_RETRY_BACKOFF		100	// Multipler to backoff DB retry on lock
 
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
@@ -318,7 +318,11 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
 }
 
 /**
- * Append a stream of readings to the readings buffer
+ * Append a stream of readings to SQLite db
+ *
+ * @param readings  readings to store into the SQLite db
+ * @param commit    if true a database commit is executed and a new transaction will be opened at the next execution
+ *
  */
 int Connection::readingStream(ReadingStream **readings, bool commit)
 {
@@ -335,7 +339,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	string reading;
 
 	// Retry mechanism
-	int retries =0;
+	int retries = 0;
 	int sleep_time_ms = 0;
 
 	// SQLite related
@@ -355,16 +359,19 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		return -1;
 	}
 
-	//---  -----------------------------------------------------------------------------------------:
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG - readingStream commit 1.0  |%s| ",commit ? "true" : "false");
-	//---  -----------------------------------------------------------------------------------------:
+	// The handling of the commit parameter is overridden as using a pool of connections every execution receives
+	// a differen one, so a commit at every run is executed.
+	m_streamOpenTransaction = true;
+	commit = true;
 
-	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+	if (m_streamOpenTransaction)
 	{
-		raiseError("readingStream", sqlite3_errmsg(dbHandle));
-		return -1;
+		if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+		{
+			raiseError("readingStream", sqlite3_errmsg(dbHandle));
+			return -1;
+		}
+		m_streamOpenTransaction = false;
 	}
 
 #if INSTRUMENT
@@ -461,6 +468,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 								   reading.c_str());
 
 						sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+						m_streamOpenTransaction = true;
 						return -1;
 					}
 				}
@@ -473,6 +481,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command - error :%s:", e.what());
 
 		sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+		m_streamOpenTransaction = true;
 		return -1;
 	}
 
@@ -480,11 +489,15 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	gettimeofday(&t1, NULL);
 #endif
 
-	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
-	if (sqlite3_resut != SQLITE_OK)
+	if (commit)
 	{
-		raiseError("appendReadings", "Executing the commit of the transaction - error :%s:", sqlite3_errmsg(dbHandle));
-		rowNumber = -1;
+		sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+		if (sqlite3_resut != SQLITE_OK)
+		{
+			raiseError("appendReadings", "Executing the commit of the transaction - error :%s:", sqlite3_errmsg(dbHandle));
+			rowNumber = -1;
+		}
+		m_streamOpenTransaction = true;
 	}
 
 	if(stmt != NULL)
@@ -1467,4 +1480,5 @@ int blocks = 0;
 
 	return deletedRows;
 }
+
 
