@@ -552,6 +552,10 @@ sqlite3_stmt *stmt;
 int           sqlite3_resut;
 string        now;
 
+// Retry mechanism
+int retries = 0;
+int sleep_time_ms = 0;
+
 #if INSTRUMENT
 	struct timeval	start, t1, t2, t3, t4, t5;
 #endif
@@ -637,16 +641,31 @@ string        now;
 				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
 
-				// Insert the row using a lock to ensure one insert at time
-				{
-					m_writeAccessOngoing.fetch_add(1);
-					unique_lock<mutex> lck(db_mutex);
+				retries =0;
+				sleep_time_ms = 0;
 
-					sqlite3_resut = sqlite3_step(stmt);
+				// Retry mechanism in case SQLlite DB is locked
+				do {
+					// Insert the row using a lock to ensure one insert at time
+					{
+						m_writeAccessOngoing.fetch_add(1);
+						unique_lock<mutex> lck(db_mutex);
 
-					m_writeAccessOngoing.fetch_sub(1);
-					db_cv.notify_all();
-				}
+						sqlite3_resut = sqlite3_step(stmt);
+
+						m_writeAccessOngoing.fetch_sub(1);
+						db_cv.notify_all();
+					}
+					if (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY)
+					{
+						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
+						retries++;
+
+						Logger::getLogger()->debug("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
+
+						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
+					}
+				} while (retries < PREP_CMD_MAX_RETRIES && (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
 
 				if (sqlite3_resut == SQLITE_DONE)
 				{
