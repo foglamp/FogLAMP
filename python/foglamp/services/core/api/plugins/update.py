@@ -102,7 +102,7 @@ async def update_plugin(request: web.Request) -> web.Response:
                     if sch_info[0]['enabled'] == 't':
                         status, reason = await server.Server.scheduler.disable_schedule(uuid.UUID(sch_info[0]['id']))
                         if status:
-                            _logger.warning("Disabling {} {} instance, as {} plugin is updating..".format(
+                            _logger.warning("Disabling {} {} instance, as {} plugin is updating...".format(
                                 p['service'], _type, name))
                             sch_list.append(sch_info[0]['id'])
 
@@ -189,7 +189,7 @@ def do_update(request):
 
     # Below case is applicable for the notification plugins ONLY
     # Enabled back configuration categories which were disabled during update process
-    if request._type in ['notificationDelivery', 'notificationRule']:
+    if request._type in ['notify', 'rule']:
         storage_client = connect.get_storage_async()
         config_mgr = ConfigurationManager(storage_client)
         for n in request._notification_list:

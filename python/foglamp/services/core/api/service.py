@@ -425,7 +425,7 @@ async def update_service(request: web.Request) -> web.Response:
     try:
         _type = _type.lower()
         if _type != 'notification':
-            raise ValueError("Invalid plugin type. Must be 'notification'")
+            raise ValueError("Invalid service type. Must be 'notification'")
 
         # Check requested service name is installed or not
         installed_services = get_service_installed()
