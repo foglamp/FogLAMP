@@ -1099,90 +1099,143 @@ bool StorageClient::openStream()
  */
 bool StorageClient::streamReadings(const std::vector<Reading *> & readings)
 {
-RDSBlockHeader   	blkhdr;
-RDSReadingHeader 	rdhdrs[STREAM_BLK_SIZE];
+RDSBlockHeader   		blkhdr;
+RDSReadingHeader 		rdhdrs[STREAM_BLK_SIZE];
+register RDSReadingHeader	*phdr;
 struct { const void *iov_base; size_t iov_len;} iovs[STREAM_BLK_SIZE * 4], *iovp;
-string			payloads[STREAM_BLK_SIZE];
-struct timeval		tm[STREAM_BLK_SIZE];
-ssize_t			n, length = 0;
-string			lastAsset;
+string				payloads[STREAM_BLK_SIZE];
+struct timeval			tm[STREAM_BLK_SIZE];
+ssize_t				n, length = 0;
+string				lastAsset;
 
 	if (!m_streaming)
 	{
 		return false;
 	}
+
+	/*
+	 * Assemble and write the block header. This header contains information
+	 * to synchronise the blocks of data and also the number of readings
+	 * to expect within the block.
+	 */
 	blkhdr.magic = RDS_BLOCK_MAGIC;
 	blkhdr.blockNumber = m_readingBlock++;
 	blkhdr.count = readings.size();
 	if ((n = write(m_stream, &blkhdr, sizeof(blkhdr))) != sizeof(blkhdr))
 	{
-		Logger::getLogger()->error("Failed to write block header: %s", sys_errlist[errno]);
 		if (errno == EPIPE || errno == ECONNRESET)
 		{
+			Logger::getLogger()->warn("Storage service has closed stream unexpectedly");
 			m_streaming = false;
-		}
-		return false;
-	}
-	iovp = iovs;
-	for (int i = 0; i < readings.size(); i++)
-	{
-		int offset = i % STREAM_BLK_SIZE;
-
-		rdhdrs[offset].magic = RDS_READING_MAGIC;
-		rdhdrs[offset].readingNo = i;
-		string assetCode = readings[i]->getAssetName();
-		if (i > 0 && assetCode.compare(lastAsset) == 0)
-		{
-			rdhdrs[offset].assetLength = 0;
 		}
 		else
 		{
-			lastAsset = assetCode;
-			rdhdrs[offset].assetLength = assetCode.length() + 1;
+			Logger::getLogger()->error("Failed to write block header: %s", sys_errlist[errno]);
 		}
-		payloads[offset] = readings[i]->getDatapointsJSON();
-		rdhdrs[offset].payloadLength = payloads[offset].length() + 1;
+		return false;
+	}
 
-		iovp->iov_base = &rdhdrs[offset];
+	/*
+	 * Use the writev scatter/gather interface to send the reading headers and reading data.
+	 * We sent chunks of data in order to allow the parallel sendign and unpacking process
+	 * at the two ends. The chunk size is STREAM_BLK_SIZE readings.
+	 */
+	iovp = iovs;
+	phdr = rdhdrs;
+	int offset = 0;
+	for (int i = 0; i < readings.size(); i++)
+	{
+		phdr->magic = RDS_READING_MAGIC;
+		phdr->readingNo = i;
+		string assetCode = readings[i]->getAssetName();
+		if (i > 0 && assetCode.compare(lastAsset) == 0)
+		{
+			// Asset name is unchanged so don;t send it
+			phdr->assetLength = 0;
+		}
+		else
+		{
+			// Asset name has changed or this is the first asset in the block
+			lastAsset = assetCode;
+			phdr->assetLength = assetCode.length() + 1;
+		}
+
+		// Alwayts generate the JSON variant of the data points and send
+		payloads[offset] = readings[i]->getDatapointsJSON();
+		phdr->payloadLength = payloads[offset].length() + 1;
+
+		// Add the reading header
+		iovp->iov_base = phdr;
 		iovp->iov_len = sizeof(RDSReadingHeader);
 		length += iovp->iov_len;
 		iovp++;
 
+		// Reading user timestamp
 		readings[i]->getUserTimestamp(&tm[offset]);
 		iovp->iov_base = &tm[offset];
 		iovp->iov_len = sizeof(struct timeval);
 		length += iovp->iov_len;
 		iovp++;
 
-		if (rdhdrs[offset].assetLength)
+		// If the asset code has changed than add that
+		if (phdr->assetLength)
 		{
 			iovp->iov_base = readings[i]->getAssetName().c_str();
-			iovp->iov_len = rdhdrs[offset].assetLength;
+			iovp->iov_len = phdr->assetLength;
 			length += iovp->iov_len;
 			iovp++;
 		}
 
+		// Add the data points themselves
 		iovp->iov_base = payloads[offset].c_str();
-		iovp->iov_len = rdhdrs[offset].payloadLength;
+		iovp->iov_len = phdr->payloadLength;
 		length += iovp->iov_len;
 		iovp++;
 
+		offset++;
 		if (offset == STREAM_BLK_SIZE - 1)
 		{
 			n = writev(m_stream, (const iovec *)iovs, iovp - iovs);
 			if (n < length)
-				Logger::getLogger()->error("Write of block short, %d < %d: %s",
-						n, length, sys_errlist[errno]);
+			{
+				if (errno == EPIPE || errno == ECONNRESET)
+				{
+					Logger::getLogger()->error("Stream has been closed by the storage service");
+					m_streaming = false;
+				}
+				else
+				{
+					Logger::getLogger()->error("Write of block short, %d < %d: %s",
+							n, length, sys_errlist[errno]);
+				}
+				return false;
+			}
+			offset = 0;
 			length = 0;
 			iovp = iovs;
+			phdr = rdhdrs;
+		}
+		else
+		{
+			phdr++;
 		}
 	}
-	if (readings.size() % STREAM_BLK_SIZE)
+	if (length)	// Remaining data to be sent to finish the block
 	{
-		n = writev(m_stream, (const iovec *)iovs, iovp - iovs);
-		if (n < length)
-			Logger::getLogger()->error("Write of block short, %d < %d: %s",
+		if ((n = writev(m_stream, (const iovec *)iovs, iovp - iovs)) < length)
+		{
+			if (errno == EPIPE || errno == ECONNRESET)
+			{
+				Logger::getLogger()->error("Stream has been closed by the storage service");
+				m_streaming = false;
+			}
+			else
+			{
+				Logger::getLogger()->error("Write of block short, %d < %d: %s",
 						n, length, sys_errlist[errno]);
+			}
+			return false;
+		}
 	}
 	return true;
 }
