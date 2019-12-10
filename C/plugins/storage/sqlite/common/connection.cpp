@@ -433,6 +433,7 @@ Connection::Connection()
 
 	m_logSQL = false;
 	m_queuing = 0;
+	m_streamOpenTransaction = true;
 
 	if (defaultConnection == NULL)
 	{
