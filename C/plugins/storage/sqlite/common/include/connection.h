@@ -96,6 +96,7 @@ class Connection {
 		bool        getNow(std::string& Now);
 
 	private:
+		bool 		m_streamOpenTransaction;
 		int		m_queuing;
 		std::mutex	m_qMutex;
 		int 		SQLexec(sqlite3 *db, const char *sql,

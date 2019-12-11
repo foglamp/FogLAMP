@@ -12,9 +12,8 @@
 #include <common.h>
 #include <reading_stream.h>
 
-// FIXME_I:
 // 1 enable performance tracking
-#define INSTRUMENT	1
+#define INSTRUMENT	0
 
 #if INSTRUMENT
 #include <sys/time.h>
@@ -26,8 +25,8 @@
 #define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
 
 // Retry mechanism
-#define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
-#define PREP_CMD_RETRY_BACKOFF		10	// Multipler to backoff DB retry on lock
+#define PREP_CMD_MAX_RETRIES		20	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_RETRY_BACKOFF		100	// Multipler to backoff DB retry on lock
 
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
@@ -319,7 +318,11 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
 }
 
 /**
- * Append a stream of readings to the readings buffer
+ * Append a stream of readings to SQLite db
+ *
+ * @param readings  readings to store into the SQLite db
+ * @param commit    if true a database commit is executed and a new transaction will be opened at the next execution
+ *
  */
 int Connection::readingStream(ReadingStream **readings, bool commit)
 {
@@ -336,7 +339,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	string reading;
 
 	// Retry mechanism
-	int retries =0;
+	int retries = 0;
 	int sleep_time_ms = 0;
 
 	// SQLite related
@@ -356,14 +359,19 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		return -1;
 	}
 
-	// FIXME_I:
-	Logger::getLogger()->debug("DBG xxx sqlite3_get_autocommit :%d: ", sqlite3_get_autocommit(dbHandle) );
-	//	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+	// The handling of the commit parameter is overridden as using a pool of connections every execution receives
+	// a differen one, so a commit at every run is executed.
+	m_streamOpenTransaction = true;
+	commit = true;
 
-	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+	if (m_streamOpenTransaction)
 	{
-		raiseError("readingStream", sqlite3_errmsg(dbHandle));
-		return -1;
+		if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+		{
+			raiseError("readingStream", sqlite3_errmsg(dbHandle));
+			return -1;
+		}
+		m_streamOpenTransaction = false;
 	}
 
 #if INSTRUMENT
@@ -381,27 +389,18 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 			// Handles - reading
 			payload = RDS_PAYLOAD(readings, i);
-			// FIXME_I:// FIXME_I:
-			// Handles - reading
-			//		StringBuffer buffer;
-			//		Writer<StringBuffer> writer(buffer);
-			//		(*itr)["reading"].Accept(writer);
-			//		reading = escape(buffer.GetString());
-			reading = string(payload);
+			reading = escape(payload);
 
-			// FIXME_I:
-			//user_ts = RDS_USER_TIMESTAMP(readings, i);
+			// Handles - user_ts
 			memset(&timeinfo, 0, sizeof(struct tm));
 			gmtime_r(&RDS_USER_TIMESTAMP(readings, i).tv_sec, &timeinfo);
 			std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &timeinfo);
 			snprintf(micro_s, sizeof(micro_s), ".%06lu", RDS_USER_TIMESTAMP(readings, i).tv_usec);
 
-			// Handles - user_ts
 			formatted_date[0] = {0};
 			strncat(ts, micro_s, 10);
 			user_ts = ts;
-			// FIXME_I:
-			if (0)
+			if (strcmp(user_ts, "now()") == 0)
 			{
 				getNow(now);
 				user_ts = now.c_str();
@@ -418,16 +417,14 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					user_ts = formatted_date;
 				}
 			}
-			// FIXME_I:
-			//Logger::getLogger()->debug("DBG xxx readingStream :%s: :%s: :%s: :%s: %s:", asset_code, payload, user_ts, ts, micro_s);
 
 			if (add_row)
 			{
 				if (stmt != NULL)
 				{
-					sqlite3_bind_text(stmt, 1, asset_code, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 1, asset_code,      -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
-					sqlite3_bind_text(stmt, 3, user_ts, -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
 
 					retries =0;
 					sleep_time_ms = 0;
@@ -461,7 +458,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 						sqlite3_clear_bindings(stmt);
 						sqlite3_reset(stmt);
-
 					}
 					else
 					{
@@ -472,6 +468,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 								   reading.c_str());
 
 						sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+						m_streamOpenTransaction = true;
 						return -1;
 					}
 				}
@@ -481,9 +478,10 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 	} catch (exception e) {
 
-		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command :%s:", e.what());
+		raiseError("appendReadings", "Inserting a row into SQLIte using a prepared command - error :%s:", e.what());
 
 		sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+		m_streamOpenTransaction = true;
 		return -1;
 	}
 
@@ -491,11 +489,15 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	gettimeofday(&t1, NULL);
 #endif
 
-	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
-	if (sqlite3_resut != SQLITE_OK)
+	if (commit)
 	{
-		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
-		rowNumber = -1;
+		sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+		if (sqlite3_resut != SQLITE_OK)
+		{
+			raiseError("appendReadings", "Executing the commit of the transaction - error :%s:", sqlite3_errmsg(dbHandle));
+			rowNumber = -1;
+		}
+		m_streamOpenTransaction = true;
 	}
 
 	if(stmt != NULL)
@@ -528,9 +530,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	);
 #endif
 
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("warning");
-
 	return rowNumber;
 }
 
@@ -553,8 +552,9 @@ sqlite3_stmt *stmt;
 int           sqlite3_resut;
 string        now;
 
-// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
+// Retry mechanism
+int retries = 0;
+int sleep_time_ms = 0;
 
 #if INSTRUMENT
 	struct timeval	start, t1, t2, t3, t4, t5;
@@ -641,16 +641,31 @@ string        now;
 				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
 
-				// Insert the row using a lock to ensure one insert at time
-				{
-					m_writeAccessOngoing.fetch_add(1);
-					unique_lock<mutex> lck(db_mutex);
+				retries =0;
+				sleep_time_ms = 0;
 
-					sqlite3_resut = sqlite3_step(stmt);
+				// Retry mechanism in case SQLlite DB is locked
+				do {
+					// Insert the row using a lock to ensure one insert at time
+					{
+						m_writeAccessOngoing.fetch_add(1);
+						unique_lock<mutex> lck(db_mutex);
 
-					m_writeAccessOngoing.fetch_sub(1);
-					db_cv.notify_all();
-				}
+						sqlite3_resut = sqlite3_step(stmt);
+
+						m_writeAccessOngoing.fetch_sub(1);
+						db_cv.notify_all();
+					}
+					if (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY)
+					{
+						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
+						retries++;
+
+						Logger::getLogger()->debug("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
+
+						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
+					}
+				} while (retries < PREP_CMD_MAX_RETRIES && (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
 
 				if (sqlite3_resut == SQLITE_DONE)
 				{
@@ -1484,4 +1499,5 @@ int blocks = 0;
 
 	return deletedRows;
 }
+
 
