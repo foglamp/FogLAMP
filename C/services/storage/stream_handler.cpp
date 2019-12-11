@@ -282,6 +282,7 @@ ssize_t n;
 					{
 						Logger::getLogger()->error("Expected block header %d, but incorrect header found 0x%x", m_blockNo, blkHdr.magic);
 						Logger::getLogger()->error("Previous block size was %d", m_blockSize);
+						dump(10);
 						close(m_socket);
 						return;
 					}
@@ -312,6 +313,7 @@ ssize_t n;
 					if (rdhdr.magic != RDS_READING_MAGIC)
 					{
 						Logger::getLogger()->error("Expected reading header %d of %d in block %d, but incorrect header found 0x%x", m_readingNo, m_blockSize, m_blockNo, rdhdr.magic);
+						dump(10);
 						close(m_socket);
 						return;
 					}
@@ -330,7 +332,6 @@ ssize_t n;
 						rdhdr.assetLength = extra;
 					}
 					extra  += 2 * sizeof(uint32_t);
-					Logger::getLogger()->debug("Reading Size: %d", m_readingSize + extra);
 					m_currentReading = (ReadingStream *)m_blockPool->allocate(m_readingSize + extra);
 					m_readings[m_readingNo % RDS_BLOCK] = m_currentReading;
 					m_currentReading->assetCodeLength = rdhdr.assetLength;
@@ -369,7 +370,7 @@ ssize_t n;
 					}
 					else if (m_readingNo == m_blockSize)
 					{
-						// We have complete the block, insert readings and wait
+						// We have completed the block, insert readings and wait
 						// for a block header
 						queueInsert(api, m_readingNo % RDS_BLOCK, true);
 						for (uint32_t i = 0; i < m_readingNo % RDS_BLOCK; i++)
@@ -514,5 +515,23 @@ void StreamHandler::Stream::MemoryPool::growPool(vector<void *> *pool, size_t si
 		size_t *mem = (size_t *)malloc(realSize);
 		pool->push_back(&mem[1]);
 		mem[0] = size;
+	}
+}
+
+void StreamHandler::Stream::dump(int n)
+{
+	char buf[132];
+	char data[10];
+	while (n--)
+	{
+		buf[0] = 0;
+		read(m_socket, data, 10);
+		for (int i = 0; i < 10; i++)
+		{
+			char one[8];
+			snprintf(one, sizeof(one), "0x%02x ", data[i]);
+			strcat(buf, one);
+		}
+		Logger::getLogger()->error(buf);
 	}
 }
