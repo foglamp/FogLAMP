@@ -409,9 +409,9 @@ void StreamHandler::Stream::queueInsert(StorageApi *api, unsigned int nReadings,
  *
  * @param fd	The file descriptor to check
  */
-size_t StreamHandler::Stream::available(int fd)
+int  StreamHandler::Stream::available(int fd)
 {
-size_t	avail;
+int	avail;
 
 	if (ioctl(fd, FIONREAD, &avail) < 0)
 	{
