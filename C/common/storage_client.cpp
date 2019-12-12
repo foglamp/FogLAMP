@@ -1108,6 +1108,7 @@ struct timeval			tm[STREAM_BLK_SIZE];
 ssize_t				n, length = 0;
 string				lastAsset;
 
+
 	if (!m_streaming)
 	{
 		return false;
@@ -1150,7 +1151,7 @@ string				lastAsset;
 		string assetCode = readings[i]->getAssetName();
 		if (i > 0 && assetCode.compare(lastAsset) == 0)
 		{
-			// Asset name is unchanged so don;t send it
+			// Asset name is unchanged so don't send it
 			phdr->assetLength = 0;
 		}
 		else
@@ -1210,6 +1211,8 @@ string				lastAsset;
 				}
 				return false;
 			}
+			else if (n > length)
+				Logger::getLogger()->fatal("Long write %d < %d", length, n);
 			offset = 0;
 			length = 0;
 			iovp = iovs;
@@ -1236,6 +1239,8 @@ string				lastAsset;
 			}
 			return false;
 		}
+		else if (n > length)
+			Logger::getLogger()->fatal("Long write %d < %d", length, n);
 	}
 	return true;
 }

@@ -62,8 +62,9 @@ class StreamHandler {
 									m_pool;
 					};
 					void		setNonBlocking(int fd);
-					size_t		available(int fd);
+					int		available(int fd);
 					void		queueInsert(StorageApi *api, unsigned int nReadings, bool commit);
+					void		dump(int n);
 					enum { Closed, Listen, AwaitingToken, Connected }
 				       			m_status;
 					int		m_socket;
