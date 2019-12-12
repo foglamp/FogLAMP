@@ -25,8 +25,8 @@
 #define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
 
 // Retry mechanism
-#define PREP_CMD_MAX_RETRIES		20	// Maximum no. of retries when a lock is encountered
-#define PREP_CMD_RETRY_BACKOFF		100	// Multipler to backoff DB retry on lock
+#define PREP_CMD_MAX_RETRIES		50	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_RETRY_BACKOFF		10	// Multipler to backoff DB retry on lock
 
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
@@ -446,7 +446,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 							sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 							retries++;
 
-							Logger::getLogger()->debug("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
+							Logger::getLogger()->warn("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
 
 							std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 						}
@@ -661,7 +661,7 @@ int sleep_time_ms = 0;
 						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 						retries++;
 
-						Logger::getLogger()->debug("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
+						Logger::getLogger()->warn("SQLITE_LOCKED - retry number :%d: sleep time ms :%d:", retries, sleep_time_ms);
 
 						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 					}
