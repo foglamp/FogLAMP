@@ -345,8 +345,6 @@ int nFullQueues;
 
 void Ingest::waitForQueue()
 {
-	mutex mtx;
-	unique_lock<mutex> lck(mtx);
 	if (m_fullQueues.size() > 0 || m_resendQueues.size() > 0)
 		return;
 	if (m_running && m_queue->size() < m_queueSizeThreshold)
@@ -365,6 +363,8 @@ void Ingest::waitForQueue()
 		}
 		if (timeout > 0)
 		{
+			mutex mtx;
+			unique_lock<mutex> lck(mtx);
 			m_cv.wait_for(lck,chrono::milliseconds((3 * timeout) / 4));
 		}
 	}
@@ -398,15 +398,19 @@ void Ingest::processQueue()
 			else
 			{
 				std::map<std::string, int>		statsEntriesCurrQueue;
+				AssetTracker *tracker = AssetTracker::getAssetTracker();
 				for (vector<Reading *>::iterator it = q->begin();
 							 it != q->end(); ++it)
 				{
 					Reading *reading = *it;
 					string assetName = reading->getAssetName();
-					AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
-					if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+					if (statsPendingEntries.find(assetName) != statsPendingEntries.end())
 					{
-						AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+						AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+						if (!tracker->checkAssetTrackingCache(tuple))
+						{
+							tracker->addAssetTrackingTuple(tuple);
+						}
 					}
 					++statsEntriesCurrQueue[assetName];
 					delete reading;
@@ -501,7 +505,7 @@ void Ingest::processQueue()
 			long latency = dur.tv_sec * 1000 + (dur.tv_usec / 1000);
 			if (latency > m_timeout && m_highLatency == false)
 			{
-				m_logger->warn("Current send latency of %dmS exceeds requested maximum latency of %dmS", latency, m_timeout);
+				m_logger->warn("Current send latency of %ldmS exceeds requested maximum latency of %dmS", latency, m_timeout);
 				m_highLatency = true;
 			}
 			else if (latency <= m_timeout / 1000 && m_highLatency)
@@ -535,14 +539,18 @@ void Ingest::processQueue()
 				std::map<std::string, int>		statsEntriesCurrQueue;
 				// check if this requires addition of a new asset tracker tuple
 				// Remove the Readings in the vector
+				AssetTracker *tracker = AssetTracker::getAssetTracker();
 				for (vector<Reading *>::iterator it = m_data->begin(); it != m_data->end(); ++it)
 				{
 					Reading *reading = *it;
 					string	assetName = reading->getAssetName();
-					AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
-					if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+					if (statsPendingEntries.find(assetName) != statsPendingEntries.end())
 					{
-						AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+						AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+						if (!tracker->checkAssetTrackingCache(tuple))
+						{
+							tracker->addAssetTrackingTuple(tuple);
+						}
 					}
 					++statsEntriesCurrQueue[assetName];
 					delete reading;
