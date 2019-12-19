@@ -37,7 +37,7 @@ class Ingest : public ServiceHandler {
 
 public:
 	Ingest(StorageClient& storage,
-		unsigned long timeout,
+		long timeout,
 		unsigned int threshold,
 		const std::string& serviceName,
 		const std::string& pluginName,
@@ -50,7 +50,7 @@ public:
     	bool		isStopping();
 	void		processQueue();
 	void		waitForQueue();
-	size_t		queueLength() { return m_queue->size(); };
+	size_t		queueLength();
 	void		updateStats(void);
 	int 		createStatsDbEntry(const std::string& assetName);
 
@@ -60,7 +60,7 @@ public:
 	static void	useFilteredData(OUTPUT_HANDLE *outHandle,
 					READINGSET* readings);
 
-	void		setTimeout(const unsigned long timeout) { m_timeout = timeout; };
+	void		setTimeout(const long timeout) { m_timeout = timeout; };
 	void		setThreshold(const unsigned int threshold) { m_queueSizeThreshold = threshold; };
 	void		configChange(const std::string&, const std::string&);
 	void		shutdown() {};	// Satisfy ServiceHandler
@@ -73,7 +73,7 @@ private:
 					};
 
 	StorageClient&			m_storage;
-	unsigned long			m_timeout;
+	long				m_timeout;
 	bool				m_shutdown;
 	unsigned int			m_queueSizeThreshold;
 	bool				m_running;

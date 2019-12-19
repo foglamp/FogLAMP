@@ -195,7 +195,7 @@ void Ingest::updateStats()
  * @param threshold	Length of queue before sending readings
  */
 Ingest::Ingest(StorageClient& storage,
-		unsigned long timeout,
+		long timeout,
 		unsigned int threshold,
 		const std::string& serviceName,
 		const std::string& pluginName,
@@ -302,11 +302,13 @@ vector<Reading *> *fullQueue = 0;
 }
 
 /**
- * Add a reading to the reading queue
+ * Add a set of readings to the reading queue
  */
 void Ingest::ingest(const vector<Reading *> *vec)
 {
 vector<Reading *> *fullQueue = 0;
+size_t qSize;
+int nFullQueues;
 
 	{
 		lock_guard<mutex> guard(m_qMutex);
@@ -321,21 +323,28 @@ vector<Reading *> *fullQueue = 0;
 			fullQueue = m_queue;
 			m_queue = new vector<Reading *>;
 		}
+		qSize = m_queue->size();
 	}
 	if (fullQueue)
 	{
 		lock_guard<mutex> guard(m_fqMutex);
 		m_fullQueues.push(fullQueue);
+		nFullQueues = m_fullQueues.size();
 	}
-	if (m_fullQueues.size())
+	else
+	{
+		lock_guard<mutex> guard(m_fqMutex);
+		nFullQueues = m_fullQueues.size();
+	}
+	if (nFullQueues != 0 || qSize > m_queueSizeThreshold * 3 / 4)
+	{
 		m_cv.notify_all();
+	}
 }
 
 
 void Ingest::waitForQueue()
 {
-	mutex mtx;
-	unique_lock<mutex> lck(mtx);
 	if (m_fullQueues.size() > 0 || m_resendQueues.size() > 0)
 		return;
 	if (m_running && m_queue->size() < m_queueSizeThreshold)
@@ -354,7 +363,9 @@ void Ingest::waitForQueue()
 		}
 		if (timeout > 0)
 		{
-			m_cv.wait_for(lck,chrono::milliseconds(timeout));
+			mutex mtx;
+			unique_lock<mutex> lck(mtx);
+			m_cv.wait_for(lck,chrono::milliseconds((3 * timeout) / 4));
 		}
 	}
 }
@@ -387,15 +398,19 @@ void Ingest::processQueue()
 			else
 			{
 				std::map<std::string, int>		statsEntriesCurrQueue;
+				AssetTracker *tracker = AssetTracker::getAssetTracker();
 				for (vector<Reading *>::iterator it = q->begin();
 							 it != q->end(); ++it)
 				{
 					Reading *reading = *it;
 					string assetName = reading->getAssetName();
-					AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
-					if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+					if (statsPendingEntries.find(assetName) != statsPendingEntries.end())
 					{
-						AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+						AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+						if (!tracker->checkAssetTrackingCache(tuple))
+						{
+							tracker->addAssetTrackingTuple(tuple);
+						}
 					}
 					++statsEntriesCurrQueue[assetName];
 					delete reading;
@@ -479,15 +494,18 @@ void Ingest::processQueue()
 		 * Check the first reading in the list to see if we are meeting the
 		 * latency configuration we have been set
 		 */
-		const vector<Reading *>::const_iterator itr = m_data->cbegin();
+		vector<Reading *>::iterator itr = m_data->begin();
 		if (itr != m_data->cend())
 		{
-			const Reading *firstReading = *itr;
-			time_t now = time(0);
-			unsigned long latency = now - firstReading->getUserTimestamp();
-			if (latency > m_timeout / 1000 && m_highLatency == false)	// m_timeout is in milliseconds
+			Reading *firstReading = *itr;
+			struct timeval tmFirst, tmNow, dur;
+			gettimeofday(&tmNow, NULL);
+			firstReading->getUserTimestamp(&tmFirst);
+			timersub(&tmNow, &tmFirst, &dur);
+			long latency = dur.tv_sec * 1000 + (dur.tv_usec / 1000);
+			if (latency > m_timeout && m_highLatency == false)
 			{
-				m_logger->warn("Current send latency of %d seconds exceeds requested maximum latency of %d seconds", latency, m_timeout / 1000);
+				m_logger->warn("Current send latency of %ldmS exceeds requested maximum latency of %dmS", latency, m_timeout);
 				m_highLatency = true;
 			}
 			else if (latency <= m_timeout / 1000 && m_highLatency)
@@ -521,14 +539,18 @@ void Ingest::processQueue()
 				std::map<std::string, int>		statsEntriesCurrQueue;
 				// check if this requires addition of a new asset tracker tuple
 				// Remove the Readings in the vector
+				AssetTracker *tracker = AssetTracker::getAssetTracker();
 				for (vector<Reading *>::iterator it = m_data->begin(); it != m_data->end(); ++it)
 				{
 					Reading *reading = *it;
 					string	assetName = reading->getAssetName();
-					AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
-					if (!AssetTracker::getAssetTracker()->checkAssetTrackingCache(tuple))
+					if (statsPendingEntries.find(assetName) != statsPendingEntries.end())
 					{
-						AssetTracker::getAssetTracker()->addAssetTrackingTuple(tuple);
+						AssetTrackingTuple tuple(m_serviceName, m_pluginName, assetName, "Ingest");
+						if (!tracker->checkAssetTrackingCache(tuple))
+						{
+							tracker->addAssetTrackingTuple(tuple);
+						}
 					}
 					++statsEntriesCurrQueue[assetName];
 					delete reading;
@@ -731,4 +753,18 @@ void Ingest::configChange(const string& category, const string& newConfig)
 			m_filterPipeline->configChange(category, newConfig);
 		}
 	}
+}
+
+/**
+ * Return the numebr fo queued readings in the south service
+ */
+size_t Ingest::queueLength()
+{
+	size_t	len = m_queue->size();
+
+	// Approximate the amount of data in the full queues
+	len += m_fullQueues.size() * m_queueSizeThreshold;
+	len += m_resendQueues.size() * m_queueSizeThreshold;
+
+	return len;
 }
