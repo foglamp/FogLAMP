@@ -67,6 +67,7 @@ async def upload(request):
         curl -F "key=@filename.pem" -F "cert=@filename.pem" http://localhost:8081/foglamp/certificate
         curl -F "key=@filename.key" -F "cert=@filename.json" http://localhost:8081/foglamp/certificate
         curl -F "key=@filename.key" -F "cert=@filename.cert" http://localhost:8081/foglamp/certificate
+        curl -F "cert=@filename.cert" http://localhost:8081/foglamp/certificate
         curl -F "key=@filename.key" -F "cert=@filename.cert" -F "overwrite=1" http://localhost:8081/foglamp/certificate
     """
     data = await request.post()
@@ -85,10 +86,6 @@ async def upload(request):
         raise web.HTTPBadRequest(reason="Cert file is missing")
 
     cert_filename = cert_file.filename
-    if cert_filename.endswith('.cert'):
-        if not key_file:
-            raise web.HTTPBadRequest(reason="key file is missing, or upload certificate with .pem or .json extension")
-
     key_valid_extensions = ('.key', '.pem')
     cert_valid_extensions = ('.cert', '.json', '.pem')
 

@@ -107,18 +107,19 @@ class TestCertificateStore:
             args, kwargs = patch_find_file.call_args_list[1]
             assert ('foglamp.key', certificate_store._get_certs_dir('/certs/')) == args
 
-    async def test_upload_with_cert_only(self, client, certs_path):
-        files = {'cert': open(str(certs_path / 'certs/foglamp.pem'), 'rb')}
+    @pytest.mark.parametrize("filename", ["foglamp.pem", "foglamp.cert"])
+    async def test_upload_with_cert_only(self, client, certs_path, filename):
+        files = {'cert': open(str(certs_path / 'certs/{}'.format(filename)), 'rb')}
         with patch.object(certificate_store, '_get_certs_dir', return_value=certs_path / 'certs/pem'):
             with patch.object(certificate_store, '_find_file', return_value=[]) as patch_find_file:
                 resp = await client.post('/foglamp/certificate', data=files)
                 assert 200 == resp.status
                 result = await resp.text()
                 json_response = json.loads(result)
-                assert 'foglamp.pem has been uploaded successfully' == json_response['result']
+                assert '{} has been uploaded successfully'.format(filename) == json_response['result']
             assert 1 == patch_find_file.call_count
             args, kwargs = patch_find_file.call_args
-            assert ('foglamp.pem', certificate_store._get_certs_dir('/certs/pem')) == args
+            assert (filename, certificate_store._get_certs_dir('/certs/pem')) == args
 
     async def test_file_upload_with_overwrite(self, client, certs_path):
         files = {'key': open(str(certs_path / 'certs/foglamp.key'), 'rb'),
@@ -136,14 +137,6 @@ class TestCertificateStore:
             assert ('foglamp.cert', certificate_store._get_certs_dir('/certs/')) == args
             args, kwargs = patch_find_file.call_args_list[1]
             assert ('foglamp.key', certificate_store._get_certs_dir('/certs/')) == args
-
-    async def test_bad_key_file_upload(self, client, certs_path):
-        files = {'bad_key': open(str(certs_path / 'certs/foglamp.key'), 'rb'),
-                 'cert': open(str(certs_path / 'certs/foglamp.cert'), 'rb')
-                 }
-        resp = await client.post('/foglamp/certificate', data=files)
-        assert 400 == resp.status
-        assert 'key file is missing, or upload certificate with .pem or .json extension' == resp.reason
 
     async def test_bad_cert_file_upload(self, client, certs_path):
         files = {'bad_cert': open(str(certs_path / 'certs/foglamp.cert'), 'rb'),
