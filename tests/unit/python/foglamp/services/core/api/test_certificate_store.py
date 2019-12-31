@@ -42,11 +42,11 @@ class TestCertificateStore:
 
     async def test_get_certs(self, client, certs_path):
         response_content = {'keys': ['foglamp.key', 'rsa_private.pem'],
-                            'certs': ['foglamp.cert', 'test.json', 'foglamp.pem']}
+                            'certs': ['foglamp.cert', 'test.cer', 'test.crt', 'test.json', 'foglamp.pem']}
         with patch.object(certificate_store, '_get_certs_dir', side_effect=[certs_path / 'certs',
                                                                             certs_path / 'json', certs_path / 'pem']):
             with patch('os.walk') as mockwalk:
-                mockwalk.return_value = [(str(certs_path / 'certs'), [], ['foglamp.cert']),
+                mockwalk.return_value = [(str(certs_path / 'certs'), [], ['foglamp.cert', 'test.cer', 'test.crt']),
                                          (str(certs_path / 'certs/pem'), [], ['foglamp.pem']),
                                          (str(certs_path / 'certs/json'), [], ['test.json']),
                                          (str(certs_path / 'certs'), [], ['foglamp.key', 'rsa_private.pem'])
@@ -58,7 +58,7 @@ class TestCertificateStore:
                     res = await resp.text()
                     jdict = json.loads(res)
                     cert = jdict["certs"]
-                    assert 3 == len(cert)
+                    assert 5 == len(cert)
                     assert Counter(response_content['certs']) == Counter(cert)
                     key = jdict["keys"]
                     assert 2 == len(key)
@@ -107,7 +107,7 @@ class TestCertificateStore:
             args, kwargs = patch_find_file.call_args_list[1]
             assert ('foglamp.key', certificate_store._get_certs_dir('/certs/')) == args
 
-    @pytest.mark.parametrize("filename", ["foglamp.pem", "foglamp.cert"])
+    @pytest.mark.parametrize("filename", ["foglamp.pem", "foglamp.cert", "test.cer", "test.crt"])
     async def test_upload_with_cert_only(self, client, certs_path, filename):
         files = {'cert': open(str(certs_path / 'certs/{}'.format(filename)), 'rb')}
         with patch.object(certificate_store, '_get_certs_dir', return_value=certs_path / 'certs/pem'):
@@ -146,18 +146,20 @@ class TestCertificateStore:
         assert 'Cert file is missing' == resp.reason
 
     async def test_bad_extension_cert_file_upload(self, client, certs_path):
+        cert_valid_extensions = ('.cert', '.cer', '.crt', '.json', '.pem')
         files = {'cert': open(str(certs_path / 'certs/foglamp.txt'), 'rb'),
                  'key': open(str(certs_path / 'certs/foglamp.key'), 'rb')}
         resp = await client.post('/foglamp/certificate', data=files)
         assert 400 == resp.status
-        assert 'Accepted file extensions are .cert, .json and .pem for cert file' == resp.reason
+        assert 'Accepted file extensions are {} for cert file'.format(cert_valid_extensions) == resp.reason
 
     async def test_bad_extension_key_file_upload(self, client, certs_path):
+        key_valid_extensions = ('.key', '.pem')
         files = {'cert': open(str(certs_path / 'certs/foglamp.cert'), 'rb'),
                  'key': open(str(certs_path / 'certs/foglamp.txt'), 'rb')}
         resp = await client.post('/foglamp/certificate', data=files)
         assert 400 == resp.status
-        assert 'Accepted file extensions are .key and .pem for key file' == resp.reason
+        assert 'Accepted file extensions are {} for key file'.format(key_valid_extensions) == resp.reason
 
     @pytest.mark.parametrize("overwrite", ['blah', '2'])
     async def test_bad_overwrite_file_upload(self, client, certs_path, overwrite):
@@ -205,7 +207,7 @@ class TestCertificateStore:
 
     @pytest.mark.parametrize("cert_name, actual_code, actual_reason", [
         ('', 404, "Not Found",),
-        ('root.txt', 400, "Accepted file extensions are ('.cert', '.json', '.key', '.pem')"),
+        ('root.txt', 400, "Accepted file extensions are ('.cert', '.cer', '.crt', '.json', '.key', '.pem')"),
     ])
     async def test_bad_delete_cert(self, client, cert_name, actual_code, actual_reason):
         resp = await client.delete('/foglamp/certificate/{}'.format(cert_name))
@@ -242,6 +244,8 @@ class TestCertificateStore:
 
     @pytest.mark.parametrize("cert_name, param", [
         ('foglamp.cert', '?type=cert'),
+        ('test.cer', '?type=cert'),
+        ('test.crt', '?type=cert'),
         ('foglamp.json', '?type=cert'),
         ('foglamp.pem', '?type=cert'),
         ('foglamp.key', '?type=key'),
@@ -249,7 +253,7 @@ class TestCertificateStore:
     ])
     async def test_delete_cert_with_type(self, client, cert_name, param):
         async def async_mock():
-            return {'value': 'test'}
+            return {'value': 'foo'}
 
         storage_client_mock = MagicMock(StorageClientAsync)
         c_mgr = ConfigurationManager(storage_client_mock)
