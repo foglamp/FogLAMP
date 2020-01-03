@@ -4,7 +4,10 @@
 # See: http://foglamp.readthedocs.io/
 # FOGLAMP_END
 
-""" Test GCP Gateway plugin"""
+""" Test GCP Gateway plugin
+
+Prerequisite: This test expects gcp certificates in $FOGLAMP_ROOT/tests/system/python/packages/data/gcp directory.
+"""
 
 import os
 import subprocess
@@ -20,13 +23,16 @@ __copyright__ = "Copyright (c) 2019 Dianomic Systems Inc."
 __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
-taskname = "gcp-gateway"
+task_name = "gcp-gateway"
 north_plugin = "GCP-Gateway"
 # TODO : pass package_build_version to setup script from conftest.py
 package_build_version = "nightly"
 # This  gives the path of directory where FogLAMP is cloned. test_file < packages < python < system < tests < ROOT
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent.parent
 SCRIPTS_DIR_ROOT = "{}/tests/system/python/packages/data/".format(PROJECT_ROOT)
+FOGLAMP_ROOT = os.environ.get('FOGLAMP_ROOT')
+CERTS_DIR = "{}/gcp".format(SCRIPTS_DIR_ROOT)
+FOGLAMP_CERTS_DIR = "{}/data/etc/certs/".format(FOGLAMP_ROOT)
 
 
 @pytest.fixture
@@ -58,7 +64,7 @@ def remove_and_add_foglamp_pkgs():
     try:
         subprocess.run(["sudo apt install -y foglamp-north-gcp-gateway foglamp-south-sinusoid"], shell=True, check=True)
     except subprocess.CalledProcessError:
-        assert False, "installation of http-south package failed"
+        assert False, "installation of gcp-gateway and sinusoid packages failed"
 
 
 def get_ping_status(foglamp_url):
@@ -81,6 +87,12 @@ def get_statistics_map(foglamp_url):
     return utils.serialize_stats_map(jdoc)
 
 
+def copy_certs():
+    copy_file = "cp {}/* {}".format(CERTS_DIR, FOGLAMP_CERTS_DIR)
+    exit_code = os.system(copy_file)
+    assert 0 == exit_code
+
+
 class TestGCPGateway:
     def test_gcp_gateway(self, remove_and_add_foglamp_pkgs, reset_foglamp, foglamp_url, wait_time):
         payload = {"name": "Sine", "type": "south", "plugin": "sinusoid", "enabled": True, "config": {}}
@@ -88,16 +100,15 @@ class TestGCPGateway:
         conn = http.client.HTTPConnection(foglamp_url)
         conn.request("POST", post_url, json.dumps(payload))
         res = conn.getresponse()
-        print(res.reason)
         assert 200 == res.status, "ERROR! POST {} request failed".format(post_url)
-        res = res.read().decode()
-        r = json.loads(res)
 
-        payload = {"name": taskname,
+        copy_certs()
+
+        payload = {"name": task_name,
                    "plugin": "{}".format(north_plugin),
                    "type": "north",
                    "schedule_type": 3,
-                   "schedule_repeat": 30,
+                   "schedule_repeat": 5,
                    "schedule_enabled": True,
                    "config": {"project_id": {"value": "foglamp"},
                               "registry_id": {"value": "flreg1"},
@@ -108,10 +119,7 @@ class TestGCPGateway:
         conn = http.client.HTTPConnection(foglamp_url)
         conn.request("POST", post_url, json.dumps(payload))
         res = conn.getresponse()
-        print(res.reason)
         assert 200 == res.status, "ERROR! POST {} request failed".format(post_url)
-        res = res.read().decode()
-        r = json.loads(res)
 
         time.sleep(wait_time)
 
@@ -123,4 +131,4 @@ class TestGCPGateway:
         assert 0 < actual_stats_map['SINUSOID']
         assert 0 < actual_stats_map['READINGS']
         assert 0 < actual_stats_map['Readings Sent']
-        assert 0 < actual_stats_map[taskname]
+        assert 0 < actual_stats_map[task_name]
