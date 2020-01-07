@@ -23,7 +23,7 @@
 #include <sys/uio.h>
 #include <errno.h>
 
-#define INSTRUMENT	1
+#define INSTRUMENT	0
 
 #if INSTRUMENT
 #include <sys/time.h>
