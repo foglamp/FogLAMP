@@ -36,9 +36,9 @@ TEST(JSONReadingTest, CopyReading)
 	string json = reading.toJSON();
 	string copyJson = copyReading.toJSON();
 
-	ASSERT_NE(json.find(string("\"asset_code\" : \"luxometer\"")), std::string::npos);
-	ASSERT_NE(json.find(string("\"reading\" : { \"lux\" : 76204.524 }")), std::string::npos);
-	ASSERT_NE(json.find(string("\"user_ts\" : ")), std::string::npos);
+	ASSERT_NE(json.find(string("\"asset_code\":\"luxometer\"")), std::string::npos);
+	ASSERT_NE(json.find(string("\"reading\":{\"lux\":76204.524}")), std::string::npos);
+	ASSERT_NE(json.find(string("\"user_ts\":")), std::string::npos);
 
 	// Check JSON object as string
 	ASSERT_EQ(json, copyJson);
