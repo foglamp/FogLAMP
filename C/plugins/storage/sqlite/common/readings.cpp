@@ -377,6 +377,13 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
  */
 int Connection::readingStream(ReadingStream **readings, bool commit)
 {
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx-1 count - readingStream ");
+	Logger::getLogger()->setMinLevel("warning");
+
+
 	// Row defintion related
 	int i;
 	bool add_row = false;
@@ -590,6 +597,13 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 							   timeT2
 	);
 #endif
+
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx-1 count - readingStream :%d: ", rowNumber);
+	Logger::getLogger()->setMinLevel("warning");
+
 
 	return rowNumber;
 }
