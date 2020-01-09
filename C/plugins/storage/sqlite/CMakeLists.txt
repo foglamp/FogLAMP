@@ -48,3 +48,6 @@ install(TARGETS ${PROJECT_NAME} DESTINATION foglamp/plugins/storage/${PROJECT_NA
 
 # Install init.sql
 install(FILES ${CMAKE_SOURCE_DIR}/scripts/plugins/storage/${PROJECT_NAME}/init.sql DESTINATION foglamp/plugins/storage/${PROJECT_NAME})
+
+#// FIXME:
+set(CMAKE_BUILD_TYPE Debug)

@@ -381,7 +381,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	// FIXME_I:
 	Logger::getLogger()->setMinLevel("debug");
 	Logger::getLogger()->debug("DBG xxx-1 count - readingStream ");
-	Logger::getLogger()->setMinLevel("warning");
+	//Logger::getLogger()->setMinLevel("warning");
 
 
 	// Row defintion related
@@ -402,6 +402,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 	// SQLite related
 	sqlite3_stmt *stmt;
+	sqlite3_stmt *stmt_1, *stmt_2, *stmt_3;
 	int sqlite3_resut;
 	int rowNumber = -1;
 
@@ -409,9 +410,23 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	struct timeval start, t1, t2, t3, t4, t5;
 #endif
 
-	const char *sql_cmd = "INSERT INTO foglamp.readings ( asset_code, reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_2 = "INSERT INTO foglamp.readings_2 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_3 = "INSERT INTO foglamp.readings_3 ( id,         reading, user_ts ) VALUES  (?,?,?)";
 
-	if (sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL) != SQLITE_OK)
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_1, strlen(sql_cmd_1), &stmt_1, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_2, strlen(sql_cmd_2), &stmt_2, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_3, strlen(sql_cmd_3), &stmt_3, NULL) != SQLITE_OK)
 	{
 		raiseError("readingStream", sqlite3_errmsg(dbHandle));
 		return -1;
@@ -478,9 +493,35 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 
 			if (add_row)
 			{
+				// FIXME_I:
+				Logger::getLogger()->debug("DBG xxx - step 2 - asset_code :%s:" , asset_code);
+				stmt = NULL;
+				if (strstr(asset_code, "XO1_Righ") != NULL)
+				{
+					Logger::getLogger()->debug("DBG xxx - step XO1_right");
+					stmt = stmt_1;
+
+				} else if (strstr(asset_code, "XO1_Left") != NULL)
+				{
+					Logger::getLogger()->debug("DBG xxx - step XO1_Left");
+					stmt = stmt_2;
+
+				} else if (strstr(asset_code, "XO1_Torso") != NULL)
+				{
+					Logger::getLogger()->debug("DBG xxx - step XO1_Left");
+					stmt = stmt_3;
+				}
+
+
 				if (stmt != NULL)
 				{
-					sqlite3_bind_text(stmt, 1, asset_code,      -1, SQLITE_STATIC);
+					// FIXME_I:
+					char global_id [10];
+					sprintf(global_id, "%d", m_readingsGId);
+
+					Logger::getLogger()->debug("DBG xxx - step m_readingsGId :%d: :%s:", m_readingsGId , global_id);
+
+					sqlite3_bind_text(stmt, 1, global_id,       -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
 
@@ -523,6 +564,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					if (sqlite3_resut == SQLITE_DONE)
 					{
 						rowNumber++;
+						m_readingsGId++;
 
 						sqlite3_clear_bindings(stmt);
 						sqlite3_reset(stmt);
@@ -568,9 +610,28 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 		m_streamOpenTransaction = true;
 	}
 
-	if(stmt != NULL)
+	// FIXME_I:
+	if(stmt_1 != NULL)
 	{
-		if (sqlite3_finalize(stmt) != SQLITE_OK)
+		if (sqlite3_finalize(stmt_1) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+	// FIXME_I:
+	if(stmt_2 != NULL)
+	{
+		if (sqlite3_finalize(stmt_2) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+	// FIXME_I:
+	if(stmt_3 != NULL)
+	{
+		if (sqlite3_finalize(stmt_3) != SQLITE_OK)
 		{
 			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
 		}

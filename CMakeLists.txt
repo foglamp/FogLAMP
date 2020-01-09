@@ -25,3 +25,7 @@ add_subdirectory(C/plugins/utils)
 add_subdirectory(C/plugins/north/PI_Server_V2)
 add_subdirectory(C/plugins/north/ocs_V2)
 
+#// FIXME:
+set(CMAKE_BUILD_TYPE Debug)
+#// FIXME:
+add_subdirectory(1_links_dev/test_extra/c++)

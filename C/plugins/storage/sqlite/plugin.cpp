@@ -43,6 +43,9 @@ static PLUGIN_INFORMATION info = {
 	"1.3.0"                   // Interface version
 };
 
+// FIXME_I:
+int			m_readingsGId;
+
 /**
  * Return the information about this plugin
  */
@@ -59,6 +62,9 @@ PLUGIN_INFORMATION *plugin_info()
 PLUGIN_HANDLE plugin_init()
 {
 ConnectionManager *manager = ConnectionManager::getInstance();
+
+	// FIXME_I:
+	m_readingsGId=1;
 
 	manager->growPool(5);
 	return manager;

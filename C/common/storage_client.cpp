@@ -155,7 +155,9 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 	timersub(&tmLast, &tmFirst, &dur);
 	double timeSpan = dur.tv_sec + ((double)dur.tv_usec / 1000000);
 	double rate = (double)readings.size() / timeSpan;
-	if (rate > STREAM_THRESHOLD)
+	// FIXME_I:
+	//if (rate > STREAM_THRESHOLD)
+	if (1)
 	{
 		m_logger->info("Reading rate %.1f readings per second above threshold, attmempting to switch to stream mode", rate);
 		if (openStream())

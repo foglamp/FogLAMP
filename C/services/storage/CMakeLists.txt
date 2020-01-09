@@ -48,3 +48,6 @@ if(MSYS) #TODO: Is MSYS true when MSVC is true?
         target_link_libraries(${EXEC} ws2_32 wsock32)
     endif()
 endif()
+
+#// FIXME:
+set(CMAKE_BUILD_TYPE Debug)

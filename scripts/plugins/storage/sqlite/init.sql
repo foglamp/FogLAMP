@@ -222,14 +222,77 @@ CREATE TABLE foglamp.readings (
     ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
-CREATE INDEX fki_readings_fk1
-    ON readings (asset_code, user_ts desc);
-
-CREATE INDEX readings_ix2
-    ON readings (asset_code);
+-- CREATE INDEX fki_readings_fk1
+--     ON readings (asset_code, user_ts desc);
+--
+-- CREATE INDEX readings_ix2
+--     ON readings (asset_code);
 
 CREATE INDEX readings_ix3
     ON readings (user_ts);
+
+-- FIXME_I:
+--- New implementation--------------------------------------------------------------------------------
+
+CREATE TABLE asset_reading_catalogue (
+                                         id         INTEGER                     PRIMARY KEY AUTOINCREMENT,
+                                         asset_code character varying(50)       NOT NULL
+);
+
+--
+-- readings_1
+--
+CREATE TABLE readings_1 (
+                            id         INTEGER                     ,
+                            reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+                            user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+                            ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+);
+
+CREATE INDEX readings_1_ix1
+    ON readings_1 (id);
+
+CREATE INDEX readings_1_ix3
+    ON readings_1 (user_ts);
+
+--
+-- readings_2
+--
+CREATE TABLE readings_2 (
+                            id         INTEGER                     ,
+                            reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+                            user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+                            ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+);
+
+CREATE INDEX readings_2_ix1
+    ON readings_2 (id);
+
+CREATE INDEX readings_2_ix3
+    ON readings_2 (user_ts);
+
+--
+-- readings_3
+--
+CREATE TABLE readings_3 (
+                            id         INTEGER,
+                            reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+                            user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+                            ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+);
+
+CREATE INDEX readings_3_ix1
+    ON readings_3 (id);
+
+
+CREATE INDEX readings_3_ix3
+    ON readings_3 (user_ts);
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+
 
 -- Streams table
 -- List of the streams to the Cloud.
