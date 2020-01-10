@@ -7,6 +7,8 @@
 """ Test GCP Gateway plugin
 
 Prerequisite: This test expects gcp certificates in $FOGLAMP_ROOT/tests/system/python/packages/data/gcp directory.
+              Also export the GOOGLE_APPLICATION_CREDENTIALS variable to the JSON file which has details of service account.
+              Example: export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
 """
 
 import os
@@ -26,8 +28,6 @@ __version__ = "${VERSION}"
 
 task_name = "gcp-gateway"
 north_plugin = "GCP-Gateway"
-# TODO : pass package_build_version to setup script from conftest.py
-package_build_version = "nightly"
 # This  gives the path of directory where FogLAMP is cloned. test_file < packages < python < system < tests < ROOT
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent.parent
 SCRIPTS_DIR_ROOT = "{}/tests/system/python/packages/data/".format(PROJECT_ROOT)
@@ -53,7 +53,7 @@ def reset_foglamp(wait_time):
 
 
 @pytest.fixture
-def remove_and_add_pkgs():
+def remove_and_add_pkgs(package_build_version):
     try:
         subprocess.run(["cd {}/tests/system/python/scripts/package && ./remove"
                        .format(PROJECT_ROOT)], shell=True, check=True)
@@ -98,7 +98,7 @@ def get_statistics_map(foglamp_url):
 
 
 def copy_certs():
-    copy_file = "cp {}/* {}".format(CERTS_DIR, FOGLAMP_CERTS_DIR)
+    copy_file = "cp {}/rsa_private.pem {}/roots.pem {}".format(CERTS_DIR, CERTS_DIR, FOGLAMP_CERTS_DIR)
     exit_code = os.system(copy_file)
     assert 0 == exit_code
 
@@ -144,7 +144,7 @@ def verify_received_messages(project_id, subscription_name, timeout=None):
 
 
 class TestGCPGateway:
-    def test_gcp_gateway(self, remove_and_add_foglamp_pkgs, reset_foglamp, foglamp_url, wait_time):
+    def test_gcp_gateway(self, remove_and_add_pkgs, reset_foglamp, foglamp_url, wait_time, remove_data_file):
         payload = {"name": "Sine", "type": "south", "plugin": "sinusoid", "enabled": True, "config": {}}
         post_url = "/foglamp/service"
         conn = http.client.HTTPConnection(foglamp_url)
