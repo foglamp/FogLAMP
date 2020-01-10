@@ -205,6 +205,11 @@ void StreamHandler::Stream::handleEvent(int epollfd, StorageApi *api, uint32_t e
 {
 ssize_t n;
 
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx StreamHandler handleEvent");
+	Logger::getLogger()->setMinLevel("warning");
+
 	if (events & EPOLLRDHUP)
 	{
 		// TODO mark this stream for destruction
@@ -340,6 +345,12 @@ ssize_t n;
 				}
 				else if (m_protocolState == RdBody)
 				{
+					// FIXME_I:
+					Logger::getLogger()->setMinLevel("debug");
+					Logger::getLogger()->debug("DBG xxx RdBody 1");
+					Logger::getLogger()->setMinLevel("warning");
+
+
 					if (available(m_socket) < m_readingSize)
 					{
 						Logger::getLogger()->debug("Not enough bytes for reading %d", m_readingSize);
@@ -361,21 +372,46 @@ ssize_t n;
 							Logger::getLogger()->warn("Short read of %d bytes for reading: %s", n, sys_errlist[errno]);
 						m_lastAsset = m_currentReading->assetCode;
 					}
+
+					// FIXME_I:
+					Logger::getLogger()->setMinLevel("debug");
+					Logger::getLogger()->debug("DBG xxx RdBody 2");
+					Logger::getLogger()->setMinLevel("warning");
+
+
 					m_readingNo++;
 					if ((m_readingNo % RDS_BLOCK) == 0)
 					{
+						// FIXME_I:
+						Logger::getLogger()->setMinLevel("debug");
+						Logger::getLogger()->debug("DBG xxx RdBody 2.1");
+						Logger::getLogger()->setMinLevel("warning");
+
+
 						queueInsert(api, RDS_BLOCK, false);
 						for (int i = 0; i < RDS_BLOCK; i++)
 							m_blockPool->release(m_readings[i]);
 					}
 					else if (m_readingNo == m_blockSize)
 					{
+						// FIXME_I:
+						Logger::getLogger()->setMinLevel("debug");
+						Logger::getLogger()->debug("DBG xxx RdBody 2.2");
+						Logger::getLogger()->setMinLevel("warning");
+
+
 						// We have completed the block, insert readings and wait
 						// for a block header
 						queueInsert(api, m_readingNo % RDS_BLOCK, true);
 						for (uint32_t i = 0; i < m_readingNo % RDS_BLOCK; i++)
 							m_blockPool->release(m_readings[i]);
 					}
+					// FIXME_I:
+					Logger::getLogger()->setMinLevel("debug");
+					Logger::getLogger()->debug("DBG xxx RdBody 3");
+					Logger::getLogger()->setMinLevel("warning");
+
+
 					if (m_readingNo >= m_blockSize)
 					{
 						m_protocolState = BlkHdr;
@@ -399,6 +435,12 @@ ssize_t n;
  */
 void StreamHandler::Stream::queueInsert(StorageApi *api, unsigned int nReadings, bool commit)
 {
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx StreamHandler::Stream::queueInsert");
+	Logger::getLogger()->setMinLevel("warning");
+
 	m_readings[nReadings] = NULL;
 	api->readingStream(m_readings, commit);
 }

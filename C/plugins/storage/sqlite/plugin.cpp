@@ -43,8 +43,6 @@ static PLUGIN_INFORMATION info = {
 	"1.3.0"                   // Interface version
 };
 
-// FIXME_I:
-int			m_readingsGId;
 
 /**
  * Return the information about this plugin
@@ -62,9 +60,6 @@ PLUGIN_INFORMATION *plugin_info()
 PLUGIN_HANDLE plugin_init()
 {
 ConnectionManager *manager = ConnectionManager::getInstance();
-
-	// FIXME_I:
-	m_readingsGId=1;
 
 	manager->growPool(5);
 	return manager;
@@ -145,6 +140,12 @@ Connection        *connection = manager->allocate();
  */
 int plugin_readingStream(PLUGIN_HANDLE handle, ReadingStream **readings, bool commit)
 {
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx plugin_readingStream");
+	Logger::getLogger()->setMinLevel("warning");
+
 	int result = 0;
 	ConnectionManager *manager = (ConnectionManager *)handle;
 	Connection        *connection = manager->allocate();

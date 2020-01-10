@@ -122,5 +122,9 @@ class Connection {
 						int i,
 						std::string& newDate);
 		void		logSQL(const char *, const char *);
+
+		// FIXME_I:
+		int			m_readingsGId;
+
 };
 #endif

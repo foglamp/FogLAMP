@@ -157,6 +157,12 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 	double rate = (double)readings.size() / timeSpan;
 	// FIXME_I:
 	//if (rate > STREAM_THRESHOLD)
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx readingAppend");
+	Logger::getLogger()->setMinLevel("warning");
+
 	if (1)
 	{
 		m_logger->info("Reading rate %.1f readings per second above threshold, attmempting to switch to stream mode", rate);
