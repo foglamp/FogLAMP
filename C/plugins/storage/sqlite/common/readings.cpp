@@ -27,7 +27,7 @@
 #define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
 
 // Retry mechanism
-#define PREP_CMD_MAX_RETRIES		200	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_MAX_RETRIES		5	// Maximum no. of retries when a lock is encountered
 #define PREP_CMD_RETRY_BACKOFF		10 	// Multipler to backoff DB retry on lock
 
 /*
@@ -377,13 +377,6 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
  */
 int Connection::readingStream(ReadingStream **readings, bool commit)
 {
-
-	// FIXME_I:
-	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xxx-1 count - readingStream ");
-	//Logger::getLogger()->setMinLevel("warning");
-
-
 	// Row defintion related
 	int i;
 	bool add_row = false;
@@ -494,24 +487,19 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 			if (add_row)
 			{
 				// FIXME_I:
-				Logger::getLogger()->debug("DBG xxx - step 2 - asset_code :%s:" , asset_code);
 				stmt = NULL;
 				if (strstr(asset_code, "XO1_Righ") != NULL)
 				{
-					Logger::getLogger()->debug("DBG xxx - step XO1_right");
 					stmt = stmt_1;
 
 				} else if (strstr(asset_code, "XO1_Left") != NULL)
 				{
-					Logger::getLogger()->debug("DBG xxx - step XO1_Left");
 					stmt = stmt_2;
 
 				} else if (strstr(asset_code, "XO1_Torso") != NULL)
 				{
-					Logger::getLogger()->debug("DBG xxx - step XO1_Left");
 					stmt = stmt_3;
 				}
-
 
 				if (stmt != NULL)
 				{
@@ -519,7 +507,8 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					char global_id [10];
 					sprintf(global_id, "%d", m_readingsGId);
 
-					Logger::getLogger()->debug("DBG xxx - step m_readingsGId :%d: :%s:", m_readingsGId , global_id);
+					// FIXME_I:
+					//Logger::getLogger()->debug("DBG xxx - step m_readingsGId :%d: :%s:", m_readingsGId , global_id);
 
 					sqlite3_bind_text(stmt, 1, global_id,       -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
