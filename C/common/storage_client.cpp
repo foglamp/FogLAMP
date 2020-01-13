@@ -155,7 +155,7 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 	timersub(&tmLast, &tmFirst, &dur);
 	double timeSpan = dur.tv_sec + ((double)dur.tv_usec / 1000000);
 	double rate = (double)readings.size() / timeSpan;
-	// Stream functionalty disabled
+	// Stream functionality disabled
 	// if (rate > STREAM_THRESHOLD)
 	if (0)
 	{
