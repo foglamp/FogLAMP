@@ -76,6 +76,12 @@ def remove_and_add_pkgs(package_build_version):
     except subprocess.CalledProcessError:
         assert False, "pip installation of google-cloud-pubsub failed"
 
+    try:
+        subprocess.run(["if [ ! -f \"{}/roots.pem\" ]; then wget https://pki.goog/roots.pem -P {}; fi"
+                       .format(CERTS_DIR, CERTS_DIR)], shell=True, check=True)
+    except subprocess.CalledProcessError:
+        assert False, "download of roots.pem failed"
+
 
 def get_ping_status(foglamp_url):
     _connection = http.client.HTTPConnection(foglamp_url)
@@ -101,6 +107,13 @@ def copy_certs():
     copy_file = "cp {}/rsa_private.pem {}/roots.pem {}".format(CERTS_DIR, CERTS_DIR, FOGLAMP_CERTS_DIR)
     exit_code = os.system(copy_file)
     assert 0 == exit_code
+
+
+@pytest.fixture
+def verify_prerequisites():
+    assert os.path.exists("{}/rsa_private.pem".format(CERTS_DIR)), "Private key not found in {} directory".format(
+        CERTS_DIR)
+    assert os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') is not None, "Please set GOOGLE_APPLICATION_CREDENTIALS"
 
 
 def verify_received_messages(project_id, subscription_name, timeout=None):
@@ -144,7 +157,8 @@ def verify_received_messages(project_id, subscription_name, timeout=None):
 
 
 class TestGCPGateway:
-    def test_gcp_gateway(self, remove_and_add_pkgs, reset_foglamp, foglamp_url, wait_time, remove_data_file):
+    def test_gcp_gateway(self, verify_prerequisites, remove_and_add_pkgs, reset_foglamp, foglamp_url, wait_time,
+                         remove_data_file):
         payload = {"name": "Sine", "type": "south", "plugin": "sinusoid", "enabled": True, "config": {}}
         post_url = "/foglamp/service"
         conn = http.client.HTTPConnection(foglamp_url)
