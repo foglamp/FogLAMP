@@ -140,9 +140,9 @@ if [[ ( $os_name == *"Red Hat"* || $os_name == *"CentOS"* ) &&  $os_version == *
 	if [ -d /tmp/foglamp-sqlite3-pkg ]; then
 		rm -rf /tmp/foglamp-sqlite3-pkg
 	fi
-	echo "Pulling SQLite3 from FogLAMP SQLite3 repository ..."
+	echo "Pulling SQLite3 from Dianomic SQLite3 repository ..."
 	cd /tmp/
-	git clone https://github.com/foglamp/foglamp-sqlite3-pkg.git
+	git clone https://github.com/dianomic/foglamp-sqlite3-pkg.git
 	cd foglamp-sqlite3-pkg
 	cd src
 	echo "Compiling SQLite3 static library for FogLAMP ..."
