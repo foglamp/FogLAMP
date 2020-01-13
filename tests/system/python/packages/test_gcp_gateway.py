@@ -35,10 +35,13 @@ FOGLAMP_ROOT = os.environ.get('FOGLAMP_ROOT')
 CERTS_DIR = "{}/gcp".format(SCRIPTS_DIR_ROOT)
 FOGLAMP_CERTS_DIR = "{}/data/etc/certs/".format(FOGLAMP_ROOT)
 
-# GCP project
+# [[ GCP project specific configuration ]]
 project_id = "nomadic-groove-264509"
-subscription_name = "my-subscription"
+registry_id = "fl-nerd--registry"
+device_id = "fl-nerd-gateway"
 
+subscription_name = "my-subscription"
+# [[ GCP project specific configuration ]]
 
 @pytest.fixture
 def reset_foglamp(wait_time):
@@ -168,13 +171,9 @@ class TestGCPGateway:
 
         copy_certs()
 
-        gcp_project_cfg = {"project_id": {"value": "{}".format("foglamp")},
-                           "registry_id": {"value": "flreg1"},
-                           "device_id": {"value": "flgate1"},
-                           "key": {"value": "rsa_private"}}
         gcp_project_cfg = {"project_id": {"value": "{}".format(project_id)},
-                           "registry_id": {"value": "fl-nerd--registry"},
-                           "device_id": {"value": "fl-nerd-gateway"},
+                           "registry_id": {"value": "{}".format(registry_id)},
+                           "device_id": {"value": "{}".format(device_id)},
                            "key": {"value": "rsa_private"}}
 
         payload = {"name": task_name,
