@@ -27,7 +27,7 @@ __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
 task_name = "gcp-gateway"
-north_plugin = "GCP-Gateway"
+north_plugin = "GCP"
 # This  gives the path of directory where FogLAMP is cloned. test_file < packages < python < system < tests < ROOT
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent.parent
 SCRIPTS_DIR_ROOT = "{}/tests/system/python/packages/data/".format(PROJECT_ROOT)
@@ -70,7 +70,7 @@ def remove_and_add_pkgs(package_build_version):
         assert False, "setup package script failed"
 
     try:
-        subprocess.run(["sudo apt install -y foglamp-north-gcp-gateway foglamp-south-sinusoid"], shell=True, check=True)
+        subprocess.run(["sudo apt install -y foglamp-north-gcp foglamp-south-sinusoid"], shell=True, check=True)
     except subprocess.CalledProcessError:
         assert False, "installation of gcp-gateway and sinusoid packages failed"
 
