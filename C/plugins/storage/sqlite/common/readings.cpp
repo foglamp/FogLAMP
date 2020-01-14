@@ -375,7 +375,7 @@ bool Connection::aggregateQuery(const Value& payload, string& resultSet)
  * @param commit    if true a database commit is executed and a new transaction will be opened at the next execution
  *
  */
-int Connection::readingStream(ReadingStream **readings, bool commit)
+int Connection::readingStream(ReadingStream **readings, bool commit, int *readingsGId)
 {
 	// Row defintion related
 	int i;
@@ -388,6 +388,9 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	const char *asset_code;
 	const char *payload;
 	string reading;
+
+	// FIXME_I:
+	char readingsGIdStr [10];
 
 	// Retry mechanism
 	int retries = 0;
@@ -504,13 +507,12 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 				if (stmt != NULL)
 				{
 					// FIXME_I:
-					char global_id [10];
-					sprintf(global_id, "%d", m_readingsGId);
+					sprintf(readingsGIdStr, "%d", *readingsGId);
 
 					// FIXME_I:
-					//Logger::getLogger()->debug("DBG xxx - step m_readingsGId :%d: :%s:", m_readingsGId , global_id);
+					Logger::getLogger()->debug("DBG xxx - Gid :%d: :%s:", *readingsGId , readingsGIdStr);
 
-					sqlite3_bind_text(stmt, 1, global_id,       -1, SQLITE_STATIC);
+					sqlite3_bind_text(stmt, 1, readingsGIdStr,  -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
 					sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
 
@@ -553,7 +555,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 					if (sqlite3_resut == SQLITE_DONE)
 					{
 						rowNumber++;
-						m_readingsGId++;
+						(*readingsGId)++;
 
 						sqlite3_clear_bindings(stmt);
 						sqlite3_reset(stmt);
@@ -662,8 +664,13 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 /**
  * Append a set of readings to the readings table
  */
-int Connection::appendReadings(const char *readings)
+int Connection::appendReadings(const char *readings, int *readingsGId)
 {
+
+// FIXME_I:
+Logger::getLogger()->setMinLevel("debug");
+Logger::getLogger()->debug("DBG xxx-1 count - appendReadings 3");
+
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document doc;
 int      row = 0;
@@ -674,8 +681,12 @@ const char   *user_ts;
 const char   *asset_code;
 string        reading;
 sqlite3_stmt *stmt;
+sqlite3_stmt *stmt_1, *stmt_2, *stmt_3;
 int           sqlite3_resut;
 string        now;
+
+// FIXME_I:
+char readingsGIdStr [10];
 
 // Retry mechanism
 int retries = 0;
@@ -708,10 +719,33 @@ int sleep_time_ms = 0;
 		return -1;
 	}
 
-	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+	const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_2 = "INSERT INTO foglamp.readings_2 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_3 = "INSERT INTO foglamp.readings_3 ( id,         reading, user_ts ) VALUES  (?,?,?)";
 
-	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
-	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_1, strlen(sql_cmd_1), &stmt_1, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_2, strlen(sql_cmd_2), &stmt_2, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_3, strlen(sql_cmd_3), &stmt_3, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
 
 #if INSTRUMENT
 		gettimeofday(&t1, NULL);
@@ -760,11 +794,31 @@ int sleep_time_ms = 0;
 			(*itr)["reading"].Accept(writer);
 			reading = escape(buffer.GetString());
 
-			if(stmt != NULL) {
+			// FIXME_I:
+			stmt = NULL;
+			if (strstr(asset_code, "XO1_Righ") != NULL)
+			{
+				stmt = stmt_1;
 
-				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+			} else if (strstr(asset_code, "XO1_Left") != NULL)
+			{
+				stmt = stmt_2;
+
+			} else if (strstr(asset_code, "XO1_Torso") != NULL)
+			{
+				stmt = stmt_3;
+			}
+
+			if(stmt != NULL) {
+				// FIXME_I:
+				sprintf(readingsGIdStr, "%d", *readingsGId);
+
+				// FIXME_I:
+				//Logger::getLogger()->debug("DBG xxx - Gid :%d: :%s: :%s:", *readingsGId , readingsGIdStr, asset_code);
+
+				sqlite3_bind_text(stmt, 1, readingsGIdStr,  -1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
 
 				retries =0;
 				sleep_time_ms = 0;
@@ -804,6 +858,7 @@ int sleep_time_ms = 0;
 				if (sqlite3_resut == SQLITE_DONE)
 				{
 					row++;
+					(*readingsGId)++;
 
 					sqlite3_clear_bindings(stmt);
 					sqlite3_reset(stmt);
@@ -833,13 +888,33 @@ int sleep_time_ms = 0;
 		gettimeofday(&t2, NULL);
 #endif
 
-	if(stmt != NULL)
+	// FIXME_I:
+	if(stmt_1 != NULL)
 	{
-		if (sqlite3_finalize(stmt) != SQLITE_OK)
+		if (sqlite3_finalize(stmt_1) != SQLITE_OK)
 		{
 			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
 		}
 	}
+
+	// FIXME_I:
+	if(stmt_2 != NULL)
+	{
+		if (sqlite3_finalize(stmt_2) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+	// FIXME_I:
+	if(stmt_3 != NULL)
+	{
+		if (sqlite3_finalize(stmt_3) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
 
 #if INSTRUMENT
 		gettimeofday(&t3, NULL);
@@ -866,6 +941,12 @@ int sleep_time_ms = 0;
 		                           timeT3
 		);
 #endif
+
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx-1 count - appendReadings :%d: ", row);
+	Logger::getLogger()->setMinLevel("warning");
 
 	return row;
 }

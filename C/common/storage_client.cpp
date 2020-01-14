@@ -163,7 +163,7 @@ bool StorageClient::readingAppend(const vector<Reading *>& readings)
 	Logger::getLogger()->debug("DBG xxx readingAppend");
 	Logger::getLogger()->setMinLevel("warning");
 
-	if (1)
+	if (0)
 	{
 		m_logger->info("Reading rate %.1f readings per second above threshold, attmempting to switch to stream mode", rate);
 		if (openStream())

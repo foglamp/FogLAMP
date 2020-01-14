@@ -81,8 +81,8 @@ class Connection {
 		int		delete_table_snapshot(const std::string& table, const std::string& id);
 		bool		get_table_snapshots(const std::string& table, std::string& resultSet);
 #endif
-		int		appendReadings(const char *readings);
-		int 	readingStream(ReadingStream **readings, bool commit);
+		int		appendReadings(const char *readings, int *readingsGId);
+		int 	readingStream(ReadingStream **readings, bool commit, int *readingsGId);
 		bool		fetchReadings(unsigned long id, unsigned int blksize,
 						std::string& resultSet);
 		bool		retrieveReadings(const std::string& condition,
@@ -122,9 +122,6 @@ class Connection {
 						int i,
 						std::string& newDate);
 		void		logSQL(const char *, const char *);
-
-		// FIXME_I:
-		int			m_readingsGId;
 
 };
 #endif

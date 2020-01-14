@@ -235,18 +235,18 @@ CREATE INDEX readings_ix3
 --- New implementation--------------------------------------------------------------------------------
 
 CREATE TABLE asset_reading_catalogue (
-                                         id         INTEGER                     PRIMARY KEY AUTOINCREMENT,
-                                         asset_code character varying(50)       NOT NULL
+    id         INTEGER                     PRIMARY KEY AUTOINCREMENT,
+    asset_code character varying(50)       NOT NULL
 );
 
 --
 -- readings_1
 --
 CREATE TABLE readings_1 (
-                            id         INTEGER                     ,
-                            reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
-                            user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
-                            ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+    id         INTEGER                     ,
+    reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+    user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+    ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
 CREATE INDEX readings_1_ix1
@@ -259,10 +259,10 @@ CREATE INDEX readings_1_ix3
 -- readings_2
 --
 CREATE TABLE readings_2 (
-                            id         INTEGER                     ,
-                            reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
-                            user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
-                            ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+    id         INTEGER                     ,
+    reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+    user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+    ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
 CREATE INDEX readings_2_ix1
@@ -275,15 +275,14 @@ CREATE INDEX readings_2_ix3
 -- readings_3
 --
 CREATE TABLE readings_3 (
-                            id         INTEGER,
-                            reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
-                            user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
-                            ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+    id         INTEGER,
+    reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+    user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+    ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
 CREATE INDEX readings_3_ix1
     ON readings_3 (id);
-
 
 CREATE INDEX readings_3_ix3
     ON readings_3 (user_ts);

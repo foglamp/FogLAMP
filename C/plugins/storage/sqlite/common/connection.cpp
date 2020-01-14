@@ -431,9 +431,6 @@ Connection::Connection()
 	string dbPath;
 	const char *defaultConnection = getenv("DEFAULT_SQLITE_DB_FILE");
 
-	// FIXME_I:
-	m_readingsGId =1;
-
 	m_logSQL = false;
 	m_queuing = 0;
 	m_streamOpenTransaction = true;

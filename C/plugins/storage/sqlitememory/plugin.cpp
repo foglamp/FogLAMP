@@ -42,6 +42,9 @@ static PLUGIN_INFORMATION info = {
 	"1.0.0"                   // Interface version
 };
 
+// FIXME_I:
+int readingsGId;
+
 /**
  * Return the information about this plugin
  */
@@ -59,6 +62,9 @@ PLUGIN_HANDLE plugin_init()
 {
 ConnectionManager *manager = ConnectionManager::getInstance();
 
+	// FIXME_I:
+	readingsGId = 1;
+
 	manager->growPool(5);
 	return manager;
 }
@@ -70,7 +76,7 @@ int plugin_reading_append(PLUGIN_HANDLE handle, char *readings)
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
 
-	int result = connection->appendReadings(readings);
+	int result = connection->appendReadings(readings, &readingsGId);
 	manager->release(connection);
 	return result;;
 }
