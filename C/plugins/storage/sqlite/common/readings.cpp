@@ -405,7 +405,6 @@ int Connection::readingStream(ReadingStream **readings, bool commit, int *readin
 #if INSTRUMENT
 	struct timeval start, t1, t2, t3, t4, t5;
 #endif
-
 	const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( id,         reading, user_ts ) VALUES  (?,?,?)";
 	const char *sql_cmd_2 = "INSERT INTO foglamp.readings_2 ( id,         reading, user_ts ) VALUES  (?,?,?)";
 	const char *sql_cmd_3 = "INSERT INTO foglamp.readings_3 ( id,         reading, user_ts ) VALUES  (?,?,?)";
@@ -719,9 +718,11 @@ int sleep_time_ms = 0;
 		return -1;
 	}
 
-	const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( id,         reading, user_ts ) VALUES  (?,?,?)";
-	const char *sql_cmd_2 = "INSERT INTO foglamp.readings_2 ( id,         reading, user_ts ) VALUES  (?,?,?)";
-	const char *sql_cmd_3 = "INSERT INTO foglamp.readings_3 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_1 = "INSERT INTO foglamp.readings ( asset_code, reading, user_ts ) VALUES  (?,?,?)";
+
+//	const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+//	const char *sql_cmd_2 = "INSERT INTO foglamp.readings_2 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+//	const char *sql_cmd_3 = "INSERT INTO foglamp.readings_3 ( id,         reading, user_ts ) VALUES  (?,?,?)";
 
 	if (sqlite3_prepare_v2(dbHandle, sql_cmd_1, strlen(sql_cmd_1), &stmt_1, NULL) != SQLITE_OK)
 	{
@@ -729,17 +730,18 @@ int sleep_time_ms = 0;
 		return -1;
 	}
 
-	if (sqlite3_prepare_v2(dbHandle, sql_cmd_2, strlen(sql_cmd_2), &stmt_2, NULL) != SQLITE_OK)
-	{
-		raiseError("readingStream", sqlite3_errmsg(dbHandle));
-		return -1;
-	}
-
-	if (sqlite3_prepare_v2(dbHandle, sql_cmd_3, strlen(sql_cmd_3), &stmt_3, NULL) != SQLITE_OK)
-	{
-		raiseError("readingStream", sqlite3_errmsg(dbHandle));
-		return -1;
-	}
+	// FIXME_I:
+//	if (sqlite3_prepare_v2(dbHandle, sql_cmd_2, strlen(sql_cmd_2), &stmt_2, NULL) != SQLITE_OK)
+//	{
+//		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+//		return -1;
+//	}
+//
+//	if (sqlite3_prepare_v2(dbHandle, sql_cmd_3, strlen(sql_cmd_3), &stmt_3, NULL) != SQLITE_OK)
+//	{
+//		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+//		return -1;
+//	}
 
 	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
 	{
@@ -795,30 +797,38 @@ int sleep_time_ms = 0;
 			reading = escape(buffer.GetString());
 
 			// FIXME_I:
-			stmt = NULL;
-			if (strstr(asset_code, "XO1_Righ") != NULL)
-			{
-				stmt = stmt_1;
-
-			} else if (strstr(asset_code, "XO1_Left") != NULL)
-			{
-				stmt = stmt_2;
-
-			} else if (strstr(asset_code, "XO1_Torso") != NULL)
-			{
-				stmt = stmt_3;
-			}
+//			stmt = NULL;
+//			if (strstr(asset_code, "XO1_Righ") != NULL)
+//			{
+//				stmt = stmt_1;
+//
+//			} else if (strstr(asset_code, "XO1_Left") != NULL)
+//			{
+//				stmt = stmt_2;
+//
+//			} else if (strstr(asset_code, "XO1_Torso") != NULL)
+//			{
+//				stmt = stmt_3;
+//			}
+			stmt = stmt_1;
 
 			if(stmt != NULL) {
 				// FIXME_I:
-				sprintf(readingsGIdStr, "%d", *readingsGId);
+				// sprintf(readingsGIdStr, "%d", *readingsGId);
+				//itoa (*readingsGId,readingsGIdStr,10);
+				//string readingsGIdStr2;
+				//readingsGIdStr2 =  std::to_string(*readingsGId);
 
 				// FIXME_I:
 				//Logger::getLogger()->debug("DBG xxx - Gid :%d: :%s: :%s:", *readingsGId , readingsGIdStr, asset_code);
 
-				sqlite3_bind_text(stmt, 1, readingsGIdStr,  -1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 1, asset_code,      -1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
+
+//				sqlite3_bind_text(stmt, 1, readingsGIdStr,  -1, SQLITE_STATIC);
+//				sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
+//				sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
 
 				retries =0;
 				sleep_time_ms = 0;
@@ -897,23 +907,23 @@ int sleep_time_ms = 0;
 		}
 	}
 
-	// FIXME_I:
-	if(stmt_2 != NULL)
-	{
-		if (sqlite3_finalize(stmt_2) != SQLITE_OK)
-		{
-			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
-		}
-	}
-
-	// FIXME_I:
-	if(stmt_3 != NULL)
-	{
-		if (sqlite3_finalize(stmt_3) != SQLITE_OK)
-		{
-			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
-		}
-	}
+//	// FIXME_I:
+//	if(stmt_2 != NULL)
+//	{
+//		if (sqlite3_finalize(stmt_2) != SQLITE_OK)
+//		{
+//			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+//		}
+//	}
+//
+//	// FIXME_I:
+//	if(stmt_3 != NULL)
+//	{
+//		if (sqlite3_finalize(stmt_3) != SQLITE_OK)
+//		{
+//			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+//		}
+//	}
 
 
 #if INSTRUMENT

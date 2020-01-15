@@ -222,6 +222,7 @@ CREATE TABLE foglamp.readings (
     ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
+--
 -- CREATE INDEX fki_readings_fk1
 --     ON readings (asset_code, user_ts desc);
 --
@@ -243,14 +244,14 @@ CREATE TABLE asset_reading_catalogue (
 -- readings_1
 --
 CREATE TABLE readings_1 (
-    id         INTEGER                     ,
+    id         INTEGER                     PRIMARY KEY,
     reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
     user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
     ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
-CREATE INDEX readings_1_ix1
-    ON readings_1 (id);
+-- CREATE INDEX readings_1_ix1
+--     ON readings_1 (id);
 
 CREATE INDEX readings_1_ix3
     ON readings_1 (user_ts);
