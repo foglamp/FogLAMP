@@ -659,11 +659,225 @@ int Connection::readingStream(ReadingStream **readings, bool commit, int *readin
 	return rowNumber;
 }
 
+
 #ifndef SQLITE_SPLIT_READINGS
 /**
  * Append a set of readings to the readings table
  */
 int Connection::appendReadings(const char *readings, int *readingsGId)
+{
+// Default template parameter uses UTF8 and MemoryPoolAllocator.
+	Document doc;
+	int      row = 0;
+	bool     add_row = false;
+
+// Variables related to the SQLite insert using prepared command
+	const char   *user_ts;
+	const char   *asset_code;
+	string        reading;
+	sqlite3_stmt *stmt;
+	int           sqlite3_resut;
+	string        now;
+
+// Retry mechanism
+	int retries = 0;
+	int sleep_time_ms = 0;
+
+#if INSTRUMENT
+	struct timeval	start, t1, t2, t3, t4, t5;
+#endif
+
+#if INSTRUMENT
+	gettimeofday(&start, NULL);
+#endif
+
+	ParseResult ok = doc.Parse(readings);
+	if (!ok)
+	{
+		raiseError("appendReadings", GetParseError_En(doc.GetParseError()));
+		return -1;
+	}
+
+	if (!doc.HasMember("readings"))
+	{
+		raiseError("appendReadings", "Payload is missing a readings array");
+		return -1;
+	}
+	Value &readingsValue = doc["readings"];
+	if (!readingsValue.IsArray())
+	{
+		raiseError("appendReadings", "Payload is missing the readings array");
+		return -1;
+	}
+
+	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+
+	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
+	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
+
+#if INSTRUMENT
+	gettimeofday(&t1, NULL);
+#endif
+
+	for (Value::ConstValueIterator itr = readingsValue.Begin(); itr != readingsValue.End(); ++itr)
+	{
+		if (!itr->IsObject())
+		{
+			raiseError("appendReadings","Each reading in the readings array must be an object");
+			sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION;", NULL, NULL, NULL);
+			return -1;
+		}
+
+		add_row = true;
+
+		// Handles - user_ts
+		char formatted_date[LEN_BUFFER_DATE] = {0};
+		user_ts = (*itr)["user_ts"].GetString();
+		if (strcmp(user_ts, "now()") == 0)
+		{
+			getNow(now);
+			user_ts = now.c_str();
+		}
+		else
+		{
+			if (! formatDate(formatted_date, sizeof(formatted_date), user_ts) )
+			{
+				raiseError("appendReadings", "Invalid date |%s|", user_ts);
+				add_row = false;
+			}
+			else
+			{
+				user_ts = formatted_date;
+			}
+		}
+
+		if (add_row)
+		{
+			// Handles - asset_code
+			asset_code = (*itr)["asset_code"].GetString();
+
+			// Handles - reading
+			StringBuffer buffer;
+			Writer<StringBuffer> writer(buffer);
+			(*itr)["reading"].Accept(writer);
+			reading = escape(buffer.GetString());
+
+			if(stmt != NULL) {
+
+				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+
+				retries =0;
+				sleep_time_ms = 0;
+
+				// Retry mechanism in case SQLlite DB is locked
+				do {
+					// Insert the row using a lock to ensure one insert at time
+					{
+						m_writeAccessOngoing.fetch_add(1);
+						unique_lock<mutex> lck(db_mutex);
+
+						sqlite3_resut = sqlite3_step(stmt);
+
+						m_writeAccessOngoing.fetch_sub(1);
+						db_cv.notify_all();
+					}
+					if (sqlite3_resut == SQLITE_LOCKED  )
+					{
+						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
+						retries++;
+
+						Logger::getLogger()->warn("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
+
+						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
+					}
+					if (sqlite3_resut == SQLITE_BUSY)
+					{
+						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
+						retries++;
+
+						Logger::getLogger()->warn("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
+
+						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
+					}
+				} while (retries < PREP_CMD_MAX_RETRIES && (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
+
+				if (sqlite3_resut == SQLITE_DONE)
+				{
+					row++;
+
+					sqlite3_clear_bindings(stmt);
+					sqlite3_reset(stmt);
+				}
+				else
+				{
+					raiseError("appendReadings","Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
+							   asset_code,
+							   sqlite3_errmsg(dbHandle),
+							   reading.c_str());
+
+					sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+					return -1;
+				}
+			}
+		}
+	}
+
+	sqlite3_resut = sqlite3_exec(dbHandle, "END TRANSACTION", NULL, NULL, NULL);
+	if (sqlite3_resut != SQLITE_OK)
+	{
+		raiseError("appendReadings", "Executing the commit of the transaction :%s:", sqlite3_errmsg(dbHandle));
+		row = -1;
+	}
+
+#if INSTRUMENT
+	gettimeofday(&t2, NULL);
+#endif
+
+	if(stmt != NULL)
+	{
+		if (sqlite3_finalize(stmt) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+#if INSTRUMENT
+	gettimeofday(&t3, NULL);
+#endif
+
+#if INSTRUMENT
+	struct timeval tm;
+		double timeT1, timeT2, timeT3;
+
+		timersub(&t1, &start, &tm);
+		timeT1 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+		timersub(&t2, &t1, &tm);
+		timeT2 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+		timersub(&t3, &t2, &tm);
+		timeT3 = tm.tv_sec + ((double)tm.tv_usec / 1000000);
+
+		Logger::getLogger()->debug("Appended readings buffer size :%d: row count :%d:", strlen(readings), row);
+
+		Logger::getLogger()->debug("Timing - JSON handling %.3f seconds - inserts execution %.3f seconds - sqlite3_finalize %.3f seconds",
+		                           timeT1,
+		                           timeT2,
+		                           timeT3
+		);
+#endif
+
+	return row;
+}
+#endif
+
+#ifndef SQLITE_SPLIT_READINGS
+/**
+ * Append a set of readings to the readings table
+ */
+int Connection::appendReadings_2(const char *readings, int *readingsGId)
 {
 
 // FIXME_I:

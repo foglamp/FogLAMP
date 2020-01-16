@@ -82,6 +82,7 @@ class Connection {
 		bool		get_table_snapshots(const std::string& table, std::string& resultSet);
 #endif
 		int		appendReadings(const char *readings, int *readingsGId);
+		int 	appendReadings_2(const char *readings, int *readingsGId);
 		int 	readingStream(ReadingStream **readings, bool commit, int *readingsGId);
 		bool		fetchReadings(unsigned long id, unsigned int blksize,
 						std::string& resultSet);
