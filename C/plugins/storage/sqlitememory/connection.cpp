@@ -119,7 +119,7 @@ Connection::Connection()
 /**
  * Append a set of readings to the readings table
  */
-int Connection::appendReadings(const char *readings)
+int Connection::appendReadings(const char *readings, int *readingsGId)
 {
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document 	doc;

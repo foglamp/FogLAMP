@@ -598,7 +598,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 /**
  * Append a set of readings to the readings table
  */
-int Connection::appendReadings(const char *readings)
+int Connection::appendReadings(const char *readings, int *readingsGId)
 {
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document doc;
@@ -610,6 +610,13 @@ const char   *user_ts;
 const char   *asset_code;
 string        reading;
 sqlite3_stmt *stmt;
+
+// FIXME_I:
+char readingsGIdStr [10];
+
+// FIXME_I:
+sqlite3_stmt *stmt_tmp;
+sqlite3_stmt *stmt_1, *stmt_2, *stmt_3, *stmt_4;
 int           sqlite3_resut;
 string        now;
 
@@ -646,8 +653,45 @@ int sleep_time_ms = 0;
 
 	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
 
-	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
-	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
+	const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	//const char *sql_cmd_1 = "INSERT INTO foglamp.readings_1 ( reading, user_ts ) VALUES  (?,?)";
+
+	const char *sql_cmd_2 = "INSERT INTO foglamp.readings_2 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_3 = "INSERT INTO foglamp.readings_3 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+	const char *sql_cmd_4 = "INSERT INTO foglamp.readings_4 ( id,         reading, user_ts ) VALUES  (?,?,?)";
+
+	//sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_1, strlen(sql_cmd_1), &stmt_1, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	// FIXME_I:
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_2, strlen(sql_cmd_2), &stmt_2, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_3, strlen(sql_cmd_3), &stmt_3, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_4, strlen(sql_cmd_4), &stmt_4, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
 
 #if INSTRUMENT
 		gettimeofday(&t1, NULL);
@@ -696,11 +740,50 @@ int sleep_time_ms = 0;
 			(*itr)["reading"].Accept(writer);
 			reading = escape(buffer.GetString());
 
-			if(stmt != NULL) {
+			// FIXME_I:
+			stmt_tmp = NULL;
+			if (strstr(asset_code, "XO1_Righ") != NULL)
+			{
+				stmt_tmp = stmt_1;
 
-				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
+			} else if (strstr(asset_code, "XO1_Left") != NULL)
+			{
+				stmt_tmp = stmt_2;
+
+			} else if (strstr(asset_code, "XO1_Torso") != NULL)
+			{
+				stmt_tmp = stmt_3;
+			} else {
+				stmt_tmp = stmt_4;
+			}
+			stmt = stmt_tmp;
+			//stmt_tmp = stmt_1;
+			//stmt = stmt_1;
+
+			//Logger::getLogger()->debug("DBG xxx - Gid :%d: :%s: :%X:  :%X: :%s:", *readingsGId , readingsGIdStr, stmt, stmt_1, asset_code);
+
+			if(stmt != NULL) {
+				// FIXME_I:
+				 sprintf(readingsGIdStr, "%d", *readingsGId);
+				//itoa (*readingsGId,readingsGIdStr,10);
+				//string readingsGIdStr2;
+				//readingsGIdStr2 =  std::to_string(*readingsGId);
+
+				// FIXME_I:
+				//Logger::getLogger()->debug("DBG xxx - Gid :%d: :%s: :%s:", *readingsGId , readingsGIdStr, asset_code);
+
+
+//				sqlite3_bind_text(stmt, 1, reading.c_str(), -1, SQLITE_STATIC);
+//				sqlite3_bind_text(stmt, 2, user_ts,         -1, SQLITE_STATIC);
+
+				sqlite3_bind_text(stmt, 1, readingsGIdStr,  -1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, reading.c_str(), -1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 3, user_ts,         -1, SQLITE_STATIC);
+
+
+//				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
+//				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
+//				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
 
 				retries =0;
 				sleep_time_ms = 0;
@@ -740,6 +823,7 @@ int sleep_time_ms = 0;
 				if (sqlite3_resut == SQLITE_DONE)
 				{
 					row++;
+					(*readingsGId)++;
 
 					sqlite3_clear_bindings(stmt);
 					sqlite3_reset(stmt);
@@ -769,13 +853,51 @@ int sleep_time_ms = 0;
 		gettimeofday(&t2, NULL);
 #endif
 
-	if(stmt != NULL)
+//	if(stmt != NULL)
+//	{
+//		if (sqlite3_finalize(stmt) != SQLITE_OK)
+//		{
+//			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+//		}
+//	}
+
+	// FIXME_I:
+	if(stmt_1 != NULL)
 	{
-		if (sqlite3_finalize(stmt) != SQLITE_OK)
+		if (sqlite3_finalize(stmt_1) != SQLITE_OK)
 		{
 			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
 		}
 	}
+
+//	// FIXME_I:
+	if(stmt_2 != NULL)
+	{
+		if (sqlite3_finalize(stmt_2) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+	// FIXME_I:
+	if(stmt_3 != NULL)
+	{
+		if (sqlite3_finalize(stmt_3) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+	// FIXME_I:
+	if(stmt_4 != NULL)
+	{
+		if (sqlite3_finalize(stmt_4) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+
 
 #if INSTRUMENT
 		gettimeofday(&t3, NULL);
@@ -802,6 +924,12 @@ int sleep_time_ms = 0;
 		                           timeT3
 		);
 #endif
+
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx-1 count - appendReadings :%d: ", row);
+	Logger::getLogger()->setMinLevel("warning");
 
 	return row;
 }
