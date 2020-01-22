@@ -1037,8 +1037,18 @@ const std::string OMF::createTypeData(const Reading& reading) const
 		tData.append(it->first.c_str());
 		tData.append("\": {\"type\": \"string\"},");
 	}
-	tData.append("\"Name\": { \"type\": \"string\", \"isindex\": true } }, "
-			"\"classification\": \"static\", \"id\": \"");
+
+	if (m_PIServerEndpoint.compare("c") == 0)
+	{
+		tData.append("\"Name\": { \"type\": \"string\", \"isindex\": true } }, "
+					 "\"classification\": \"static\", \"id\": \"");
+	}
+	else if (m_PIServerEndpoint.compare("p") == 0)
+	{
+		tData.append("\"Name\": { \"type\": \"string\", \"isname\": true }, ");
+		tData.append("\"AssetId\": { \"type\": \"string\", \"isindex\": true } ");
+		tData.append(" }, \"classification\": \"static\", \"id\": \"");
+	}
 
 	// Add type_id + '_' + asset_name + '_typename_sensor'
 	OMF::setAssetTypeTag(reading.getAssetName(),
@@ -1189,7 +1199,17 @@ const std::string OMF::createStaticData(const Reading& reading) const
 	sData.append(" \"Name\": \"");
 
 	// Add asset_name
-	sData.append(reading.getAssetName());
+	if (m_PIServerEndpoint.compare("c") == 0)
+	{
+		sData.append(reading.getAssetName());
+	}
+	else if (m_PIServerEndpoint.compare("p") == 0)
+	{
+		sData.append(reading.getAssetName());
+		sData.append("\", \"AssetId\": \"");
+		sData.append(m_AFHierarchy1Level + "_" + reading.getAssetName());
+	}
+
 	sData.append("\"}]}]");
 
 	// Return JSON string
@@ -1250,7 +1270,7 @@ const std::string OMF::createLinkData(const Reading& reading) const
 		StringReplace(tmpStr, "_placeholder_src_type_", m_AFHierarchy1Level + "_typeid");
 		StringReplace(tmpStr, "_placeholder_src_idx_",  m_AFHierarchy1Level );
 		StringReplace(tmpStr, "_placeholder_tgt_type_", targetTypeId);
-		StringReplace(tmpStr, "_placeholder_tgt_idx_",  assetName);
+		StringReplace(tmpStr, "_placeholder_tgt_idx_",  m_AFHierarchy1Level + "_" + assetName);
 
 		lData.append(tmpStr);
 		lData.append(",");
@@ -1265,8 +1285,15 @@ const std::string OMF::createLinkData(const Reading& reading) const
 
 	lData.append("\", \"index\": \"");
 
-	// Add asset_name
-	lData.append(assetName);
+	if (m_PIServerEndpoint.compare("c") == 0)
+	{
+		// Add asset_name
+		lData.append(assetName);
+	}
+	else if (m_PIServerEndpoint.compare("p") == 0)
+	{
+		lData.append(m_AFHierarchy1Level + "_" + assetName);
+	}
 
 	measurementId = to_string(OMF::getAssetTypeId(assetName)) + "measurement_" + assetName;
 
@@ -1784,7 +1811,18 @@ bool OMF::setCreatedTypes(const Reading& row)
 	}
 
 	string types;
-	string key = row.getAssetName();
+	string key;
+
+	if (m_PIServerEndpoint.compare("c") == 0)
+	{
+		key = row.getAssetName();
+	}
+	else if (m_PIServerEndpoint.compare("p") == 0)
+	{
+		key = m_AFHierarchy1Level + "_" + row.getAssetName();
+	}
+
+
 	long typeId = OMF::getAssetTypeId(key);
 	const vector<Datapoint*> data = row.getReadingData();
 	types.append("{");
