@@ -600,6 +600,11 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
  */
 int Connection::appendReadings(const char *readings)
 {
+// FIXME_I:
+Logger::getLogger()->setMinLevel("debug");
+Logger::getLogger()->debug("DBG xxx-1 count - appendReadings ");
+Logger::getLogger()->setMinLevel("warning");
+
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document doc;
 int      row = 0;
@@ -802,6 +807,11 @@ int sleep_time_ms = 0;
 		                           timeT3
 		);
 #endif
+
+	// FIXME_I:
+	Logger::getLogger()->setMinLevel("debug");
+	Logger::getLogger()->debug("DBG xxx-2 count - appendReadings :%d: ", row);
+	Logger::getLogger()->setMinLevel("warning");
 
 	return row;
 }
