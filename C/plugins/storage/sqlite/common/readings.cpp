@@ -598,12 +598,17 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 /**
  * Append a set of readings to the readings table
  */
-int Connection::appendReadings(const char *readings)
+int Connection::appendReadings(const char *readings, int readingsGId)
 {
 // FIXME_I:
 Logger::getLogger()->setMinLevel("debug");
 Logger::getLogger()->debug("DBG xxx-1 count - appendReadings ");
+
+Logger::getLogger()->debug("DBG xxx  ReadingsGId :%d: ", readingsGId);
+
 Logger::getLogger()->setMinLevel("warning");
+
+char readingsGIdStr [255];
 
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document doc;
@@ -649,10 +654,19 @@ int sleep_time_ms = 0;
 		return -1;
 	}
 
-	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
+	const char *sql_cmd="INSERT INTO foglamp.readings_1 ( id, user_ts, reading ) VALUES  (?,?,?)";
 
-	sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL);
-	sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL);
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_exec(dbHandle, "BEGIN TRANSACTION", NULL, NULL, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
 
 #if INSTRUMENT
 		gettimeofday(&t1, NULL);
@@ -702,9 +716,10 @@ int sleep_time_ms = 0;
 			reading = escape(buffer.GetString());
 
 			if(stmt != NULL) {
+				snprintf(readingsGIdStr, sizeof(readingsGIdStr), "%d", readingsGId);
 
-				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 1, readingsGIdStr  ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, user_ts         ,-1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
 
 				retries =0;
@@ -745,6 +760,7 @@ int sleep_time_ms = 0;
 				if (sqlite3_resut == SQLITE_DONE)
 				{
 					row++;
+					readingsGId++;
 
 					sqlite3_clear_bindings(stmt);
 					sqlite3_reset(stmt);

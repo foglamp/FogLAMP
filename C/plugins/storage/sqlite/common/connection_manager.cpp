@@ -24,6 +24,8 @@ ConnectionManager::ConnectionManager()
 		m_trace = true;
 	else
 		m_trace = false;
+
+	m_ReadingsGId=1;
 }
 
 /**

@@ -209,6 +209,7 @@ CREATE INDEX fki_asset_messages_fk1
 CREATE INDEX fki_asset_messages_fk2
     ON asset_messages (status_id);
 
+-- // FIXME_I: to be removed
 -- Readings table
 -- This tables contains the readings for assets.
 -- An asset can be a south with multiple sensor, a single sensor,
@@ -230,6 +231,36 @@ CREATE INDEX readings_ix2
 
 CREATE INDEX readings_ix3
     ON readings (user_ts);
+
+--###   #########################################################################################:
+--// FIXME_I:
+
+-- Used to track the multiple reading tables,
+-- mapping a particular asset_code to a table that holds readings for that asset_code
+CREATE TABLE foglamp.asset_reading_catalogue (
+    id         INTEGER                     PRIMARY KEY AUTOINCREMENT,
+    asset_code character varying(50)       NOT NULL
+);
+
+-- Readings tables - readings_1
+-- These tables contain the readings for asset.
+-- An asset can be a south with multiple sensor, a single sensor,
+-- a software or anything that generates data that is sent to FogLAMP
+CREATE TABLE foglamp.readings_1 (
+    id         INTEGER,
+    reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
+    user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
+    ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
+);
+
+
+CREATE INDEX readings_1_ix1
+    ON readings_1 (id);
+
+CREATE INDEX readings_1_ix2
+    ON readings_1 (user_ts);
+
+--###   #########################################################################################:
 
 -- Streams table
 -- List of the streams to the Cloud.

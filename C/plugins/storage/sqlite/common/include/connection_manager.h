@@ -28,16 +28,22 @@ class ConnectionManager {
 		void                      release(Connection *);
 		void			  shutdown();
 		void			  setError(const char *, const char *, bool);
+		void			  setReadingsGId(int readingsGId) {m_ReadingsGId = readingsGId;};
+		int			      getReadingsGId()                {return m_ReadingsGId; };
+
 		PLUGIN_ERROR		  *getError()
 					  {
 						return &lastError;
 					  }
 
-	protected:
+protected:
 		ConnectionManager();
 
 	private:
 		static ConnectionManager     *instance;
+		int                        m_ReadingsGId=1;
+
+
 	protected:
 		std::list<Connection *>      idle;
 		std::list<Connection *>      inUse;
@@ -46,6 +52,7 @@ class ConnectionManager {
 		std::mutex                   errorLock;
 		PLUGIN_ERROR		     lastError;
 		bool			     m_trace;
+
 };
 
 #endif

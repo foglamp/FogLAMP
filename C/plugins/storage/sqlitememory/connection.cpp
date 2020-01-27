@@ -109,8 +109,10 @@ Connection::Connection()
 
 /**
  * Append a set of readings to the readings table
+ *
+ * Note: ReadingsGId is not used in the in memory engine
  */
-int Connection::appendReadings(const char *readings)
+int Connection::appendReadings(const char *readings, int ReadingsGId)
 {
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document 	doc;

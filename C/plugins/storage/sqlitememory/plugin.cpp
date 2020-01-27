@@ -70,7 +70,7 @@ int plugin_reading_append(PLUGIN_HANDLE handle, char *readings)
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
 
-	int result = connection->appendReadings(readings);
+	int result = connection->appendReadings(readings, -1);
 	manager->release(connection);
 	return result;;
 }
