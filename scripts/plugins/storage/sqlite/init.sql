@@ -222,12 +222,12 @@ CREATE TABLE foglamp.readings (
     user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
     ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
-
-CREATE INDEX fki_readings_fk1
-    ON readings (asset_code, user_ts desc);
-
-CREATE INDEX readings_ix2
-    ON readings (asset_code);
+--
+-- CREATE INDEX fki_readings_fk1
+--     ON readings (asset_code, user_ts desc);
+--
+-- CREATE INDEX readings_ix2
+--     ON readings (asset_code);
 
 CREATE INDEX readings_ix3
     ON readings (user_ts);
