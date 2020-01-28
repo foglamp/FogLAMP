@@ -13,6 +13,7 @@
 #include <connection_manager.h>
 #include <common.h>
 #include <reading_stream.h>
+#include <atomic>
 
 // 1 enable performance tracking
 #define INSTRUMENT	0
@@ -507,7 +508,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 							sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 							retries++;
 
-							Logger::getLogger()->warn("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:",i, retries, sleep_time_ms);
+							Logger::getLogger()->info("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:",i, retries, sleep_time_ms);
 
 							std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 						}
@@ -598,19 +599,21 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 /**
  * Append a set of readings to the readings table
  */
-int Connection::appendReadings(const char *readings, int readingsGId)
+int Connection::appendReadings(const char *readings, std::atomic<int>* readingsGId)
 {
 // FIXME_I:
 Logger::getLogger()->setMinLevel("debug");
 Logger::getLogger()->debug("DBG xxx-1 count - appendReadings ");
 
-Logger::getLogger()->debug("DBG xxx  ReadingsGId :%d: ", readingsGId);
+// FIXME_I:
+ostringstream ss;
+ss << std::this_thread::get_id();
+Logger::getLogger()->debug("DBG xxx threadID :%s: ReadingsGId :%d: ",ss.str().c_str(), readingsGId->load() );
 
 Logger::getLogger()->setMinLevel("warning");
 
+int  readingsGIdTmp;
 char readingsGIdStr [255];
-// FIXME_I:
-snprintf(readingsGIdStr, sizeof(readingsGIdStr), "%d", 2);
 
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document doc;
@@ -656,9 +659,7 @@ int sleep_time_ms = 0;
 		return -1;
 	}
 
-	//const char *sql_cmd="INSERT INTO foglamp.readings_1 ( id, user_ts, reading ) VALUES  (?,?,?)";
-	const char *sql_cmd="INSERT INTO foglamp.readings ( user_ts, asset_code, reading ) VALUES  (?,?,?)";
-
+	const char *sql_cmd="INSERT INTO foglamp.readings_1 ( id, user_ts, reading ) VALUES  (?,?,?)";
 
 	if (sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL) != SQLITE_OK)
 	{
@@ -720,14 +721,11 @@ int sleep_time_ms = 0;
 			reading = escape(buffer.GetString());
 
 			if(stmt != NULL) {
-				//snprintf(readingsGIdStr, sizeof(readingsGIdStr), "%d", readingsGId);
+				readingsGIdTmp = (*readingsGId)++;
+				snprintf(readingsGIdStr, sizeof(readingsGIdStr), "%d", readingsGIdTmp);
 
-//				sqlite3_bind_text(stmt, 1, readingsGIdStr  ,-1, SQLITE_STATIC);
-//				sqlite3_bind_text(stmt, 2, user_ts         ,-1, SQLITE_STATIC);
-//				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
-
-				sqlite3_bind_text(stmt, 1, user_ts         ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 2, asset_code      ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 1, readingsGIdStr  ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, user_ts         ,-1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
 
 				retries =0;
@@ -759,7 +757,7 @@ int sleep_time_ms = 0;
 						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 						retries++;
 
-						Logger::getLogger()->warn("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
+						Logger::getLogger()->info("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
 
 						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 					}
@@ -768,7 +766,6 @@ int sleep_time_ms = 0;
 				if (sqlite3_resut == SQLITE_DONE)
 				{
 					row++;
-					readingsGId++;
 
 					sqlite3_clear_bindings(stmt);
 					sqlite3_reset(stmt);
@@ -834,7 +831,7 @@ int sleep_time_ms = 0;
 
 	// FIXME_I:
 	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xxx-2 count - appendReadings :%d: ", row);
+	Logger::getLogger()->debug("DBG xxx  - apthreadID :%s: pendReadings :%d: ",ss.str().c_str(), row);
 	Logger::getLogger()->setMinLevel("warning");
 
 	return row;

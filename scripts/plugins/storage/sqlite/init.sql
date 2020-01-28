@@ -247,15 +247,15 @@ CREATE TABLE foglamp.asset_reading_catalogue (
 -- An asset can be a south with multiple sensor, a single sensor,
 -- a software or anything that generates data that is sent to FogLAMP
 CREATE TABLE foglamp.readings_1 (
-    id         INTEGER,
+    id         INTEGER PRIMARY KEY,
     reading    JSON                        NOT NULL DEFAULT '{}',            -- The json object received
     user_ts    DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW')),      -- UTC time
     ts         DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00:00', 'NOW'))       -- UTC time
 );
 
 
-CREATE INDEX readings_1_ix1
-    ON readings_1 (id);
+-- CREATE INDEX readings_1_ix1
+--     ON readings_1 (id);
 
 CREATE INDEX readings_1_ix2
     ON readings_1 (user_ts);

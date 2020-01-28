@@ -13,6 +13,7 @@
 #include <plugin_api.h>
 #include <list>
 #include <mutex>
+#include <atomic>
 
 class Connection;
 
@@ -28,21 +29,18 @@ class ConnectionManager {
 		void                      release(Connection *);
 		void			  shutdown();
 		void			  setError(const char *, const char *, bool);
-		void			  setReadingsGId(int readingsGId) {m_ReadingsGId = readingsGId;};
-		int			      getReadingsGId()                {return m_ReadingsGId; };
-
 		PLUGIN_ERROR		  *getError()
 					  {
 						return &lastError;
 					  }
+
+		std::atomic<int>           m_ReadingsGId;
 
 protected:
 		ConnectionManager();
 
 	private:
 		static ConnectionManager     *instance;
-		int                        m_ReadingsGId=1;
-
 
 	protected:
 		std::list<Connection *>      idle;

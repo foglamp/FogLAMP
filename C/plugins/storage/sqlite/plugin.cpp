@@ -129,13 +129,9 @@ int plugin_reading_append(PLUGIN_HANDLE handle, char *readings)
 ConnectionManager *manager = (ConnectionManager *)handle;
 Connection        *connection = manager->allocate();
 
-	int ReadingsGId = manager->getReadingsGId();
-	int result = connection->appendReadings(readings, ReadingsGId);
+	int result = connection->appendReadings(readings, &(manager->m_ReadingsGId));
 
 	manager->release(connection);
-	if (result != -1) {
-		manager->setReadingsGId(ReadingsGId + result);
-	}
 	return result;;
 }
 

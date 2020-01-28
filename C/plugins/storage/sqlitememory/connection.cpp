@@ -112,7 +112,7 @@ Connection::Connection()
  *
  * Note: ReadingsGId is not used in the in memory engine
  */
-int Connection::appendReadings(const char *readings, int ReadingsGId)
+int Connection::appendReadings(const char *readings,  std::atomic<int>* readingsGId)
 {
 // Default template parameter uses UTF8 and MemoryPoolAllocator.
 Document 	doc;

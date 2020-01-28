@@ -25,7 +25,7 @@ ConnectionManager::ConnectionManager()
 	else
 		m_trace = false;
 
-	m_ReadingsGId=1;
+	m_ReadingsGId=ATOMIC_VAR_INIT(1);
 }
 
 /**
