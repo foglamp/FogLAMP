@@ -28,8 +28,8 @@
 #define	RDS_PAYLOAD(stream, x)			&(stream[x]->assetCode[0]) + stream[x]->assetCodeLength
 
 // Retry mechanism
-#define PREP_CMD_MAX_RETRIES		6	// Maximum no. of retries when a lock is encountered
-#define PREP_CMD_RETRY_BACKOFF		10 	// Multipler to backoff DB retry on lock
+#define PREP_CMD_MAX_RETRIES		5 	// Maximum no. of retries when a lock is encountered
+#define PREP_CMD_RETRY_BACKOFF		100 // Multipler to backoff DB retry on lock
 
 /*
  * Control the way purge deletes readings. The block size sets a limit as to how many rows
@@ -595,6 +595,34 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 	return rowNumber;
 }
 
+// FIXME_I:
+const map<int, string>  readingCatalogue;
+std::atomic<int>        readingCatalogue =1;
+
+// FIXME_I:
+bool Connection::checkCatalogue(const char *asset_code)
+{
+	auto item = readingCatalogue.find(asset_code);
+	if (item  != readingCatalogue.end() )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
+int Connection::addCatalogue(const char *asset_code)
+{
+
+	readingCatalogue++;
+
+	return
+}
+
+
 #ifndef SQLITE_SPLIT_READINGS
 /**
  * Append a set of readings to the readings table
@@ -603,13 +631,9 @@ int Connection::appendReadings(const char *readings, std::atomic<int>* readingsG
 {
 // FIXME_I:
 Logger::getLogger()->setMinLevel("debug");
-Logger::getLogger()->debug("DBG xxx-1 count - appendReadings ");
-
-// FIXME_I:
 ostringstream ss;
 ss << std::this_thread::get_id();
-Logger::getLogger()->debug("DBG xxx threadID :%s: ReadingsGId :%d: ",ss.str().c_str(), readingsGId->load() );
-
+Logger::getLogger()->debug("DBG xxx threadID :%s: Gid :%d: ",ss.str().c_str(), readingsGId->load() );
 Logger::getLogger()->setMinLevel("warning");
 
 int  readingsGIdTmp;
@@ -624,13 +648,19 @@ bool     add_row = false;
 const char   *user_ts;
 const char   *asset_code;
 string        reading;
-sqlite3_stmt *stmt;
-int           sqlite3_resut;
 string        now;
+const char *sql_cmd;
+const char *sql_cmd_catalogue;
+sqlite3_stmt *stmt;
+sqlite3_stmt *stmt_catalogue;
+int           sqlite3_resut;
+
+bool          assetInCatalog;
 
 // Retry mechanism
 int retries = 0;
 int sleep_time_ms = 0;
+
 
 #if INSTRUMENT
 	struct timeval	start, t1, t2, t3, t4, t5;
@@ -659,9 +689,16 @@ int sleep_time_ms = 0;
 		return -1;
 	}
 
-	const char *sql_cmd="INSERT INTO foglamp.readings_1 ( id, user_ts, reading ) VALUES  (?,?,?)";
+	sql_cmd="INSERT INTO foglamp.readings_1 ( id, user_ts, reading ) VALUES  (?,?,?)";
+	sql_cmd_catalogue="INSERT INTO foglamp.asset_reading_catalogue (asset_code) VALUES  (?)";
 
 	if (sqlite3_prepare_v2(dbHandle, sql_cmd, strlen(sql_cmd), &stmt, NULL) != SQLITE_OK)
+	{
+		raiseError("readingStream", sqlite3_errmsg(dbHandle));
+		return -1;
+	}
+
+	if (sqlite3_prepare_v2(dbHandle, sql_cmd_catalogue, strlen(sql_cmd_catalogue), &stmt_catalogue, NULL) != SQLITE_OK)
 	{
 		raiseError("readingStream", sqlite3_errmsg(dbHandle));
 		return -1;
@@ -720,19 +757,61 @@ int sleep_time_ms = 0;
 			(*itr)["reading"].Accept(writer);
 			reading = escape(buffer.GetString());
 
-			if(stmt != NULL) {
+			assetInCatalog = false;
+			// FIXME_I: - check in memory todo retry mechanism
+			// Insert into the readings catalogue
+			{
+				sqlite3_bind_text(stmt_catalogue, 1, asset_code, -1, SQLITE_STATIC);
+
+				m_writeAccessOngoing.fetch_add(1);
+				unique_lock<mutex> lck(db_mutex);
+
+				// FIXME_I:
+				Logger::getLogger()->setMinLevel("debug");
+				Logger::getLogger()->debug("DBG xxx asset_code :%s:",asset_code);
+				Logger::getLogger()->setMinLevel("warning");
+
+				// FIXME_I:
+				sqlite3_resut = sqlite3_step(stmt_catalogue);
+
+				m_writeAccessOngoing.fetch_sub(1);
+				db_cv.notify_all();
+
+				// FIXME_I: todo retry mechanism
+				if (sqlite3_resut == SQLITE_DONE)
+				{
+					assetInCatalog = true;
+
+					sqlite3_clear_bindings(stmt_catalogue);
+					sqlite3_reset(stmt_catalogue);
+				}
+				else
+				{
+					// FIXME_I:
+					assetInCatalog = true;
+					raiseError("appendReadings","Inserting into the readings catalogue - asset_code :%s: error :%s: reading :%s: ",
+							   asset_code,
+							   sqlite3_errmsg(dbHandle),
+							   reading.c_str());
+				}
+			}
+
+			// Insert into the reading* table
+			if (assetInCatalog)
+			{
 				readingsGIdTmp = (*readingsGId)++;
 				snprintf(readingsGIdStr, sizeof(readingsGIdStr), "%d", readingsGIdTmp);
 
-				sqlite3_bind_text(stmt, 1, readingsGIdStr  ,-1, SQLITE_STATIC);
-				sqlite3_bind_text(stmt, 2, user_ts         ,-1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 1, readingsGIdStr, -1, SQLITE_STATIC);
+				sqlite3_bind_text(stmt, 2, user_ts, -1, SQLITE_STATIC);
 				sqlite3_bind_text(stmt, 3, reading.c_str(), -1, SQLITE_STATIC);
 
-				retries =0;
+				retries = 0;
 				sleep_time_ms = 0;
 
 				// Retry mechanism in case SQLlite DB is locked
-				do {
+				do
+				{
 					// Insert the row using a lock to ensure one insert at time
 					{
 						m_writeAccessOngoing.fetch_add(1);
@@ -743,12 +822,17 @@ int sleep_time_ms = 0;
 						m_writeAccessOngoing.fetch_sub(1);
 						db_cv.notify_all();
 					}
-					if (sqlite3_resut == SQLITE_LOCKED  )
+					if (sqlite3_resut == SQLITE_LOCKED)
 					{
 						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 						retries++;
 
-						Logger::getLogger()->warn("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
+						// FIXME_I:
+						Logger::getLogger()->setMinLevel("debug");
+						Logger::getLogger()->info("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:",
+												  row, retries, sleep_time_ms);
+						Logger::getLogger()->debug("DBG xx1 threadID :%s: Gid :%s: ", ss.str().c_str(), readingsGIdStr);
+						Logger::getLogger()->setMinLevel("warning");
 
 						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 					}
@@ -757,30 +841,40 @@ int sleep_time_ms = 0;
 						sleep_time_ms = (1 * PREP_CMD_RETRY_BACKOFF);
 						retries++;
 
-						Logger::getLogger()->info("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
+						// FIXME_I:
+						Logger::getLogger()->setMinLevel("debug");
+						Logger::getLogger()->info("SQLITE_BUSY - record :%d: - retry number :%d: sleep time ms :%d:",
+												  row, retries, sleep_time_ms);
+						Logger::getLogger()->debug("DBG xx2 threadID :%s: Gid :%s: ", ss.str().c_str(), readingsGIdStr);
+						Logger::getLogger()->setMinLevel("warning");
 
 						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 					}
-				} while (retries < PREP_CMD_MAX_RETRIES && (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
-
-				if (sqlite3_resut == SQLITE_DONE)
-				{
-					row++;
-
-					sqlite3_clear_bindings(stmt);
-					sqlite3_reset(stmt);
-				}
-				else
-				{
-					raiseError("appendReadings","Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
-						asset_code,
-						sqlite3_errmsg(dbHandle),
-						reading.c_str());
-
-					sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
-					return -1;
-				}
+				} while (retries < PREP_CMD_MAX_RETRIES &&
+						 (sqlite3_resut == SQLITE_LOCKED || sqlite3_resut == SQLITE_BUSY));
 			}
+
+			if (sqlite3_resut == SQLITE_DONE)
+			{
+				row++;
+
+				sqlite3_clear_bindings(stmt);
+				sqlite3_reset(stmt);
+			}
+			else
+			{
+				raiseError("appendReadings","Inserting a row into SQLIte using a prepared command - asset_code :%s: error :%s: reading :%s: ",
+					asset_code,
+					sqlite3_errmsg(dbHandle),
+					reading.c_str());
+
+				// FIXME_I:
+				Logger::getLogger()->warn("DBG xx3 threadID :%s: Gid :%s: ",ss.str().c_str(), readingsGIdStr );
+
+				sqlite3_exec(dbHandle, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+				return -1;
+			}
+
 		}
 	}
 
@@ -800,6 +894,14 @@ int sleep_time_ms = 0;
 		if (sqlite3_finalize(stmt) != SQLITE_OK)
 		{
 			raiseError("appendReadings","freeing SQLite in memory structure - error :%s:", sqlite3_errmsg(dbHandle));
+		}
+	}
+
+	if(stmt_catalogue != NULL)
+	{
+		if (sqlite3_finalize(stmt_catalogue) != SQLITE_OK)
+		{
+			raiseError("appendReadings","freeing SQLite in memory structure for readings catalogue- error :%s:", sqlite3_errmsg(dbHandle));
 		}
 	}
 
@@ -831,7 +933,7 @@ int sleep_time_ms = 0;
 
 	// FIXME_I:
 	Logger::getLogger()->setMinLevel("debug");
-	Logger::getLogger()->debug("DBG xxx  - apthreadID :%s: pendReadings :%d: ",ss.str().c_str(), row);
+	Logger::getLogger()->debug("DBG xxx threadID :%s: row :%d: ",ss.str().c_str(),row );
 	Logger::getLogger()->setMinLevel("warning");
 
 	return row;
