@@ -143,12 +143,12 @@ const char *PLUGIN_DEFAULT_CONFIG_INFO = QUOTE(
 			"order": "17",
 			"displayName": "PI-Server Endpoint"
 		},
-		"AFHierarchy1Level": {
-			"description": "Defines the first level of hierarchy in Asset Framework in which the assets will be created, PI Web API only.",
+		"DefaultAFLocation": {
+			"description": "Defines the hierarchy tree in Asset Framework in which the assets will be created, PI Web API only.",
 			"type": "string",
-			"default": "foglamp_data_piwebapi",
+			"default": "foglamp/data_piwebapi",
 			"order": "18",
-			"displayName": "Asset Framework 1st Level Hierarchy",
+			"displayName": "Asset Framework hierarchy tree",
 			"validity" : "PIServerEndpoint != \"Connector Relay\""
 		},
 		"notBlockingErrors": {
@@ -220,11 +220,12 @@ typedef struct
 	string		producerToken;	        // PI Server connector token
 	string		formatNumber;	        // OMF protocol Number format
 	string		formatInteger;	        // OMF protocol Integer format
-    	string		PIServerEndpoint;       // Defines which PIServer component should be used for the communication:
-    	                                        // a=auto discovery - p=PI Web API, c=Connector Relay
-	string		AFHierarchy1Level;      // 1st hierarchy in Asset Framework, PI Web API only.
-    	string		PIWebAPIAuthMethod;     // Authentication method to be used with the PI Web API.
-    	string		PIWebAPICredentials;    // Credentials is the base64 encoding of id and password joined by a single colon (:)
+	string		PIServerEndpoint;       // Defines which PIServer component should be used for the communication:
+	// a=auto discovery - p=PI Web API, c=Connector Relay
+	string		DefaultAFLocation;      // 1st hierarchy in Asset Framework, PI Web API only.
+	string		prefixAFAsset;       	// Prefix to generate unique asste id
+	string		PIWebAPIAuthMethod;     // Authentication method to be used with the PI Web API.
+	string		PIWebAPICredentials;    // Credentials is the base64 encoding of id and password joined by a single colon (:)
 	string 		KerberosKeytab;         // Kerberos authentication keytab file
 	                                        //   stores the environment variable value about the keytab file path
 	                                        //   to allow the environment to persist for all the execution of the plugin
@@ -300,7 +301,7 @@ PLUGIN_HANDLE plugin_init(ConfigCategory* configData)
 	string formatNumber = configData->getValue("formatNumber");
 	string formatInteger = configData->getValue("formatInteger");
 	string PIServerEndpoint = configData->getValue("PIServerEndpoint");
-	string AFHierarchy1Level = configData->getValue("AFHierarchy1Level");
+	string DefaultAFLocation = configData->getValue("DefaultAFLocation");
 
 	string PIWebAPIAuthMethod     = configData->getValue("PIWebAPIAuthenticationMethod");
 	string PIWebAPIUserId         = configData->getValue("PIWebAPIUserId");
@@ -335,7 +336,11 @@ PLUGIN_HANDLE plugin_init(ConfigCategory* configData)
 	connInfo->producerToken = producerToken;
 	connInfo->formatNumber = formatNumber;
 	connInfo->formatInteger = formatInteger;
-	connInfo->AFHierarchy1Level = AFHierarchy1Level;
+	connInfo->DefaultAFLocation = DefaultAFLocation;
+
+	// FIXME_I: implement full alg
+	// FIXME_I: x1
+	connInfo->prefixAFAsset = "007f0100";
 
 	// PI Web API end-point - evaluates the authentication method requested
 	if (PIWebAPIAuthMethod.compare("anonymous") == 0)
@@ -546,7 +551,11 @@ uint32_t plugin_send(const PLUGIN_HANDLE handle,
 	// Set PIServerEndpoint configuration
 	connInfo->omf->setPIServerEndpoint(connInfo->PIServerEndpoint);
 
-	connInfo->omf->setAFHierarchy1Level(connInfo->AFHierarchy1Level);
+	connInfo->omf->setDefaultAFLocation(connInfo->DefaultAFLocation);
+
+	// FIXME_I:x1
+	connInfo->omf->setPrefixAFAsset(connInfo->prefixAFAsset);
+
 
 	// Set OMF FormatTypes  
 	connInfo->omf->setFormatType(OMF_TYPE_FLOAT,

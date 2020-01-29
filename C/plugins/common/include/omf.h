@@ -92,11 +92,13 @@ class OMF
 		// Set saved OMF formats
 		void setFormatType(const std::string &key, std::string &value);
 
-    		// Set which PIServer component should be used for the communication
-    		void setPIServerEndpoint(const std::string &PIServerEndpoint);
+		// Set which PIServer component should be used for the communication
+		void setPIServerEndpoint(const std::string &PIServerEndpoint);
 
-    		// Set the first level of hierarchy in Asset Framework in which the assets will be created, PI Web API only.
-    		void setAFHierarchy1Level(const std::string &AFHierarchy1Level);
+		// Set the first level of hierarchy in Asset Framework in which the assets will be created, PI Web API only.
+		void setDefaultAFLocation(const std::string &DefaultAFLocation);
+
+		void setPrefixAFAsset(const std::string &prefixAFAsset);
 
 		// Get saved OMF formats
 		std::string getFormatType(const std::string &key) const;
@@ -200,10 +202,10 @@ class OMF
 		void clearCreatedTypes(const std::string& key);
 
 		// Add the 1st level of AF hierarchy if the end point is PI Web API
-    		bool sendAFHierarchy();
-    		bool sendAFHierarchyTypes();
-    		bool sendAFHierarchyStatic();
-    		bool AFHierarchySendMessage(const std::string& msgType, std::string& jsonData);
+		bool sendAFHierarchy();
+   		bool sendAFHierarchyTypes();
+   		bool sendAFHierarchyStatic();
+		bool AFHierarchySendMessage(const std::string& msgType, std::string& jsonData);
 
 	private:
 		const std::string	m_path;
@@ -211,6 +213,7 @@ class OMF
 		const std::string	m_producerToken;
     		std::string		m_PIServerEndpoint;
     		std::string		m_AFHierarchy1Level;
+			std::string		m_prefixAFAsset;
 
 		// Define the OMF format to use for each type
 		// the format will not be applied if the string is empty
@@ -257,7 +260,7 @@ class OMFData
 		OMFData(const Reading& reading,
 			const long typeId,
 			const std::string& PIServerEndpoint = std::string(),
-			const std::string& AFHierarchy1Level = std::string());
+			const std::string& DefaultAFLocation = std::string());
 
 		const std::string& OMFdataVal() const;
 	private:
