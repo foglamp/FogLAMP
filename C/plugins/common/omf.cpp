@@ -599,9 +599,8 @@ bool OMF::sendAFHierarchyStatic(const std::string AFHierarchyLevel)
 	return success;
 }
 
-
 /**
- *  AFHierarchy - // FIXME_I:
+ *  AFHierarchy - creates the link between 2 elements in the AF hierarchy
  *
  */
 bool OMF::sendAFHierarchyLink(std::string parent, std::string child)
@@ -625,7 +624,9 @@ bool OMF::sendAFHierarchyLink(std::string parent, std::string child)
 }
 
 /**
- * Add the 1st level of AF hierarchy if the end point is PI Web API
+ * Creates the hierarchies tree in the AF as defined in the configuration item DefaultAFLocation
+ * each level is separated by /
+ * the implementation is available for PI Web API only
  * The hierarchy is created/recreated if an OMF type message is sent
  *
  */
@@ -637,7 +638,7 @@ bool OMF::sendAFHierarchy()
 
 	if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		// FIXME_I:
+		// Implementation onfly for PI Web API
 		std::stringstream defaultAFLocation(m_DefaultAFLocation);
 
 		if (m_DefaultAFLocation.find(AFHierarchySeparator) == string::npos)
@@ -1282,7 +1283,6 @@ const std::string OMF::createStaticData(const Reading& reading) const
 	}
 	else if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		// FIXME_I:x1
 		sData.append(reading.getAssetName());
 		sData.append("\", \"AssetId\": \"");
 		sData.append(m_prefixAFAsset + "_" + reading.getAssetName());
@@ -1348,7 +1348,6 @@ const std::string OMF::createLinkData(const Reading& reading) const
 		StringReplace(tmpStr, "_placeholder_src_type_", m_AFHierarchyLevel + "_typeid");
 		StringReplace(tmpStr, "_placeholder_src_idx_",  m_AFHierarchyLevel );
 		StringReplace(tmpStr, "_placeholder_tgt_type_", targetTypeId);
-		// FIXME_I:x1
 		StringReplace(tmpStr, "_placeholder_tgt_idx_",  m_prefixAFAsset + "_" + assetName);
 
 		lData.append(tmpStr);
@@ -1371,7 +1370,6 @@ const std::string OMF::createLinkData(const Reading& reading) const
 	}
 	else if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		// FIXME_I:x1
 		lData.append(m_prefixAFAsset + "_" + assetName);
 	}
 

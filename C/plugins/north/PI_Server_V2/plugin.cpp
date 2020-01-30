@@ -145,7 +145,7 @@ const char *PLUGIN_DEFAULT_CONFIG_INFO = QUOTE(
 			"displayName": "PI-Server Endpoint"
 		},
 		"DefaultAFLocation": {
-			"description": "Defines the hierarchies tree in Asset Framework in which the assets will be created, PI Web API only.",
+			"description": "Defines the hierarchies tree in Asset Framework in which the assets will be created, each level is separated by /, PI Web API only.",
 			"type": "string",
 			"default": "foglamp/data_piwebapi",
 			"order": "18",
@@ -339,8 +339,7 @@ PLUGIN_HANDLE plugin_init(ConfigCategory* configData)
 	connInfo->formatInteger = formatInteger;
 	connInfo->DefaultAFLocation = DefaultAFLocation;
 
-	// FIXME_I: implement full alg
-	// FIXME_I: x1
+	// Generates the prefix to have unique asset_id across different levels of hierarchies
 	long hostId = gethostid();
 	std::size_t hierarchyHash = std::hash<std::string>{}(DefaultAFLocation);
 	connInfo->prefixAFAsset = std::to_string(hostId) + "_" + std::to_string(hierarchyHash);
@@ -553,12 +552,8 @@ uint32_t plugin_send(const PLUGIN_HANDLE handle,
 
 	// Set PIServerEndpoint configuration
 	connInfo->omf->setPIServerEndpoint(connInfo->PIServerEndpoint);
-
 	connInfo->omf->setDefaultAFLocation(connInfo->DefaultAFLocation);
-
-	// FIXME_I:x1
 	connInfo->omf->setPrefixAFAsset(connInfo->prefixAFAsset);
-
 
 	// Set OMF FormatTypes  
 	connInfo->omf->setFormatType(OMF_TYPE_FLOAT,

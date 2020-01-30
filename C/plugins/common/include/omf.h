@@ -203,8 +203,8 @@ class OMF
 
 		// Add the 1st level of AF hierarchy if the end point is PI Web API
 		bool sendAFHierarchy();
-   		bool sendAFHierarchyTypes(const std::string AFHierarchyLevel);
-   		bool sendAFHierarchyStatic(const std::string AFHierarchyLevel);
+		bool sendAFHierarchyTypes(const std::string AFHierarchyLevel);
+		bool sendAFHierarchyStatic(const std::string AFHierarchyLevel);
 		bool sendAFHierarchyLink(std::string parent, std::string child);
 		bool AFHierarchySendMessage(const std::string& msgType, std::string& jsonData);
 
@@ -212,21 +212,21 @@ class OMF
 		const std::string	m_path;
 		long			m_typeId;
 		const std::string	m_producerToken;
-    		std::string		m_PIServerEndpoint;
-			std::string		m_DefaultAFLocation;
-    		std::string		m_AFHierarchyLevel;
-			std::string		m_prefixAFAsset;
+		std::string		m_PIServerEndpoint;
+		std::string		m_DefaultAFLocation;
+		std::string		m_AFHierarchyLevel;
+		std::string		m_prefixAFAsset;
 
 		// Define the OMF format to use for each type
 		// the format will not be applied if the string is empty
-                std::map<const std::string, std::string> m_formatTypes {
+		std::map<const std::string, std::string> m_formatTypes {
 			{OMF_TYPE_STRING, ""},
 			{OMF_TYPE_INTEGER,"int64"},
 			{OMF_TYPE_FLOAT,  "float64"},
 			{OMF_TYPE_UNSUPPORTED,  "unsupported"}
 		};
 
-    		// Vector with OMF_TYPES
+		// Vector with OMF_TYPES
 		const std::vector<std::string> omfTypes = { OMF_TYPE_STRING,
 							    OMF_TYPE_FLOAT,  // Forces the creation of float also for integer numbers
 							    OMF_TYPE_FLOAT,
