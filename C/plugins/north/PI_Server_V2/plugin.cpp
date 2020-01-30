@@ -145,11 +145,11 @@ const char *PLUGIN_DEFAULT_CONFIG_INFO = QUOTE(
 			"displayName": "PI-Server Endpoint"
 		},
 		"DefaultAFLocation": {
-			"description": "Defines the hierarchy tree in Asset Framework in which the assets will be created, PI Web API only.",
+			"description": "Defines the hierarchies tree in Asset Framework in which the assets will be created, PI Web API only.",
 			"type": "string",
 			"default": "foglamp/data_piwebapi",
 			"order": "18",
-			"displayName": "Asset Framework hierarchy tree",
+			"displayName": "Asset Framework hierarchies tree",
 			"validity" : "PIServerEndpoint != \"Connector Relay\""
 		},
 		"notBlockingErrors": {
