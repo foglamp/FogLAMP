@@ -26,6 +26,8 @@ using namespace rapidjson;
 
 static bool isTypeSupported(DatapointValue& dataPoint);
 
+#define  AFHierarchySeparator '/'
+
 // Structures to generate and assign the 1st level of AF hierarchy if the end point is PI Web API
 const char *AF_HIERARCHY_1LEVEL_TYPE = QUOTE(
 	[
@@ -56,6 +58,27 @@ const char *AF_HIERARCHY_1LEVEL_STATIC = QUOTE(
 			]
 		}
 	]
+);
+
+
+const char *AF_HIERARCHY_LEVEL_LINK = QUOTE(
+[
+  {
+    "typeid": "__Link",
+	"values": [
+		{
+			"source": {
+				"typeid": "_placeholder_src_type_",
+				"index":  "_placeholder_src_idx_"
+			},
+			"target": {
+				"typeid": "_placeholder_tgt_type_",
+				"index":  "_placeholder_tgt_idx_"
+			}
+		}
+	]
+  }
+]
 );
 
 const char *AF_HIERARCHY_1LEVEL_LINK = QUOTE(
@@ -539,7 +562,7 @@ bool OMF::AFHierarchySendMessage(const string& msgType, string& jsonData)
  * AFHierarchy - handles OMF types definition
  *
  */
-bool OMF::sendAFHierarchyTypes()
+bool OMF::sendAFHierarchyTypes(const std::string AFHierarchyLevel)
 {
 	bool success;
 	string jsonData;
@@ -547,7 +570,7 @@ bool OMF::sendAFHierarchyTypes()
 
 	jsonData = "";
 	tmpStr = AF_HIERARCHY_1LEVEL_TYPE;
-	StringReplace(tmpStr, "_placeholder_typeid_", m_AFHierarchy1Level + "_typeid");
+	StringReplace(tmpStr, "_placeholder_typeid_", AFHierarchyLevel + "_typeid");
 	jsonData.append(tmpStr);
 
 	success = AFHierarchySendMessage("Type", jsonData);
@@ -559,7 +582,7 @@ bool OMF::sendAFHierarchyTypes()
  *  AFHierarchy - handles OMF static data
  *
  */
-bool OMF::sendAFHierarchyStatic()
+bool OMF::sendAFHierarchyStatic(const std::string AFHierarchyLevel)
 {
 	bool success;
 	string jsonData;
@@ -567,8 +590,33 @@ bool OMF::sendAFHierarchyStatic()
 
 	jsonData = "";
 	tmpStr = AF_HIERARCHY_1LEVEL_STATIC;
-	StringReplace(tmpStr, "_placeholder_typeid_" , m_AFHierarchy1Level + "_typeid");
-	StringReplace(tmpStr, "_placeholder_"        , m_AFHierarchy1Level);
+	StringReplace(tmpStr, "_placeholder_typeid_" , AFHierarchyLevel + "_typeid");
+	StringReplace(tmpStr, "_placeholder_"        , AFHierarchyLevel);
+	jsonData.append(tmpStr);
+
+	success = AFHierarchySendMessage("Data", jsonData);
+
+	return success;
+}
+
+
+/**
+ *  AFHierarchy - // FIXME_I:
+ *
+ */
+bool OMF::sendAFHierarchyLink(std::string parent, std::string child)
+{
+	bool success;
+	string jsonData;
+	string tmpStr;
+
+	jsonData = "";
+	tmpStr = AF_HIERARCHY_LEVEL_LINK;
+
+	StringReplace(tmpStr, "_placeholder_src_type_", parent + "_typeid");
+	StringReplace(tmpStr, "_placeholder_src_idx_",  parent );
+	StringReplace(tmpStr, "_placeholder_tgt_type_", child + "_typeid");
+	StringReplace(tmpStr, "_placeholder_tgt_idx_",  child);
 	jsonData.append(tmpStr);
 
 	success = AFHierarchySendMessage("Data", jsonData);
@@ -584,15 +632,44 @@ bool OMF::sendAFHierarchyStatic()
 bool OMF::sendAFHierarchy()
 {
 	bool success = true;
+	std::string level;
+	std::string previousLevel;
 
 	if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		success = sendAFHierarchyTypes();
-		if (success)
-		{
-			success = sendAFHierarchyStatic();
-		}
+		// FIXME_I:
+		std::stringstream defaultAFLocation(m_DefaultAFLocation);
 
+		if (m_DefaultAFLocation.find(AFHierarchySeparator) == string::npos)
+		{
+			// only 1 single level of hierarchy
+			success = sendAFHierarchyTypes(m_DefaultAFLocation);
+			if (success)
+			{
+				success = sendAFHierarchyStatic(m_DefaultAFLocation);
+			}
+			m_AFHierarchyLevel = m_DefaultAFLocation;
+		}
+		else
+		{
+			// multiple hierarchy levels
+			while (std::getline(defaultAFLocation, level, AFHierarchySeparator))
+			{
+				success = sendAFHierarchyTypes(level);
+				if (success)
+				{
+					success = sendAFHierarchyStatic(level);
+				}
+
+				// Creates the link between the AF level
+				if (previousLevel != "")
+				{
+					sendAFHierarchyLink(previousLevel, level);
+				}
+				previousLevel = level;
+			}
+			m_AFHierarchyLevel = level;
+		}
 	}
 	return success;
 }
@@ -685,7 +762,7 @@ uint32_t OMF::sendToServer(const vector<Reading *>& readings,
 		}
 
 		// Add into JSON string the OMF transformed Reading data
-		string outData = OMFData(**elem, typeId, m_PIServerEndpoint, m_AFHierarchy1Level ).OMFdataVal();
+		string outData = OMFData(**elem, typeId, m_PIServerEndpoint, m_AFHierarchyLevel ).OMFdataVal();
 		if (!outData.empty())
 		{
 			jsonData << (pendingSeparator ? ", " : "") << outData;
@@ -880,7 +957,7 @@ uint32_t OMF::sendToServer(const vector<Reading>& readings,
 		}
 
 		// Add into JSON string the OMF transformed Reading data
-		jsonData << OMFData(*elem, typeId, m_PIServerEndpoint, m_AFHierarchy1Level).OMFdataVal() << (elem < (readings.end() -1 ) ? ", " : "");
+		jsonData << OMFData(*elem, typeId, m_PIServerEndpoint, m_AFHierarchyLevel).OMFdataVal() << (elem < (readings.end() -1 ) ? ", " : "");
 	}
 
 	jsonData << "]";
@@ -956,7 +1033,7 @@ uint32_t OMF::sendToServer(const Reading* reading,
 
 	long typeId = OMF::getAssetTypeId((*reading).getAssetName());
 	// Add into JSON string the OMF transformed Reading data
-	jsonData << OMFData(*reading, typeId, m_PIServerEndpoint, m_AFHierarchy1Level).OMFdataVal();
+	jsonData << OMFData(*reading, typeId, m_PIServerEndpoint, m_AFHierarchyLevel).OMFdataVal();
 	jsonData << "]";
 
 	// Build headers for Readings data
@@ -1157,7 +1234,7 @@ const std::string OMF::createContainerData(const Reading& reading) const
 	// Add the 1st level of AFHierarchy as a prefix to the name in case of PI Web API
 	if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		measurementId = m_AFHierarchy1Level + "_" + measurementId;
+		measurementId = m_AFHierarchyLevel + "_" + measurementId;
 	}
 
 	cData.append("\", \"id\": \"" + measurementId);
@@ -1268,8 +1345,8 @@ const std::string OMF::createLinkData(const Reading& reading) const
 
 		OMF::setAssetTypeTag(assetName, "typename_sensor", targetTypeId);
 
-		StringReplace(tmpStr, "_placeholder_src_type_", m_AFHierarchy1Level + "_typeid");
-		StringReplace(tmpStr, "_placeholder_src_idx_",  m_AFHierarchy1Level );
+		StringReplace(tmpStr, "_placeholder_src_type_", m_AFHierarchyLevel + "_typeid");
+		StringReplace(tmpStr, "_placeholder_src_idx_",  m_AFHierarchyLevel );
 		StringReplace(tmpStr, "_placeholder_tgt_type_", targetTypeId);
 		// FIXME_I:x1
 		StringReplace(tmpStr, "_placeholder_tgt_idx_",  m_prefixAFAsset + "_" + assetName);
@@ -1303,7 +1380,7 @@ const std::string OMF::createLinkData(const Reading& reading) const
 	// Add the 1st level of AFHierarchy as a prefix to the name in case of PI Web API
 	if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		measurementId = m_AFHierarchy1Level + "_" + measurementId;
+		measurementId = m_AFHierarchyLevel + "_" + measurementId;
 	}
 
 	lData.append("\"}, \"target\": {\"containerid\": \"" + measurementId);
@@ -1333,7 +1410,7 @@ void OMF::setAssetTypeTag(const string& assetName,
 	// Add the 1st level of AFHierarchy as a prefix to the name in case of PI Web API
 	if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		AssetTypeTag = m_AFHierarchy1Level + "_" + AssetTypeTag;
+		AssetTypeTag = m_AFHierarchyLevel + "_" + AssetTypeTag;
 	}
 	// Add type-id + '_' + asset_name + '_' + tagName'
 	data.append(AssetTypeTag);
@@ -1430,7 +1507,7 @@ void OMF::setPIServerEndpoint(const string &PIServerEndpoint)
  */
 void OMF::setDefaultAFLocation(const string &DefaultAFLocation)
 {
-	m_AFHierarchy1Level = DefaultAFLocation;
+	m_DefaultAFLocation = DefaultAFLocation;
 }
 
 /**
@@ -1831,7 +1908,7 @@ bool OMF::setCreatedTypes(const Reading& row)
 	}
 	else if (m_PIServerEndpoint.compare("p") == 0)
 	{
-		key = m_AFHierarchy1Level + "_" + row.getAssetName();
+		key = m_AFHierarchyLevel + "_" + row.getAssetName();
 	}
 
 

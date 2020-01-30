@@ -203,8 +203,9 @@ class OMF
 
 		// Add the 1st level of AF hierarchy if the end point is PI Web API
 		bool sendAFHierarchy();
-   		bool sendAFHierarchyTypes();
-   		bool sendAFHierarchyStatic();
+   		bool sendAFHierarchyTypes(const std::string AFHierarchyLevel);
+   		bool sendAFHierarchyStatic(const std::string AFHierarchyLevel);
+		bool sendAFHierarchyLink(std::string parent, std::string child);
 		bool AFHierarchySendMessage(const std::string& msgType, std::string& jsonData);
 
 	private:
@@ -212,7 +213,8 @@ class OMF
 		long			m_typeId;
 		const std::string	m_producerToken;
     		std::string		m_PIServerEndpoint;
-    		std::string		m_AFHierarchy1Level;
+			std::string		m_DefaultAFLocation;
+    		std::string		m_AFHierarchyLevel;
 			std::string		m_prefixAFAsset;
 
 		// Define the OMF format to use for each type

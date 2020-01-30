@@ -28,6 +28,7 @@
 
 #include "crypto.hpp"
 
+
 #define VERBOSE_LOG	0
 
 using namespace std;
@@ -340,7 +341,9 @@ PLUGIN_HANDLE plugin_init(ConfigCategory* configData)
 
 	// FIXME_I: implement full alg
 	// FIXME_I: x1
-	connInfo->prefixAFAsset = "007f0100";
+	long hostId = gethostid();
+	std::size_t hierarchyHash = std::hash<std::string>{}(DefaultAFLocation);
+	connInfo->prefixAFAsset = std::to_string(hostId) + "_" + std::to_string(hierarchyHash);
 
 	// PI Web API end-point - evaluates the authentication method requested
 	if (PIWebAPIAuthMethod.compare("anonymous") == 0)
