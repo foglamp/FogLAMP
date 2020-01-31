@@ -500,7 +500,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 							sleep_time_ms = PREP_CMD_RETRY_BASE + (random() &  PREP_CMD_RETRY_BACKOFF);
 							retries++;
 
-							Logger::getLogger()->warn("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:",i, retries, sleep_time_ms);
+							Logger::getLogger()->info("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:",i, retries, sleep_time_ms);
 
 							std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 						}
@@ -512,7 +512,7 @@ int Connection::readingStream(ReadingStream **readings, bool commit)
 							sleep_time_ms = PREP_CMD_RETRY_BASE + (random() &  PREP_CMD_RETRY_BACKOFF);
 							retries++;
 
-							Logger::getLogger()->warn("SQLITE_BUSY - thread :%s: - record :%d: - retry number :%d: sleep time ms :%d:", threadId.str().c_str() ,i , retries, sleep_time_ms);
+							Logger::getLogger()->info("SQLITE_BUSY - thread :%s: - record :%d: - retry number :%d: sleep time ms :%d:", threadId.str().c_str() ,i , retries, sleep_time_ms);
 
 							std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 						}
@@ -727,7 +727,7 @@ int sleep_time_ms = 0;
 						sleep_time_ms = PREP_CMD_RETRY_BASE + (random() &  PREP_CMD_RETRY_BACKOFF);
 						retries++;
 
-						Logger::getLogger()->warn("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
+						Logger::getLogger()->info("SQLITE_LOCKED - record :%d: - retry number :%d: sleep time ms :%d:" ,row ,retries ,sleep_time_ms);
 
 						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 					}
@@ -739,7 +739,7 @@ int sleep_time_ms = 0;
 						sleep_time_ms = PREP_CMD_RETRY_BASE + (random() &  PREP_CMD_RETRY_BACKOFF);
 						retries++;
 
-						Logger::getLogger()->warn("SQLITE_BUSY - thread :%s: - record :%d: - retry number :%d: sleep time ms :%d:", threadId.str().c_str() ,row, retries, sleep_time_ms);
+						Logger::getLogger()->info("SQLITE_BUSY - thread :%s: - record :%d: - retry number :%d: sleep time ms :%d:", threadId.str().c_str() ,row, retries, sleep_time_ms);
 
 						std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
 					}
