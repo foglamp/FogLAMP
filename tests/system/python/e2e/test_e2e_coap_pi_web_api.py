@@ -53,7 +53,7 @@ def _verify_egress(read_data_from_pi, pi_host, pi_admin, pi_passwd, pi_db, wait_
     data_from_pi = None
 
     # See C/plugins/common/omf.cpp
-    af_hierarchy_level = "foglamp_data_piwebapi"
+    af_hierarchy_level = "data_piwebapi"
     type_id = 1
     recorded_datapoint = "{}_{}measurement_{}.{}".format(af_hierarchy_level, type_id, asset_name, DATAPOINT)
 

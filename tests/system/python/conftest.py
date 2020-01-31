@@ -235,6 +235,7 @@ def read_data_from_pi():
             res = conn.getresponse()
             r = json.loads(res.read().decode())
             dbs = r["Items"][0]["Links"]["Databases"]
+            #print ("Databases:", dbs)
 
             if dbs is not None:
                 conn.request("GET", dbs, headers=headers)
@@ -243,22 +244,40 @@ def read_data_from_pi():
                 for el in r["Items"]:
                     if el["Name"] == pi_database:
                         elements = el["Links"]["Elements"]
+                        #print ("elements:", elements)
 
             if elements is not None:
                 conn.request("GET", elements, headers=headers)
                 res = conn.getresponse()
                 r = json.loads(res.read().decode())
                 url_elements_list = r["Items"][0]["Links"]["Elements"]
+                print ("url_elements_list:", url_elements_list)
+
+            url_elements_data_list=None
 
             if url_elements_list is not None:
                 conn.request("GET", url_elements_list, headers=headers)
                 res = conn.getresponse()
                 r = json.loads(res.read().decode())
                 items = r["Items"]
+                print ("items1:", items)
                 for el in items:
-                    if el["Name"] == asset:
-                        url_recorded_data = el["Links"]["RecordedData"]
+                    if el["Name"] == "data_piwebapi":
+                        url_elements_data_list = el["Links"]["Elements"]
+                        print ("url_elements_data_list:", url_elements_data_list)
+
+            if url_elements_data_list is not None:
+                conn.request("GET", url_elements_data_list, headers=headers)
+                res = conn.getresponse()
+                r = json.loads(res.read().decode())
+                items = r["Items"]
+                print ("items2:", items)
+                for e2 in items:
+                    if e2["Name"] == asset:
+                        url_recorded_data = e2["Links"]["RecordedData"]
                         web_id = el["WebId"]
+                        print ("url_recorded_data:", url_recorded_data)
+                        print ("web_id:", web_id)
 
             _data_pi = {}
             if url_recorded_data is not None:
@@ -267,6 +286,7 @@ def read_data_from_pi():
                 r = json.loads(res.read().decode())
                 _items = r["Items"]
                 for el in _items:
+                    print(el)
                     _recoded_value_list = []
                     for _head in sensor:
                         if el["Name"] == _head:
@@ -276,9 +296,9 @@ def read_data_from_pi():
                             _data_pi[_head] = _recoded_value_list
 
                 # Delete recorded elements
-                conn.request("DELETE", '/piwebapi/elements/{}'.format(web_id), headers=headers)
-                res = conn.getresponse()
-                res.read()
+#                conn.request("DELETE", '/piwebapi/elements/{}'.format(web_id), headers=headers)
+#                res = conn.getresponse()
+#                res.read()
 
                 return _data_pi
         except (KeyError, IndexError, Exception):
