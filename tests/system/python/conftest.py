@@ -192,7 +192,8 @@ def start_north_pi_v2_web_api():
                            "PIWebAPIUserId":  {"value": pi_user},
                            "PIWebAPIPassword": {"value": pi_pwd},
                            "URL": {"value": "https://{}:{}/piwebapi/omf".format(pi_host, pi_port)},
-                           "compression": {"value": "true"}
+                           "compression": {"value": "true"},
+                           "DefaultAFLocation": {"value": "foglamp/room1/machine1"}
                            }
                 }
 
@@ -318,13 +319,23 @@ def read_data_from_pi_web_api():
                 r = json.loads(res.read().decode())
                 for el in r["Items"]:
                     if el["Name"] == pi_database:
-                        elements = el["Links"]["Elements"]
+                        url_elements_list = el["Links"]["Elements"]
 
-            if elements is not None:
-                conn.request("GET", elements, headers=headers)
-                res = conn.getresponse()
-                r = json.loads(res.read().decode())
-                url_elements_list = r["Items"][0]["Links"]["Elements"]
+            # This block is for iteration when we have multi-level hierarchy.
+            # For eg., if we have DefaultAFLocation as "foglamp/room1/machine1" then
+            # it will recursively find elements of "foglamp" and then "room1".
+            # And next block is for finding element of "machine1".
+
+            af_level_count = 0
+            for level in af_hierarchy_list[:-1]:
+                if url_elements_list is not None:
+                    conn.request("GET", url_elements_list, headers=headers)
+                    res = conn.getresponse()
+                    r = json.loads(res.read().decode())
+                    for el in r["Items"]:
+                        if el["Name"] == af_hierarchy_list[af_level_count]:
+                            url_elements_list = el["Links"]["Elements"]
+                            af_level_count = af_level_count+1
 
             if url_elements_list is not None:
                 conn.request("GET", url_elements_list, headers=headers)
@@ -361,9 +372,9 @@ def read_data_from_pi_web_api():
                             _data_pi[_head] = _recoded_value_list
 
                 # Delete recorded elements
-#                conn.request("DELETE", '/piwebapi/elements/{}'.format(web_id), headers=headers)
-#                res = conn.getresponse()
-#                res.read()
+                conn.request("DELETE", '/piwebapi/elements/{}'.format(web_id), headers=headers)
+                res = conn.getresponse()
+                res.read()
 
                 return _data_pi
         except (KeyError, IndexError, Exception):
