@@ -322,7 +322,7 @@ def read_data_from_pi_web_api():
                         url_elements_list = el["Links"]["Elements"]
 
             # This block is for iteration when we have multi-level hierarchy.
-            # For eg., if we have DefaultAFLocation as "foglamp/room1/machine1" then
+            # For example, if we have DefaultAFLocation as "foglamp/room1/machine1" then
             # it will recursively find elements of "foglamp" and then "room1".
             # And next block is for finding element of "machine1".
 
