@@ -20,6 +20,7 @@
 #include <rapidjson/document.h>
 #include "string_utils.h"
 #include <plugin_api.h>
+#include <string_utils.h>
 
 using namespace std;
 using namespace rapidjson;
@@ -1542,7 +1543,7 @@ void OMF::setPIServerEndpoint(const string &PIServerEndpoint)
  */
 void OMF::setDefaultAFLocation(const string &DefaultAFLocation)
 {
-	m_DefaultAFLocation = DefaultAFLocation;
+	m_DefaultAFLocation = StringSlashFix(DefaultAFLocation);
 }
 
 /**

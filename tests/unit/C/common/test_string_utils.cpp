@@ -2,9 +2,9 @@
 #include <iostream>
 #include <string>
 #include "string_utils.h"
+#include <vector>
 
 using namespace std;
-
 
 class Row  {
 	public:
@@ -23,6 +23,38 @@ class Row  {
 
 class StringUtilsTestClass : public ::testing::TestWithParam<Row> {
 };
+
+TEST(StringSlashFixTestClass, goodCases)
+{
+	vector<pair<string, string>> testCases = {
+
+		// TestCase        - Expected
+		{"foglamp_test1",    "foglamp_test1"},
+
+		{"/foglamp_test1",   "foglamp_test1"},
+		{"//foglamp_test1",  "foglamp_test1"},
+		{"///foglamp_test1", "foglamp_test1"},
+
+		{"foglamp_test1/",   "foglamp_test1"},
+		{"foglamp_test1//",  "foglamp_test1"},
+		{"foglamp_test1///", "foglamp_test1"},
+
+		{"/a//b/c/",         "a/b/c"},
+		{"foglamp/test1",    "foglamp/test1"},
+		{"foglamp//test1",   "foglamp/test1"},
+		{"foglamp//test//1", "foglamp/test/1"},
+
+		{"//foglamp_test1//",    "foglamp_test1"},
+		{"//foglamp//test//1//", "foglamp/test/1"}
+	};
+	string result;
+
+	for(auto &testCase : testCases)
+	{
+		result = StringSlashFix(testCase.first);
+		ASSERT_EQ(result, testCase.second);
+	}
+}
 
 // Test Code
 TEST_P(StringUtilsTestClass, StringUtilsTestCase)

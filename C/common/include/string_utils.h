@@ -19,6 +19,9 @@ using namespace std;
 void StringReplace(std::string& StringToManage,
 		   const std::string& StringToSearch,
 		   const std::string& StringReplacement);
+
+string StringSlashFix(const string& stringToFix);
+
 void StringStripCRLF(std::string& StringToManage);
 string urlEncode(const string& s);
 string urlDecode(const string& s);
