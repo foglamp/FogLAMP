@@ -35,6 +35,25 @@ void StringReplace(std::string& StringToManage,
 }
 
 /**
+ * Search and replace all the occurances of a string
+ *
+ * @param out StringToManage    string in which apply the search and replacement
+ * @param     StringToSearch    string to search and replace
+ * @param     StringToReplace   substitution string
+ *
+ */
+void StringReplaceAll(std::string& StringToManage,
+				   const std::string& StringToSearch,
+				   const std::string& StringReplacement)
+{
+
+	while (StringToManage.find(StringToSearch) != string::npos)
+	{
+		StringReplace(StringToManage,StringToSearch, StringReplacement);
+	}
+}
+
+/**
  * Removes slash when not needed, at the beggining and at the end,
  * substitutes // with /
  *

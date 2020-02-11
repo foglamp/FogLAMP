@@ -56,6 +56,36 @@ TEST(StringSlashFixTestClass, goodCases)
 	}
 }
 
+
+TEST(StringReplaceAllTestClass, goodCases)
+{
+	vector<std::tuple<string, string, string, string>> testCases = {
+
+		// TestCase               - to search - to repplace   - Expected
+		{"foglamp@@test1",        "@@",       "@",            "foglamp@test1"},
+		{"foglamp@@test@@2",      "@@",       "@",            "foglamp@test@2"},
+		{"@@foglamp@@test@@3@@",  "@@",       "@",            "@foglamp@test@3@"}
+
+	};
+	string test;
+	string toSearch;
+	string toReplace;
+	string Expected;
+
+	for(auto &testCase : testCases)
+	{
+		test = std::get<0>(testCase);
+		toSearch = std::get<1>(testCase);
+		toReplace = std::get<2>(testCase);
+		Expected = std::get<3>(testCase);
+
+		StringReplaceAll(test, toSearch, toReplace);
+		ASSERT_EQ(test, Expected);
+	}
+}
+
+
+
 // Test Code
 TEST_P(StringUtilsTestClass, StringUtilsTestCase)
 {
