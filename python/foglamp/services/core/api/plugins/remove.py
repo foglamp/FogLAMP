@@ -27,14 +27,14 @@ async def plugin_delete(request):
     Remove plugin from foglamp
 
     '''
-    EndPoint: curl -X DELETE http://host-ip:port/foglamp/plugins/{type}/{name}/remove
+    EndPoint: curl -X DELETE http://host-ip:port/foglamp/plugins/{type}/{name}
     '''
     Example:
-        curl -X DELETE http://host-ip:port/foglamp/plugins/south/sinusoid/remove
-        curl -X DELETE http://host-ip:port/foglamp/plugins/north/http_north/remove
-        curl -X DELETE http://host-ip:port/foglamp/plugins/filter/expression/remove
-        curl -X DELETE http://host-ip:port/foglamp/plugins/notificationDelivery/alexa/remove
-        curl -X DELETE http://host-ip:port/foglamp/plugins/notificationRule/Average/remove
+        curl -X DELETE http://host-ip:port/foglamp/plugins/south/sinusoid
+        curl -X DELETE http://host-ip:port/foglamp/plugins/north/http_north
+        curl -X DELETE http://host-ip:port/foglamp/plugins/filter/expression
+        curl -X DELETE http://host-ip:port/foglamp/plugins/notificationDelivery/alexa
+        curl -X DELETE http://host-ip:port/foglamp/plugins/notificationRule/Average
     """
     plugin_type = request.match_info.get('type', None)
     name = request.match_info.get('name', None)

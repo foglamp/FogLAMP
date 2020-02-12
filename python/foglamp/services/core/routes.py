@@ -170,7 +170,7 @@ def setup(app):
     app.router.add_route('GET', '/foglamp/plugins/available', plugins_discovery.get_plugins_available)
     app.router.add_route('POST', '/foglamp/plugins', plugins_install.add_plugin)
     app.router.add_route('PUT', '/foglamp/plugins/{type}/{name}/update', plugins_update.update_plugin)
-    app.router.add_route('DELETE', '/foglamp/plugins/{type}/{name}/remove', remove.plugin_delete)
+    app.router.add_route('DELETE', '/foglamp/plugins/{type}/{name}', remove.plugin_delete)
 
     # Filters 
     app.router.add_route('POST', '/foglamp/filter', filters.create_filter)
