@@ -62,10 +62,9 @@ TEST(StringReplaceAllTestClass, goodCases)
 	vector<std::tuple<string, string, string, string>> testCases = {
 
 		// TestCase               - to search - to repplace   - Expected
-		{"foglamp@@test1",        "@@",       "@",            "foglamp@test1"},
-		{"foglamp@@test@@2",      "@@",       "@",            "foglamp@test@2"},
-		{"@@foglamp@@test@@3@@",  "@@",       "@",            "@foglamp@test@3@"}
-
+		{std::make_tuple("foglamp@@test1",        "@@",       "@",            "foglamp@test1")},
+		{std::make_tuple("foglamp@@test@@2",      "@@",       "@",            "foglamp@test@2")},
+		{std::make_tuple("@@foglamp@@test@@3@@",  "@@",       "@",            "@foglamp@test@3@")}
 	};
 	string test;
 	string toSearch;
