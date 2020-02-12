@@ -27,6 +27,7 @@ from foglamp.services.core.api.plugins import update as plugins_update
 from foglamp.services.core.api.snapshot import plugins as snapshot_plugins
 from foglamp.services.core.api.snapshot import table as snapshot_table
 from foglamp.services.core.api import package_log
+from foglamp.services.core.api.plugins import remove
 
 __author__ = "Ashish Jabble, Praveen Garg, Massimiliano Pinto, Amarendra K Sinha"
 __copyright__ = "Copyright (c) 2017-2018 OSIsoft, LLC"
@@ -164,11 +165,12 @@ def setup(app):
     app.router.add_route('GET', '/foglamp/package/log', package_log.get_logs)
     app.router.add_route('GET', '/foglamp/package/log/{name}', package_log.get_log_by_name)
 
-    # Plugins (install, discovery, update)
+    # Plugins (install, discovery, update, delete)
     app.router.add_route('GET', '/foglamp/plugins/installed', plugins_discovery.get_plugins_installed)
     app.router.add_route('GET', '/foglamp/plugins/available', plugins_discovery.get_plugins_available)
     app.router.add_route('POST', '/foglamp/plugins', plugins_install.add_plugin)
     app.router.add_route('PUT', '/foglamp/plugins/{type}/{name}/update', plugins_update.update_plugin)
+    app.router.add_route('DELETE', '/foglamp/plugins/{type}/{name}/remove', remove.plugin_delete)
 
     # Filters 
     app.router.add_route('POST', '/foglamp/filter', filters.create_filter)
