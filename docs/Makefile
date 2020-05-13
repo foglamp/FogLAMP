@@ -23,13 +23,13 @@ generated: foglamp_plugins.rst plugin_configuration
 
 foglamp_plugins.rst: 
 	@echo Building page with table of plugins
-	#@bash scripts/foglamp_plugin_list foglamp_plugins.rst
+	@bash scripts/foglamp_plugin_list foglamp_plugins.rst
 
 plugin_configuration: 
 	@echo Building plugin configuration appendices
-	#@bash scripts/plugin_documentation
+	@bash scripts/plugin_documentation
 
 clean:
-	#@rm -f foglamp_plugins.rst
-	#@rm -rf plugins
+	@rm -f foglamp_plugins.rst
+	@rm -rf plugins
 	@rm -rf "$(BUILDDIR)"
