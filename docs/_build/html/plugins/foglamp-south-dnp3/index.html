@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DNP3 Master Plugin &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP South Plugins" href="../south.html"/>
+        <link rel="next" title="Enviro pHAT Plugin" href="../foglamp-south-envirophat/index.html"/>
+        <link rel="prev" title="DHT11 (Python version)" href="../foglamp-south-dht11/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-am2315/index.html">AM2315 Temperature &amp; Humidity Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-cc2650/index.html">CC2650 SensorTag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-coap/index.html">CoAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-csv/index.html">Simple CSV Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht/index.html">DHT11 (C version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht11/index.html">DHT11 (Python version)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DNP3 Master Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dnp3-out-station-testing">DNP3 Out Station Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-envirophat/index.html">Enviro pHAT Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-expression/index.html">Expression South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-FlirAX8/index.html">Flir AX8 Thermal Imaging Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-http/index.html">South HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-ina219/index.html">INA219 Voltage &amp; Current Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-modbus-c/index.html">Modbus South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-mqtt-sparkplug/index.html">MQTT Sparkplug B</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-opcua/index.html">OPC/UA South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-playback/index.html">Playback Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-pt100/index.html">PT100 Temperature Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-random/index.html">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-randomwalk/index.html">Random Walk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sensehat/index.html">SenseHAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sinusoid/index.html">Sinusoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-systeminfo/index.html">System Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-usb4704/index.html">Advantech USB-4704</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-beckhoff/index.html">Beckhoff TwinCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-digiducer/index.html">Digiducer Vibration Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../south.html">FogLAMP South Plugins</a> &raquo;</li>
+        
+      <li>DNP3 Master Plugin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-south-dnp3/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dnp3-master-plugin">
+<h1>DNP3 Master Plugin<a class="headerlink" href="#dnp3-master-plugin" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-south-dnp3</em> allows FogLAMP to act as a DNP3 master and gather data from a DNP3 Out Station.  The plugin will fetch all data types from the DNP3 Out Station and create assets for each in FogLAMP. The DNP3 plugin also handles unsolicited messages transmitted by the outstation.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="dnp3" src="../../_images/dnp3.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Asset Name prefix</strong>: An asset name prefix that is prepended to the DNP3 objects retrieved from the DNP3 outstations to create the FogLAMP asset name.</li>
+<li><strong>Master link id</strong>: The master link id FogLAMP uses when implementing the DNP3 protocol.</li>
+<li><strong>Outstation address</strong>: The IP address of the DNP3 Out Station to be connected.</li>
+<li><strong>Outstation port</strong>: The post on the Out Station to which the connection is established.</li>
+<li><strong>Outstation link Id</strong>: The Out Station link id.</li>
+<li><strong>Data scan</strong>: Enable or disable the scanning of all objects and values in the Out Station.  This is the Integrity Poll for all Classes.</li>
+<li><strong>Scan interval</strong>: The interval between data scans of the Out Station.</li>
+<li><strong>Network timeout</strong>: Timeout for fetching data from the Out Station expressed in seconds.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="dnp3-out-station-testing">
+<h2>DNP3 Out Station Testing<a class="headerlink" href="#dnp3-out-station-testing" title="Permalink to this headline">¶</a></h2>
+<p>The opdendnp3 package contains a demo Out Station that can be used for test purposes. After building the opendnp3 package on your machine run the demo program as follows;</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> opendnp3/build
+<span class="gp">$</span> ./outstation-demo
+</pre></div>
+</div>
+<p>This demo application listens on any IP address, port 20001 and has link Id set to 10.  It also assumes master link Id is 1. Configuring your FogLAMP plugin with these parameters should allow FogLAMP to connect to this Out Station.</p>
+<p>Once started it logs traffic and waits for use input to send unsolicited messages:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">Enter one or more measurement changes then press &lt;enter&gt;</span>
+<span class="go">c = counter, b = binary, d = doublebit, a = analog, o = octet string, &#39;quit&#39; = exit</span>
+</pre></div>
+</div>
+<p>Another option is the use of a DNP3 Out Station simulator, as an example:</p>
+<p><a class="reference external" href="http://freyrscada.com/dnp3-ieee-1815-Client-Simulator.php#Download-DNP3-Development-Bundle">http://freyrscada.com/dnp3-ieee-1815-Client-Simulator.php#Download-DNP3-Development-Bundle</a></p>
+<p>Once the bundle has been downloaded, the <strong>DNPOutstationSimulator.exe</strong> application under the “Simulator” folder can be installed and run on a Windows 32bit platform.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-south-envirophat/index.html" class="btn btn-neutral float-right" title="Enviro pHAT Plugin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-south-dht11/index.html" class="btn btn-neutral" title="DHT11 (Python version)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

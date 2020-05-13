@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Processing Data &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="FogLAMP Architecture" href="foglamp_architecture.html"/>
+        <link rel="prev" title="Quick Start Guide" href="quick_start.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Processing Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-be-done">What Can Be Done?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-can-it-be-done">Where Can it Be Done?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adding-a-south-filter">Adding a South Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reordering-filters">Reordering Filters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#editing-filter-configuration">Editing Filter Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-filters-to-the-north">Adding Filters To The North</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#some-useful-filters">Some Useful Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scale">Scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delta">Delta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rate">Rate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Processing Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/processing_data.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="processing-data">
+<h1>Processing Data<a class="headerlink" href="#processing-data" title="Permalink to this headline">¶</a></h1>
+<p>We have already seen that FogLAMP can collect data from a variety of sources, buffer it locally and send it on to one or more destination systems. It is also possible to process the data within FogLAMP to edit, augment or remove data as it traverses the FogLAMP system. In the same way FogLAMP makes extensive use of plugin components to add new sources of data and new destinations for that data, FogLAMP also uses plugins to add processing filters to the FogLAMP system.</p>
+<div class="section" id="what-can-be-done">
+<h2>What Can Be Done?<a class="headerlink" href="#what-can-be-done" title="Permalink to this headline">¶</a></h2>
+<p>Data processing is done via plugins that are known as <em>filters</em> in FogLAMP, therefore it is not possible to give a definitive list of all the different processing that can occur, the design intent is that it is expandable by the user. The general types of things that can be done are;</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Modify a value in a reading</strong>. This could be as simple as applying a scale factor to convert from one measurement scale to another or more complex mathematical operation.</li>
+<li><strong>Modify asset or datapoint names</strong>. Perform a simple textual substitution in order to change the name of an asset or a data point within that asset.</li>
+<li><strong>Add a new calculated value</strong>. A new value can be calculated from a set of values, either based over a time period or based on a combination of different values, e.g. calculate power from voltage and current.</li>
+<li><strong>Add metadata to an asset</strong>. This allows data such as units of measurement or information about the data source to be added to the data.</li>
+<li><strong>Compress data</strong>. Only send data forward when the data itself shows significant change from previous values. This can be a useful technique to save bandwidth in low bandwidth or high cost network connections.</li>
+<li><strong>Conditionally forward data</strong>. Only send data when a condition is satisfied or send low rate data unless some <em>interesting</em> condition is met.</li>
+<li><strong>Data conditioning</strong>. Remove data from the data stream if the values are suspect or outside of reasonable conditions.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="where-can-it-be-done">
+<h2>Where Can it Be Done?<a class="headerlink" href="#where-can-it-be-done" title="Permalink to this headline">¶</a></h2>
+<p>Filters can be applied in two locations in the FogLAMP system;</p>
+<blockquote>
+<div><ul class="simple">
+<li>In the south service as data arrives in FogLAMP and before it is added to the storage subsystem for buffering.</li>
+<li>In the north tasks as the data is sent out to the upstream systems that receive data from the FogLAMP system.</li>
+</ul>
+</div></blockquote>
+<p>More than one filter can be added to a single south or north within a FogLAMP instance. Filters are placed in an ordered pipeline of filters that are applied to the data in the order of the pipeline. The output of the first filter becomes the input to the second. Filters can thus be combined to perform complex sets of operations on a particular data stream into FogLAMP or out of FogLAMP.</p>
+<p>The same filter plugin can appear in mutliple places within a filter pipeline, a different instance is created for each and each one has its own configuration.</p>
+<div class="section" id="adding-a-south-filter">
+<h3>Adding a South Filter<a class="headerlink" href="#adding-a-south-filter" title="Permalink to this headline">¶</a></h3>
+<p>In the following example we will add a filter to a south service. The filter we will use is the <em>expression</em> filter and we will convert the incoming value to a logarithmic scale. The south plugin used in this simple example is the <em>sinusoid</em> plugin that creates a simulated sine wave.</p>
+<p>The process starts by selecting the <em>South</em> services in the FogLAMP GUI from the left-hand menu bar. Then click on the south service of interest. This will display a dialog that allows the south service to be edited.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_south" src="_images/filter_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Towards the bottom of this dialog is a section labeled <em>Applications</em> with a + icon to the right, select the + icon to add a filter to the south service. A filter wizard is now shown that allows you to select the filter you wish to add and give that filter a name.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_add" src="_images/filter_2.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Select the <em>expression</em> filter and enter a name in the dialog. Now click on the <em>Next</em> button. A new page in the wizard appears that allows the configuration of the filter.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_expression" src="_images/filter_3.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>In the case of our expression filter we should add the expression we wish to execute <em>log(sinusoid)</em> and the name of the datapoint we wish to put the result in, <em>LogSine</em>. We can also choose to enable or disable the execution of this filter. We will enable it and click on <em>Done</em> to complete adding the filter.</p>
+<p>Click on <em>Save</em> in the south edit dialog and our filter is now installed and running.</p>
+<p>If we select the <em>Assets &amp; Readings</em> option from the menu bar we can examine the sinusoid asset and view a graph of that asset. We will now see a second datapoint has been added, <em>LogSine</em> which is the result of executing our expression in the filter.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_data" src="_images/filter_4.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>A second filter can be added in the same way, for example a <em>metadata</em> filter to create a pipeline. Now when we go back and view the south service we see two applications in the dialog.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_pipeline" src="_images/filter_5.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="reordering-filters">
+<h4>Reordering Filters<a class="headerlink" href="#reordering-filters" title="Permalink to this headline">¶</a></h4>
+<p>The order in which the filters are applied can be changed in the south service dialog by clicking and dragging one filter above another in the <em>Applications</em> section of dialog.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_reorder" src="_images/filter_6.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Filters are executed in a top to bottom order always. It may not matter in some cases what order a filter is executed in, in others it can have significant effect on the result.</p>
+</div>
+<div class="section" id="editing-filter-configuration">
+<h4>Editing Filter Configuration<a class="headerlink" href="#editing-filter-configuration" title="Permalink to this headline">¶</a></h4>
+<p>A filters configuration can be altered from the south service dialog by selecting the down arrow to the right of the filter name. This will open the edit area for that filter and show the configuration that can be altered.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_edit" src="_images/filter_7.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>You can also remove a filter from the pipeline of filters by select the trash can icon at the bottom right of the edit area for the filter.</p>
+</div>
+</div>
+<div class="section" id="adding-filters-to-the-north">
+<h3>Adding Filters To The North<a class="headerlink" href="#adding-filters-to-the-north" title="Permalink to this headline">¶</a></h3>
+<p>Filters can also be added to the north in the same way as the south. The same set of filters can be applied, however some may be less useful in the north than in the south as they apply to all assets that are sent north.</p>
+<p>In this example we will use the metadata filter to label all the data that goes north as coming via a particular FogLAMP instance. As with the <em>South</em> service we start by selecting our north task from the <em>North</em> menu item in the left-hand menu bar.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_north" src="_images/filter_8.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>At the bottom of the dialog there is a <em>Applications</em> area, you may have to scroll the dialog to find it, click on the + icon. A selection dialog appears that allows you to select the filter to use. Select the <em>metadata</em> filter.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_select" src="_images/filter_9.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>After clicking <em>Next</em> you will be shown the configuration page for the particular filter you have chosen. We will edit the JSON that defines the metadata tags to add and set a name of <em>floor</em> and a value of <em>1</em>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="filter_floor" src="_images/filter_10.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>After enabling and clicking on <em>Done</em> we save the north changes. All assets sent to this PI Server connection will now be tagged with the tag “floor” and value “1”.</p>
+<p>Although this is a simple example of labeling data other things can be done here, such as limiting the rate we send data to the PI Server until an <em>interesting</em> condition becomes true, perhaps to save costs on an expensive link or prevent a network becoming loaded until normal operating conditions. Another option might be to block particular assets from being sent on this link, this could be useful if you have two destinations and you wish to send a subset of assets to each.</p>
+<p>This example used a PI Server as the destination, however the same mechanism and filters may be used for any north destination.</p>
+</div>
+</div>
+<div class="section" id="some-useful-filters">
+<h2>Some Useful Filters<a class="headerlink" href="#some-useful-filters" title="Permalink to this headline">¶</a></h2>
+<p>A number of simple filters are worthy of mention here, a complete list of the currently available filters in FogLAMP can be found in the section <a href="foglamp_plugins.html#filter-plugins">Filter Plugins</a>.</p>
+<div class="section" id="scale">
+<h3>Scale<a class="headerlink" href="#scale" title="Permalink to this headline">¶</a></h3>
+<p>The filter <em>foglamp-filter-scale</em> applies a scale factor and offset to the numeric values within an asset. This is useful for operations such as changing the unit of measurement of a value. An example might be to convert a temperature reading from Centigrade to Fahrenheit.</p>
+</div>
+<div class="section" id="metadata">
+<h3>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h3>
+<p>The filter <em>foglamp-filter-metadata</em> will add metadata to an asset. This could be used to add information such as unit of measurement, machine data (make, model, serial no)  or the location of the asset to the data.</p>
+</div>
+<div class="section" id="delta">
+<h3>Delta<a class="headerlink" href="#delta" title="Permalink to this headline">¶</a></h3>
+<p>The filter <em>foglamp-filter-delta</em> allows duplicate data to be removed, only forwarding data that changes by more than a configurable percentage. This can be useful if a value does not change often and there is a desire not to forward all the <em>similar</em> values in order to save network bandwidth or reduce storage requirements.</p>
+</div>
+<div class="section" id="rate">
+<h3>Rate<a class="headerlink" href="#rate" title="Permalink to this headline">¶</a></h3>
+<p>The filter <em>foglamp-filter-rate</em> is similar to the delta filter above, however it forwards data at a fixed rate that is lower the rate of the oncoming data but can send full rate data should an <em>interesting</em> condition be detected. The filter is configured with a rate to send data, the values sent at that rate are an average of the values seen since the last value was sent.</p>
+<p>A rate of one reading per minute for example would average all the values for 1 minute and then send that average as the reading at the end of that minute. A condition can be added, when that condition is triggered all data is forwarded at full rate of the incoming data until a further condition is triggered that causes the reduced rate to be resumed.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="foglamp_architecture.html" class="btn btn-neutral float-right" title="FogLAMP Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quick_start.html" class="btn btn-neutral" title="Quick Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

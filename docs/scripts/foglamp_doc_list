@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+ROOT_DIR=`pwd`
+FOGLAMP_BRANCH_NAME=$1
+
+[[ -z "${FOGLAMP_BRANCH_NAME}" ]] && FOGLAMP_BRANCH_NAME="master"
+
+WHITE_LABELLING_OF="fledge"
+WHITE_LABELLING_FOR="foglamp"
+FL_DIR_NAME="FogLAMP"
+
+
+clean () {
+   rm -rf /tmp/${FL_DIR_NAME}
+   rm -rf ${ROOT_DIR}/docs
+}
+
+clone_repo () {
+    git clone -b ${FOGLAMP_BRANCH_NAME} --single-branch https://github.com/fledge-iot/fledge.git /tmp/${FL_DIR_NAME}
+}
+
+copy_docs_dir (){
+    cp -R /tmp/${FL_DIR_NAME}/docs ${ROOT_DIR}/
+}
+
+replace_occurrences (){
+    cd ${ROOT_DIR}/docs
+    find . -type f -exec sed -i "{}" \
+    -e "s/Fledge/${FL_DIR_NAME}/g" \
+    -e "s/${WHITE_LABELLING_OF}/${WHITE_LABELLING_FOR}/g" \
+    -e 's/FLEDGE/FOGLAMP/g' \
+    \;
+    dirs=`find . -type d -name "*${WHITE_LABELLING_OF}*" -print`
+    for file in ${dirs}
+    do
+        newname=`echo ${file} | sed -e "s/${WHITE_LABELLING_OF}/${WHITE_LABELLING_FOR}/"`
+        echo ${newname}
+        mv ${file} ${newname}
+    done
+    files=`find . -type f -name "*${WHITE_LABELLING_OF}*" -print`
+    for file in ${files}
+    do
+        newname=`echo ${file} | sed -e "s/${WHITE_LABELLING_OF}/${WHITE_LABELLING_FOR}/"`
+        echo ${newname}
+        mv ${file} ${newname}
+    done
+    files=`find . -type f -name "*Fledge*" -print`
+    for file in ${files}
+    do
+        newname=`echo ${file} | sed -e "s/Fledge/${FL_DIR_NAME}/"`
+        echo ${newname}
+        mv ${file} ${newname}
+    done
+    for file in ${dirs}
+    do
+        newname=`echo ${file} | sed -e "s/${WHITE_LABELLING_OF}/${WHITE_LABELLING_FOR}/"`
+        echo ${newname}
+    done
+    cd -
+}
+
+dump_screenshots (){
+    # TODO: Some screenshots resolved via FOGL-4025 and place them in required path
+    dirs=`find ${ROOT_DIR}/docs -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'`
+    cp -r ${ROOT_DIR}/images/* ${ROOT_DIR}/docs/images/
+}
+
+copy_custom_scripts_to_doc_dir (){
+    cp -r ${ROOT_DIR}/scripts/* ${ROOT_DIR}/docs/scripts/
+}
+
+echo "Cleaning..."
+clean
+echo "Clean up done!"
+echo "Clone White labelled Repository..."
+clone_repo
+echo "Clone done!"
+echo "Copy White labelled docs directory..."
+copy_docs_dir
+echo "White-labelled docs directory copied to ${ROOT_DIR} successfully!"
+echo "Update & Replace files with ${WHITE_LABELLING_FOR} occurrences..."
+replace_occurrences
+echo "Fledge occurrences for files, dirs and text are replaced successfully!"
+echo "Update screenshots..."
+dump_screenshots
+echo "Screenshots are updated successfully!"
+echo "Custom scripts copying to docs/scripts..."
+copy_custom_scripts_to_doc_dir
+echo "Custom scripts copied to docs/scripts successfully!"

@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building FogLAMP &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="Building Developers Guide" href="building_foglamp/index.html"/>
+        <link rel="prev" title="User API Reference" href="rest_api_guide/03_RESTuser.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building FogLAMP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/index.html">Building Developers Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Building FogLAMP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/build_index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-foglamp">
+<h1>Building FogLAMP<a class="headerlink" href="#building-foglamp" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="building_foglamp/index.html">Building Developers Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/01_introduction.html">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/01_introduction.html#what-is-foglamp">What Is FogLAMP?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/01_introduction.html#foglamp-positioning-in-an-iot-and-iiot-infrastructure">FogLAMP Positioning in an IoT and IIoT Infrastructure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/01_introduction.html#foglamp-features">FogLAMP Features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/building_foglamp.html">Building FogLAMP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/building_foglamp.html#foglamp-platforms">FogLAMP Platforms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#general-requirements">General Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/building_foglamp.html#id1">Building FogLAMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#build-pre-requisites">Build Pre-Requisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#obtaining-the-source-code">Obtaining the Source Code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#selecting-the-correct-version">Selecting the Correct Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#id2">Building FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#testing-foglamp-from-the-build-environment">Testing FogLAMP from the Build Environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#now-i-want-to-stop-foglamp">Now I Want to Stop FogLAMP!</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/building_foglamp.html#appendix-setting-the-postgresql-database">Appendix: Setting the PostgreSQL Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/building_foglamp.html#appendix-building-foglamp-on-centos">Appendix: Building FogLAMP on CentOS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#pre-requisites">Pre-Requisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#building-and-installing-c-5-4">Building and Installing C++ 5.4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#installing-postgresql-9-6">Installing PostgreSQL 9.6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#installing-sqlite3">Installing SQLite3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#changing-to-the-postgresql-engine">Changing to the PostgreSQL Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#id3">Building FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#further-notes">Further Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/04_installation.html">FogLAMP Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/04_installation.html#installing-foglamp-from-a-build">Installing FogLAMP from a Build</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#installing-foglamp-in-a-different-destination-directory">Installing FogLAMP in a Different Destination Directory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#the-setenv-sh-script">The setenv.sh Script</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#the-foglamp-service-script">The foglamp.service Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/04_installation.html#installing-the-debian-package">Installing the Debian Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#obtaining-and-installing-the-debian-package">Obtaining and Installing the Debian Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#upgrading-or-downgrading-foglamp">Upgrading or Downgrading FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#uninstalling-the-debian-package">Uninstalling the Debian Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/06_testing.html">Testing FogLAMP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/06_testing.html#first-checks-foglamp-status">First Checks: FogLAMP Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/06_testing.html#hello-foggy-world">Hello, Foggy World!</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#the-foglamp-rest-api">The FogLAMP REST API</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#useful-tools">Useful Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#hello-world">Hello World!</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/06_testing.html#hello-from-the-southern-hemisphere-of-the-foglamp-world">Hello from the Southern Hemisphere of the FogLAMP World</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#fogbench-a-brief-intro">fogbench: a Brief Intro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#data-coming-from-south">Data Coming from South</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/06_testing.html#checking-what-s-inside-foglamp">Checking What’s Inside FogLAMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#feeding-east-west-applications">Feeding East/West Applications</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/06_testing.html#sending-greetings-to-the-northern-hemisphere">Sending Greetings to the Northern Hemisphere</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#the-omf-translator">The OMF Translator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#preparing-the-pi-system">Preparing the PI System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#setting-the-omf-translator-plugin">Setting the OMF Translator Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#sending-data-to-the-pi-system">Sending Data to the PI System</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/04_utilities.html">FogLAMP Utilities and Scripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/04_utilities.html#foglamp">foglamp</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#starting-foglamp">Starting FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#safe-mode">Safe Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#stopping-foglamp">Stopping FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#if-foglamp-does-not-stop">If FogLAMP Does Not Stop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#checking-the-status-of-foglamp">Checking the Status of FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#resetting-foglamp">Resetting FogLAMP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/05_tasks.html">FogLAMP Tasks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/05_tasks.html#purge">Purge</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/05_tasks.html#purge-schedule">Purge Schedule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/05_tasks.html#purge-configuration">Purge Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l1"><a class="reference internal" href="REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#installation-on-red-hat">Installation on Red Hat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#installation-on-centos">Installation on CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#build-and-use-foglamp-with-postgresql-for-red-hat-centos">Build and use FogLAMP with PostgreSQL for Red Hat/CentOS</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="building_foglamp/index.html" class="btn btn-neutral float-right" title="Building Developers Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rest_api_guide/03_RESTuser.html" class="btn btn-neutral" title="User API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

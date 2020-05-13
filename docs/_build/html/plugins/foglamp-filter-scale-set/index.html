@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scale Set Filter &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Filter Plugins" href="../filter.html"/>
+        <link rel="next" title="Threshold Filter" href="../foglamp-filter-threshold/index.html"/>
+        <link rel="prev" title="Scale Filter" href="../foglamp-filter-scale/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-asset/index.html">Asset Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-expression/index.html">Expression Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-metadata/index.html">Metadata Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python27/index.html">Python 2.7 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python35/index.html">Python 3.5 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Scale Set Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-threshold/index.html">Threshold Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../filter.html">FogLAMP Filter Plugins</a> &raquo;</li>
+        
+      <li>Scale Set Filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-filter-scale-set/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scale-set-filter">
+<h1>Scale Set Filter<a class="headerlink" href="#scale-set-filter" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-filter-scale-set</em> plugin is a filter that allows a scale factor and an offset to be applied to numerical data where an asset has multiple data points. It is very similar to the <a href="../foglamp-filter-scale/index.html">foglamp-filter-scale</a> filter, which allows a single scale and offset to be applied to all assets and data points. It’s primary uses are for adjusting values to match different measurement scales, for example converting temperatures from Centigrade to Fahrenheit or when a sensor reports a value in non-base units, e.g. 1/10th of a degree.</p>
+<p>Scale set filters are added in the same way as any other filters.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Click on the Applications add icon for your service or task.</p>
+</li>
+<li><p class="first">Select the <em>scale-set</em> plugin from the list of available plugins.</p>
+</li>
+<li><p class="first">Name your scale-set filter.</p>
+</li>
+<li><p class="first">Click <em>Next</em> and you will be presented with the following configuration page</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="scaleset_1" src="../../_images/scaleset_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Enter the configuration for your change filter</p>
+<ul>
+<li><p class="first"><strong>Scale factors</strong>: A JSON document that defines a set of factors to apply. It is an array of JSON objects that define the scale factor and offset, a regular expression that is matched against the asset name and another that matches the data point name within the asset.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>asset</td>
+<td>A regular expression to match against the asset name. The scale factor is only
+applied to assets whose name matches this regular expression.</td>
+</tr>
+<tr class="row-odd"><td>datapoint</td>
+<td>A regular expression to match against the data point name within a matching asset.
+The scale factor is only applied to assets whose name matches this regular expression.</td>
+</tr>
+<tr class="row-even"><td>scale</td>
+<td>The scale factor to apply to the numeric data.</td>
+</tr>
+<tr class="row-odd"><td>offset</td>
+<td>The offset to add to the matching numeric data.</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><p class="first">Enable the scale-set filter and click on <em>Done</em> to activate your plugin</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>In the following example we have an asset whose name is <em>environment</em> which contains two data points; <em>temperature</em> and <em>humidity</em>. We wish to allow two different scale factors and offsets to these two data points whilst not affecting assets of any other name in the data stream. We can accomplish this by using the following JSON document in the plugin configuration;</p>
+<div class="highlight-JSON"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;factors&quot;</span> <span class="p">:</span> <span class="p">[</span>
+     <span class="p">{</span>
+       <span class="nt">&quot;asset&quot;</span>     <span class="p">:</span> <span class="s2">&quot;environment&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;datapoint&quot;</span> <span class="p">:</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;scale&quot;</span>     <span class="p">:</span> <span class="mf">1.8</span><span class="p">,</span>
+       <span class="nt">&quot;offset&quot;</span>    <span class="p">:</span> <span class="mi">32</span>
+     <span class="p">},</span>
+     <span class="p">{</span>
+       <span class="nt">&quot;asset&quot;</span>     <span class="p">:</span> <span class="s2">&quot;environment&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;datapoint&quot;</span> <span class="p">:</span> <span class="s2">&quot;humidity&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;scale&quot;</span>     <span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+       <span class="nt">&quot;offset&quot;</span>    <span class="p">:</span> <span class="mi">0</span>
+     <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If instead we had multiple assets that contain <em>temperature</em> and <em>humidity</em> we can accomplish the same transformation on all these assets, whilst not affecting any other assets, by changing the <em>asset</em> regular expression to something that matches more asset names;</p>
+<div class="highlight-JSON"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;factors&quot;</span> <span class="p">:</span> <span class="p">[</span>
+     <span class="p">{</span>
+       <span class="nt">&quot;asset&quot;</span>     <span class="p">:</span> <span class="s2">&quot;.*&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;datapoint&quot;</span> <span class="p">:</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;scale&quot;</span>     <span class="p">:</span> <span class="mf">1.8</span><span class="p">,</span>
+       <span class="nt">&quot;offset&quot;</span>    <span class="p">:</span> <span class="mi">32</span>
+     <span class="p">},</span>
+     <span class="p">{</span>
+       <span class="nt">&quot;asset&quot;</span>     <span class="p">:</span> <span class="s2">&quot;.*&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;datapoint&quot;</span> <span class="p">:</span> <span class="s2">&quot;humidity&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;scale&quot;</span>     <span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+       <span class="nt">&quot;offset&quot;</span>    <span class="p">:</span> <span class="mi">0</span>
+     <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-filter-threshold/index.html" class="btn btn-neutral float-right" title="Threshold Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-filter-scale/index.html" class="btn btn-neutral" title="Scale Filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OPC/UA South Plugin &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP South Plugins" href="../south.html"/>
+        <link rel="next" title="Playback Plugin" href="../foglamp-south-playback/index.html"/>
+        <link rel="prev" title="MQTT Sparkplug B" href="../foglamp-south-mqtt-sparkplug/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-am2315/index.html">AM2315 Temperature &amp; Humidity Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-cc2650/index.html">CC2650 SensorTag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-coap/index.html">CoAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-csv/index.html">Simple CSV Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht/index.html">DHT11 (C version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht11/index.html">DHT11 (Python version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dnp3/index.html">DNP3 Master Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-envirophat/index.html">Enviro pHAT Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-expression/index.html">Expression South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-FlirAX8/index.html">Flir AX8 Thermal Imaging Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-http/index.html">South HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-ina219/index.html">INA219 Voltage &amp; Current Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-modbus-c/index.html">Modbus South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-mqtt-sparkplug/index.html">MQTT Sparkplug B</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">OPC/UA South Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subscriptions">Subscriptions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-playback/index.html">Playback Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-pt100/index.html">PT100 Temperature Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-random/index.html">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-randomwalk/index.html">Random Walk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sensehat/index.html">SenseHAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sinusoid/index.html">Sinusoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-systeminfo/index.html">System Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-usb4704/index.html">Advantech USB-4704</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-beckhoff/index.html">Beckhoff TwinCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-digiducer/index.html">Digiducer Vibration Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../south.html">FogLAMP South Plugins</a> &raquo;</li>
+        
+      <li>OPC/UA South Plugin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-south-opcua/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="opc-ua-south-plugin">
+<h1>OPC/UA South Plugin<a class="headerlink" href="#opc-ua-south-plugin" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-south-opcua</em> plugin allows FogLAMP to connect to an OPC/UA server and subscribe to changes in the objects within the OPC/UA server.</p>
+<p>A south service to collect OPC/UA data is created in the same way as any other south service in FogLAMP.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Use the <em>South</em> option in the left hand menu bar to display a list of your South services</li>
+<li>Click on the + add icon at the top right of the page</li>
+<li>Select the OPCUA plugin from the list of plugins you are provided with</li>
+<li>Enter a name for your south service</li>
+<li>Click on <em>Next</em> to configure the OPC/UA plugin</li>
+</ul>
+</div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="opcua_1" src="../../_images/opcua_11.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>The configuration parameters that can be set on this page are;</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Asset Name</strong>: This is a prefix that will be applied to all assets that are created by this plugin. The OPC/UA plugin creates a separate asset for each data item read from the OPC/UA server. This is done since the OPC/UA server will deliver changes to individual data items only. Combining these into a complex asset would result in assets that do only contain one of many data points in each update. This can cause upstream systems problems with the every changing asset structure.</li>
+<li><strong>OPCUA Server URL</strong>: This is the URL of the OPC/UA server from which data will be extracted. The URL should be of the form opc.tcp://…./</li>
+<li><strong>OPCUA Object Subscriptions</strong>: The subscriptions are a set of locations in the OPC/UA object hierarchy that defined which data is subscribed to in the server and hence what assets get created within FogLAMP. A fuller description of how to configure subscriptions is shown below.</li>
+<li><strong>Subscribe By ID</strong>: This toggle determines if the OPC/UA objects in the subscription are using names to identify the objects in the OPC/UA object hierarchy or using object ID’s.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="subscriptions">
+<h2>Subscriptions<a class="headerlink" href="#subscriptions" title="Permalink to this headline">¶</a></h2>
+<p>Subscriptions to OPC/UA objects are stored as a JSON object that contents an array named “subscriptions”. This  array is a set of OPC/UA nodes that will control the subscription to variables in the OPC/UA server.</p>
+<p>The array may be empty, in which case all variables are subscribed to in the server and will create assets in FogLAMP. Although simply subscribing to everything will return a lot of data that may not be of use.</p>
+<p>If the <em>Subscribe By ID</em>  option is set then this is an array of node Id’s. Each node Id should be of the form <em>ns=..;s=…</em> Where <em>ns</em> is a namespace index and <em>s</em> is the node id string identifier. A subscription will be created with the OPC/UA server for the object with the specified node id and its children, resulting in data change messages from the server for those objects. Each data change received from the server will create an asset in FogLAMP with the name of the object prepended by the value set for <em>Asset Name</em>.</p>
+<p>If the <em>Subscribe By ID</em> option is not set then the array is an array of browse names. The format of the browse names is &lt;namespace&gt;:&lt;name&gt;. If the namespace is not required then the name can simply be given, in which case any name that matches in any namespace will have a subscription created. The plugin will traverse the node tree of the server from the <em>ObjectNodes</em> root and subscribe to all variables that live below the named nodes in the subscriptions array.</p>
+<div class="section" id="configuration-examples">
+<h3>Configuration examples<a class="headerlink" href="#configuration-examples" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">{&quot;subscriptions&quot;:[&quot;5:Simulation&quot;,&quot;2:MyLevel&quot;]}</span>
+</pre></div>
+</div>
+<p>We subscribe to</p>
+<blockquote>
+<div><ul class="simple">
+<li>5:Simulation is a node name under ObjectsNode in namespace 5</li>
+<li>2:MyLevel is a variable under ObjectsNode in namespace 2</li>
+</ul>
+</div></blockquote>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">{&quot;subscriptions&quot;:[&quot;5:Sinusoid1&quot;,&quot;2:MyLevel&quot;,&quot;5:Sawtooth1&quot;]}</span>
+</pre></div>
+</div>
+<p>We subscribe to</p>
+<blockquote>
+<div><ul class="simple">
+<li>5:Sinusoid1 and 5:Sawtooth1 are variables under ObjectsNode/Simulation in namespace 5</li>
+<li>2:MyLevel is a variable under ObjectsNode in namespace 2</li>
+</ul>
+</div></blockquote>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">{&quot;subscriptions&quot;:[&quot;2:Random.Double&quot;,&quot;2:Random.Boolean&quot;]}</span>
+</pre></div>
+</div>
+<p>We subscribe to</p>
+<blockquote>
+<div><ul class="simple">
+<li>Random.Double and Random.Boolean are variables under ObjectsNode/Demo both in namespace 2</li>
+</ul>
+</div></blockquote>
+<p>It’s also possible to specify an empty subscription array:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">{&quot;subscriptions&quot;:[]}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Depending on OPC/UA server configuration (number of objects, number of variables) this empty configuration might take a long time to create the subscriptions and hence delay the startup of the south service. It will also result in a large number of assets being created within FogLAMP.</p>
+</div>
+<p>Object names, variable names and NamespaceIndexes can be easily retrieved browsing the given OPC/UA server using OPC UA clients, such as <a href="https://www.unified-automation.com/downloads/opc-ua-clients.html">Ua Expert</a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-south-playback/index.html" class="btn btn-neutral float-right" title="Playback Plugin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-south-mqtt-sparkplug/index.html" class="btn btn-neutral" title="MQTT Sparkplug B" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

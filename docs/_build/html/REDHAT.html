@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building and using FogLAMP on RedHat/CentOS &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="up" title="Building FogLAMP" href="build_index.html"/>
+        <link rel="next" title="Version History" href="91_version_history.html"/>
+        <link rel="prev" title="Building and using FogLAMP on Raspbian" href="RASPBIAN.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/index.html">Building Developers Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation-on-red-hat">Installation on Red Hat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-on-centos">Installation on CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-and-use-foglamp-with-postgresql-for-red-hat-centos">Build and use FogLAMP with PostgreSQL for Red Hat/CentOS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+      <li>Building and using FogLAMP on RedHat/CentOS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/REDHAT.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-and-using-foglamp-on-redhat-centos">
+<h1>Building and using FogLAMP on RedHat/CentOS<a class="headerlink" href="#building-and-using-foglamp-on-redhat-centos" title="Permalink to this headline">¶</a></h1>
+<p>FogLAMP can be built or installed on Red Hat or CentOS, it is currently tested against:</p>
+<ul class="simple">
+<li>Red Hat 7.6</li>
+<li>CentOS  7.6</li>
+</ul>
+<p>You may follow the instructions in the README file to build,
+install and run FogLAMP on Red Hat or CentOS.</p>
+</div>
+<div class="section" id="install-foglamp-on-red-hat-centos-using-the-rpm-package">
+<h1>Install FogLAMP on Red Hat/CentOS using the RPM package<a class="headerlink" href="#install-foglamp-on-red-hat-centos-using-the-rpm-package" title="Permalink to this headline">¶</a></h1>
+<p>The FogLAMP RPM is available in the download page of the documentation available at <a class="reference external" href="http://dianomic.com/download-packages">download page</a>.</p>
+<p>The RPM can also be created from the FogLAMP sources through the repository <a class="reference external" href="https://github.com/foglamp-iot/foglamp-pkg">foglamp-pkg</a> using the make_rpm script and following the instruction in the README.rst.</p>
+<div class="section" id="installation-on-red-hat">
+<h2>Installation on Red Hat<a class="headerlink" href="#installation-on-red-hat" title="Permalink to this headline">¶</a></h2>
+<p>It is necessary to install a Red Hat package before FogLAMP can be installed successfully. The installation sequence is as follows:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo yum-config-manager --enable <span class="s1">&#39;Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server from RHUI&#39;</span>
+<span class="gp">$</span> sudo yum -y  localinstall ~/foglamp-1.5.2-0.00.x86_64.rpm
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-on-centos">
+<h2>Installation on CentOS<a class="headerlink" href="#installation-on-centos" title="Permalink to this headline">¶</a></h2>
+<p>It is necessary to install a CentOS package before FogLAMP can be installed successfully. The installation sequence is as follows:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo yum install -y  centos-release-scl-rh
+<span class="gp">$</span> sudo yum -y  localinstall ~/foglamp-1.5.2-0.00.x86_64.rpm
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, /var/log/messages are created with read-write permissions for ‘root’ user only.
+Make sure to set the correct READ permissions.</p>
+<p class="last"><cite>sudo chmod 644 /var/log/messages</cite></p>
+</div>
+</div>
+</div>
+<div class="section" id="build-of-foglamp-on-red-hat-centos">
+<h1>Build of FogLAMP on Red Hat/CentOS<a class="headerlink" href="#build-of-foglamp-on-red-hat-centos" title="Permalink to this headline">¶</a></h1>
+<p>A gcc version newer than 4.9.0 is needed to properly use &lt;regex&gt; and build FogLAMP.</p>
+<p>The <em>requirements.sh</em> script, executed as follows:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo ./requirements.sh
+</pre></div>
+</div>
+<p>installs <em>devtoolset-7</em> that provides the newer compiler.</p>
+<p>It must be enabled before building FogLAMP using:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">source</span> scl_source <span class="nb">enable</span> devtoolset-7
+</pre></div>
+</div>
+<p>It is possible to use the following command to verify which version is currently active:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc --version
+</pre></div>
+</div>
+<p>The previously installed gcc will be by default enabled again after a logoff/login.</p>
+<div class="section" id="build-and-use-foglamp-with-postgresql-for-red-hat-centos">
+<h2>Build and use FogLAMP with PostgreSQL for Red Hat/CentOS<a class="headerlink" href="#build-and-use-foglamp-with-postgresql-for-red-hat-centos" title="Permalink to this headline">¶</a></h2>
+<p>The <em>rh-postgresql96</em> environment should be enabled using:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">source</span> scl_source <span class="nb">enable</span> rh-postgresql96
+</pre></div>
+</div>
+<p>before building FogLAMP if the intention is to use the Postgres plugin.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="91_version_history.html" class="btn btn-neutral float-right" title="Version History" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="RASPBIAN.html" class="btn btn-neutral" title="Building and using FogLAMP on Raspbian" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

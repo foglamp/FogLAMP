@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>A South Plugin Example In C/C++: the DHT11 Sensor &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>A South Plugin Example In C/C++: the DHT11 Sensor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/03_02_DHT11_C.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="a-south-plugin-example-in-c-c-the-dht11-sensor">
+<h1>A South Plugin Example In C/C++: the DHT11 Sensor<a class="headerlink" href="#a-south-plugin-example-in-c-c-the-dht11-sensor" title="Permalink to this headline">¶</a></h1>
+<p>Using the same example as before, the DHT11 temperature and humidity sensor, let’s look at how to create the plugin in C/C++.</p>
+<div class="section" id="the-software">
+<h2>The Software<a class="headerlink" href="#the-software" title="Permalink to this headline">¶</a></h2>
+<p>For this plugin we use the wiringpi C library to connect to the hardware of the Raspberry Pi</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install wiringpi
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">Reading state information... Done</span>
+<span class="go">The following NEW packages will be installed:</span>
+<span class="go">wiringpi</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-plugin">
+<h2>The Plugin<a class="headerlink" href="#the-plugin" title="Permalink to this headline">¶</a></h2>
+<p>This is the code for the plugin.cpp file that provides the plugin API:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * FogLAMP south plugin.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Copyright (c) 2018 OSisoft, LLC</span>
+<span class="cm"> *</span>
+<span class="cm"> * Released under the Apache 2.0 Licence</span>
+<span class="cm"> *</span>
+<span class="cm"> * Author: Amandeep Singh Arora</span>
+<span class="cm"> */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;dht11.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;plugin_api.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;strings.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;logger.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;plugin_exception.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;config_category.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rapidjson/document.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;version.h&gt;</span><span class="cp"></span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="cp">#define PLUGIN_NAME &quot;dht11_V2&quot;</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Default configuration</span>
+<span class="cm"> */</span>
+<span class="k">const</span> <span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">default_config</span> <span class="o">=</span> <span class="n">QUOTE</span><span class="p">({</span>
+                <span class="s">&quot;plugin&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                        <span class="s">&quot;description&quot;</span> <span class="o">:</span> <span class="s">&quot;DHT11 C south plugin&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;type&quot;</span> <span class="o">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;default&quot;</span> <span class="o">:</span> <span class="n">PLUGIN_NAME</span><span class="p">,</span>
+                        <span class="s">&quot;readonly&quot;</span><span class="o">:</span> <span class="s">&quot;true&quot;</span>
+                        <span class="p">},</span>
+                <span class="s">&quot;asset&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                        <span class="s">&quot;description&quot;</span> <span class="o">:</span> <span class="s">&quot;Asset name&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;type&quot;</span> <span class="o">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;default&quot;</span> <span class="o">:</span> <span class="s">&quot;dht11&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;order&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;displayName&quot;</span><span class="o">:</span> <span class="s">&quot;Asset Name&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;mandatory&quot;</span> <span class="o">:</span> <span class="s">&quot;true&quot;</span>
+                        <span class="p">},</span>
+                <span class="s">&quot;pin&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                        <span class="s">&quot;description&quot;</span> <span class="o">:</span> <span class="s">&quot;Rpi pin to which DHT11 is attached&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;type&quot;</span> <span class="o">:</span> <span class="s">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;default&quot;</span> <span class="o">:</span> <span class="s">&quot;7&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;displayName&quot;</span><span class="o">:</span> <span class="s">&quot;Rpi Pin&quot;</span>
+                        <span class="p">}</span>
+                <span class="p">});</span>
+
+
+<span class="cm">/**</span>
+<span class="cm"> * The DHT11 plugin interface</span>
+<span class="cm"> */</span>
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="p">{</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * The plugin information structure</span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="n">PLUGIN_INFORMATION</span> <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">PLUGIN_NAME</span><span class="p">,</span>              <span class="c1">// Name</span>
+        <span class="n">VERSION</span><span class="p">,</span>                  <span class="c1">// Version</span>
+        <span class="mi">0</span><span class="p">,</span>                        <span class="c1">// Flags</span>
+        <span class="n">PLUGIN_TYPE_SOUTH</span><span class="p">,</span>        <span class="c1">// Type</span>
+        <span class="s">&quot;1.0.0&quot;</span><span class="p">,</span>                  <span class="c1">// Interface version</span>
+        <span class="n">default_config</span>            <span class="c1">// Default configuration</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Return the information about this plugin</span>
+<span class="cm"> */</span>
+<span class="n">PLUGIN_INFORMATION</span> <span class="o">*</span><span class="nf">plugin_info</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="k">return</span> <span class="o">&amp;</span><span class="n">info</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Initialise the plugin, called to get the plugin handle</span>
+<span class="cm"> */</span>
+<span class="n">PLUGIN_HANDLE</span> <span class="nf">plugin_init</span><span class="p">(</span><span class="n">ConfigCategory</span> <span class="o">*</span><span class="n">config</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pin</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">config</span><span class="o">-&gt;</span><span class="n">itemExists</span><span class="p">(</span><span class="s">&quot;pin&quot;</span><span class="p">))</span>
+        <span class="p">{</span>
+                <span class="n">pin</span> <span class="o">=</span> <span class="n">stoul</span><span class="p">(</span><span class="n">config</span><span class="o">-&gt;</span><span class="n">getValue</span><span class="p">(</span><span class="s">&quot;pin&quot;</span><span class="p">),</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">DHT11</span> <span class="o">*</span><span class="n">dht11</span><span class="o">=</span> <span class="n">new</span> <span class="n">DHT11</span><span class="p">(</span><span class="n">pin</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">config</span><span class="o">-&gt;</span><span class="n">itemExists</span><span class="p">(</span><span class="s">&quot;asset&quot;</span><span class="p">))</span>
+                <span class="n">dht11</span><span class="o">-&gt;</span><span class="n">setAssetName</span><span class="p">(</span><span class="n">config</span><span class="o">-&gt;</span><span class="n">getValue</span><span class="p">(</span><span class="s">&quot;asset&quot;</span><span class="p">));</span>
+        <span class="k">else</span>
+                <span class="n">dht11</span><span class="o">-&gt;</span><span class="n">setAssetName</span><span class="p">(</span><span class="s">&quot;dht11&quot;</span><span class="p">);</span>
+
+        <span class="n">Logger</span><span class="o">::</span><span class="n">getLogger</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;m_assetName set to %s&quot;</span><span class="p">,</span> <span class="n">dht11</span><span class="o">-&gt;</span><span class="n">getAssetName</span><span class="p">());</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">PLUGIN_HANDLE</span><span class="p">)</span><span class="n">dht11</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Poll for a plugin reading</span>
+<span class="cm"> */</span>
+<span class="n">Reading</span> <span class="nf">plugin_poll</span><span class="p">(</span><span class="n">PLUGIN_HANDLE</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">DHT11</span> <span class="o">*</span><span class="n">dht11</span> <span class="o">=</span> <span class="p">(</span><span class="n">DHT11</span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">dht11</span><span class="o">-&gt;</span><span class="n">takeReading</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Reconfigure the plugin</span>
+<span class="cm"> */</span>
+<span class="kt">void</span> <span class="nf">plugin_reconfigure</span><span class="p">(</span><span class="n">PLUGIN_HANDLE</span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">newConfig</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="n">ConfigCategory</span>        <span class="n">conf</span><span class="p">(</span><span class="s">&quot;dht&quot;</span><span class="p">,</span> <span class="n">newConfig</span><span class="p">);</span>
+<span class="n">DHT11</span> <span class="o">*</span><span class="n">dht11</span> <span class="o">=</span> <span class="p">(</span><span class="n">DHT11</span><span class="o">*</span><span class="p">)</span><span class="o">*</span><span class="n">handle</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">conf</span><span class="p">.</span><span class="n">itemExists</span><span class="p">(</span><span class="s">&quot;asset&quot;</span><span class="p">))</span>
+                <span class="n">dht11</span><span class="o">-&gt;</span><span class="n">setAssetName</span><span class="p">(</span><span class="n">conf</span><span class="p">.</span><span class="n">getValue</span><span class="p">(</span><span class="s">&quot;asset&quot;</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">conf</span><span class="p">.</span><span class="n">itemExists</span><span class="p">(</span><span class="s">&quot;pin&quot;</span><span class="p">))</span>
+        <span class="p">{</span>
+                <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pin</span> <span class="o">=</span> <span class="n">stoul</span><span class="p">(</span><span class="n">conf</span><span class="p">.</span><span class="n">getValue</span><span class="p">(</span><span class="s">&quot;pin&quot;</span><span class="p">),</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="n">dht11</span><span class="o">-&gt;</span><span class="n">setPin</span><span class="p">(</span><span class="n">pin</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Shutdown the plugin</span>
+<span class="cm"> */</span>
+<span class="kt">void</span> <span class="nf">plugin_shutdown</span><span class="p">(</span><span class="n">PLUGIN_HANDLE</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">DHT11</span> <span class="o">*</span><span class="n">dht11</span> <span class="o">=</span> <span class="p">(</span><span class="n">DHT11</span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
+        <span class="n">delete</span> <span class="n">dht11</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The full source code, including the <em>DHT11</em> class can be found in GitHub <a href="https://github.com/foglamp-iot/foglamp-south-dht" target="_blank">https://github.com/foglamp-iot/foglamp-south-dht</a>
+<br /></p>
+</div>
+<div class="section" id="building-foglamp-and-adding-the-plugin">
+<h2>Building FogLAMP and Adding the Plugin<a class="headerlink" href="#building-foglamp-and-adding-the-plugin" title="Permalink to this headline">¶</a></h2>
+<p>If you have not built FogLAMP yet, follow the steps described <a href="../03_getting_started.html#building-foglamp">here</a>. After the build, you can optionally install FogLAMP following <a href="../04_installation.html">these</a> steps.</p>
+<ul class="simple">
+<li>Clone the <em>foglamp-south-dht</em> repository</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/foglamp-iot/foglamp-south-dht.git
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Set the environment variable FOGLAMP_ROOT to the directory in which you built FogLAMP</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">FOGLAMP_ROOT</span><span class="o">=</span>~/foglamp
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Go to the location in which you cloned the foglamp-south-dht repository and create a build directory and run cmake in that directory</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ~/foglamp-south-dht
+<span class="gp">$</span> mkdir build
+<span class="gp">$</span> <span class="nb">cd</span> build
+<span class="gp">$</span> cmake ..
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Now make the plugin</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> make
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>If you have started FogLAMP from the build directory, copy the plugin into the destination directory</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> mkdir -p <span class="nv">$FOGLAMP_ROOT</span>/plugins/south/dht
+<span class="gp">$</span> cp libdht.so <span class="nv">$FOGLAMP_ROOT</span>/plugins/south/dht
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>If you have installed FogLAMP by executing <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code>, copy the plugin into the destination directory</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo mkdir -p /usr/local/foglamp/plugins/south/dht
+<span class="gp">$</span> sudo cp libdht.so /usr/local/foglamp/plugins/south/dht
+<span class="gp">$</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have installed FogLAMP using an alternative <em>DESTDIR</em>, remember to add the path to the destination directory to the <code class="docutils literal"><span class="pre">cp</span></code> command.</p>
+</div>
+<ul class="simple">
+<li>Add service</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX POST http://localhost:8081/foglamp/service -d <span class="s1">&#39;{&quot;name&quot;: &quot;dht&quot;, &quot;type&quot;: &quot;south&quot;, &quot;plugin&quot;: &quot;dht&quot;, &quot;enabled&quot;: true}&#39;</span>
+</pre></div>
+</div>
+<p>You may now use the C/C++ plugin in exactly the same way as you used a Python plugin earlier.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

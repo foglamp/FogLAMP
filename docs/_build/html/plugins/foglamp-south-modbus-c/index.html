@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Modbus South Plugin &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP South Plugins" href="../south.html"/>
+        <link rel="next" title="MQTT Sparkplug B" href="../foglamp-south-mqtt-sparkplug/index.html"/>
+        <link rel="prev" title="INA219 Voltage &amp; Current Sensor" href="../foglamp-south-ina219/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-am2315/index.html">AM2315 Temperature &amp; Humidity Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-cc2650/index.html">CC2650 SensorTag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-coap/index.html">CoAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-csv/index.html">Simple CSV Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht/index.html">DHT11 (C version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht11/index.html">DHT11 (Python version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dnp3/index.html">DNP3 Master Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-envirophat/index.html">Enviro pHAT Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-expression/index.html">Expression South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-FlirAX8/index.html">Flir AX8 Thermal Imaging Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-http/index.html">South HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-ina219/index.html">INA219 Voltage &amp; Current Sensor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Modbus South Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-mqtt-sparkplug/index.html">MQTT Sparkplug B</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-opcua/index.html">OPC/UA South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-playback/index.html">Playback Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-pt100/index.html">PT100 Temperature Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-random/index.html">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-randomwalk/index.html">Random Walk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sensehat/index.html">SenseHAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sinusoid/index.html">Sinusoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-systeminfo/index.html">System Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-usb4704/index.html">Advantech USB-4704</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-beckhoff/index.html">Beckhoff TwinCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-digiducer/index.html">Digiducer Vibration Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../south.html">FogLAMP South Plugins</a> &raquo;</li>
+        
+      <li>Modbus South Plugin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-south-modbus-c/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="modbus-south-plugin">
+<h1>Modbus South Plugin<a class="headerlink" href="#modbus-south-plugin" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-south-modbus-c</em> plugin is a south plugin that supports both TCP and RTU variants of Modbus. The plugin provides support for reading Modbus coils, input bits, registers and input registers, a flexible mechanism is provided to create a mapping between the Modbus registers and coils and the assets within FogLAMP. Multiple registers can be combined to allow larger values that then register width to be mapped from devices that represent data in this way. Support is also included for floating point representation within the Modbus registers.</p>
+<div class="section" id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this headline">¶</a></h2>
+<p>A Modbus south service is added in the same way as any other south service in FogLAMP,</p>
+<blockquote>
+<div><ul class="simple">
+<li>Select the <em>South</em> menu item</li>
+<li>Click on the + icon in the top right</li>
+<li>Select <em>ModbusC</em> from the plugin list</li>
+<li>Enter a name for your Modbus service</li>
+<li>Click <em>Next</em></li>
+<li>You will be presented with the following configuration page</li>
+</ul>
+</div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="modbus_1" src="../../_images/modbus_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Asset Name</strong>: This is the name of the asset that will be used for the data read by this service. You can override this within the Modbus Map, so this should be treated as the default if no override is given.</li>
+<li><strong>Protocol</strong>: This allows you to select either the <em>RTU</em> or <em>TCP</em> protocol. Modbus RTU is used whenever you have a serial connection, such as RS485 for connecting to you device. The TCP variant is used where you have a network connection to your device.</li>
+<li><strong>Server Address</strong>: This is the network address of your Modbus device and is only valid if you selected the <em>TCP</em> protocol.</li>
+<li><strong>Port</strong>: This is the port to use to connect to your Modbus device if you are using the TCP protocol.</li>
+<li><strong>Device</strong>: This is the device to open if you are using the RTU protocol. This would be the name of a Linux device in /dev, for example /dev/SERIAL0</li>
+<li><strong>Baud Rate</strong>: The baud rate used to communicate if you are using a serial connection with Modbus RTU.</li>
+<li><strong>Number of Data Bits</strong>: The number of data bits to send on serial connections.</li>
+<li><strong>Number of Stop Bits</strong>: The number of stop bits to send on the serial connections.</li>
+<li><strong>Parity</strong>: The parity setting to use on the serial connection.</li>
+<li><strong>Slave ID</strong>: The slave ID of the Modbus device from which you wish to pull data.</li>
+<li><strong>Register Map</strong>: The register map defines which Modbus registers and coils you read, and how to map them to FogLAMP assets. The map is a complex JSON object which is described in more detail below.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="register-map">
+<h3>Register Map<a class="headerlink" href="#register-map" title="Permalink to this headline">¶</a></h3>
+<p>The register map is the most complex configuration parameter for this plugin and over time has supported a number of different variants. We will only document the latest of these here although previous variants are still supported. This latest variant is the most flexible to date and is thus the recommended approach to adopt.</p>
+<p>The map is a JSON object with a single array <em>values</em>, each element of this array is a JSON object that defines a single item of data that will be stored in FogLAMP. These objects support a number of properties and values, these are</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>The name of the value that we are reading. This becomes the name of the
+data point with the asset. This may be either the default asset name
+defined plugin or an individual asset if an override is given.</td>
+</tr>
+<tr class="row-odd"><td>slave</td>
+<td>The Modbus slave ID of the device if it differs from the global Slave
+ID defined for the plugin. If not given the default Slave ID will be
+used.</td>
+</tr>
+<tr class="row-even"><td>assetName</td>
+<td>This is an optional property that allows the asset name define for the
+plugin to be overridden on an individual basis. Multiple values in the
+values array may share the same AssetName, in which case the values
+read from the Modbus device are placed in the same asset.</td>
+</tr>
+<tr class="row-odd"><td>register</td>
+<td>This defines the Modbus register that is read. It may be a single
+register, it which case the value is the register number or it may be
+multiple registers in which case the value is a JSON array of numbers.
+If an array is given then the registers are read in the order of that
+array and combined into a single value by shifting each value up 16
+bits and performing a logical OR operation with the next register in
+the array.</td>
+</tr>
+<tr class="row-even"><td>coil</td>
+<td>This defines the number of the Modbus coil to read. Coils are single
+bit Modbus values.</td>
+</tr>
+<tr class="row-odd"><td>input</td>
+<td>This defines the number of the Modbus discrete input. Coils are single
+bit Modbus values.</td>
+</tr>
+<tr class="row-even"><td>inputRegister</td>
+<td>This defines the Modbus input register that is read. It may be a single
+register, it which case the value is the register number or it may be
+multiple registers in which case the value is a JSON array of numbers.
+If an array is given then the registers are read in the order of that
+array and combined into a single value by shifting each value up 16
+bits and performing a logical OR operation with the next register in
+the array.</td>
+</tr>
+<tr class="row-odd"><td>scale</td>
+<td>A scale factor to apply to the data that is read. The value read is
+multiplied by this scale. This is an optional property.</td>
+</tr>
+<tr class="row-even"><td>offset</td>
+<td>An optional offset to add to the value read from the Modbus device.</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td>This allows data to be cast to a different type. The only support type
+currently is <em>float</em> and is used to interpret data read from the one or
+more of the 16 bit registers as a floating point value. This property
+is optional.</td>
+</tr>
+<tr class="row-even"><td>swap</td>
+<td>This is an optional property used to byte swap values read from a
+Modbus device. It may be set to one of <em>bytes</em>, <em>words</em> or <em>both</em> to
+control the swapping to apply to bytes in a 16 bit value, 16 bit words
+in a 32 bit value or both bytes and words in 32 bit values.</td>
+</tr>
+</tbody>
+</table>
+<p>Every <em>value</em> object in the <em>values</em> array must have one and only one of <em>coil</em>, <em>input</em>, <em>register</em> or <em>inputRegister</em> included as this defines the source of the data in your Modbus device. These are the Modbus object types and each has an address space within a typical Modbus device.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="16%" />
+<col width="26%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Object Type</th>
+<th class="head">Size</th>
+<th class="head">Address Space</th>
+<th class="head">Map Property</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Coil</td>
+<td>1 bit</td>
+<td>00001 - 09999</td>
+<td>coil</td>
+</tr>
+<tr class="row-odd"><td>Discrete Input</td>
+<td>1 bit</td>
+<td>10001 - 19999</td>
+<td>input</td>
+</tr>
+<tr class="row-even"><td>Input Register</td>
+<td>16 bits</td>
+<td>30001 - 39999</td>
+<td>inputRegister</td>
+</tr>
+<tr class="row-odd"><td>Holding Register</td>
+<td>16 bits</td>
+<td>40001 - 49999</td>
+<td>register</td>
+</tr>
+</tbody>
+</table>
+<p>The values in the map for coils, inputs and registers are relative to the base of the address space for that object type rather than the global address space and each is 0 based. A map value that has the property <em>“coil” : 10</em> would return the values of the tenth coil and <em>“register” : 10</em> would return the tenth register.</p>
+</div>
+<div class="section" id="example-maps">
+<h3>Example Maps<a class="headerlink" href="#example-maps" title="Permalink to this headline">¶</a></h3>
+<p>In this example we will assume we have a cooling fan that has a Modbus interface and we want to extract three data items of interest. These items are</p>
+<blockquote>
+<div><ul class="simple">
+<li>Current temperature that is in Modbus holding register 10</li>
+<li>Current speed of the fan that is stored as a 32 bit value in Modbus holding registers 11 and 12</li>
+<li>The active state of the fan that is stored in a Modbus coil 1</li>
+</ul>
+</div></blockquote>
+<p>The Modbus Map for this example would be as follow:</p>
+<div class="highlight-JSON"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span>
+           <span class="p">{</span>
+               <span class="nt">&quot;name&quot;</span>     <span class="p">:</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+               <span class="nt">&quot;register&quot;</span> <span class="p">:</span> <span class="mi">10</span>
+           <span class="p">},</span>
+           <span class="p">{</span>
+               <span class="nt">&quot;name&quot;</span>     <span class="p">:</span> <span class="s2">&quot;speed&quot;</span><span class="p">,</span>
+               <span class="nt">&quot;register&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span> <span class="p">]</span>
+           <span class="p">},</span>
+           <span class="p">{</span>
+               <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span>
+               <span class="nt">&quot;coil&quot;</span> <span class="p">:</span> <span class="mi">1</span>
+           <span class="p">}</span>
+        <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Since none of these values have an assetName defined all there values will be stored in a single asset, the name of which is the default asset name defined for the plugin as a whole. This asset will have three data points within it; <em>temperature</em>, <em>speed</em> and <em>active</em>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-south-mqtt-sparkplug/index.html" class="btn btn-neutral float-right" title="MQTT Sparkplug B" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-south-ina219/index.html" class="btn btn-neutral" title="INA219 Voltage &amp; Current Sensor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

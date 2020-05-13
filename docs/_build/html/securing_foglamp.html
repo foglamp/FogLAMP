@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Securing FogLAMP &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="Notifications Service" href="notifications.html"/>
+        <link rel="prev" title="FogLAMP Plugins" href="foglamp_plugins.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Securing FogLAMP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-https-encryption">Enabling HTTPS Encryption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requiring-user-login">Requiring User Login</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#changing-your-password">Changing Your Password</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#password-rotation-mechanism">Password Rotation Mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#user-management">User Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adding-users">Adding Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changing-user-roles">Changing User Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reset-user-password">Reset User Password</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delete-a-user">Delete A User</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#certificate-store">Certificate Store</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Securing FogLAMP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/securing_foglamp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="securing-foglamp">
+<h1>Securing FogLAMP<a class="headerlink" href="#securing-foglamp" title="Permalink to this headline">¶</a></h1>
+<p>The default installation of a FogLAMP service comes with security features turned off, there are several things that can be done to add security to FogLAMP.  The REST API by default support unencrypted HTTP requests, it can be switched to require HTTPS to be used. The REST API and the GUI can be protected by requiring authentication to prevent users being able to change the configuration of the FogLAMP system. Authentication can be via username and password or by means of an authentication certificate.</p>
+<div class="section" id="enabling-https-encryption">
+<h2>Enabling HTTPS Encryption<a class="headerlink" href="#enabling-https-encryption" title="Permalink to this headline">¶</a></h2>
+<p>FogLAMP can support both HTTP and HTTPS as the transport for the REST API used for management, to switch between there two transport protocols select the <em>Configuration</em> option from the left-hand menu and the select <em>Admin API</em> from the configuration tree that appears,</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="admin_api" src="_images/admin_api.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>The first option you will see is a tick box labeled <em>Enable HTTP</em>, to select HTTPS as the protocol to use this tick box should be deselected.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="enable_https" src="_images/enable_https.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>When this is unticked two options become active on the page, <em>HTTPS Port</em> and <em>Certificate Name</em>. The HTTPS Port is the port that FogLAMP will listen on for HTTPS requests, the default for this is port 1995.</p>
+<p>The <em>Certificate Name</em> is the name of the certificate that will be used for encryption. The default s to use a self signed certificate called <em>foglamp</em> that is created as part of the installation process. This certificate is unique per foglamp installation but is not signed by a certificate authority. If you require the extra security of using a signed certificate you may use the FogLAMP <a class="reference internal" href="#certificate-store"><span class="std std-ref">Certificate Store</span></a> functionality to upload a certificate that has been created and signed by a certificate authority.</p>
+<p>After enabling HTTPS and selecting save you must restart FogLAMP in order for the change to take effect. You must also update the connection setting in the GUI to use the HTTPS transport and the correct port.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="connection_https" src="_images/connection_https.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="requiring-user-login">
+<h2>Requiring User Login<a class="headerlink" href="#requiring-user-login" title="Permalink to this headline">¶</a></h2>
+<p>In order to set the REST API and GUI to force users to login before accessing FogLAMP select the <em>Configuration</em> option from the left-hand menu and then select <em>Admin API</em> from the configuration tree that appears.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="admin_api" src="_images/admin_api.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Two particular items are of interest in this configuration category that is then displayed; <em>Authentication</em> and <em>Authentication method</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="auth_options" src="_images/authentication.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Select the <em>Authentication</em> field to be mandatory and the <em>Authentication method</em> to be password. Click on <em>Save</em> at the bottom of the dialog.</p>
+<p>In order for the changes to take effect FogLAMP must be restarted, this can be done in the GUI by selecting the restart item in the top status bar of FogLAMP. Confirm the restart of FogLAMP and wait for it to be restarted.</p>
+<p>Once restarted refresh your browser page. You should be presented with a login request.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="login" src="_images/login.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>The default username is “admin” with a password of “foglamp”. Use these to login to FogLAMP, you should be presented with a slightly changed dashboard view.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="login_dashboard" src="_images/login_dashboard.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>The status bar now contains the name of the user that is currently logged in and a new option has appeared in the left-hand menu, <em>User Management</em>.</p>
+<div class="section" id="changing-your-password">
+<h3>Changing Your Password<a class="headerlink" href="#changing-your-password" title="Permalink to this headline">¶</a></h3>
+<p>The top status bar of the FogLAMP GUI now contains the user name on the right-hand side and a pull down arrow, selecting this arrow gives a number of options including one labeled <em>Profile</em>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="user_pulldown" src="_images/user_pulldown.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This pulldown menu is also where the <em>Shutdown</em> and <em>Restart</em> options have moved.</p>
+</div>
+<p>Selecting the <em>Profile</em> option will display the profile for the user.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="profile" src="_images/profile.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Towards the bottom of this profile display the <em>change password</em> option appears. Click on this text and a new password dialog will appear.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="password" src="_images/password.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>This popup can be used to change your password. On successfully changing your password you will be logged out of the user interface and will be required to log back in using this new password.</p>
+</div>
+<div class="section" id="password-rotation-mechanism">
+<h3>Password Rotation Mechanism<a class="headerlink" href="#password-rotation-mechanism" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP provides a mechanism to limit the age of passwords in use within the system. A value for the maximum allowed age of a password is defined in the configuration page of the user interface.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="password_rotation" src="_images/password_rotation.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Whenever a user logs into FogLAMP the age of their password is checked against the maximum allowed password age. If their password has reached that age then the user is not logged in, but is instead forced to enter a new password. They must then login with that new password. In addition the system maintains a history of the last three passwords the user has used and prevents them being reused.</p>
+</div>
+</div>
+<div class="section" id="user-management">
+<h2>User Management<a class="headerlink" href="#user-management" title="Permalink to this headline">¶</a></h2>
+<p>Once mandatory authentication has been enabled and the currently logged in user has the role <em>admin</em>, a new option appears in the GUI, <em>User Management</em>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="user_management" src="_images/user_management.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>The user management pages allows</p>
+<blockquote>
+<div><ul class="simple">
+<li>Adding new users.</li>
+<li>Deleting users.</li>
+<li>Resetting user passwords.</li>
+<li>Changing the role of a user.</li>
+</ul>
+</div></blockquote>
+<p>FogLAMP currently supports two roles for users,</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>admin</strong>: a user with admin role is able to fully configure FogLAMP and also manage FogLAMP users</li>
+<li><strong>user</strong>: a user with this role is able to configure FogLAMP but can not manage users</li>
+</ul>
+</div></blockquote>
+<div class="section" id="adding-users">
+<h3>Adding Users<a class="headerlink" href="#adding-users" title="Permalink to this headline">¶</a></h3>
+<p>To add a new user from the <em>User Management</em> page select the <em>Add User</em> icon in the top right of the <em>User Management</em> pane. a new dialog will appear that will allow you to enter details of that user.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="add_user" src="_images/add_user.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>You can select a role for the new user, a user name and an initial password for the user. Only users with the role <em>admin</em> can add new users.</p>
+</div>
+<div class="section" id="changing-user-roles">
+<h3>Changing User Roles<a class="headerlink" href="#changing-user-roles" title="Permalink to this headline">¶</a></h3>
+<p>The role that a particular user has when the login can be changed from the <em>User Management</em> page. Simply select on the <em>change role</em> link next to the user you wish to change the role of.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="change_role" src="_images/change_role.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Select the new role for the user from the drop down list and click on update. The new role will take effect the next time the user logs in.</p>
+</div>
+<div class="section" id="reset-user-password">
+<h3>Reset User Password<a class="headerlink" href="#reset-user-password" title="Permalink to this headline">¶</a></h3>
+<p>Users with the <em>admin</em> role may reset the password of other users. In the <em>User Management</em> page select the <em>reset password</em> link to the right of the user name of the user you wish to reset the password of. A new dialog will appear prompting for a new password to be created for the user.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="reset_password" src="_images/reset_password.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Enter the new password and confirm that password by entering it a second time and click on <em>Update</em>.</p>
+</div>
+<div class="section" id="delete-a-user">
+<h3>Delete A User<a class="headerlink" href="#delete-a-user" title="Permalink to this headline">¶</a></h3>
+<p>Users may be deleted from the <em>User Management</em> page. Select the <em>delete</em> link to the right of the user you wish to delete. A confirmation dialog will appear. Select <em>Delete</em> and the user will be deleted.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="delete_user" src="_images/delete_user.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>You can not delete the last user with role <em>admin</em> as this will prevent you from being able to manage FogLAMP.</p>
+</div>
+</div>
+<div class="section" id="certificate-store">
+<span id="id1"></span><h2>Certificate Store<a class="headerlink" href="#certificate-store" title="Permalink to this headline">¶</a></h2>
+<p>The FogLAMP <em>Certificate Store</em> allows certificates to be stored that may be referenced by various components within the system, in particular these certificates are used for the encryption of the REST API traffic and authentication. They may also be used by particular plugins that require a certificate of one type or another. A number of different certificate types re supported by the certificate store;</p>
+<blockquote>
+<div><ul class="simple">
+<li>PEM files as created by most certificate authorities</li>
+<li>CRT files as used by GlobalSign, VeriSign and Thawte</li>
+<li>Binary CER X.509 certificates</li>
+<li>JSON certificates as used by Google Cloud Platform</li>
+</ul>
+</div></blockquote>
+<p>The <em>Certificate Store</em> functionality is available in the left-hand menu by selecting <em>Certificate Store</em>. When selected it will show the current content of the store.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="certificate_store" src="_images/certificate_store.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Certificates may be removed by selecting the delete option next to the certificate name, note that the keys and certificates can be deleted independently.
+The self signed certificate that is created at installation time can not be deleted.</p>
+<p>To add a new certificate select the <em>Import</em> icon in the top right of the certificate store display.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="update_certificate" src="_images/update_certificate.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>A dialog will appear that allows a key file and/or a certificate file to be selected and uploaded to the <em>Certificate Store</em>. An option allows to allow overwrite of an existing certificate. By default certificates may not be overwritten.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="notifications.html" class="btn btn-neutral float-right" title="Notifications Service" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="foglamp_plugins.html" class="btn btn-neutral" title="FogLAMP Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

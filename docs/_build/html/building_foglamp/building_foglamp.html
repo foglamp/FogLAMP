@@ -1,0 +1,855 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building FogLAMP &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Building Developers Guide" href="index.html"/>
+        <link rel="next" title="FogLAMP Installation" href="04_installation.html"/>
+        <link rel="prev" title="Introduction" href="01_introduction.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Building Developers Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Building FogLAMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#foglamp-platforms">FogLAMP Platforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Building FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appendix-setting-the-postgresql-database">Appendix: Setting the PostgreSQL Database</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appendix-building-foglamp-on-centos">Appendix: Building FogLAMP on CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="04_installation.html">FogLAMP Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_testing.html">Testing FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_utilities.html">FogLAMP Utilities and Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_tasks.html">FogLAMP Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+          <li><a href="index.html">Building Developers Guide</a> &raquo;</li>
+        
+      <li>Building FogLAMP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/building_foglamp/building_foglamp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-foglamp">
+<h1>Building FogLAMP<a class="headerlink" href="#building-foglamp" title="Permalink to this headline">¶</a></h1>
+<p>Let’s get started! In this chapter we will see where to find and how to build, install and run FogLAMP for the first time.</p>
+<div class="section" id="foglamp-platforms">
+<h2>FogLAMP Platforms<a class="headerlink" href="#foglamp-platforms" title="Permalink to this headline">¶</a></h2>
+<p>Due to the use of standard libraries, FogLAMP can run on a large number of platforms and operating environments, but its primary target is Linux distributions. <br /> Our testing environment includes Ubuntu LTS 18.04 and Raspbian, but we have installed and tested FogLAMP on other Linux distributions. In addition to the native support, FogLAMP can also run on Virtual Machines, Docker and LXC containers.</p>
+<div class="section" id="general-requirements">
+<h3>General Requirements<a class="headerlink" href="#general-requirements" title="Permalink to this headline">¶</a></h3>
+<p>This version of FogLAMP requires the following software to be installed in the same environment:</p>
+<ul class="simple">
+<li><strong>Avahi 0.6.32+</strong></li>
+<li><strong>Python 3.6.9+</strong></li>
+<li><strong>PostgreSQL 9.5+</strong></li>
+<li><strong>SQLite 3.11+</strong></li>
+</ul>
+<p>If you intend to download and build FogLAMP from source (as explained in this page), you also need <em>git</em>. <br /> In this version SQLite is default engine, but we have left libraries to easily switch to PostgreSQL, in case you need it. The PostgreSQL plugin will be moved to a different repository in future versions. Other requirements largely depend on the plugins that run in FogLAMP.</p>
+<p>You may also want to install some utilities to make your life easier when you use or test FogLAMP:</p>
+<ul class="simple">
+<li><strong>curl</strong>: it is used to interact with the REST API</li>
+<li><strong>jq</strong>: the JSON processor, it helps in formatting the output of the REST API calls</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Building FogLAMP<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>In this section we will describe how to build FogLAMP on Ubuntu 18.04 LTS (Server or Desktop). Other Linux distributions, Debian or Red-Hat based, or even other versions of Ubuntu may differ. If you are not familiar with Linux and you do not want to build FogLAMP from the source code, you can download a ready-made Debian package (the list of packages is <a class="reference external" href="92_downloads.html">available here</a>).</p>
+<div class="section" id="build-pre-requisites">
+<h3>Build Pre-Requisites<a class="headerlink" href="#build-pre-requisites" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP is currently based on C/C++ and Python code. The packages needed to build and run FogLAMP are:</p>
+<ul class="simple">
+<li>autoconf</li>
+<li>automake</li>
+<li>avahi-daemon</li>
+<li>build-essential</li>
+<li>cmake</li>
+<li>cpulimit</li>
+<li>curl</li>
+<li>g++</li>
+<li>git</li>
+<li>krb5-user</li>
+<li>libboost-dev</li>
+<li>libboost-system-dev</li>
+<li>libboost-thread-dev</li>
+<li>libcurl4-openssl-dev</li>
+<li>libssl-dev</li>
+<li>libpq-dev</li>
+<li>libsqlite3-dev</li>
+<li>libtool</li>
+<li>libz-dev</li>
+<li>make</li>
+<li>pkg-config</li>
+<li>postgresql</li>
+<li>python3-dev</li>
+<li>python3-pip</li>
+<li>python3-setuptools</li>
+<li>sqlite3</li>
+<li>uuid-dev</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get update
+<span class="go">Get:1 http://security.ubuntu.com/ubuntu xenial-security InRelease [102 kB]</span>
+<span class="go">...</span>
+<span class="go">All packages are up-to-date.</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo apt-get install avahi-daemon curl git cmake g++ make build-essential autoconf automake
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo apt-get install sqlite3 libsqlite3-dev
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo apt-get install libtool libboost-dev libboost-system-dev libboost-thread-dev libssl-dev libpq-dev uuid-dev libz-dev
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo apt-get install python3-dev python3-pip python3-setuptools
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo apt-get install postgresql
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="gp">$</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo apt-get install pkg-config cpulimit
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="gp">$</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive sudo apt-get install -yq krb5-user
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="gp">$</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive sudo apt-get install -yq libcurl4-openssl-dev
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="obtaining-the-source-code">
+<h3>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP is available on GitHub. The link to the repository is <a href="https://github.com/foglamp-iot/FogLAMP" target="_blank">https://github.com/foglamp-iot/FogLAMP</a>. In order to clone the code in the repository, type:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/foglamp-iot/FogLAMP.git
+<span class="go">Cloning into &#39;FogLAMP&#39;...</span>
+<span class="go">remote: Counting objects: 15639, done.</span>
+<span class="go">remote: Compressing objects: 100% (88/88), done.</span>
+<span class="go">remote: Total 15639 (delta 32), reused 58 (delta 14), pack-reused 15531</span>
+<span class="go">Receiving objects: 100% (15639/15639), 9.71 MiB | 2.11 MiB/s, done.</span>
+<span class="go">Resolving deltas: 100% (10486/10486), done.</span>
+<span class="go">Checking connectivity... done.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>The code should be now in your home directory. The name of the repository directory is <em>FogLAMP</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> ls -l FogLAMP
+<span class="go">total 128</span>
+<span class="go">drwxr-xr-x   7 ubuntu ubuntu    224 Jan  3 20:08 C</span>
+<span class="go">-rw-r--r--   1 ubuntu ubuntu   1480 May  7 00:29 CMakeLists.txt</span>
+<span class="go">-rw-r--r--   1 ubuntu ubuntu  11346 Jan  3 20:08 LICENSE</span>
+<span class="go">-rw-r--r--   1 ubuntu ubuntu  20660 Mar 13 00:25 Makefile</span>
+<span class="go">-rw-r--r--   1 ubuntu ubuntu   9173 May  7 00:29 README.rst</span>
+<span class="go">-rwxr-xr-x   1 ubuntu ubuntu     38 May  9 19:50 VERSION</span>
+<span class="go">drwxr-xr-x   3 ubuntu ubuntu     96 Jan  3 20:08 contrib</span>
+<span class="go">drwxr-xr-x   4 ubuntu ubuntu    128 Jan  3 20:08 data</span>
+<span class="go">drwxr-xr-x  15 ubuntu ubuntu    480 Jan  3 20:08 dco-signoffs</span>
+<span class="go">drwxr-xr-x  24 ubuntu ubuntu    768 May 11 00:44 docs</span>
+<span class="go">drwxr-xr-x   3 ubuntu ubuntu     96 Jan  3 20:08 examples</span>
+<span class="go">drwxr-xr-x   4 ubuntu ubuntu    128 Jan  3 20:08 extras</span>
+<span class="go">drwxr-xr-x  14 ubuntu ubuntu    448 Jan  3 20:08 python</span>
+<span class="go">-rwxr-xr-x   1 ubuntu ubuntu   6804 Mar 13 00:25 requirements.sh</span>
+<span class="go">drwxr-xr-x  13 ubuntu ubuntu    416 May  7 00:29 scripts</span>
+<span class="go">drwxr-xr-x   7 ubuntu ubuntu    224 Mar 13 00:25 tests</span>
+<span class="go">drwxr-xr-x   3 ubuntu ubuntu     96 Jan  3 20:08 tests-manual</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="selecting-the-correct-version">
+<h3>Selecting the Correct Version<a class="headerlink" href="#selecting-the-correct-version" title="Permalink to this headline">¶</a></h3>
+<p>The git repository created on your local machine, creates several branches. More specifically:</p>
+<ul class="simple">
+<li>The <strong>master</strong> branch is the latest, stable version. You should use this branch if you are interested in using FogLAMP with the last release features and fixes.</li>
+<li>The <strong>develop</strong> branch is the current working branch used by our developers. The branch contains the latest version and features, but it may be unstable and there may be issues in the code. You may consider to use this branch if you are curious to see one of the latest features we are working on, but you should not use this branch in production.</li>
+<li>The branches with versions <strong>majorID.minorID</strong>, such as <em>1.0</em> or <em>1.4</em>, contain the code of that specific version. You may use one of these branches if you need to check the code used in those versions.</li>
+<li>The branches with name <strong>FOGL-XXXX</strong>, where ‘XXXX’ is a sequence number, are working branches used by developers and contributors to add features, fix issues, modify and release code and documentation of FogLAMP. Those branches are free for you to see and learn from the work of the contributors.</li>
+</ul>
+<p>Note that the default branch is <em>develop</em>.</p>
+<p>Once you have cloned the FogLAMP project, in order to check the branches available, use the <code class="docutils literal"><span class="pre">git</span> <span class="pre">branch</span></code> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">pwd</span>
+<span class="go">/home/ubuntu</span>
+<span class="gp">$</span> <span class="nb">cd</span> FogLAMP
+<span class="gp">$</span> git branch --all
+<span class="go">* develop</span>
+<span class="go">remotes/origin/1.0</span>
+<span class="go">...</span>
+<span class="go">remotes/origin/FOGL-822</span>
+<span class="go">remotes/origin/FOGL-823</span>
+<span class="go">remotes/origin/HEAD -&gt; origin/develop</span>
+<span class="go">...</span>
+<span class="go">remotes/origin/develop</span>
+<span class="go">remotes/origin/master</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Assuming you want to use the latest released, stable version, use the <code class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span></code> command to select the <em>master</em> branch:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git checkout master
+<span class="go">Branch master set up to track remote branch master from origin.</span>
+<span class="go">Switched to a new branch &#39;master&#39;</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>You can always use the <code class="docutils literal"><span class="pre">git</span> <span class="pre">status</span></code> command to check the branch you have checked out.</p>
+</div>
+<div class="section" id="id2">
+<h3>Building FogLAMP<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>You are now ready to build your first FogLAMP project. If you want to install FogLAMP on CentOS, Fedora or Red Hat, we recommend you to read this section first and then look at <a class="reference external" href="#appendix-building-foglamp-on-centos">this section</a>. <br /> <br />
+Move to the <em>FogLAMP</em> project directory, type the <code class="docutils literal"><span class="pre">make</span></code> command and let the magic happen.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> FogLAMP
+<span class="gp">$</span> make
+<span class="go">mkdir -p cmake_build</span>
+<span class="go">cd cmake_build ; cmake /home/ubuntu/FogLAMP/</span>
+<span class="go">-- The C compiler identification is GNU 5.4.0</span>
+<span class="go">-- The CXX compiler identification is GNU 5.4.0</span>
+<span class="go">...</span>
+<span class="go">pip3 install -Ir python/requirements.txt --user --no-cache-dir</span>
+<span class="go">...</span>
+<span class="go">Installing collected packages: multidict, idna, yarl, async-timeout, chardet, aiohttp, typing, aiohttp-cors, cchardet, pyjwt, six, pyjq</span>
+<span class="go">Successfully installed aiohttp-2.3.8 aiohttp-cors-0.5.3 async-timeout-3.0.0 cchardet-2.1.1 chardet-3.0.4 idna-2.6 multidict-4.3.1 pyjq-2.1.0 pyjwt-1.6.0 six-1.11.0 typing-3.6.4 yarl-1.2.6</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Depending on the version of Ubuntu or other Linux distribution you are using, you may have found some issues. For example, there is a bug in the GCC compiler that raises a warning under specific circumstances. The output of the build will be something like:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">/home/ubuntu/FogLAMP/C/services/storage/storage.cpp:97:14: warning: ignoring return value of ‘int dup(int)’, declared with attribute warn_unused_result [-Wunused-result]</span>
+<span class="go">  (void)dup(0);     // stdout GCC bug 66425 produces warning</span>
+<span class="go">              ^</span>
+<span class="go">/home/ubuntu/FogLAMP/C/services/storage/storage.cpp:98:14: warning: ignoring return value of ‘int dup(int)’, declared with attribute warn_unused_result [-Wunused-result]</span>
+<span class="go">  (void)dup(0);     // stderr GCC bug 66425 produces warning</span>
+<span class="go">              ^</span>
+</pre></div>
+</div>
+<p>The bug is documented <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66425" target="_blank">here</a>. For our project, you should ignore it.</p>
+<p>The other issue is related to the version of pip (more specifically pip3), the Python package manager. If you see this warning in the middle of the build output:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">/usr/lib/python3.6/distutils/dist.py:261: UserWarning: Unknown distribution option: &#39;python_requires&#39;</span>
+<span class="go">  warnings.warn(msg)</span>
+</pre></div>
+</div>
+<p>…and this output at the end of the build process:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">You are using pip version 8.1.1, however version 9.0.1 is available.</span>
+<span class="go">You should consider upgrading via the &#39;pip install --upgrade pip&#39; command.</span>
+</pre></div>
+</div>
+<p>In this case, what you need to do is to upgrade the pip software for Python3:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo pip3 install --upgrade pip
+<span class="go">Collecting pip</span>
+<span class="go">  Downloading pip-9.0.1-py2.py3-none-any.whl (1.3MB)</span>
+<span class="go">    100% |████████████████████████████████| 1.3MB 1.1MB/s</span>
+<span class="go">Installing collected packages: pip</span>
+<span class="go">Successfully installed pip-9.0.1</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>At this point, run the <code class="docutils literal"><span class="pre">make</span></code> command again and the Python warning should disappear.</p>
+</div>
+<div class="section" id="testing-foglamp-from-the-build-environment">
+<h3>Testing FogLAMP from the Build Environment<a class="headerlink" href="#testing-foglamp-from-the-build-environment" title="Permalink to this headline">¶</a></h3>
+<p>If you are eager to test FogLAMP straight away, you can do so! All you need to do is to set the <em>FOGLAMP_ROOT</em> environment variable and you are good to go. Stay in the FogLAMP project directory, set the environment variable with the path to the FogLAMP directory and start foglamp with the <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">pwd</span>
+<span class="go">/home/ubuntu/FogLAMP</span>
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">FOGLAMP_ROOT</span><span class="o">=</span>/home/ubuntu/FogLAMP
+<span class="gp">$</span> ./scripts/foglamp start
+<span class="go">Starting FogLAMP vX.X.....</span>
+<span class="go">FogLAMP started.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>You can check the status of FogLAMP with the <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> command. For few seconds you may see service starting, then it will show the status of the FogLAMP services and tasks:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> ./scripts/foglamp status
+<span class="go">FogLAMP starting.</span>
+<span class="gp">$</span>
+<span class="gp">$</span> scripts/foglamp status
+<span class="go">FogLAMP v1.3.1 running.</span>
+<span class="go">FogLAMP uptime:  175 seconds.</span>
+<span class="go">FogLAMP Records: 0 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="go">foglamp.tasks.north.sending_process --stream_id 1 --debug_level 1 --port=40417 --address=127.0.0.1 --name=sending process</span>
+<span class="go">foglamp.tasks.north.sending_process --stream_id 2 --debug_level 1 --port=40417 --address=127.0.0.1 --name=statistics to pi</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>If you are curious to see a proper output from FogLAMP, you can query the Core microservice using the REST API:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/ping <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">{&quot;dataPurged&quot;: 0, &quot;dataRead&quot;: 10, &quot;uptime&quot;: 308.42881059646606, &quot;dataSent&quot;: 0, &quot;authenticationOptional&quot;: true}</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -s http://localhost:8081/foglamp/statistics <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">[{&quot;key&quot;: &quot;BUFFERED&quot;, &quot;description&quot;: &quot;The number of readings currently in the FogLAMP buffer&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;DISCARDED&quot;, &quot;description&quot;: &quot;The number of readings discarded at the input side by FogLAMP, i.e. discarded before being  placed in the buffer. This may be due to some error in the readings themselves.&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;PURGED&quot;, &quot;description&quot;: &quot;The number of readings removed from the buffer by the purge process&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;READINGS&quot;, &quot;description&quot;: &quot;The number of readings received by FogLAMP since startup&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;SENT_1&quot;, &quot;description&quot;: &quot;The number of readings sent to the historian&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;SENT_2&quot;, &quot;description&quot;: &quot;The number of statistics data sent to the historian&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;UNSENT&quot;, &quot;description&quot;: &quot;The number of readings filtered out in the send process&quot;, &quot;value&quot;: 0}, {&quot;key&quot;: &quot;UNSNPURGED&quot;, &quot;description&quot;: &quot;The number of readings that were purged from the buffer before being sent&quot;, &quot;value&quot;: 0}]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Congratulations! You have installed and tested FogLAMP! If you want to go extra mile (and make the output of the REST API more readable, download the <em>jq</em> JSON processor and pipe the output of the <em>curl</em> command to it:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt install jq
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -s http://localhost:8081/foglamp/statistics <span class="p">|</span> jq
+<span class="go">[</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;BUFFERED&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings currently in the FogLAMP buffer&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;DISCARDED&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings discarded at the input side by FogLAMP, i.e. discarded before being  placed in the buffer. This may be due to some error in the readings themselves.&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;PURGED&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings removed from the buffer by the purge process&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;READINGS&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings received by FogLAMP since startup&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;SENT_1&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings sent to the historian&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;SENT_2&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of statistics data sent to the historian&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;UNSENT&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings filtered out in the send process&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;key&quot;: &quot;UNSNPURGED&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The number of readings that were purged from the buffer before being sent&quot;,</span>
+<span class="go">    &quot;value&quot;: 0</span>
+<span class="go">  }</span>
+<span class="go">]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="now-i-want-to-stop-foglamp">
+<h3>Now I Want to Stop FogLAMP!<a class="headerlink" href="#now-i-want-to-stop-foglamp" title="Permalink to this headline">¶</a></h3>
+<p>Easy, you have learnt <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code>, simply type <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">stop</span></code>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> scripts/foglamp stop
+<span class="go">Stopping FogLAMP.........</span>
+<span class="go">FogLAMP stopped.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /> <br />
+As a next step, let’s install FogLAMP!</p>
+</div>
+</div>
+<div class="section" id="appendix-setting-the-postgresql-database">
+<h2>Appendix: Setting the PostgreSQL Database<a class="headerlink" href="#appendix-setting-the-postgresql-database" title="Permalink to this headline">¶</a></h2>
+<p>If you intend to use the PostgreSQL database as storage engine, make sure that PostgreSQL is installed and running correctly:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo systemctl status postgresql
+<span class="go">● postgresql.service - PostgreSQL RDBMS</span>
+<span class="go">   Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)</span>
+<span class="go">   Active: active (exited) since Fri 2017-12-08 15:56:07 GMT; 15min ago</span>
+<span class="go"> Main PID: 14572 (code=exited, status=0/SUCCESS)</span>
+<span class="go">   CGroup: /system.slice/postgresql.service</span>
+
+<span class="go">Dec 08 15:56:07 ubuntu systemd[1]: Starting PostgreSQL RDBMS...</span>
+<span class="go">Dec 08 15:56:07 ubuntu systemd[1]: Started PostgreSQL RDBMS.</span>
+<span class="go">Dec 08 15:56:11 ubuntu systemd[1]: Started PostgreSQL RDBMS.</span>
+<span class="gp">$</span>
+<span class="gp">$</span> ps -ef <span class="p">|</span> grep postgres
+<span class="go">postgres 14806     1  0 15:56 ?        00:00:00 /usr/lib/postgresql/9.5/bin/postgres -D /var/lib/postgresql/9.5/main -c config_file=/etc/postgresql/9.5/main/postgresql.conf</span>
+<span class="go">postgres 14808 14806  0 15:56 ?        00:00:00 postgres: checkpointer process</span>
+<span class="go">postgres 14809 14806  0 15:56 ?        00:00:00 postgres: writer process</span>
+<span class="go">postgres 14810 14806  0 15:56 ?        00:00:00 postgres: wal writer process</span>
+<span class="go">postgres 14811 14806  0 15:56 ?        00:00:00 postgres: autovacuum launcher process</span>
+<span class="go">postgres 14812 14806  0 15:56 ?        00:00:00 postgres: stats collector process</span>
+<span class="go">ubuntu   15198  1225  0 17:22 pts/0    00:00:00 grep --color=auto postgres</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>PostgreSQL 9.5 is the version available for Ubuntu 18.04 when we have published this page. Other versions of PostgreSQL, such as 9.6 or 10.1, work just fine. <br /> <br /> When you install the Ubuntu package, PostreSQL is set for a <em>peer authentication</em>, i.e. the database user must match with the Linux user. Other packages may differ. You may quickly check the authentication mode set in the <em>pg_hba.conf</em> file. The file is in the same directory of the <em>postgresql.conf</em> file you may see as output from the <em>ps</em> command shown above, in our case <em>/etc/postgresql/9.5/main</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo grep <span class="s1">&#39;^local&#39;</span> /etc/postgresql/9.5/main/pg_hba.conf
+<span class="go">local   all             postgres                                peer</span>
+<span class="go">local   all             all                                     peer</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>The installation procedure also creates a Linux <em>postgres</em> user. In order to check if everything is set correctly, execute the <em>psql</em> utility as sudo user:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo -u postgres psql -l
+<span class="go">                                  List of databases</span>
+<span class="go">   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges</span>
+<span class="go">-----------+----------+----------+-------------+-------------+-----------------------</span>
+<span class="go"> postgres  | postgres | UTF8     | en_GB.UTF-8 | en_GB.UTF-8 |</span>
+<span class="go"> template0 | postgres | UTF8     | en_GB.UTF-8 | en_GB.UTF-8 | =c/postgres          +</span>
+<span class="go">           |          |          |             |             | postgres=CTc/postgres</span>
+<span class="go"> template1 | postgres | UTF8     | en_GB.UTF-8 | en_GB.UTF-8 | =c/postgres          +</span>
+<span class="go">           |          |          |             |             | postgres=CTc/postgres</span>
+<span class="gp gp-VirtualEnv">(3 rows)</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Encoding and collations may differ, depending on the choices made when you installed your operating system. <br /> Before you proceed, you must create a PostgreSQL user that matches your Linux user. Supposing that your user is <em>&lt;foglamp_user&gt;</em>, type:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo -u postgres createuser -d &lt;foglamp_user&gt;
+</pre></div>
+</div>
+<p>The <em>-d</em> argument is important because the user will need to create the FogLAMP database.</p>
+<p>Finally, you should now be able to see the list of the available databases from your current user:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> psql -l
+<span class="go">                                  List of databases</span>
+<span class="go">   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges</span>
+<span class="go">-----------+----------+----------+-------------+-------------+-----------------------</span>
+<span class="go"> postgres  | postgres | UTF8     | en_GB.UTF-8 | en_GB.UTF-8 |</span>
+<span class="go"> template0 | postgres | UTF8     | en_GB.UTF-8 | en_GB.UTF-8 | =c/postgres          +</span>
+<span class="go">           |          |          |             |             | postgres=CTc/postgres</span>
+<span class="go"> template1 | postgres | UTF8     | en_GB.UTF-8 | en_GB.UTF-8 | =c/postgres          +</span>
+<span class="go">           |          |          |             |             | postgres=CTc/postgres</span>
+<span class="gp gp-VirtualEnv">(3 rows)</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="appendix-building-foglamp-on-centos">
+<h2>Appendix: Building FogLAMP on CentOS<a class="headerlink" href="#appendix-building-foglamp-on-centos" title="Permalink to this headline">¶</a></h2>
+<p>In this section we present how to prepare a CentOS machine to build and install FogLAMP. A similar approach can be adopted to build the platform on RedHat and Fedora distributions. Here we refer to CentOS version 17.4.1708, requirements for other versions or distributions might differ.</p>
+<div class="section" id="pre-requisites">
+<h3>Pre-Requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h3>
+<p>Pre-requisites on CentOS are similar to the ones on other distributions, but the name of the packages may differ from Debian-based distros. Starting from a minimal installation, this is the list of packages you need to add:</p>
+<ul class="simple">
+<li>libtool</li>
+<li>cmake</li>
+<li>boost-devel</li>
+<li>libuuid-devel</li>
+<li>gmp-devel</li>
+<li>mpfr-devel</li>
+<li>libmpc-devel</li>
+<li>sqlite3</li>
+<li>bzip2</li>
+<li>jq</li>
+</ul>
+<p>This is the complete list of the commands to execute and the installed packages in CentoOS 17.4.1708.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo yum install libtool</span>
+<span class="go">sudo yum install cmake</span>
+<span class="go">sudo yum install boost-devel</span>
+<span class="go">sudo yum install libuuid-devel</span>
+<span class="go">sudo yum install gmp-devel</span>
+<span class="go">sudo yum install mpfr-devel</span>
+<span class="go">sudo yum install libmpc-devel</span>
+<span class="go">sudo yum install bzip2</span>
+<span class="go">sudo yum install jq</span>
+<span class="go">sudo yum install libsqlite3x-devel</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-and-installing-c-5-4">
+<h3>Building and Installing C++ 5.4<a class="headerlink" href="#building-and-installing-c-5-4" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP, requires C++ 5.4, CentOS 7 provides version 4.8. These are the commands to build and install the new GCC environment:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo yum install gcc-c++</span>
+<span class="go">curl https://ftp.gnu.org/gnu/gcc/gcc-5.4.0/gcc-5.4.0.tar.bz2 -O</span>
+<span class="go">bzip2 -dk gcc-5.4.0.tar.bz</span>
+<span class="go">tar xvf gcc-5.4.0.tar</span>
+<span class="go">mkdir gcc-5.4.0-build</span>
+<span class="go">cd gcc-5.4.0-build</span>
+<span class="go">../gcc-5.4.0/configure --enable-languages=c,c++ --disable-multilib</span>
+<span class="go">make -j$(nproc)</span>
+<span class="go">sudo make install</span>
+</pre></div>
+</div>
+<p>At the end of the procedure, the system will have two versions of GCC installed:</p>
+<ul class="simple">
+<li>GCC 4.8, installed in /usr/bin and /usr/lib64</li>
+<li>GCC 5.4, installed in /usr/local/bin and /usr/local/lib64</li>
+</ul>
+<p>In order to use the latest version for FogLAMP, add the following lines at the end of your <code class="docutils literal"><span class="pre">$HOME/.bash_profile</span></code> script:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">export CC=/usr/local/bin/gcc</span>
+<span class="go">export CXX=/usr/local/bin/g++</span>
+<span class="go">export LD_LIBRARY_PATH=/usr/local/lib64</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-postgresql-9-6">
+<h3>Installing PostgreSQL 9.6<a class="headerlink" href="#installing-postgresql-9-6" title="Permalink to this headline">¶</a></h3>
+<p>CentOS provides PostgreSQL 9.2. FogLAMP has been tested with PostgreSQL 9.5, 9.6 and 10.X. The commands to install the new version of PostgreSQL are:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">sudo yum install https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm</span>
+<span class="go">sudo yum install postgresql96</span>
+<span class="go">sudo yum install postgresql96-server</span>
+<span class="go">sudo yum install postgresql96-devel</span>
+<span class="go">sudo /usr/pgsql-9.6/bin/postgresql96-setup initdb</span>
+<span class="go">sudo systemctl enable postgresql-9.6</span>
+<span class="go">sudo systemctl start postgresql-9.6</span>
+</pre></div>
+</div>
+<p>At this point, Postgres has been configured to start at boot and it should be up and running. You can always check the status of the database server with <code class="docutils literal"><span class="pre">systemctl</span> <span class="pre">status</span> <span class="pre">postgresql-9.6</span></code>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo systemctl status postgresql-9.6
+<span class="go">[sudo] password for foglamp:</span>
+<span class="go">● postgresql-9.6.service - PostgreSQL 9.6 database server</span>
+<span class="go">   Loaded: loaded (/usr/lib/systemd/system/postgresql-9.6.service; enabled; vendor preset: disabled)</span>
+<span class="go">   Active: active (running) since Sat 2018-03-17 06:22:52 GMT; 8min ago</span>
+<span class="go">     Docs: https://www.postgresql.org/docs/9.6/static/</span>
+<span class="go">  Process: 1036 ExecStartPre=/usr/pgsql-9.6/bin/postgresql96-check-db-dir ${PGDATA} (code=exited, status=0/SUCCESS)</span>
+<span class="go"> Main PID: 1049 (postmaster)</span>
+<span class="go">   CGroup: /system.slice/postgresql-9.6.service</span>
+<span class="go">           ├─1049 /usr/pgsql-9.6/bin/postmaster -D /var/lib/pgsql/9.6/data/</span>
+<span class="go">           ├─1077 postgres: logger process</span>
+<span class="go">           ├─1087 postgres: checkpointer process</span>
+<span class="go">           ├─1088 postgres: writer process</span>
+<span class="go">           ├─1089 postgres: wal writer process</span>
+<span class="go">           ├─1090 postgres: autovacuum launcher process</span>
+<span class="go">           └─1091 postgres: stats collector process</span>
+
+<span class="go">Mar 17 06:22:52 vbox-centos-test systemd[1]: Starting PostgreSQL 9.6 database server...</span>
+<span class="go">Mar 17 06:22:52 vbox-centos-test postmaster[1049]: &lt; 2018-03-17 06:22:52.910 GMT &gt; LOG:  redirecting log output to logging collector process</span>
+<span class="go">Mar 17 06:22:52 vbox-centos-test postmaster[1049]: &lt; 2018-03-17 06:22:52.910 GMT &gt; HINT:  Future log output will appear in directory &quot;pg_log&quot;.</span>
+<span class="go">Mar 17 06:22:52 vbox-centos-test systemd[1]: Started PostgreSQL 9.6 database server.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Next, add the FogLAMP user to PostgreSQL with the command <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">postgres</span> <span class="pre">createuser</span> <span class="pre">-d</span> <span class="pre">&lt;user&gt;</span></code>, where <em>&lt;user&gt;</em> is your FogLAMP user.</p>
+<p>Finally, add <code class="docutils literal"><span class="pre">/usr/pgsql-9.6/bin</span></code> to your PATH environment variable in <code class="docutils literal"><span class="pre">$HOME/.bash_profile</span></code>. the new PATH setting in the file should look something like this:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">PATH=$PATH:$HOME/.local/bin:$</span>HOME/bin:/usr/pgsql-9.6/bin
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-sqlite3">
+<h3>Installing SQLite3<a class="headerlink" href="#installing-sqlite3" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP requires SQLite version 3.11 or later, CentOS provides an old version of SQLite. We must download SQLite, compile it and install it. The steps are:</p>
+<ul class="simple">
+<li>Download the source code of SQLite with <em>wget</em>. If you do not have <em>wget</em> installed, install it with <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">wget</span></code>: <br /> <code class="docutils literal"><span class="pre">wget</span> <span class="pre">http://www.sqlite.org/2018/sqlite-autoconf-3230100.tar.gz</span></code></li>
+<li>Extract the SQLite tarball: <br /> <code class="docutils literal"><span class="pre">tar</span> <span class="pre">xzvf</span> <span class="pre">sqlite-autoconf-3230100.tar.gz</span></code></li>
+<li>Move into the SQLite directory and execute the <em>configure-make-make install</em> commands: <br /> <code class="docutils literal"><span class="pre">cd</span> <span class="pre">sqlite-autoconf-3230100</span></code> <br /> <code class="docutils literal"><span class="pre">./configure</span></code> <br /> <code class="docutils literal"><span class="pre">make</span></code> <br /> <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code></li>
+</ul>
+</div>
+<div class="section" id="changing-to-the-postgresql-engine">
+<h3>Changing to the PostgreSQL Engine<a class="headerlink" href="#changing-to-the-postgresql-engine" title="Permalink to this headline">¶</a></h3>
+<p>The CentOS version of FogLAMP is optimized to work with PostgreSQL as storage engine. In order to achieve that, change the file <em>configuration.cpp</em> in the <em>C/services/storage</em> directory: line #20, word <em>sqlite</em> must be replaced with <em>postgres</em>:</p>
+<p><code class="docutils literal"><span class="pre">&quot;</span> <span class="pre">{</span> <span class="pre">\&quot;plugin\&quot;</span> <span class="pre">:</span> <span class="pre">{</span> <span class="pre">\&quot;value\&quot;</span> <span class="pre">:</span> <span class="pre">\&quot;postgres\&quot;,</span> <span class="pre">\&quot;description\&quot;</span> <span class="pre">:</span> <span class="pre">\&quot;The</span> <span class="pre">stora</span>&#160;&#160;&#160; <span class="pre">ge</span> <span class="pre">plugin</span> <span class="pre">to</span> <span class="pre">load\&quot;},&quot;</span></code></p>
+</div>
+<div class="section" id="id3">
+<h3>Building FogLAMP<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>We are finally ready to install FogLAMP, but we need to apply some little changes to the code and the make files. These changes will be removed in the future, but for the moment they are necessary to complete the procedure.</p>
+<p>First, clone the Github repository with the usual command: <br /> <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/foglamp-iot/FogLAMP.git</span></code> <br /> The project should have been added to your machine under the <em>FogLAMP</em> directory.</p>
+<p>We need to apply these changes to <em>C/plugins/storage/postgres/CMakeLists.txt</em>:</p>
+<ul class="simple">
+<li>Replace <br /> <code class="docutils literal"><span class="pre">include_directories(../../../thirdparty/rapidjson/include</span> <span class="pre">/usr/include/postgresql)</span></code> <br /> with: <br /> <code class="docutils literal"><span class="pre">include_directories(../../../thirdparty/rapidjson/include</span> <span class="pre">/usr/pgsql-9.6/include)</span></code> <br /> <code class="docutils literal"><span class="pre">link_directories(/usr/pgsql-9.6/lib)</span></code> <br /></li>
+</ul>
+<p>You are now ready to execute the <code class="docutils literal"><span class="pre">make</span></code> command, as described <a class="reference external" href="#id1">here</a>.</p>
+</div>
+<div class="section" id="further-notes">
+<h3>Further Notes<a class="headerlink" href="#further-notes" title="Permalink to this headline">¶</a></h3>
+<p>Here are some extra notes for the CentOS users.</p>
+<p><strong>Commented code</strong> <br /> The code commented in the previous paragraph is experimental and used for auto-discovery. It has been used for tests with South Microservices running on smart sensors, separated from the Core and Storage Microservices. This means that auto-discovery, i.e. the ability for a South Microservice to automatically identify the other services of FogLAMP distributed over the network, is currently not available on CentOS.</p>
+<p><strong>foglamp start</strong> <br /> When FogLAMP starts on CentOS, it returns this message:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">Starting FogLAMP v1.3.1.FogLAMP cannot start.</span>
+<span class="go">Check /home/foglamp/FogLAMP/data/core.err for more information.</span>
+</pre></div>
+</div>
+<p>Check the <em>core.err</em> file, but if it is empty and <em>foglamp status</em> shows FogLAMP running, it means that the services are up and running.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp start
+<span class="go">Starting FogLAMP v1.3.1.FogLAMP cannot start.</span>
+<span class="go">Check /home/foglamp/FogLAMP/data/core.err for more information.</span>
+<span class="gp">$</span>
+<span class="gp">$</span> foglamp status
+<span class="go">FogLAMP v1.3.1 running.</span>
+<span class="go">FogLAMP uptime:  6 seconds.</span>
+<span class="go">FogLAMP Records: 0 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="gp">$</span>
+<span class="gp">$</span> cat data/core.err
+<span class="gp">$</span>
+<span class="gp">$</span> ps -ef <span class="p">|</span> grep foglamp
+<span class="go">...</span>
+<span class="go">foglamp   6174     1  1 08:03 pts/0    00:00:00 python3 -m foglamp.services.core</span>
+<span class="go">foglamp   6179     1  0 08:03 ?        00:00:00 /home/foglamp/FogLAMP/services/storage --address=0.0.0.0 --port=34037</span>
+<span class="go">foglamp   6213  6212  0 08:04 pts/0    00:00:00 python3 -m foglamp.tasks.statistics --port=34037 --address=127.0.0.1 --name=stats collector</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><strong>foglamp stop</strong> <br /> In CentOS, the command stops all the microservices with the exception of Core (with a <code class="docutils literal"><span class="pre">ps</span> <span class="pre">-ef</span></code> command you can easily check the process still running). You should execute a <em>stop</em> and a <em>kill</em> command to complete the shutdown on CentOS:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp status
+<span class="go">FogLAMP v1.3.1 running.</span>
+<span class="go">FogLAMP uptime:  6 seconds.</span>
+<span class="go">FogLAMP Records: 0 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="gp">$</span> foglamp stop
+<span class="go">Stopping FogLAMP.............</span>
+<span class="go">FogLAMP stopped.</span>
+<span class="gp">$</span>
+<span class="gp">$</span> ps -ef <span class="p">|</span> grep foglamp
+<span class="go">...</span>
+<span class="go">foglamp   5782     1  5 07:56 pts/0    00:00:11 python3 -m foglamp.services.core</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+<span class="gp">$</span> foglamp <span class="nb">kill</span>
+<span class="go">FogLAMP killed.</span>
+<span class="gp">$</span> ps -ef <span class="p">|</span> grep foglamp
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="04_installation.html" class="btn btn-neutral float-right" title="FogLAMP Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="01_introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

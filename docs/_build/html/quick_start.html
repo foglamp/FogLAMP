@@ -1,0 +1,849 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick Start Guide &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="Processing Data" href="processing_data.html"/>
+        <link rel="prev" title="Welcome to FogLAMP’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction-to-foglamp">Introduction to FogLAMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-foglamp">Installing FogLAMP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-foglamp-packages">Installing FogLAMP packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checking-package-installation">Checking package installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-and-stopping-foglamp">Starting and stopping FogLAMP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting-foglamp">Troubleshooting FogLAMP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-foglamp-gui">Running the FogLAMP GUI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foglamp-dashboard">FogLAMP Dashboard</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#managing-data-sources">Managing Data Sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adding-data-sources">Adding Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-data-sources">Configuring Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enabling-and-disabling-data-sources">Enabling and Disabling Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#viewing-data">Viewing Data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#display-graph">Display Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#download-data">Download Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sending-data-to-other-systems">Sending Data to Other Systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adding-data-destinations">Adding Data Destinations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-data-destinations">Configuring Data Destinations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enabling-and-disabling-data-destinations">Enabling and Disabling Data Destinations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-omf-plugin">Using the OMF plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pi-connector-relay">PI Connector Relay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pi-web-api-omf-endpoint">PI Web API OMF Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#eds-omf-endpoint">EDS OMF Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ocs-omf-endpoint">OCS OMF Endpoint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#backing-up-and-restoring-foglamp">Backing up and Restoring FogLAMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-and-support-information">Troubleshooting and Support Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quick Start Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quick_start.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start-guide">
+<h1>Quick Start Guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction-to-foglamp">
+<h2>Introduction to FogLAMP<a class="headerlink" href="#introduction-to-foglamp" title="Permalink to this headline">¶</a></h2>
+<p>FogLAMP is an open sensor-to-cloud data fabric for the Internet of Things (IoT) that connects people and systems to the information they need to operate their business.  It provides a scalable, secure, robust infrastructure for collecting data from sensors, processing data at the edge and transporting data to historian and other management systems. FogLAMP can operate over the unreliable, intermittent and low bandwidth connections often found in IoT applications.</p>
+<p>FogLAMP is implemented as a collection of microservices which include:</p>
+<ul class="simple">
+<li>Core services, including security, monitoring, and storage</li>
+<li>Data transformation and alerting services</li>
+<li>South services: Collect data from sensors and other FogLAMP systems</li>
+<li>North services: Transmit data to historians and other systems</li>
+<li>Edge data processing applications</li>
+</ul>
+<p>Services can easily be developed and incorporated into the FogLAMP framework. The FogLAMP Developer Guides describe how to do this.</p>
+</div>
+<div class="section" id="installing-foglamp">
+<h2>Installing FogLAMP<a class="headerlink" href="#installing-foglamp" title="Permalink to this headline">¶</a></h2>
+<p>FogLAMP is extremely lightweight and can run on inexpensive edge devices, sensors and actuator boards.  For the purposes of this manual, we assume that all services are running on a Raspberry Pi running the Raspbian operating system. Be sure your system has plenty of storage available for data readings.</p>
+<p>If your system does not have Raspbian pre-installed, you can find instructions on downloading and installing it at <a class="reference external" href="https://www.raspberrypi.org/downloads/raspbian/">https://www.raspberrypi.org/downloads/raspbian/</a>.  After installing Raspbian, ensure you have the latest updates by executing the following commands on your FogLAMP server:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">upgrade</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+</pre></div>
+</div>
+<p>You can obtain FogLAMP in two ways:</p>
+<ul class="simple">
+<li>Dianomic Systems offers pre-built, certified binaries of FogLAMP for Debian using either Intel or ARM architectures. This is the recommended method, especially for new users. You can download these from <a class="reference external" href="https://FogLAMP.readthedocs.io/en/master/92_downloads.html">https://FogLAMP.readthedocs.io/en/master/92_downloads.html</a>.</li>
+<li>As source code from <a class="reference external" href="https://github.com/foglamp-iot/">https://github.com/foglamp-iot/</a>.  Instructions for downloading and building FogLAMP source code can be found in the FogLAMP Developer’s Guide</li>
+</ul>
+<p>In general, FogLAMP installation will require the following packages:</p>
+<ul class="simple">
+<li>FogLAMP core</li>
+<li>FogLAMP user interface</li>
+<li>One or more FogLAMP South services</li>
+<li>One or more FogLAMP North service (OSI PI and OCS north services are included in FogLAMP core)</li>
+</ul>
+<div class="section" id="installing-foglamp-packages">
+<h3>Installing FogLAMP packages<a class="headerlink" href="#installing-foglamp-packages" title="Permalink to this headline">¶</a></h3>
+<p>SSH into the system that will host FogLAMP services. For each FogLAMP package that you choose to install, type the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">PackageName</span>
+</pre></div>
+</div>
+<p>The key packages to install are the FogLAMP core and the FogLAMP User Interface:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="o">./</span><span class="n">foglamp</span><span class="o">-</span><span class="mf">1.4</span><span class="o">.</span><span class="mi">1</span><span class="o">-</span><span class="n">armhf</span><span class="o">.</span><span class="n">deb</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="o">./</span><span class="n">foglamp</span><span class="o">-</span><span class="n">gui</span><span class="o">-</span><span class="mf">1.4</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">deb</span>
+</pre></div>
+</div>
+<p>You will need to install one of more South plugins to acquire data.  You can either do this now or when you are adding the data source. For example, to install the plugin for the Sense HAT sensor board, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="o">./</span><span class="n">foglamp</span><span class="o">-</span><span class="n">south</span><span class="o">-</span><span class="n">sensehat</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="n">armhf</span><span class="o">.</span><span class="n">deb</span>
+</pre></div>
+</div>
+<p>You may also need to install one or more North plugins to transmit data.  Support for OSIsoft PI and OCS are included with the FogLAMP core package, so you don’t need to install anything more if you are sending data to only these systems.</p>
+</div>
+<div class="section" id="checking-package-installation">
+<h3>Checking package installation<a class="headerlink" href="#checking-package-installation" title="Permalink to this headline">¶</a></h3>
+<p>To check what packages have been installed, ssh into your host system and use the dpkg command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dpkg</span> <span class="o">-</span><span class="n">l</span> <span class="o">|</span> <span class="n">grep</span> <span class="s1">&#39;foglamp&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="starting-and-stopping-foglamp">
+<h2>Starting and stopping FogLAMP<a class="headerlink" href="#starting-and-stopping-foglamp" title="Permalink to this headline">¶</a></h2>
+<p>FogLAMP administration is performed using the “foglamp” command line utility.  You must first ssh into the host system.  The FogLAMP utility is installed by default in /usr/local/foglamp/bin.</p>
+<p>The following command options are available:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Start:</strong> Start the FogLAMP system</li>
+<li><strong>Stop:</strong> Stop the FogLAMP system</li>
+<li><strong>Status:</strong> Lists currently running FogLAMP services and tasks</li>
+<li><strong>Reset:</strong> Delete all data and configuration and return FogLAMP to factory settings</li>
+<li><strong>Kill:</strong> Kill FogLAMP services that have not correctly responded to Stop</li>
+<li><strong>Help:</strong> Describe FogLAMP options</li>
+</ul>
+</div></blockquote>
+<p>For example, to start the FogLAMP system, open a session to the FogLAMP device and type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">foglamp</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">foglamp</span> <span class="n">start</span>
+</pre></div>
+</div>
+<div class="section" id="troubleshooting-foglamp">
+<h3>Troubleshooting FogLAMP<a class="headerlink" href="#troubleshooting-foglamp" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP logs status and error messages to syslog.  To troubleshoot a FogLAMP installation using this information, open a session to the FogLAMP server and type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">grep</span> <span class="o">-</span><span class="n">a</span> <span class="s1">&#39;foglamp&#39;</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">syslog</span> <span class="o">|</span> <span class="n">tail</span> <span class="o">-</span><span class="n">n</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="running-the-foglamp-gui">
+<h2>Running the FogLAMP GUI<a class="headerlink" href="#running-the-foglamp-gui" title="Permalink to this headline">¶</a></h2>
+<p>FogLAMP offers an easy-to-use, browser-based GUI.  To access the GUI, open your browser and enter the IP address of the FogLAMP server into the address bar.  This will display the FogLAMP dashboard.</p>
+<p>You can easily use the FogLAMP UI to monitor multiple FogLAMP servers.  To view and manage a different server, click “Settings” in the left menu bar. In the “Connection Setup” pane, enter the IP address and port number for the new server you wish to manage.  Click the “Set the URL &amp; Restart” button to switch the UI to the new server.</p>
+<p>If you are managing a very lightweight server or one that is connected via a slow network link, you may want to reduce the UI update frequency to minimize load on the server and network.  You can adjust this rate in the “GUI Settings” pane of the Settings screen.  While the graph rate and ping rate can be adjusted individually, in general you should set them to the same value.</p>
+<div class="section" id="foglamp-dashboard">
+<h3>FogLAMP Dashboard<a class="headerlink" href="#foglamp-dashboard" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="dashboard" src="_images/dashboard.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>This screen provides an overview of FogLAMP operations.  You can customize the information and time frames displayed on this screen using the drop-down menus in the upper right corner.  The information you select will be displayed in a series of graphs.</p>
+<p>You can choose to view a graph of any of the sensor reading being collected by the FogLAMP system.  In addition, you can view graphs of the following system-wide information:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Readings:</strong> The total number of data readings collected by FogLAMP since system boot</li>
+<li><strong>Buffered:</strong> The number of data readings currently stored by the system</li>
+<li><strong>Discarded:</strong> Number of data readings discarded before being buffered (due to data errors, for example)</li>
+<li><strong>Unsent:</strong> Number of data readings that were not sent successfully</li>
+<li><strong>Purged:</strong> The total number of data readings that have been purged from the system</li>
+<li><strong>Unsnpurged:</strong> The number of data readings that were purged without being sent to a North service.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="managing-data-sources">
+<h2>Managing Data Sources<a class="headerlink" href="#managing-data-sources" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="south_services" src="_images/south_services.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>Data sources are managed from the South Services screen.  To access this screen, click on “South” from the menu bar on the left side of any screen.</p>
+<p>The South Services screen displays the status of all data sources in the FogLAMP system.  Each data source will display its status, the data assets it is providing, and the number of readings that have been collected.</p>
+<div class="section" id="adding-data-sources">
+<h3>Adding Data Sources<a class="headerlink" href="#adding-data-sources" title="Permalink to this headline">¶</a></h3>
+<p>To add a data source, you will first need to install the plugin for that sensor type.  If you have not already done this, open a terminal session to your FogLAMP server.  Download the package for the plugin and enter:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">PackageName</span>
+</pre></div>
+</div>
+<p>Once the plugin is installed return to the FogLAMP GUI and click on “Add+” in the upper right of the South Services screen.  FogLAMP will display a series of 3 screens to add the data source:</p>
+<ol class="arabic simple">
+<li>The first screen will ask you to select the plugin for the data source from the list of installed plugins.  If you do not see the plugin you need, refer to the Installing FogLAMP section of this manual.  In addition, this screen allows you to specify a display name for the data source.</li>
+<li>The second screen allows you to configure the plugin and the data assets it will provide.  Note that every data asset in FogLAMP must have a unique name.  If you have multiple sensors using the same plugin, modify the asset names on this screen so they are unique. (Some plugins allow you to specify an asset name prefix that will apply to all the asset names for that sensor.)  Refer to the individual plugin documentation for descriptions of the fields on this screen.  If you modify any of the configuration fields, click on the “save” button to save them.</li>
+<li>The final screen loads the plugin.  You can specify whether it will be enabled immediately for data collection or to await enabling in the future.</li>
+</ol>
+</div>
+<div class="section" id="configuring-data-sources">
+<h3>Configuring Data Sources<a class="headerlink" href="#configuring-data-sources" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="south_service_config" src="_images/south_service_config.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>To modify the configuration of a data source, click on its name in the South Services screen. This will display a list of all parameters available for that data source.  If you make any changes, click on the “save” button in the top panel to save the new configuration.  Click on the “x” button in the upper right corner to return to the South Services screen.</p>
+</div>
+<div class="section" id="enabling-and-disabling-data-sources">
+<h3>Enabling and Disabling Data Sources<a class="headerlink" href="#enabling-and-disabling-data-sources" title="Permalink to this headline">¶</a></h3>
+<p>To enable or disable a data source, click on its name in the South Services screen. Under the list of data source parameters, there is a check box to enable or disable the service.  If you make any changes, click on the “save” button in the bottom panel near the check box to save the new configuration.</p>
+</div>
+<div class="section" id="viewing-data">
+<h3>Viewing Data<a class="headerlink" href="#viewing-data" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="viewing_data" src="_images/viewing_data.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>You can inspect all the data buffered by the FogLAMP system on the Assets page.  To access this page, click on “Assets &amp; Readings” from the left-side menu bar.</p>
+<p>This screen will display a list of every data asset in the system.  Alongside each asset are two icons; one to display a graph of the asset and another to download the data stored for that asset as a CSV file.</p>
+<div class="section" id="display-graph">
+<h4>Display Graph<a class="headerlink" href="#display-graph" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/graph_icon.jpg" class="align-left" src="_images/graph_icon.jpg" />
+<p>By clicking on the graph button next to each asset name, you can view a graph of individual data readings. A graph will be displayed with a plot for each data point within the asset.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="view_graph" src="_images/view_graph.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>It is possible to change the time period to which the graph refers by use of the plugin list in the top left of the graph.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="view_times" src="_images/view_times.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Where an asset contains multiple data points each of these is displayed in a different colour. Graphs for particular data points can be toggled on and off by clicking on the key at the top of the graph. Those data points not should will be indicated by striking through the name of the data point.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="view_hide" src="_images/view_hide.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>A summary tab is also available, this will show the minimum, maximum and average values for each of the data points. Click on <em>Summary</em> to show the summary tab.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="view_summary" src="_images/view_summary.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="download-data">
+<h4>Download Data<a class="headerlink" href="#download-data" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/download_icon.jpg" class="align-left" src="_images/download_icon.jpg" />
+<p>By clicking on the download icon adjacent to each asset you can download the stored data for the asset. The format of the file is download is a CSV file that is designed to be loaded int a spreadsheet such as Excel, Numbers or OpenOffice Calc.</p>
+<p>The file contains a header row with the names of the data points within the asset, the first column is always the timestamp when the reading was taken, the header for this being <em>timestamp</em>. The data is sorted in chronological order with the newest data first.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="view_spreadsheet" src="_images/view_spreadsheet.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="sending-data-to-other-systems">
+<h2>Sending Data to Other Systems<a class="headerlink" href="#sending-data-to-other-systems" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="north_services" src="_images/north_services.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>Data destinations are managed from the North Services screen.  To access this screen, click on “North” from the menu bar on the left side of any screen.</p>
+<p>The North Services screen displays the status of all data sending processes in the FogLAMP system.  Each data destination will display its status and the number of readings that have been collected.</p>
+<div class="section" id="adding-data-destinations">
+<h3>Adding Data Destinations<a class="headerlink" href="#adding-data-destinations" title="Permalink to this headline">¶</a></h3>
+<p>To add a data destination, click on “Create North Instance+” in the upper right of the North Services screen.  FogLAMP will display a series of 3 screens to add the data destination:</p>
+<ol class="arabic simple">
+<li>The first screen will ask you to select the plugin for the data destination from the list of installed plugins.  If you do not see the plugin you need, refer to the Installing FogLAMP section of this manual.  In addition, this screen allows you to specify a display name for the data destination. In addition, you can specify how frequently data will be forwarded to the destination in days, hours, minutes and seconds.  Enter the number of days in the interval in the left box and the number of hours, minutes and seconds in format HH:MM:SS in the right box.</li>
+<li>The second screen allows you to configure the plugin and the data assets it will send.  See the section below for specifics of configuring a PI, EDS or OCS destination.</li>
+<li>The final screen loads the plugin.  You can specify whether it will be enabled immediately for data sending or to await enabling in the future.</li>
+</ol>
+</div>
+<div class="section" id="configuring-data-destinations">
+<h3>Configuring Data Destinations<a class="headerlink" href="#configuring-data-destinations" title="Permalink to this headline">¶</a></h3>
+<p>To modify the configuration of a data destination, click on its name in the North Services screen. This will display a list of all parameters available for that data source.  If you make any changes, click on the “save” button in the top panel to save the new configuration.  Click on the “x” button in the upper right corner to return to the North Services screen.</p>
+</div>
+<div class="section" id="enabling-and-disabling-data-destinations">
+<h3>Enabling and Disabling Data Destinations<a class="headerlink" href="#enabling-and-disabling-data-destinations" title="Permalink to this headline">¶</a></h3>
+<p>To enable or disable a data source, click on its name in the North Services screen. Under the list of data source parameters, there is a check box to enable or disable the service.  If you make any changes, click on the “save” button in the bottom panel near the check box to save the new configuration.</p>
+</div>
+<div class="section" id="using-the-omf-plugin">
+<h3>Using the OMF plugin<a class="headerlink" href="#using-the-omf-plugin" title="Permalink to this headline">¶</a></h3>
+<p>OSISoft data historians are one of the most common destinations for FogLAMP data.  FogLAMP supports the full range of OSISoft historians; the PI System, Edge Data Store (EDS) and OSISoft Cloud Services (OCS). To send data to a PI server you may use either the older PI Connector Relay or the newer PI Web API OMF endpoint. It is recommended that new users use the PI Web API OMF endpoint rather then the Connector Relay which is no longer supported.</p>
+<div class="section" id="pi-connector-relay">
+<h4>PI Connector Relay<a class="headerlink" href="#pi-connector-relay" title="Permalink to this headline">¶</a></h4>
+<p>To use the Connector Relay, open and sign into the PI Relay Data Connection Manager.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="PI_connectors" src="_images/PI_connectors.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>To add a new connector for the FogLAMP system, click on the drop down menu to the right of “Connectors” and select “Add an OMF application”.  Add and save the requested configuration information.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="PI_connect" src="_images/PI_connect.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Connect the new application to the OMF Connector Relay by selecting the new FogLAMP application, clicking the check box for the OMF Connector Relay and then clicking “Save Configuration”.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="PI_token" src="_images/PI_token.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Finally, select the new FogLAMP application. Click “More” at the bottom of the Configuration panel. Make note of the Producer Token and Relay Ingress URL.</p>
+<p>Now go to the FogLAMP user interface, create a new North instance and select the “OMF” plugin on the first screen.
+The second screen will request the following information:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="omf_plugin_connector_relay_config" src="_images/omf-plugin-connector-relay.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Basic Information</dt>
+<dd><ul class="first last">
+<li><strong>Endpoint:</strong> Select what you wish to connect to, in this case the Connector Relay.</li>
+<li><strong>Server hostname:</strong> The hostname or address of the Connector Relay.</li>
+<li><strong>Server port:</strong> The port the Connector Relay is listening on. Leave as 0 if you are using the default port.</li>
+<li><strong>Producer Token:</strong> The Producer Token provided by PI</li>
+<li><strong>Data Source:</strong> Defines which data is sent to the PI Server. The readings or FogLAMP’s internal statistics.</li>
+<li><strong>Static Data:</strong> Data to include in every reading sent to PI.  For example, you can use this to specify the location of the devices being monitored by the FogLAMP server.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Connection management (These should only be changed with guidance from support)</dt>
+<dd><ul class="first last">
+<li><strong>Sleep Time Retry:</strong> Number of seconds to wait before retrying the HTTP connection (FogLAMP doubles this time after each failed attempt).</li>
+<li><strong>Maximum Retry:</strong> Maximum number of times to retry connecting to the PI server.</li>
+<li><strong>HTTP Timeout:</strong> Number of seconds to wait before FogLAMP will time out an HTTP connection attempt.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Other (Rarely changed)</dt>
+<dd><ul class="first last">
+<li><strong>Integer Format:</strong> Used to match FogLAMP data types to the data type configured in PI. This defaults to int64 but may be set to any OMF data type compatible with integer data, e.g. int32.</li>
+<li><strong>Number Format:</strong> Used to match FogLAMP data types to the data type configured in PI. The defaults is float64 but may be set to any OMF datatype that supports floating point values.</li>
+<li><strong>Compression:</strong> Compress the readings data before sending it to the PI System.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="pi-web-api-omf-endpoint">
+<h4>PI Web API OMF Endpoint<a class="headerlink" href="#pi-web-api-omf-endpoint" title="Permalink to this headline">¶</a></h4>
+<p>To use the PI Web API OMF endpoint first  ensure the OMF option was included in your PI Server when it was installed.</p>
+<p>Now go to the FogLAMP user interface, create a new North instance and select the “OMF” plugin on the first screen.
+The second screen will request the following information:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="omf_plugin_pi_web_config" src="_images/omf-plugin-pi-web.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Select PI Web API from the Endpoint options.</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Basic Information</dt>
+<dd><ul class="first last">
+<li><strong>Endpoint:</strong> Select what you wish to connect to, in this case PI Web API.</li>
+<li><strong>Server hostname:</strong> The hostname or address of the PI Server.</li>
+<li><strong>Server port:</strong> The port the PI Web API OMF endpoint is listening on. Leave as 0 if you are using the default port.</li>
+<li><strong>Data Source:</strong> Defines which data is sent to the PI Server. The readings or FogLAMP’s internal statistics.</li>
+<li><strong>Static Data:</strong> Data to include in every reading sent to PI.  For example, you can use this to specify the location of the devices being monitored by the FogLAMP server.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Asset Framework</dt>
+<dd><ul class="first last">
+<li><strong>Asset Framework Hierarchies Tree:</strong> The location in the Asset Framework into which the data will be inserted. All data will be inserted at this point in the Asset Framework unless a later rule overrides this.</li>
+<li><strong>Asset Framework Hierarchies Rules:</strong> A set of rules that allow specific readings to be placed elsewhere in the Asset Framework. These rules can be based on the name of the asset itself or some metadata associated with the asset.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>PI Web API authentication</dt>
+<dd><ul class="first last">
+<li><strong>PI Web API Authentication Method:</strong> The authentication method to be used, anonymous equates to no authentication, basic authentication requires a user name and password and Kerberos allows integration with your single sign on environment.</li>
+<li><strong>PI Web API User Id:</strong>  The user name to authenticate with the PI Web API.</li>
+<li><strong>PI Web API Password:</strong> The password of the user we are using to authenticate.</li>
+<li><strong>PI Web API Kerberos keytab file:</strong> The Kerberos keytab file used to authenticate.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Connection management (These should only be changed with guidance from support)</dt>
+<dd><ul class="first last">
+<li><strong>Sleep Time Retry:</strong> Number of seconds to wait before retrying the HTTP connection (FogLAMP doubles this time after each failed attempt).</li>
+<li><strong>Maximum Retry:</strong> Maximum number of times to retry connecting to the PI server.</li>
+<li><strong>HTTP Timeout:</strong> Number of seconds to wait before FogLAMP will time out an HTTP connection attempt.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Other (Rarely changed)</dt>
+<dd><ul class="first last">
+<li><strong>Integer Format:</strong> Used to match FogLAMP data types to the data type configured in PI. This defaults to int64 but may be set to any OMF data type compatible with integer data, e.g. int32.</li>
+<li><strong>Number Format:</strong> Used to match FogLAMP data types to the data type configured in PI. The defaults is float64 but may be set to any OMF datatype that supports floating point values.</li>
+<li><strong>Compression:</strong> Compress the readings data before sending it to the PI System.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="eds-omf-endpoint">
+<h4>EDS OMF Endpoint<a class="headerlink" href="#eds-omf-endpoint" title="Permalink to this headline">¶</a></h4>
+<p>To use the OSISoft Edge Data Store first install Edge Data Store on the same machine as your FogLAMP instance. It is a limitation of Edge Data Store that it must reside on the same host as any system that connects to it with OMF.</p>
+<p>Now go to the FogLAMP user interface, create a new North instance and select the “OMF” plugin on the first screen.
+The second screen will request the following information:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="omf_plugin_eds_config" src="_images/omf-plugin-eds.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Select Edge Data Store from the Endpoint options.</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Basic Information</dt>
+<dd><ul class="first last">
+<li><strong>Endpoint:</strong> Select what you wish to connect to, in this case Edge Data Store.</li>
+<li><strong>Server hostname:</strong> The hostname or address of the PI Server. This must be the localhost for EDS.</li>
+<li><strong>Server port:</strong> The port the Edge Datastore is listening on. Leave as 0 if you are using the default port.</li>
+<li><strong>Data Source:</strong> Defines which data is sent to the PI Server. The readings or FogLAMP’s internal statistics.</li>
+<li><strong>Static Data:</strong> Data to include in every reading sent to PI.  For example, you can use this to specify the location of the devices being monitored by the FogLAMP server.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Connection management (These should only be changed with guidance from support)</dt>
+<dd><ul class="first last">
+<li><strong>Sleep Time Retry:</strong> Number of seconds to wait before retrying the HTTP connection (FogLAMP doubles this time after each failed attempt).</li>
+<li><strong>Maximum Retry:</strong> Maximum number of times to retry connecting to the PI server.</li>
+<li><strong>HTTP Timeout:</strong> Number of seconds to wait before FogLAMP will time out an HTTP connection attempt.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Other (Rarely changed)</dt>
+<dd><ul class="first last">
+<li><strong>Integer Format:</strong> Used to match FogLAMP data types to the data type configured in PI. This defaults to int64 but may be set to any OMF data type compatible with integer data, e.g. int32.</li>
+<li><strong>Number Format:</strong> Used to match FogLAMP data types to the data type configured in PI. The defaults is float64 but may be set to any OMF datatype that supports floating point values.</li>
+<li><strong>Compression:</strong> Compress the readings data before sending it to the PI System.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="ocs-omf-endpoint">
+<h4>OCS OMF Endpoint<a class="headerlink" href="#ocs-omf-endpoint" title="Permalink to this headline">¶</a></h4>
+<p>Go to the FogLAMP user interface, create a new North instance and select the “OMF” plugin on the first screen.
+The second screen will request the following information:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="omf_plugin_ocs_config" src="_images/omf-plugin-ocs.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>Select OSIsoft Cloud Services from the Endpoint options.</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Basic Information</dt>
+<dd><ul class="first last">
+<li><strong>Endpoint:</strong> Select what you wish to connect to, in this case OSIsoft Cloud Services.</li>
+<li><strong>Data Source:</strong> Defines which data is sent to the PI Server. The readings or FogLAMP’s internal statistics.</li>
+<li><strong>Static Data:</strong> Data to include in every reading sent to PI.  For example, you can use this to specify the location of the devices being monitored by the FogLAMP server.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Authentication</dt>
+<dd><ul class="first last">
+<li><strong>OCS Namespace:</strong> Your namespace within the OSISoft Cloud Services.</li>
+<li><strong>OCS Tenant ID:</strong> Your OSISoft Cloud Services tenant ID for yor account.</li>
+<li><strong>OCS Client ID:</strong> Your OSISoft Cloud Services client ID for your account.</li>
+<li><strong>OCS Client Secret:</strong> Your OCS client secret.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Connection management (These should only be changed with guidance from support)</dt>
+<dd><ul class="first last">
+<li><strong>Sleep Time Retry:</strong> Number of seconds to wait before retrying the HTTP connection (FogLAMP doubles this time after each failed attempt).</li>
+<li><strong>Maximum Retry:</strong> Maximum number of times to retry connecting to the PI server.</li>
+<li><strong>HTTP Timeout:</strong> Number of seconds to wait before FogLAMP will time out an HTTP connection attempt.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Other (Rarely changed)</dt>
+<dd><ul class="first last">
+<li><strong>Integer Format:</strong> Used to match FogLAMP data types to the data type configured in PI. This defaults to int64 but may be set to any OMF data type compatible with integer data, e.g. int32.</li>
+<li><strong>Number Format:</strong> Used to match FogLAMP data types to the data type configured in PI. The defaults is float64 but may be set to any OMF datatype that supports floating point values.</li>
+<li><strong>Compression:</strong> Compress the readings data before sending it to the PI System.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="backing-up-and-restoring-foglamp">
+<h2>Backing up and Restoring FogLAMP<a class="headerlink" href="#backing-up-and-restoring-foglamp" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="backup" src="_images/backup.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>You can make a complete backup of all FogLAMP data and configuration.  To do this, click on “Backup &amp; Restore” in the left menu bar. This screen will show a list of all backups on the system and the time they were created.
+To make a new backup, click the “Backup” button in the upper right corner of the screen.  You will briefly see a “Running” indicator in the lower left of the screen.  After a period of time, the new backup will appear in the list.  You may need to click the refresh button in the upper left of the screen to refresh the list.
+You can restore, delete or download any backup simply by clicking the appropriate button next to the backup in the list.</p>
+</div>
+<div class="section" id="troubleshooting-and-support-information">
+<h2>Troubleshooting and Support Information<a class="headerlink" href="#troubleshooting-and-support-information" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="support" src="_images/support.JPG" /></td>
+</tr>
+</tbody>
+</table>
+<p>FogLAMP keep detailed logs of system events for both auditing and troubleshooting use.  To access them, click “Logs” in the left menu bar.  There are five logs in the system:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Audit:</strong> Tracks all configuration changes and data uploads performed on the FogLAMP system.</li>
+<li><strong>Notifications:</strong> If you are using the FogLAMP notification service this log will give details of notifications that have been triggered</li>
+<li><strong>Packages:</strong> This log will give you information about the installation and upgrade of FogLAMP packages for services and plugins.</li>
+<li><strong>System:</strong> All events and scheduled tasks and their status.</li>
+<li><strong>Tasks:</strong> The most recent scheduled tasks that have run and their status</li>
+</ul>
+</div></blockquote>
+<p>If you have a service contract for your FogLAMP system, your support technician may ask you to send system data to facilitate troubleshooting an issue.  To do this, click on “Support” in the left menu and then “Request New” in the upper right of the screen.  This will create an archive of information.  Click download to retrieve this archive to your system so you can email it to the technician.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="processing_data.html" class="btn btn-neutral float-right" title="Processing Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to FogLAMP’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

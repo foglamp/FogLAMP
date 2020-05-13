@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OPCUA Server &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP North Plugins" href="../north.html"/>
+        <link rel="next" title="ThingSpeak" href="../foglamp-north-thingspeak/index.html"/>
+        <link rel="prev" title="Kafka Producer" href="../foglamp-north-kafka/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-gcp/index.html">Google Cloud Platform North Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-http/index.html">North HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-http-c/index.html">North HTTP-C</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-kafka/index.html">Kafka Producer</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">OPCUA Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-thingspeak/index.html">ThingSpeak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-influxdb/index.html">InfluxDB Time Series Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-splunk/index.html">Splunk Data Collector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../north.html">FogLAMP North Plugins</a> &raquo;</li>
+        
+      <li>OPCUA Server</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-north-opcua/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="opcua-server">
+<h1>OPCUA Server<a class="headerlink" href="#opcua-server" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-north-opuca</em> plugin is a rather unusual north plugin as it does not send data to a system, but rather acts as a server from which other systems can pull data from FogLAMP. This is slightly at odds with the concept of short running tasks for sending north and does require a little more configuration when creating the North OPCUA server.</p>
+<p>The process of creating a North OPCUA Server start as with any other north setup by selecting the <em>North</em> option in the left-hand menu bar, then press the add icon in the top right corner. In the <em>North Plugin</em> list select the opcua option.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="opcua_1" src="../../_images/opcua_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>In addition to setting a name for this task it is recommended to set the <em>Repeat</em> interval to a higher value than the 30 second default as we will be later setting the maximum run time of the north task to a higher value. Once complete click on <em>Next</em> and move on to the configuration of the plugin itself.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="opcua_2" src="../../_images/opcua_2.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>This second page allows for the setting of the configuration within the OPCUA server.</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Server Name</strong>: The name the OPCUA server will report itself as to any client that connects to it.</li>
+<li><strong>URL</strong>: The URL that any client application will use to connect to the OPCUA server. This should always start opc.tcp://</li>
+<li><strong>URI</strong>: The URI you wish to associate to your data, this is part of the OPCUA specification and may be set to any option you wish or can be left as default.</li>
+<li><strong>Namespace</strong>: This defines the namespace that you wish to use for your OPCUA objects. If you are not employing a client that does namespace checking this is best left as the default.</li>
+<li><strong>Source</strong>: What data is being made available via this OPCUA server. You may chose to make the reading data available or the FogLAMP statistics</li>
+</ul>
+</div></blockquote>
+<p>Once you have completed your configuration click <em>Next</em> to move to the final page and then enable your north task and click <em>Done</em>.</p>
+<p>The only step left is to modify the duration for which the task runs. This can only be done <strong>after</strong> it has been run for the first time. Enter your <em>North</em> task list again and select the OPCUA North that you just created. This will show the configuration of your North task. Click on the <em>Show Advanced Config</em> option to display your advanced configuration.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="opcua_3" src="../../_images/opcua_3.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>The <em>Duration</em> option controls how long the north task will run before stopping. Each time it stops any client connected to the FogLAMP OPCUA server will be disconnected, in order to reduce the disconnect/reconnect volumes it is advisable to set this to a value greater than the 60 second default. In our example here we set the repeat interval to one hour, so ideally we should set the duration to an hour also such that there is no time when an OPCUA server is not running. <em>Duration</em> is set in seconds, so should be 3600 in our example.</p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-north-thingspeak/index.html" class="btn btn-neutral float-right" title="ThingSpeak" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-north-kafka/index.html" class="btn btn-neutral" title="Kafka Producer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

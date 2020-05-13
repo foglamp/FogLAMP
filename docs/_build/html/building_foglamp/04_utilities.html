@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FogLAMP Utilities and Scripts &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Building Developers Guide" href="index.html"/>
+        <link rel="next" title="FogLAMP Tasks" href="05_tasks.html"/>
+        <link rel="prev" title="Testing FogLAMP" href="06_testing.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Building Developers Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp.html">Building FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_installation.html">FogLAMP Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_testing.html">Testing FogLAMP</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FogLAMP Utilities and Scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#foglamp">foglamp</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="05_tasks.html">FogLAMP Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+          <li><a href="index.html">Building Developers Guide</a> &raquo;</li>
+        
+      <li>FogLAMP Utilities and Scripts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/building_foglamp/04_utilities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foglamp-utilities-and-scripts">
+<h1>FogLAMP Utilities and Scripts<a class="headerlink" href="#foglamp-utilities-and-scripts" title="Permalink to this headline">¶</a></h1>
+<p>The FogLAMP platform comes with a set of utilities and scripts to help users, developers and administrators with their day-by-day operations. These tools are under heavy development and you may expect incompatibilities in future versions, therefore it is highly recommended to check the revision history to verify the changes in new versions.</p>
+<div class="section" id="foglamp">
+<h2>foglamp<a class="headerlink" href="#foglamp" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">foglamp</span></code> is the first utility available with the platform, it is the control center for all the admin operations on FogLAMP.</p>
+<p>In the current implementation, <em>foglamp</em> provides these features:</p>
+<ul class="simple">
+<li><em>start</em> FogLAMP</li>
+<li><em>stop</em> FogLAMP</li>
+<li><em>kill</em> FogLAMP processes</li>
+<li>Check the <em>status</em> of FogLAMP, i.e. whether it is running, starting or not running</li>
+<li><em>reset</em> FogLAMP to its factory settings</li>
+</ul>
+<div class="section" id="starting-foglamp">
+<h3>Starting FogLAMP<a class="headerlink" href="#starting-foglamp" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code> is the command to start FogLAMP. Since only one core microservice of FogLAMP can be executed in the same environment, the command checks if FogLAMP is already running, and if it does, it ends. The command also checks the presence of the <em>FOGLAMP_ROOT</em> and <em>FOGLAMP_DATA</em> environment variables. If the variables have not been set, it verifies if FogLAMP has been installed in the default position, which is <em>/usr/local/foglamp</em> or a position defined by the installed package, and it will set the missing variables accordingly. It will also take care of the <em>PYTHONPATH</em> variable.</p>
+<p>In more specific terms, the command executes these steps:</p>
+<ul class="simple">
+<li>Check if FogLAMP is already running</li>
+<li>Check if the storage layer is <em>managed</em> or <em>unmanaged</em>. “managed” means that the storage layer relies on a storage system (i.e. a database, a set of files or in-memory structures) that are under exclusive control of FogLAMP. “unmanaged” means that the storage system is generic and potentially shared with other applications.</li>
+<li>Check if the storage plugin and the related storage system (for example a PostgreSQL database) is available.</li>
+<li>Check if the metadata structure that is necessary to execute FogLAMP is already available in the storage layer. If the metadata is not available, it creates the data model and sets the factory settings that are necessary to start and use FogLAMP.</li>
+<li>Start the core microservice.</li>
+<li>Wait until the core microservice starts the Storage microservice and the initial required process that are necessary to handle other tasks and microservices.</li>
+</ul>
+</div>
+<div class="section" id="safe-mode">
+<h3>Safe Mode<a class="headerlink" href="#safe-mode" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to start FogLAMP in safe mode by passing the flag <code class="docutils literal"><span class="pre">--safe-mode</span></code> to the start command. In safe mode FogLAMP
+will not start any of the south services or schedule any tasks, such as purge or north bound tasks. Safe mode allows
+FogLAMP to be started and configured in those situations where a previous misconfiguration has rendered it impossible to
+start and interact with FogLAMP.</p>
+<p>Once started in safe mode any configuration changes should be made and then FogLAMP should be restarted in normal mode
+to test those configuration changes.</p>
+</div>
+<div class="section" id="stopping-foglamp">
+<h3>Stopping FogLAMP<a class="headerlink" href="#stopping-foglamp" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">stop</span></code> is the command used to stop FogLAMP. The command waits until all the tasks and services have been completed, then it stops the core service.</p>
+</div>
+<div class="section" id="if-foglamp-does-not-stop">
+<h3>If FogLAMP Does Not Stop<a class="headerlink" href="#if-foglamp-does-not-stop" title="Permalink to this headline">¶</a></h3>
+<p>If FogLAMP does not stop, i.e. if by using the process status command <code class="docutils literal"><span class="pre">ps</span></code> you see FogLAMP processes still running, you can use <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">kill</span></code> to kill them.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The command issues a <code class="docutils literal"><span class="pre">kill</span> <span class="pre">-9</span></code> against the processes associated to FogLAMP. This is not recommended, unless FogLAMP cannot be stopped. The <em>stop</em> command. In other words, <em>kill</em> is your last resort before a reboot. If you must use the kill command, it means that there is a problem: please report this to the FogLAMP project slack channel.</p>
+</div>
+</div>
+<div class="section" id="checking-the-status-of-foglamp">
+<h3>Checking the Status of FogLAMP<a class="headerlink" href="#checking-the-status-of-foglamp" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> is used to provide the current status of tasks and microservices on the machine. The output is something like:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp status
+<span class="go">FogLAMP running.</span>
+<span class="go">FogLAMP uptime:  2034 seconds.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">foglamp.services.south --port=33074 --address=127.0.0.1 --name=HTTP_SOUTH</span>
+<span class="go">foglamp.services.south --port=33074 --address=127.0.0.1 --name=COAP</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="gp">$</span> foglamp_use_from_here stop
+<span class="go">FogLAMP stopped.</span>
+<span class="gp">$</span> foglamp_use_from_here status
+<span class="go">FogLAMP not running.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The first row always indicates if FogLAMP is running or not</li>
+<li>The second row provides the uptime in seconds</li>
+<li>The next set of rows provides information regarding the microservices running on the machine</li>
+<li>The last set of rows provides information regarding the tasks running on the machine</li>
+</ul>
+</div>
+<div class="section" id="resetting-foglamp">
+<h3>Resetting FogLAMP<a class="headerlink" href="#resetting-foglamp" title="Permalink to this headline">¶</a></h3>
+<p>It may occur that you want to restore FogLAMP to its factory settings, and this is what <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">reset</span></code> does. The command also destroys all the data and all the configuration currently stored in FogLAMP, so you must use it at your own risk!</p>
+<p>FogLAMP can be restored to its factory settings only when it is not running, hence you should stop it first.</p>
+<p>The command forces you to insert the word <em>YES</em>, all in uppercase, to continue:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp reset
+<span class="go">This script will remove all data stored in the server.</span>
+<span class="go">Enter YES if you want to continue: YES</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="05_tasks.html" class="btn btn-neutral float-right" title="FogLAMP Tasks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="06_testing.html" class="btn btn-neutral" title="Testing FogLAMP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

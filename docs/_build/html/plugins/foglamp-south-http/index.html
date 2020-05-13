@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>South HTTP &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP South Plugins" href="../south.html"/>
+        <link rel="next" title="INA219 Voltage &amp; Current Sensor" href="../foglamp-south-ina219/index.html"/>
+        <link rel="prev" title="Flir AX8 Thermal Imaging Camera" href="../foglamp-south-FlirAX8/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-am2315/index.html">AM2315 Temperature &amp; Humidity Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-cc2650/index.html">CC2650 SensorTag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-coap/index.html">CoAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-csv/index.html">Simple CSV Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht/index.html">DHT11 (C version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht11/index.html">DHT11 (Python version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dnp3/index.html">DNP3 Master Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-envirophat/index.html">Enviro pHAT Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-expression/index.html">Expression South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-FlirAX8/index.html">Flir AX8 Thermal Imaging Camera</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">South HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-ina219/index.html">INA219 Voltage &amp; Current Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-modbus-c/index.html">Modbus South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-mqtt-sparkplug/index.html">MQTT Sparkplug B</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-opcua/index.html">OPC/UA South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-playback/index.html">Playback Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-pt100/index.html">PT100 Temperature Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-random/index.html">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-randomwalk/index.html">Random Walk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sensehat/index.html">SenseHAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sinusoid/index.html">Sinusoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-systeminfo/index.html">System Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-usb4704/index.html">Advantech USB-4704</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-beckhoff/index.html">Beckhoff TwinCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-digiducer/index.html">Digiducer Vibration Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../south.html">FogLAMP South Plugins</a> &raquo;</li>
+        
+      <li>South HTTP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-south-http/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="south-http">
+<h1>South HTTP<a class="headerlink" href="#south-http" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-south-http</em> plugin allows data to be received from another FogLAMP instance. The FogLAMP which is sending the data the corresponding north task wit the HTTP north plugin installed. There are two options for the HTTP north <a href="../foglamp-north-http-c/index.html">C++ version</a> or <a href="../foglamp-north-http/index.html">Python version</a>. The plugin supports both HTTP and HTTPS transport protocols and sends a JSON payload of reading data in the internal FogLAMP format.</p>
+<p>To create a south service you, as with any other south plugin</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Select <em>South</em> from the left hand menu bar.</p>
+</li>
+<li><p class="first">Click on the + icon in the top left</p>
+</li>
+<li><p class="first">Choose http_south from the plugin selection list</p>
+</li>
+<li><p class="first">Name your service</p>
+</li>
+<li><p class="first">Click on <em>Next</em></p>
+</li>
+<li><p class="first">Configure the plugin</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="http_1" src="../../_images/http_12.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><strong>Host</strong>: The host name or IP address to bind to. This may be left as default, in which case the plugin binds to any address. If you have a machine with multiple network interfaces you may use this parameter to select one of those interfaces to use.</li>
+<li><strong>Port</strong>: The port to listen for connection from another FogLAMP instance.</li>
+<li><strong>URL</strong>: The URI that the plugin accepts data on. This should normally be left to the default.</li>
+<li><strong>Asset Name Prefix</strong>: A prefix to add to the incoming asset names. This may be left blank if you wish to preserve the same asset names.</li>
+<li><strong>Enable HTTP</strong>: This toggle specifies if HTTP connections should be accepted or not. If the toggle is off then only HTTPS connections can be used.</li>
+<li><strong>Certificate Name</strong>: The name of the certificate to use for the HTTPS encryption. This should be the name of a certificate that is stored in the FogLAMP <a href="../../securing_FogLAMP.html#certificate-store">Certificate Store</a>.</li>
+</ul>
+</li>
+<li><p class="first">Click <em>Next</em></p>
+</li>
+<li><p class="first">Enable your service and click <em>Done</em></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-south-ina219/index.html" class="btn btn-neutral float-right" title="INA219 Voltage &amp; Current Sensor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-south-FlirAX8/index.html" class="btn btn-neutral" title="Flir AX8 Thermal Imaging Camera" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

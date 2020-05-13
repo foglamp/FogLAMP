@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CC2650 SensorTag &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP South Plugins" href="../south.html"/>
+        <link rel="next" title="CoAP" href="../foglamp-south-coap/index.html"/>
+        <link rel="prev" title="AM2315 Temperature &amp; Humidity Sensor" href="../foglamp-south-am2315/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-am2315/index.html">AM2315 Temperature &amp; Humidity Sensor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CC2650 SensorTag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-coap/index.html">CoAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-csv/index.html">Simple CSV Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht/index.html">DHT11 (C version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dht11/index.html">DHT11 (Python version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-dnp3/index.html">DNP3 Master Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-envirophat/index.html">Enviro pHAT Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-expression/index.html">Expression South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-FlirAX8/index.html">Flir AX8 Thermal Imaging Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-http/index.html">South HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-ina219/index.html">INA219 Voltage &amp; Current Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-modbus-c/index.html">Modbus South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-mqtt-sparkplug/index.html">MQTT Sparkplug B</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-opcua/index.html">OPC/UA South Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-playback/index.html">Playback Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-pt100/index.html">PT100 Temperature Sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-random/index.html">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-randomwalk/index.html">Random Walk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sensehat/index.html">SenseHAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-sinusoid/index.html">Sinusoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-systeminfo/index.html">System Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-usb4704/index.html">Advantech USB-4704</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-beckhoff/index.html">Beckhoff TwinCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-south-digiducer/index.html">Digiducer Vibration Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../south.html">FogLAMP South Plugins</a> &raquo;</li>
+        
+      <li>CC2650 SensorTag</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-south-cc2650/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cc2650-sensortag">
+<h1>CC2650 SensorTag<a class="headerlink" href="#cc2650-sensortag" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/cc2650.jpg" class="align-right" src="../../_images/cc2650.jpg" />
+<p>The <em>foglamp-south-cc2650</em> is a plugin that connects using Bluetooth to a Texas Instruments <a href="https://www.ti.com/tool/TIDC-CC2650STK-SENSORTAG" target="_blank">CC2650 SensorTag</a>. The SensorTag offers 10 sensors within a small, low powered package which may be read by this plugin and ingested into FogLAMP. These sensors include;</p>
+<blockquote>
+<div><ul class="simple">
+<li>ambient light</li>
+<li>magnetometer</li>
+<li>humidity</li>
+<li>pressure</li>
+<li>accelerometer</li>
+<li>gyroscope</li>
+<li>object temperature</li>
+<li>digital microphone</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The sensor requires that you have a Bluetooth low energy adapter available that supports at least BLE 4.0.</p>
+</div>
+<p>To create a south service with the <a href="https://www.ti.com/tool/TIDC-CC2650STK-SENSORTAG" target="_blank">CC2650 SensorTag</a></p>
+<blockquote>
+<div><ul class="simple">
+<li>Click on <em>South</em> in the left hand menu bar</li>
+<li>Select <em>cc2650</em> from the plugin list</li>
+<li>Name your service and click <em>Next</em></li>
+</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="cc2650_1" src="../../_images/cc2650_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Configure the plugin<ul>
+<li><strong>Bluetooth Address</strong>: The Bluetooth MAC address of the device</li>
+<li><strong>Asset Name Prefix</strong>: A prefix to add to the asset name</li>
+<li><strong>Shutdown Threshold</strong>: The time in seconds allowed for a shutdown operation to complete</li>
+<li><strong>Connection Timeout</strong>: The Bluetooth connection timeout to use when attempting to connect to the device</li>
+<li><strong>Temperature Sensor</strong>: A toggle to include the temperature data in the data ingested</li>
+<li><strong>Temperature Sensor Name</strong>: The data point name to assign the temperature data</li>
+<li><strong>Luminance Sensor</strong>: Toggle to control the inclusion of the ambient light data</li>
+<li><strong>Luminance Sensor Name</strong>: The data point name to use for the luminance data</li>
+<li><strong>Humidity Sensor</strong>: A toggle to include the humidity data</li>
+<li><strong>Humidity Sensor Name</strong>: The data point name to use for the humidity data</li>
+<li><strong>Pressure Sensor</strong>: A toggle to control the inclusion of pressure data</li>
+<li><strong>Pressure Sensor Name</strong>: The name to be used for the data point that will contain the atmospheric pressure data</li>
+<li><strong>Movement Sensor</strong>: A toggle that controls the inclusion of movement data gathered from the gyroscope, accelerometer and magnetometer</li>
+<li><strong>Gyroscope Sensor Name</strong>: The data point name to use for the gyroscope data</li>
+<li><strong>Accelerometer Sensor Name</strong>: The name of the data point that will record the accelerometer data</li>
+<li><strong>Magnetometer Sensor Name</strong>: The name to use for the magnetometer data</li>
+<li><strong>Battery Data</strong>: A toggle to control inclusion of the state of charge of the battery</li>
+<li><strong>Battery Sensor Name</strong>: The data point name for the battery charge percentage</li>
+</ul>
+</li>
+<li>Click <em>Next</em></li>
+<li>Enable the service and click on <em>Done</em></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-south-coap/index.html" class="btn btn-neutral float-right" title="CoAP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-south-am2315/index.html" class="btn btn-neutral" title="AM2315 Temperature &amp; Humidity Sensor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

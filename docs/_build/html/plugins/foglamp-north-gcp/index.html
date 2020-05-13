@@ -1,0 +1,486 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Google Cloud Platform North Plugin &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP North Plugins" href="../north.html"/>
+        <link rel="next" title="North HTTP" href="../foglamp-north-http/index.html"/>
+        <link rel="prev" title="FogLAMP North Plugins" href="../north.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Google Cloud Platform North Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-http/index.html">North HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-http-c/index.html">North HTTP-C</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-kafka/index.html">Kafka Producer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-opcua/index.html">OPCUA Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-thingspeak/index.html">ThingSpeak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-influxdb/index.html">InfluxDB Time Series Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-splunk/index.html">Splunk Data Collector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../north.html">FogLAMP North Plugins</a> &raquo;</li>
+        
+      <li>Google Cloud Platform North Plugin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-north-gcp/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="google-cloud-platform-north-plugin">
+<h1>Google Cloud Platform North Plugin<a class="headerlink" href="#google-cloud-platform-north-plugin" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-north-gcp</em> plugin provide connectivity from a FogLAMP system to the Google Cloud Platform. The plugin connects to the IoT Core in Google Cloud using MQTT and is fully compliant with the security features of the Google Cloud Platform. See <a href="https://cloud.google.com/community/tutorials/cloud-iot-FogLAMP">Using FogLAMP with IoT Core on Google Cloud</a> for a tutorial on setting up a FogLAMP system and getting it to send data to Google Cloud.</p>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>A number of things must be done in the Google Cloud before you can create your north connection to GCP. You must</p>
+<blockquote>
+<div><ul class="simple">
+<li>Create a GCP IoT Core project</li>
+<li>Download the roots.pem certificate from your GCP account</li>
+<li>Create a registry</li>
+<li>Create a device ID and configure a key pair for that device</li>
+<li>Upload the certificates to the FogLAMP certificate store</li>
+</ul>
+</div></blockquote>
+<div class="section" id="create-gcp-iot-core-project">
+<h3>Create GCP IoT Core Project<a class="headerlink" href="#create-gcp-iot-core-project" title="Permalink to this headline">¶</a></h3>
+<p>To create a new project</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Goto the <a href="https://console.cloud.google.com/iot">IoT Core page in the Cloud Console</a></p>
+</li>
+<li><p class="first">Select the Projects page and select the <em>Create New Project</em> option</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_02" src="../../_images/gcp_02.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Enter your project details</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_03" src="../../_images/gcp_03.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="download-roots-pem">
+<h3>Download roots.pem<a class="headerlink" href="#download-roots-pem" title="Permalink to this headline">¶</a></h3>
+<p>To download the roots.pem security certificate</p>
+<blockquote>
+<div><ul>
+<li><p class="first">From the command line shell of your machine run the command</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> wget https://pki.goog/roots.pem
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="create-a-registry">
+<h3>Create a Registry<a class="headerlink" href="#create-a-registry" title="Permalink to this headline">¶</a></h3>
+<p>To create a registry in your project</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Goto the <a href="https://console.cloud.google.com/iot">IoT Core page in the Cloud Console</a></p>
+</li>
+<li><p class="first">Click on the menu icon in the top left corner of the page <img alt="gcp_menu" src="../../_images/gcp_menu.jpg" /></p>
+</li>
+<li><p class="first">Select the <em>Create Registry</em> option</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_registry" src="../../_images/gcp_registry.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">A new screen is shown that allows you to create a new registry</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_add_registry" src="../../_images/gcp_add_registry.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Note the Registry ID and region as you will need these later</p>
+</li>
+<li><p class="first">Select an existing telemetry topic or create a new topic (for example, projects/[YOUR_PROJECT_ID]/topics/[REGISTRY_ID])</p>
+</li>
+<li><p class="first">Click on <em>Create</em></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="create-a-device-id">
+<h3>Create a Device ID<a class="headerlink" href="#create-a-device-id" title="Permalink to this headline">¶</a></h3>
+<p>To create a device in your Google Cloud Project</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Create an RSA public/private key pair on your local machine</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">openssl genpkey -algorithm RSA -out rsa_FogLAMP.pem -pkeyopt rsa_keygen_bits:2048</span>
+<span class="go">openssl rsa -in rsa_FogLAMP.pem -pubout -out rsa_FogLAMP.pem</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Goto the <a href="https://console.cloud.google.com/iot">IoT Core page in the Cloud Console</a></p>
+</li>
+<li><p class="first">In the left pane of the IoT Core page in the Cloud Console, click Devices</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_devices" src="../../_images/gcp_devices.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">At the top of the Devices page, click <em>Create a device</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_create_device" src="../../_images/gcp_create_device.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Enter a device ID, you will need to add this in the north plugin configuration later</p>
+</li>
+<li><p class="first">Click on the <em>ADD ATTRIBUTE COMMUNICATION, STACKDRIVER LOGGING, AUTHENTICATION</em> link to open the remainder of the inputs</p>
+</li>
+<li><p class="first">Make sure the public key format matches the type of key that you created in the first step of this section (for example, RS256)</p>
+</li>
+<li><p class="first">Paste the contents of your public key in the Public key value field.</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="upload-your-certificates">
+<h3>Upload Your Certificates<a class="headerlink" href="#upload-your-certificates" title="Permalink to this headline">¶</a></h3>
+<p>You should upload your certificates to FogLAMP</p>
+<blockquote>
+<div><ul>
+<li><p class="first">From the FogLAMP user interface select the <em>Certificate Store</em> from the left-hand menu bar</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="certs" src="../../_images/certs.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Click on the Import option in the top left corner</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="import" src="../../_images/import.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">In the Certificate option select the <em>Choose file</em> option and select your roots.pem and click on open</p>
+</li>
+<li><p class="first">Repeat the above for your device key and certificate</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="create-your-north-task">
+<h3>Create Your North Task<a class="headerlink" href="#create-your-north-task" title="Permalink to this headline">¶</a></h3>
+<p>Having completed the pre-requisite steps it is now possible to create the north task to send data to GCP.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Select the <em>North</em> option from the left-hand menu bar.</p>
+</li>
+<li><p class="first">Select GCP from the North Plugin list</p>
+</li>
+<li><p class="first">Name your North task and click on <em>Next</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="gcp_01" src="../../_images/gcp_01.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Configure your GCP plugin</p>
+<ul class="simple">
+<li><strong>Project ID</strong>: Enter the project ID you created in GCP</li>
+<li><strong>The GCP Region</strong>: Select the region in which you created your registry</li>
+<li><strong>Registry ID</strong>: The Registry ID you created should be entered here</li>
+<li><strong>Device ID</strong>: The Device ID you created should be entered here</li>
+<li><strong>Key Name</strong>: Enter the name of the device key you uploaded to the certificate store</li>
+<li><strong>JWT Algorithm</strong>: Select the algorithm that matches the key you created earlier</li>
+<li><strong>Data Source</strong>: Select the data to send to GCP, this may be readings or FogLAMP statistics</li>
+</ul>
+</li>
+<li><p class="first">Click on <em>Next</em></p>
+</li>
+<li><p class="first">Enable your plugin and click on <em>Done</em></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-north-http/index.html" class="btn btn-neutral float-right" title="North HTTP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../north.html" class="btn btn-neutral" title="FogLAMP North Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

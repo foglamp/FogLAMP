@@ -1,0 +1,854 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to FogLAMP’s documentation! &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="#"/>
+        <link rel="next" title="Quick Start Guide" href="quick_start.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to FogLAMP’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-foglamp-s-documentation">
+<h1>Welcome to FogLAMP’s documentation!<a class="headerlink" href="#welcome-to-foglamp-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#introduction-to-foglamp">Introduction to FogLAMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#installing-foglamp">Installing FogLAMP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#installing-foglamp-packages">Installing FogLAMP packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#checking-package-installation">Checking package installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#starting-and-stopping-foglamp">Starting and stopping FogLAMP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#troubleshooting-foglamp">Troubleshooting FogLAMP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#running-the-foglamp-gui">Running the FogLAMP GUI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#foglamp-dashboard">FogLAMP Dashboard</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#managing-data-sources">Managing Data Sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#adding-data-sources">Adding Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#configuring-data-sources">Configuring Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#enabling-and-disabling-data-sources">Enabling and Disabling Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#viewing-data">Viewing Data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quick_start.html#display-graph">Display Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="quick_start.html#download-data">Download Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#sending-data-to-other-systems">Sending Data to Other Systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#adding-data-destinations">Adding Data Destinations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#configuring-data-destinations">Configuring Data Destinations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#enabling-and-disabling-data-destinations">Enabling and Disabling Data Destinations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_start.html#using-the-omf-plugin">Using the OMF plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quick_start.html#pi-connector-relay">PI Connector Relay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="quick_start.html#pi-web-api-omf-endpoint">PI Web API OMF Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="quick_start.html#eds-omf-endpoint">EDS OMF Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="quick_start.html#ocs-omf-endpoint">OCS OMF Endpoint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#backing-up-and-restoring-foglamp">Backing up and Restoring FogLAMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html#troubleshooting-and-support-information">Troubleshooting and Support Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="processing_data.html#what-can-be-done">What Can Be Done?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="processing_data.html#where-can-it-be-done">Where Can it Be Done?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="processing_data.html#adding-a-south-filter">Adding a South Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="processing_data.html#reordering-filters">Reordering Filters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="processing_data.html#editing-filter-configuration">Editing Filter Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="processing_data.html#adding-filters-to-the-north">Adding Filters To The North</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="processing_data.html#some-useful-filters">Some Useful Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="processing_data.html#scale">Scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="processing_data.html#metadata">Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="processing_data.html#delta">Delta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="processing_data.html#rate">Rate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#foglamp-core">FogLAMP Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#storage-layer">Storage Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#southbound-microservices">Southbound Microservices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#northbound-microservices">Northbound Microservices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#filters">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#event-engine">Event Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#rest-api">REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_architecture.html#graphical-user-interface">Graphical User Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_plugins.html#south-plugins">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_plugins.html#north-plugins">North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_plugins.html#filter-plugins">Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_plugins.html#notification-rule-plugins">Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foglamp_plugins.html#notification-delivery-plugins">Notification Delivery Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="securing_foglamp.html#enabling-https-encryption">Enabling HTTPS Encryption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="securing_foglamp.html#requiring-user-login">Requiring User Login</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="securing_foglamp.html#changing-your-password">Changing Your Password</a></li>
+<li class="toctree-l3"><a class="reference internal" href="securing_foglamp.html#password-rotation-mechanism">Password Rotation Mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="securing_foglamp.html#user-management">User Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="securing_foglamp.html#adding-users">Adding Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="securing_foglamp.html#changing-user-roles">Changing User Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="securing_foglamp.html#reset-user-password">Reset User Password</a></li>
+<li class="toctree-l3"><a class="reference internal" href="securing_foglamp.html#delete-a-user">Delete A User</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="securing_foglamp.html#certificate-store">Certificate Store</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notifications.html#notifications">Notifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#notification-rules">Notification Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#notification-types">Notification Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="notifications.html#one-shot">One shot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="notifications.html#toggle">Toggle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="notifications.html#retriggered">Retriggered</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#notification-delivery">Notification Delivery</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="notifications.html#installing-the-notification-service">Installing the Notification Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#building-notification-service">Building Notification Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#installing-notification-service-package">Installing Notification Service Package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="notifications.html#starting-the-notification-service">Starting The Notification Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notifications.html#configuring-the-notification-service">Configuring The Notification Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notifications.html#using-the-notification-service">Using The Notification Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#add-a-notification">Add A Notification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="notifications.html#notification-log">Notification Log</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="notifications.html#editing-notifications">Editing Notifications</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/01_FogLAMP_plugins.html">Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/01_FogLAMP_plugins.html#plugins-in-this-version-of-foglamp">Plugins in this version of FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/01_FogLAMP_plugins.html#installing-new-plugins">Installing New Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/02_writing_plugins.html">Writing and Using Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/02_writing_plugins.html#common-foglamp-plugin-api">Common FogLAMP Plugin API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/02_writing_plugins.html#plugin-information">Plugin Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/02_writing_plugins.html#plugin-initialization">Plugin Initialization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/02_writing_plugins.html#plugin-shutdown">Plugin Shutdown</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/02_writing_plugins.html#plugin-reconfigure">Plugin Reconfigure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html">South Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#polled-mode">Polled Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#plugin-poll">Plugin Poll</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#async-io-mode">Async IO Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#plugin-start">Plugin Start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#async-handler">Async Handler</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#a-south-plugin-example-in-python-the-dht11-sensor">A South Plugin Example In Python: the DHT11 Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#the-hardware">The Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#the-software">The Software</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#the-plugin">The Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#building-foglamp-and-adding-the-plugin">Building FogLAMP and Adding the Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_plugins.html#using-the-plugin">Using the Plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html">South Plugins in C</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#polled-mode">Polled Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#plugin-poll">Plugin Poll</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#plugin-poll-returning-multiple-values">Plugin Poll Returning Multiple Values</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#async-io-mode">Async IO Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#plugin-register-ingest">Plugin Register Ingest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#plugin-start">Plugin Start</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#a-south-plugin-example-in-c-c-the-dht11-sensor">A South Plugin Example In C/C++: the DHT11 Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#the-software">The Software</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#the-plugin">The Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/03_south_C_plugins.html#building-foglamp-and-adding-the-plugin">Building FogLAMP and Adding the Plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/035_CPP.html">C++ Support Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/035_CPP.html#reading">Reading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/035_CPP.html#configuration-category">Configuration Category</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/035_CPP.html#logger">Logger</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/037_hybrid_plugins.html">Hybrid Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/04_north_plugins.html">North Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/04_north_plugins.html#the-omf-plugin">The OMF Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/04_north_plugins.html#omf-plugin-configuration">OMF Plugin Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/04_north_plugins.html#changing-the-omf-plugin-configuration">Changing the OMF Plugin Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plugin_developers_guide/04_north_plugins.html#data-in-the-pi-system">Data in the PI System</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_developers_guide/05_storage_plugins.html">Storage Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/05_storage_plugins.html#data-and-metadata">Data and Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_developers_guide/05_storage_plugins.html#common-elements-for-storage-plugins">Common Elements for Storage Plugins</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rest_api_guide/01_REST.html">The FogLAMP REST API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rest_api_guide/01_REST.html#introducing-the-foglamp-rest-api">Introducing the FogLAMP REST API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/01_REST.html#port-usage">Port Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/01_REST.html#infrastructure">Infrastructure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html">Administration API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#audit-trail">Audit Trail</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#audit">audit</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-audit-entries">GET Audit Entries</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#post-audit-entries">POST Audit Entries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#configuration-management">Configuration Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#category">category</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-categor-ies">GET categor(ies)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-category">GET category</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-category-item">GET category item</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#put-category-item">PUT category item</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#delete-category-item">DELETE category item</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#post-category">POST category</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#task-management">Task Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#task">task</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-task">GET task</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-task-latest">GET task latest</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-task-by-id">GET task by ID</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#cancel-task-by-id">Cancel task by ID</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#other-administrative-api-calls">Other Administrative API calls</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#ping">ping</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-ping">GET ping</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#statistics">statistics</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-statistics">GET statistics</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/02_RESTadmin.html#get-statistics-history">GET statistics/history</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rest_api_guide/03_RESTuser.html">User API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#browsing-assets">Browsing Assets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#asset">asset</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#get-all-assets">GET all assets</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#get-asset-readings">GET asset readings</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#get-asset-reading">GET asset reading</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#get-asset-reading-summary">GET asset reading summary</a></li>
+<li class="toctree-l5"><a class="reference internal" href="rest_api_guide/03_RESTuser.html#get-timed-average-asset-reading">GET timed average asset reading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_foglamp/index.html">Building Developers Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/01_introduction.html">Introduction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/01_introduction.html#what-is-foglamp">What Is FogLAMP?</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/01_introduction.html#foglamp-positioning-in-an-iot-and-iiot-infrastructure">FogLAMP Positioning in an IoT and IIoT Infrastructure</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/01_introduction.html#foglamp-features">FogLAMP Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/building_foglamp.html">Building FogLAMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#foglamp-platforms">FogLAMP Platforms</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#general-requirements">General Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#id1">Building FogLAMP</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#build-pre-requisites">Build Pre-Requisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#obtaining-the-source-code">Obtaining the Source Code</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#selecting-the-correct-version">Selecting the Correct Version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#id2">Building FogLAMP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#testing-foglamp-from-the-build-environment">Testing FogLAMP from the Build Environment</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#now-i-want-to-stop-foglamp">Now I Want to Stop FogLAMP!</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#appendix-setting-the-postgresql-database">Appendix: Setting the PostgreSQL Database</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/building_foglamp.html#appendix-building-foglamp-on-centos">Appendix: Building FogLAMP on CentOS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#pre-requisites">Pre-Requisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#building-and-installing-c-5-4">Building and Installing C++ 5.4</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#installing-postgresql-9-6">Installing PostgreSQL 9.6</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#installing-sqlite3">Installing SQLite3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#changing-to-the-postgresql-engine">Changing to the PostgreSQL Engine</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#id3">Building FogLAMP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/building_foglamp.html#further-notes">Further Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/04_installation.html">FogLAMP Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#installing-foglamp-from-a-build">Installing FogLAMP from a Build</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#installing-foglamp-in-a-different-destination-directory">Installing FogLAMP in a Different Destination Directory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#the-setenv-sh-script">The setenv.sh Script</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#the-foglamp-service-script">The foglamp.service Script</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_installation.html#installing-the-debian-package">Installing the Debian Package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#obtaining-and-installing-the-debian-package">Obtaining and Installing the Debian Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#upgrading-or-downgrading-foglamp">Upgrading or Downgrading FogLAMP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_installation.html#uninstalling-the-debian-package">Uninstalling the Debian Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/06_testing.html">Testing FogLAMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#first-checks-foglamp-status">First Checks: FogLAMP Status</a></li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#hello-foggy-world">Hello, Foggy World!</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#the-foglamp-rest-api">The FogLAMP REST API</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="building_foglamp/06_testing.html#useful-tools">Useful Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#hello-world">Hello World!</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#hello-from-the-southern-hemisphere-of-the-foglamp-world">Hello from the Southern Hemisphere of the FogLAMP World</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#fogbench-a-brief-intro">fogbench: a Brief Intro</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#data-coming-from-south">Data Coming from South</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#checking-what-s-inside-foglamp">Checking What’s Inside FogLAMP</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#feeding-east-west-applications">Feeding East/West Applications</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/06_testing.html#sending-greetings-to-the-northern-hemisphere">Sending Greetings to the Northern Hemisphere</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#the-omf-translator">The OMF Translator</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#preparing-the-pi-system">Preparing the PI System</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#setting-the-omf-translator-plugin">Setting the OMF Translator Plugin</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/06_testing.html#sending-data-to-the-pi-system">Sending Data to the PI System</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/04_utilities.html">FogLAMP Utilities and Scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/04_utilities.html#foglamp">foglamp</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_utilities.html#starting-foglamp">Starting FogLAMP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_utilities.html#safe-mode">Safe Mode</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_utilities.html#stopping-foglamp">Stopping FogLAMP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_utilities.html#if-foglamp-does-not-stop">If FogLAMP Does Not Stop</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_utilities.html#checking-the-status-of-foglamp">Checking the Status of FogLAMP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/04_utilities.html#resetting-foglamp">Resetting FogLAMP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp/05_tasks.html">FogLAMP Tasks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="building_foglamp/05_tasks.html#purge">Purge</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/05_tasks.html#purge-schedule">Purge Schedule</a></li>
+<li class="toctree-l5"><a class="reference internal" href="building_foglamp/05_tasks.html#purge-configuration">Purge Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="REDHAT.html#installation-on-red-hat">Installation on Red Hat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="REDHAT.html#installation-on-centos">Installation on CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="REDHAT.html#build-and-use-foglamp-with-postgresql-for-red-hat-centos">Build and use FogLAMP with PostgreSQL for Red Hat/CentOS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="91_version_history.html#foglamp-v1">FogLAMP v1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-8-0">v1.8.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-7-0">v1.7.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-6-0">v1.6.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-5-2">v1.5.2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-5-1">v1.5.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-5-0">v1.5.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-4-1">v1.4.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-4-0">v1.4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-3-1">v1.3.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#fixed-issues">Fixed Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-3">v1.3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#new-features">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#known-issues">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-2">v1.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id1">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id2">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-1-1">v1.1.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id3">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id4">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-1">v1.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id5">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id6">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="91_version_history.html#v1-0">v1.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#features">Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="91_version_history.html#id7">Known Issues</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="92_downloads.html#packages">Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="92_downloads.html#download-clone-from-github">Download/Clone from GitHub</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="KERBEROS.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="KERBEROS.html#pi-server-as-the-north-endpoint">PI-Server as the North endpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="KERBEROS.html#foglamp-north-plugin">FogLAMP North plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="KERBEROS.html#foglamp-server-configuration">FogLAMP server configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="KERBEROS.html#ip-address-resolution-of-the-kdc">IP Address resolution of the KDC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="KERBEROS.html#kerberos-client-configuration">Kerberos client configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="KERBEROS.html#kerberos-keytab-file">Kerberos keytab file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="KERBEROS.html#troubleshooting-the-kerberos-authentication">Troubleshooting the Kerberos authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="KERBEROS.html#kerberos-authentication-on-redhat-centos">Kerberos authentication on RedHat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plugins/south.html">FogLAMP South Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-am2315/index.html">AM2315 Temperature &amp; Humidity Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-am2315/index.html#wiring-the-sensor">Wiring The Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-cc2650/index.html">CC2650 SensorTag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-coap/index.html">CoAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-csv/index.html">Simple CSV Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-dht/index.html">DHT11 (C version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-dht11/index.html">DHT11 (Python version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-dnp3/index.html">DNP3 Master Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-dnp3/index.html#dnp3-out-station-testing">DNP3 Out Station Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-envirophat/index.html">Enviro pHAT Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-expression/index.html">Expression South Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-expression/index.html#expression-support">Expression Support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-FlirAX8/index.html">Flir AX8 Thermal Imaging Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-http/index.html">South HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-ina219/index.html">INA219 Voltage &amp; Current Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-ina219/index.html#wiring-the-sensor">Wiring The Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-modbus-c/index.html">Modbus South Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-modbus-c/index.html#configuration-parameters">Configuration Parameters</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-south-modbus-c/index.html#register-map">Register Map</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-south-modbus-c/index.html#example-maps">Example Maps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-mqtt-sparkplug/index.html">MQTT Sparkplug B</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-opcua/index.html">OPC/UA South Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-opcua/index.html#subscriptions">Subscriptions</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-south-opcua/index.html#configuration-examples">Configuration examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-playback/index.html">Playback Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-playback/index.html#picking-columns">Picking Columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-pt100/index.html">PT100 Temperature Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-pt100/index.html#wiring-the-sensor">Wiring The Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-random/index.html">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-randomwalk/index.html">Random Walk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-sensehat/index.html">SenseHAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-sinusoid/index.html">Sinusoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-systeminfo/index.html">System Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-usb4704/index.html">Advantech USB-4704</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-beckhoff/index.html">Beckhoff TwinCAT</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-south-beckhoff/index.html#map-format">Map Format</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-south-beckhoff/index.html#example">Example</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-south-beckhoff/index.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-south-digiducer/index.html">Digiducer Vibration Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/north.html">FogLAMP North Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html">Google Cloud Platform North Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#create-gcp-iot-core-project">Create GCP IoT Core Project</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#download-roots-pem">Download roots.pem</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#create-a-registry">Create a Registry</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#create-a-device-id">Create a Device ID</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#upload-your-certificates">Upload Your Certificates</a></li>
+<li class="toctree-l5"><a class="reference internal" href="plugins/foglamp-north-gcp/index.html#create-your-north-task">Create Your North Task</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-http/index.html">North HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-http-c/index.html">North HTTP-C</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-kafka/index.html">Kafka Producer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-opcua/index.html">OPCUA Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-thingspeak/index.html">ThingSpeak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-influxdb/index.html">InfluxDB Time Series Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-north-splunk/index.html">Splunk Data Collector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/filter.html">FogLAMP Filter Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-asset/index.html">Asset Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-asset/index.html#asset-rules">Asset Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-expression/index.html">Expression Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-expression/index.html#exprtk">Expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-metadata/index.html">Metadata Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-metadata/index.html#example-metadata">Example Metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-python27/index.html">Python 2.7 Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-python27/index.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-python35/index.html">Python 3.5 Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-python35/index.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-scale-set/index.html">Scale Set Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-scale-set/index.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-threshold/index.html">Threshold Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-filter-threshold/index.html#expressions">Expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/rule.html">FogLAMP Notification Rule Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-rule-average/index.html">Moving Average Rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-rule-simple-expression/index.html">Expression Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/notify.html">FogLAMP Notification Delivery Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-alexa-notifyme/index.html">Amazon Alexa Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-asset/index.html">Asset Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-email/index.html">Email Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-google-hangouts/index.html">Google Chat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-ifttt/index.html">IFTTT Delivery Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-python35/index.html">Python 3.5 Script</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plugins/foglamp-notify-python35/index.html#example-script">Example Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-slack/index.html">Slack Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-telegram/index.html">Telegram Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugins/foglamp-notify-north/index.html">Conditional Forwarding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quick_start.html" class="btn btn-neutral float-right" title="Quick Start Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

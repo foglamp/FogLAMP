@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Storage Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Developer Guide" href="index.html"/>
+        <link rel="next" title="REST API Developers Guide" href="../rest_api_guide/index.html"/>
+        <link rel="prev" title="North Plugins" href="04_north_plugins.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Plugin Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_FogLAMP_plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_writing_plugins.html">Writing and Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_plugins.html">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_C_plugins.html">South Plugins in C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="035_CPP.html">C++ Support Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="037_hybrid_plugins.html">Hybrid Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_north_plugins.html">North Plugins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Storage Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-and-metadata">Data and Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-elements-for-storage-plugins">Common Elements for Storage Plugins</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Plugin Developer Guide</a> &raquo;</li>
+        
+      <li>Storage Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/05_storage_plugins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="storage-plugins">
+<h1>Storage Plugins<a class="headerlink" href="#storage-plugins" title="Permalink to this headline">¶</a></h1>
+<p>Storage plugins are used to interact with the Storage Microservice and provide the persistent storage of information for FogLAMP.</p>
+<p>The current version of FogLAMP comes with three storage plugins:</p>
+<ul class="simple">
+<li>The <strong>SQLite plugin</strong>: this is the default plugin and it is used for general purpose storage on constrained devices.</li>
+<li>The <strong>SQLite In Memory plugin</strong>: this plugin can be used in conjunction with one of the other storage plugins and will provide an in memory storage system for reading data only. Configuration data is stored using the <em>SQLite</em> or <em>PostgreSQL</em> plugins.</li>
+<li>The <strong>PostgreSQL plugin</strong>: this plugin can be set on request (or it can be built as a default plugin from source) and it is used for a more significant demand of storage on relatively larger systems.</li>
+</ul>
+<div class="section" id="data-and-metadata">
+<h2>Data and Metadata<a class="headerlink" href="#data-and-metadata" title="Permalink to this headline">¶</a></h2>
+<p>Persistency is split in two blocks:</p>
+<ul class="simple">
+<li><strong>Metadata persistency</strong>: it refers to the storage of metadata for FogLAMP, such as the configuration of the plugins, the scheduling of jobs and tasks and the the storage of statistical information.</li>
+<li><strong>Data persistency</strong>: it refers to the storage of data collected from sensors and devices by the South microservices. The <em>SQLite In Memory</em> plugin is an example of a storage plugin designed to store only the data.</li>
+</ul>
+<p>In the current implementation of FogLAMP, metadata and data use the same Storage plugin by default. Administrators can select different plugins for these two categories of data, with the most common configuration of this type to use the SQLite In Memory storage service for data and SQLite for the metadata. This is set by editing the storage configuration file. Currently there is no interface within FogLAMP to change the storage configuration.</p>
+<p>The storage configuration file is stored in the FogLAMP data directory as etc/storage.json, the default storage configuration file is</p>
+<div class="highlight-JSON"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;plugin&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;sqlite&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The main storage plugin to load&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;readingPlugin&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The storage plugin to load for readings data. If blank the main storage plugin is used.&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of threads to run&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;managedStatus&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Control if FogLAMP should manage the storage provider&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The port to listen on&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;managementPort&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The management port to listen on.&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This sets the storage plugin to use as the <em>SQLite</em> plugin and leaves the <em>readingPlugin</em> blank. If the <em>readingPlugin</em> is blank then readings will be stored via the main plugin, if it is populated then a separate plugin will be used to store the readings. As an example, to store the readings in the <em>SQLite In Memory</em> plugin the storage.json file would be</p>
+<div class="highlight-JSON"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;plugin&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;sqlite&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The main storage plugin to load&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;readingPlugin&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;sqlitememory&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The storage plugin to load for readings data. If blank the main storage plugin is used.&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;threads&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of threads to run&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;managedStatus&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Control if FogLAMP should manage the storage provider&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The port to listen on&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;managementPort&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The management port to listen on.&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>FogLAMP must be restarted for changes to the storage.json file to take effect.</p>
+<p>In addition to the definition of the plugins to use, the storage.json file also has a number of other configuration options for the storage service.</p>
+<ul class="simple">
+<li><strong>threads</strong>: The number of threads to use to accept incoming REST requests. This is normally set to 1, increasing the number of threads has minimal impact on performance in normal circumstances.</li>
+<li><strong>managedStatus</strong>: This configuration option allows FogLAMP to manage the underlying storage system. If, for example you used a database server and you wished FogLAMP to start and stop that server as part of the FogLAMP start up and shut down procedure you would set this option to “true”.</li>
+<li><strong>port</strong>: This option can be used to make the storage service listen on a fixed port. This is normally not required, but can be used for diagnostic purposes.</li>
+<li><strong>managementPort</strong>: As with <em>port</em> above this can be used for diagnostic purposes to fix the management API port for the storage service.</li>
+</ul>
+</div>
+<div class="section" id="common-elements-for-storage-plugins">
+<h2>Common Elements for Storage Plugins<a class="headerlink" href="#common-elements-for-storage-plugins" title="Permalink to this headline">¶</a></h2>
+<p>In designing the Storage API and plugins, we have first of all considered that there may be a large number of use cases for data and metadata persistence, therefore we have designed a flexible architecture that poses very few limitations. In practice, this means that developers can build their own Storage plugin and they can rely on anything they want to use as persistent storage. They can use a memory structure, or even a pass-through library, a file, a message queue system, a time series database, a relational database, NoSQL or something else.</p>
+<p>After having praised the flexibility of the Storage plugins, let’s provide guidelines about the basic functionality they should provide, bearing in mind that such functionality may not be relevant for some use cases.</p>
+<ul class="simple">
+<li><strong>Metadata persistency</strong>: As mentioned before, one of the main reasons to use a Storage plugin is to safely store the configuration of the FogLAMP components. Since the configuration must survive to a system crash or reboot, it is fair to say that such information should be stored in one or more files or in a database system.</li>
+<li><strong>Data buffering</strong>: The second most important feature of a Storage plugin is the ability to buffer (or store) data coming from the outside world, typically from the South microservices. In some cases this feature may not be necessary, since administrators may want to send data to other systems as soon as possible, using a North task of microservice. Even in situations where data can be sent up North instantaneously, you should consider these scenarios:<ul>
+<li>FogLAMP may be installed in areas where the network is unreliable. The North plugins will provide the logic of retrying to gain connectivity and resending data when the connection has been lost in the middle of the transfer operations.</li>
+<li>North services may rely on the use of networks that provide time windows to operate.</li>
+<li>Historians and other systems may work better when data is transferred in blocks instead of a constant streaming.</li>
+</ul>
+</li>
+<li><strong>Data purging</strong>: Data may persist for the time needed by any specific use case, but it is pretty common that after a while (it can be seconds or minutes, but also day or months) data is no longer needed in FogLAMP. For this reason, the Storage plugin is able to purge data. Purging may be by time or by space usage, in conjunction with the fact that data may have been already transferred to other systems.</li>
+<li><strong>Data backup/restore</strong>: Data, but especially metadata (i.e. configuration), can be backed up and stored safely on other systems. In case of crash and recovery, the same data may be restored into FogLAMP. FogLAMP provides a set of generic API to execute backup and restore operations.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../rest_api_guide/index.html" class="btn btn-neutral float-right" title="REST API Developers Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="04_north_plugins.html" class="btn btn-neutral" title="North Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

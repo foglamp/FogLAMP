@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Event Rate Filter &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Filter Plugins" href="../filter.html"/>
+        <link rel="next" title="Simple Python Filter" href="../foglamp-filter-simple-python/index.html"/>
+        <link rel="prev" title="Exponential Moving Average" href="../foglamp-filter-ema/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-asset/index.html">Asset Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-expression/index.html">Expression Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-metadata/index.html">Metadata Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python27/index.html">Python 2.7 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python35/index.html">Python 3.5 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale-set/index.html">Scale Set Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-threshold/index.html">Threshold Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../filter.html">FogLAMP Filter Plugins</a> &raquo;</li>
+        
+      <li>Event Rate Filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-filter-eventrate/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="event-rate-filter">
+<h1>Event Rate Filter<a class="headerlink" href="#event-rate-filter" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-filter-eventrate</em> is a filter plugin that has been explicitly designed to work with the
+notification server, <a href="../foglamp-notify-asset/index.html">asset notification delivery</a> mechanism and the north service. It
+can be used to reduce the rate a reading is sent northwards until an
+interesting event occurs. The filter will read data at full rate from
+the input side and buffer data internally, sending out averages for each
+value over a time frame determined by the filter configuration.</p>
+<p>The user will provide two strings and a notification asset name that will
+be used to form a trigger for the filter. One trigger string will set
+the trigger and the other will clear it. When the trigger is set then the
+filter will no longer average the data over the configured time period,
+but will instead send the full bandwidth data out of the filter.</p>
+<p>The trigger strings are values in the event data point of the notification
+asset that is named in the configuration. If the string given in the
+trigger is found within the event data point then the trigger is deemed
+to have fired. String matching is case sensitive, but strings given for
+trigger do not need to be the entire event reason, sub string searching
+is used to evaluate the trigger.</p>
+<p>The filter also allows a pre-trigger time to be configured. In this
+case it will buffer this much data internally and when the trigger is
+initially set this pre-buffered data will be sent. The pre-buffered data
+is discarded if the trigger is not set and the data gets to the defined
+age for holding pre-trigger information.</p>
+<p>Event rate filters are added in the same way as any other filters.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Click on the Applications add icon for your service or task.</li>
+<li>Select the <em>eventrate</em> plugin from the list of available plugins.</li>
+<li>Name your event rate filter.</li>
+<li>Click <em>Next</em> and you will be presented with the following configuration page</li>
+</ul>
+</div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="eventrate_1" src="../../_images/eventrate_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><ul>
+<li><p class="first">Configure your event rate filter</p>
+<ul>
+<li><p class="first"><strong>Event asset</strong>: The asset used to trigger the full rate sending of data. This is the asset that is inserted by the <a href="../foglamp-notify-asset/index.html">asset notification delivery</a> plugin.</p>
+</li>
+<li><p class="first"><strong>Trigger Reason</strong>: A trigger reason to set the trigger for full rate data</p>
+</li>
+<li><p class="first"><strong>Terminate on</strong>: A switch to control if the end condition is a trigger or time based</p>
+</li>
+<li><p class="first"><strong>Step Reason</strong>: An untrigger reason to clear the trigger for full rate data, if left blank this will simply be the trigger filter evaluating to false</p>
+</li>
+<li><p class="first"><strong>Full rate time (ms)</strong>: A full rate time after which the reduce rate is again active</p>
+</li>
+<li><p class="first"><strong>Pre-trigger time (mS)</strong>: An optional pre-trigger time expressed in milliseconds</p>
+</li>
+<li><p class="first"><strong>Reduced collection rate</strong>: The nominal data rate to send data out. This defines the period over which is outgoing data item is averaged.</p>
+</li>
+<li><p class="first"><strong>Rate Units</strong>: This defines the units used for the above rate. This can be per second, per minute, per hour or per day.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="eventrate_2" src="../../_images/eventrate_2.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first"><strong>Exclusions</strong>: A set of asset names that are excluded from the rate limit processing and always sent at full rate</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Enable your plugin and click <em>Done</em></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-filter-simple-python/index.html" class="btn btn-neutral float-right" title="Simple Python Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-filter-ema/index.html" class="btn btn-neutral" title="Exponential Moving Average" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

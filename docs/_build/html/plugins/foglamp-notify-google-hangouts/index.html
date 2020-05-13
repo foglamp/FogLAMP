@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Google Chat &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Notification Delivery Plugins" href="../notify.html"/>
+        <link rel="next" title="IFTTT Delivery Plugin" href="../foglamp-notify-ifttt/index.html"/>
+        <link rel="prev" title="Email Notifications" href="../foglamp-notify-email/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-alexa-notifyme/index.html">Amazon Alexa Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-asset/index.html">Asset Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-email/index.html">Email Notifications</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Google Chat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-ifttt/index.html">IFTTT Delivery Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-python35/index.html">Python 3.5 Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-slack/index.html">Slack Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-telegram/index.html">Telegram Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-north/index.html">Conditional Forwarding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../notify.html">FogLAMP Notification Delivery Plugins</a> &raquo;</li>
+        
+      <li>Google Chat</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-notify-google-hangouts/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="google-chat">
+<h1>Google Chat<a class="headerlink" href="#google-chat" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-notify-google-hangouts</em> plugin allows notifications to be delivered to the Google chat platform. The notification are delivered into a specific chat room within the application, in order to allow access to the chat room you must create a webhook for sending data to that chatroom.</p>
+<p>To create a webhook</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Go to the <a href="https://chat.google.com" target="_blank">Google Chat</a> page in your browser</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="chat_1" src="../../_images/chat_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Select the chat room you wish to use or create a new chat room</p>
+</li>
+<li><p class="first">In the menu at the top of the screen select <em>Configure webhooks</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="chat_2" src="../../_images/chat_2.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Enter a name for your webhook and optional avatar and click <em>Save</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="chat_3" src="../../_images/chat_3.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Copy the URL that appears under your webhook name, you can use the copy icon next to the URL to place it in the clipboard</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="chat_6" src="../../_images/chat_6.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Close the webhooks window by clicking outside the window</p>
+</li>
+</ul>
+</div></blockquote>
+<p>Once you have created your notification rule and move on to the delivery mechanism</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Select the Hangouts plugin from the list of plugins</p>
+</li>
+<li><p class="first">Click <em>Next</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="chat_4" src="../../_images/chat_4.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Now configure the asset delivery plugin</p>
+<ul class="simple">
+<li><strong>Google Hangout Webhook URL</strong>: Paste the URL obtain above here</li>
+<li><strong>Message Text</strong>: Enter the message text you wish to send</li>
+</ul>
+</li>
+<li><p class="first">Enable the plugin and click <em>Next</em></p>
+</li>
+<li><p class="first">Complete your notification setup</p>
+</li>
+</ul>
+</div></blockquote>
+<p>A message will be sent to this chat room whenever a notification is triggered.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="chat_5" src="../../_images/chat_5.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-notify-ifttt/index.html" class="btn btn-neutral float-right" title="IFTTT Delivery Plugin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-notify-email/index.html" class="btn btn-neutral" title="Email Notifications" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

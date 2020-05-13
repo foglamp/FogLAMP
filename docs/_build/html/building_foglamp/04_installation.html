@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FogLAMP Installation &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Building Developers Guide" href="index.html"/>
+        <link rel="next" title="Testing FogLAMP" href="06_testing.html"/>
+        <link rel="prev" title="Building FogLAMP" href="building_foglamp.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Building Developers Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp.html">Building FogLAMP</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FogLAMP Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installing-foglamp-from-a-build">Installing FogLAMP from a Build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installing-the-debian-package">Installing the Debian Package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="06_testing.html">Testing FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_utilities.html">FogLAMP Utilities and Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_tasks.html">FogLAMP Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+          <li><a href="index.html">Building Developers Guide</a> &raquo;</li>
+        
+      <li>FogLAMP Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/building_foglamp/04_installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foglamp-installation">
+<h1>FogLAMP Installation<a class="headerlink" href="#foglamp-installation" title="Permalink to this headline">¶</a></h1>
+<p>Installing FogLAMP using defaults is straightforward: depending on the usage, you may install a new version from source or from a pre-built package. In environments where the defaults do not fit, you will need to execute few more steps. This chapter describes the default installation of FogLAMP and the most common scenarios where administrators need to modify the default behavior.</p>
+<div class="section" id="installing-foglamp-from-a-build">
+<h2>Installing FogLAMP from a Build<a class="headerlink" href="#installing-foglamp-from-a-build" title="Permalink to this headline">¶</a></h2>
+<p>Once you have built FogLAMP following the instructions presented <a href="building_foglamp.html" target="_blank">here</a>, you can execute the default installation with the <code class="docutils literal"><span class="pre">make</span> <span class="pre">install</span></code> command. By default, FogLAMP is installed from build in the root directory, under <em>/usr/local/foglamp</em>. Since the root directory <em>/</em> is a protected a system location, you will need superuser privileges to execute the command. Therefore, if you are not superuser, you should login as superuser or you should use the <code class="docutils literal"><span class="pre">sudo</span></code> command.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo make install
+<span class="go">mkdir -p /usr/local/foglamp</span>
+<span class="go">Installing FogLAMP version 1.3.1, DB schema 2</span>
+<span class="go">-- FogLAMP DB schema check OK: Info: /usr/local/foglamp is empty right now. Skipping DB schema check.</span>
+<span class="go">cp VERSION /usr/local/foglamp</span>
+<span class="go">cd cmake_build ; cmake /home/foglamp/FogLAMP/</span>
+<span class="go">-- Boost version: 1.58.0</span>
+<span class="go">-- Found the following Boost libraries:</span>
+<span class="go">--   system</span>
+<span class="go">--   thread</span>
+<span class="go">--   chrono</span>
+<span class="go">--   date_time</span>
+<span class="go">--   atomic</span>
+<span class="go">-- Found SQLite version 3.11.0: /usr/lib/x86_64-linux-gnu/libsqlite3.so</span>
+<span class="go">-- Boost version: 1.58.0</span>
+<span class="go">-- Found the following Boost libraries:</span>
+<span class="go">--   system</span>
+<span class="go">--   thread</span>
+<span class="go">--   chrono</span>
+<span class="go">--   date_time</span>
+<span class="go">--   atomic</span>
+<span class="go">-- Configuring done</span>
+<span class="go">-- Generating done</span>
+<span class="go">-- Build files have been written to: /home/foglamp/FogLAMP/cmake_build</span>
+<span class="go">cd cmake_build ; make</span>
+<span class="go">make[1]: Entering directory &#39;/home/foglamp/FogLAMP/cmake_build&#39;</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>These are the main steps of the installation:</p>
+<ul class="simple">
+<li>Create the <em>/usr/local/foglamp</em> directory, if it does not exist</li>
+<li>Build the code that has not been compiled and built yet</li>
+<li>Create all the necessary destination directories and copy the executables, scripts and configuration files</li>
+<li>Change the ownership of the <em>data</em> directory, if the install user is a superuser (we recommend to run FogLAMP as regular user, i.e. not as superuser).</li>
+</ul>
+<p>FogLAMP is now present in <em>/usr/local/foglamp</em> and ready to start. The start script is in the <em>/usr/local/foglamp/bin</em> directory</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> /usr/local/foglamp/
+<span class="gp">$</span> ls -l
+<span class="go">total 32</span>
+<span class="go">drwxr-xr-x 2 root    root    4096 Apr 24 18:07 bin</span>
+<span class="go">drwxr-xr-x 4 foglamp foglamp 4096 Apr 24 18:07 data</span>
+<span class="go">drwxr-xr-x 4 root    root    4096 Apr 24 18:07 extras</span>
+<span class="go">drwxr-xr-x 4 root    root    4096 Apr 24 18:07 plugins</span>
+<span class="go">drwxr-xr-x 3 root    root    4096 Apr 24 18:07 python</span>
+<span class="go">drwxr-xr-x 6 root    root    4096 Apr 24 18:07 scripts</span>
+<span class="go">drwxr-xr-x 2 root    root    4096 Apr 24 18:07 services</span>
+<span class="go">-rwxr-xr-x 1 root    root      37 Apr 24 18:07 VERSION</span>
+<span class="gp">$</span>
+<span class="gp">$</span> bin/foglamp
+<span class="go">Usage: foglamp {start|stop|status|reset|kill|help|version}</span>
+<span class="gp">$</span>
+<span class="gp">$</span> bin/foglamp <span class="nb">help</span>
+<span class="go">Usage: foglamp {start|stop|status|reset|kill|help|version}</span>
+<span class="go">FogLAMP v1.3.1 admin script</span>
+<span class="go">The script is used to start FogLAMP</span>
+<span class="go">Arguments:</span>
+<span class="go"> start   - Start FogLAMP core (core will start other services).</span>
+<span class="go"> stop    - Stop all FogLAMP services and processes</span>
+<span class="go"> kill    - Kill all FogLAMP services and processes</span>
+<span class="go"> status  - Show the status for the FogLAMP services</span>
+<span class="go"> reset   - Restore FogLAMP factory settings</span>
+<span class="go">           WARNING! This command will destroy all your data!</span>
+<span class="go"> version - Print FogLAMP version</span>
+<span class="go"> help    - This text</span>
+<span class="gp">$</span>
+<span class="gp">$</span> bin/foglamp start
+<span class="go">Starting FogLAMP......</span>
+<span class="go">FogLAMP started.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<div class="section" id="installing-foglamp-in-a-different-destination-directory">
+<h3>Installing FogLAMP in a Different Destination Directory<a class="headerlink" href="#installing-foglamp-in-a-different-destination-directory" title="Permalink to this headline">¶</a></h3>
+<p>The destination directory for FogLAMP is the root directory <em>/</em>.  You can change the destination by setting the <em>make</em> variable <em>DESTDIR</em>. For example, if you want to install FogLAMP in <em>/opt</em> you should execute this command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo make install <span class="nv">DESTDIR</span><span class="o">=</span>/opt
+<span class="go">mkdir -p /opt/usr/local/foglamp</span>
+<span class="go">...</span>
+<span class="gp">$</span> ls -l
+<span class="go">total 36</span>
+<span class="go">drwxr-xr-x 9 root   root   4096 Dec 11 13:49 ./</span>
+<span class="go">drwxr-xr-x 3 root   root   4096 Dec 11 13:49 ../</span>
+<span class="go">drwxr-xr-x 2 root   root   4096 Dec 11 13:49 bin/</span>
+<span class="go">drwxr-xr-x 3 ubuntu ubuntu 4096 Dec 11 13:49 data/</span>
+<span class="go">drwxr-xr-x 3 root   root   4096 Dec 11 13:49 extras/</span>
+<span class="go">drwxr-xr-x 3 root   root   4096 Dec 11 13:49 plugins/</span>
+<span class="go">drwxr-xr-x 3 root   root   4096 Dec 11 13:49 python/</span>
+<span class="go">drwxr-xr-x 6 root   root   4096 Dec 11 13:49 scripts/</span>
+<span class="go">drwxr-xr-x 2 root   root   4096 Dec 11 13:49 services/</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>In order to operate, FogLAMP requires two environment variables:</p>
+<ul class="simple">
+<li><strong>FOGLAMP_ROOT</strong>: the root directory for FogLAMP. The default is <em>/usr/local/foglamp</em></li>
+<li><strong>FOGLAMP_DATA</strong>: the data directory. The default is <em>$FOGLAMP_ROOT/data</em>, hence whichever value <em>FOGLAMP_ROOT</em> has plus the <em>data</em> sub-directory, or <em>/usr/local/foglamp/data</em> in case <em>FOGLAMP_ROOT</em> is set as default value.</li>
+</ul>
+<p>If you have installed FogLAMP in a non-default directory, you must at least set the new root directory before you start the platform. For example, supposing that the destination directory is <em>/opt</em> and the package has been installed in <em>/opt/usr/local/foglamp</em>, you should type:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">FOGLAMP_ROOT</span><span class="o">=</span><span class="s2">&quot;/opt/usr/local/foglamp&quot;</span>
+<span class="gp">$</span> <span class="nb">cd</span> /opt/usr/local/foglamp/
+<span class="gp">$</span> bin/foglamp start
+<span class="go">Starting FogLAMP......</span>
+<span class="go">FogLAMP started.</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-setenv-sh-script">
+<h3>The setenv.sh Script<a class="headerlink" href="#the-setenv-sh-script" title="Permalink to this headline">¶</a></h3>
+<p>In the <em>extras/scripts</em> folder of the newly installed FogLAMP you can find the <em>setenv.sh</em> script. This script can be used to set the environment variables used by FogLAMP and update your PATH environment variable. <br />
+You can call the script from your shell or you can add the same command to your <em>.profile</em> script:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> cat /usr/local/foglamp/extras/scripts/setenv.sh
+<span class="gp">#</span>!/bin/sh
+
+<span class="gp">#</span><span class="c1">#--------------------------------------------------------------------</span>
+<span class="gp">#</span><span class="c1"># Copyright (c) 2018 OSIsoft, LLC</span>
+<span class="gp">#</span><span class="c1">#</span>
+<span class="gp">#</span><span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="gp">#</span><span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="gp">#</span><span class="c1"># You may obtain a copy of the License at</span>
+<span class="gp">#</span><span class="c1">#</span>
+<span class="gp">#</span><span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="gp">#</span><span class="c1">#</span>
+<span class="gp">#</span><span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="gp">#</span><span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="gp">#</span><span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="gp">#</span><span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="gp">#</span><span class="c1"># limitations under the License.</span>
+<span class="gp">#</span><span class="c1">#--------------------------------------------------------------------</span>
+
+<span class="gp">#</span>
+<span class="gp">#</span> This script sets the user environment to facilitate the administration
+<span class="gp">#</span> of FogLAMP
+<span class="gp">#</span>
+<span class="gp">#</span> You can execute this script from shell, using <span class="k">for</span> example this command:
+<span class="gp">#</span>
+<span class="gp">#</span> <span class="nb">source</span> /usr/local/foglamp/extras/scripts/setenv.sh
+<span class="gp">#</span>
+<span class="gp">#</span> or you can add the same <span class="nb">command</span> at the bottom of your profile script
+<span class="gp">#</span> <span class="o">{</span>HOME<span class="o">}</span>/.profile.
+<span class="gp">#</span>
+
+<span class="go">export FOGLAMP_ROOT=&quot;/usr/local/foglamp&quot;</span>
+<span class="go">export FOGLAMP_DATA=&quot;${FOGLAMP_ROOT}/data&quot;</span>
+
+<span class="go">export PATH=&quot;${FOGLAMP_ROOT}/bin:${PATH}&quot;</span>
+<span class="go">export LD_LIBRARY_PATH=&quot;${FOGLAMP_ROOT}/lib:${LD_LIBRARY_PATH}&quot;</span>
+
+<span class="gp">$</span> <span class="nb">source</span> /usr/local/foglamp/extras/scripts/setenv.sh
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-foglamp-service-script">
+<h3>The foglamp.service Script<a class="headerlink" href="#the-foglamp-service-script" title="Permalink to this headline">¶</a></h3>
+<p>Another file available in the <em>extras/scripts</em> folder is the foglamp.service script. This script can be used to set FogLAMP as a Linux service. If you wish to do so, we recommend to install the FogLAMP package, but if you have a special build or for other reasons you prefer to work with FogLAMP built from source, this script will be quite helpful.</p>
+<p>You can install FogLAMP as a service following these simple steps:</p>
+<ul class="simple">
+<li>After the <code class="docutils literal"><span class="pre">make</span> <span class="pre">install</span></code> command, copy <em>foglamp.service</em> with a simple name <em>foglamp</em> in the <em>/etc/init.d</em> folder.</li>
+<li>Execute the command <code class="docutils literal"><span class="pre">systemctl</span> <span class="pre">enable</span> <span class="pre">foglamp.service</span></code> to enable FogLAMP as a service</li>
+<li>Execute the command <code class="docutils literal"><span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">foglamp.service</span></code> if you want to start FogLAMP</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo cp /usr/local/foglamp/extras/scripts/foglamp.service /etc/init.d/foglamp
+<span class="gp">$</span> sudo systemctl status foglamp.service
+<span class="go">● foglamp.service</span>
+<span class="go">   Loaded: not-found (Reason: No such file or directory)</span>
+<span class="go">   Active: inactive (dead)</span>
+<span class="gp">$</span> sudo systemctl <span class="nb">enable</span> foglamp.service
+<span class="go">foglamp.service is not a native service, redirecting to systemd-sysv-install</span>
+<span class="go">Executing /lib/systemd/systemd-sysv-install enable foglamp</span>
+<span class="gp">$</span> sudo systemctl status foglamp.service
+<span class="go">● foglamp.service - LSB: FogLAMP</span>
+<span class="go">   Loaded: loaded (/etc/init.d/foglamp; bad; vendor preset: enabled)</span>
+<span class="go">   Active: inactive (dead)</span>
+<span class="go">     Docs: man:systemd-sysv-generator(8)</span>
+<span class="gp">$</span> sudo systemctl start foglamp.service
+<span class="gp">$</span> sudo systemctl status foglamp.service
+<span class="go">● foglamp.service - LSB: FogLAMP</span>
+<span class="go">   Loaded: loaded (/etc/init.d/foglamp; bad; vendor preset: enabled)</span>
+<span class="go">   Active: active (running) since Sun 2018-03-25 13:03:31 BST; 2min 8s ago</span>
+<span class="go">     Docs: man:systemd-sysv-generator(8)</span>
+<span class="go">  Process: 1661 ExecStart=/etc/init.d/foglamp start (code=exited, status=0/SUCCESS)</span>
+<span class="go">    Tasks: 14</span>
+<span class="go">   Memory: 79.5M</span>
+<span class="go">      CPU: 2.888s</span>
+<span class="go">   CGroup: /system.slice/foglamp.service</span>
+<span class="go">           ├─1759 python3 -m foglamp.services.core</span>
+<span class="go">           └─1764 /usr/local/foglamp/services/storage --address=0.0.0.0 --port=46309</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+</div>
+<div class="section" id="installing-the-debian-package">
+<h2>Installing the Debian Package<a class="headerlink" href="#installing-the-debian-package" title="Permalink to this headline">¶</a></h2>
+<p>We have versions of FogLAMP available as Debian packages for you. Check the <a href="92_downloads.html" target="_blank">Downloads page</a> to review which versions and platforms are available.</p>
+<div class="section" id="obtaining-and-installing-the-debian-package">
+<h3>Obtaining and Installing the Debian Package<a class="headerlink" href="#obtaining-and-installing-the-debian-package" title="Permalink to this headline">¶</a></h3>
+<p>Check the <a href="92_downloads.html" target="_blank">Downloads page</a> to find the package to install.</p>
+<p>Once you have downloaded the package, install it using the <code class="docutils literal"><span class="pre">apt-get</span></code> command. You can use <code class="docutils literal"><span class="pre">apt-get</span></code> to install a local Debian package and automatically retrieve all the necessary packages that are defined as pre-requisites for FogLAMP.  Note that you may need to install the package as superuser (or by using the <code class="docutils literal"><span class="pre">sudo</span></code> command) and move the package to the apt cache directory first (<code class="docutils literal"><span class="pre">/var/cache/apt/archives</span></code>).</p>
+<p>For example, if you are installing FogLAMP on an Intel x86_64 machine, you can type this command to download the package:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> wget https://s3.amazonaws.com/foglamp/debian/x86_64/foglamp-1.3.1-x86_64_ubuntu_16_04.deb
+<span class="go">--2018-04-24 18:22:08--  https://s3.amazonaws.com/foglamp/debian/x86_64/foglamp-1.3.1-x86_64_ubuntu_16_04.deb</span>
+<span class="go">Resolving s3.amazonaws.com (s3.amazonaws.com)... 52.216.133.221</span>
+<span class="go">Connecting to s3.amazonaws.com (s3.amazonaws.com)|52.216.133.221|:443... connected.</span>
+<span class="go">HTTP request sent, awaiting response... 200 OK</span>
+<span class="go">Length: 496094 (484K) [application/x-deb]</span>
+<span class="go">Saving to: ‘foglamp-1.3.1-x86_64_ubuntu_16_04.deb’</span>
+
+<span class="go">foglamp-1.3.1-x86_64_ubuntu_16_04.deb     100%[=============================================================&gt;] 484.47K   521KB/s    in 0.9s</span>
+<span class="go">2018-04-24 18:22:10 (521 KB/s) - ‘foglamp-1.3.1-x86_64_ubuntu_16_04.deb’ saved [496094/496094]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>We recommend to execute an <em>update-upgrade-update</em> of the system first, then you may copy the FogLAMP package in the <em>apt cache</em> directory and install it.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt update
+<span class="go">Hit:1 http://gb.archive.ubuntu.com/ubuntu xenial InRelease</span>
+<span class="go">...</span>
+<span class="gp">$</span> sudo apt upgrade
+<span class="go">...</span>
+<span class="gp">$</span> sudo apt update
+<span class="go">...</span>
+<span class="gp">$</span> sudo cp foglamp-1.3.1-x86_64_ubuntu_16_04.deb /var/cache/apt/archives/.
+<span class="go">...</span>
+<span class="gp">$</span> sudo apt install /var/cache/apt/archives/foglamp-1.3.1-x86_64_ubuntu_16_04.deb
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">Reading state information... Done</span>
+<span class="go">Note, selecting &#39;foglamp&#39; instead of &#39;/var/cache/apt/archives/foglamp-1.3.1-x86_64_ubuntu_16_04.deb&#39;</span>
+<span class="go">The following packages were automatically installed and are no longer required:</span>
+<span class="go">...</span>
+<span class="go">Unpacking foglamp (1.3.1) ...</span>
+<span class="go">Setting up foglamp (1.3.1) ...</span>
+<span class="go">Resolving data directory</span>
+<span class="go">Data directory does not exist. Using new data directory</span>
+<span class="go">Installing service script</span>
+<span class="go">Generating certificate files</span>
+<span class="go">Certificate files do not exist. Generating new certificate files.</span>
+<span class="go">Creating a self signed SSL certificate ...</span>
+<span class="go">Certificates created successfully, and placed in data/etc/certs</span>
+<span class="go">Setting ownership of FogLAMP files</span>
+<span class="go">Enabling FogLAMP service</span>
+<span class="go">foglamp.service is not a native service, redirecting to systemd-sysv-install</span>
+<span class="go">Executing /lib/systemd/systemd-sysv-install enable foglamp</span>
+<span class="go">Starting FogLAMP service</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>As you can see from the output, the installation automatically registers FogLAMP as a service, so it will come up at startup and it is already up and running when you complete the command.</p>
+<p>Check the newly installed package:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo dpkg -l <span class="p">|</span> grep foglamp
+<span class="go">ii  foglamp            1.3.1             amd64        FogLAMP, the open source platform for the Internet of Things</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>You can also check the service currently running:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo systemctl status foglamp.service
+<span class="go">● foglamp.service - LSB: FogLAMP</span>
+<span class="go"> Loaded: loaded (/etc/init.d/foglamp; bad; vendor preset: enabled)</span>
+<span class="go"> Active: active (running) since Thu 2018-05-10 03:48:20 BST; 1min 31s ago</span>
+<span class="go">   Docs: man:systemd-sysv-generator(8)</span>
+<span class="go">Process: 1088 ExecStart=/etc/init.d/foglamp start (code=exited, status=0/SUCCESS)</span>
+<span class="go">  Tasks: 14</span>
+<span class="go"> Memory: 87.2M</span>
+<span class="go">    CPU: 2.603s</span>
+<span class="go"> CGroup: /system.slice/foglamp.service</span>
+<span class="go">         ├─1218 python3 -m foglamp.services.core</span>
+<span class="go">         └─1226 /usr/local/foglamp/services/storage --address=0.0.0.0 --port=44530</span>
+
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Check if FogLAMP is up and running with the <code class="docutils literal"><span class="pre">foglamp</span></code> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> /usr/local/foglamp/bin/foglamp status
+<span class="go">FogLAMP v1.3.1 running.</span>
+<span class="go">FogLAMP Uptime:  162 seconds.</span>
+<span class="go">FogLAMP records: 0 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">...</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Don’t forget to add the <em>setenv.sh</em> available in the /usr/local/foglamp/extras/scripts* directory to your <em>.profile</em> user startup script if you want to have an easy access to the FogLAMP tools, and…</p>
+<p>…Congratulations! This is all you need to do, now FogLAMP is ready to run.</p>
+</div>
+<div class="section" id="upgrading-or-downgrading-foglamp">
+<h3>Upgrading or Downgrading FogLAMP<a class="headerlink" href="#upgrading-or-downgrading-foglamp" title="Permalink to this headline">¶</a></h3>
+<p>Upgrading or downgrading FogLAMP, starting from version 1.2, is as easy as installing it from scratch: simply follow the instructions in the previous section regarding the installation and the package will take care of the upgrade/downgrade path. The installation will not proceed if there is not a path to upgrade or downgrade from the currently installed version. You should still check the pre-requisites before you apply the upgrade. Clearly the old data will not be lost, there will be a schema upgrade/downgrade, if required.</p>
+</div>
+<div class="section" id="uninstalling-the-debian-package">
+<h3>Uninstalling the Debian Package<a class="headerlink" href="#uninstalling-the-debian-package" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal"><span class="pre">apt</span></code> or the <code class="docutils literal"><span class="pre">apt-get</span></code> command to uninstall FogLAMP:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt remove foglamp
+<span class="go">Reading package lists... Done</span>
+<span class="go">...</span>
+<span class="go">The following packages will be REMOVED</span>
+<span class="go">foglamp</span>
+<span class="go">0 to upgrade, 0 to newly install, 1 to remove and 2 not to upgrade.</span>
+<span class="go">After this operation, 0 B of additional disk space will be used.</span>
+<span class="go">Do you want to continue? [Y/n]</span>
+<span class="gp gp-VirtualEnv">(Reading database ... 211747 files and directories currently installed.)</span>
+<span class="go">Removing foglamp (1.3.1) ...</span>
+<span class="go">FogLAMP is currently running.</span>
+<span class="go">Stop FogLAMP service.</span>
+<span class="go">Kill FogLAMP.</span>
+<span class="go">Remove python cache files.</span>
+<span class="go">find: ‘/usr/local/foglamp/scripts/common/__pycache__’: No such file or directory</span>
+<span class="go">Disable FogLAMP service.</span>
+<span class="go">foglamp.service is not a native service, redirecting to systemd-sysv-install</span>
+<span class="go">Executing /lib/systemd/systemd-sysv-install disable foglamp</span>
+<span class="go">insserv: warning: current start runlevel(s) (empty) of script `foglamp&#39; overrides LSB defaults (2 3 4 5).</span>
+<span class="go">insserv: warning: current stop runlevel(s) (0 1 2 3 4 5 6) of script `foglamp&#39; overrides LSB defaults (0 1 6).</span>
+<span class="go">Remove FogLAMP service script</span>
+<span class="go">Reset systemctl</span>
+<span class="go">dpkg: warning: while removing foglamp, directory &#39;/usr/local/foglamp&#39; not empty so not removed</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>The command also removes the service installed. <br /> You may notice the warning in the last row of the command output: this is due to the fact that the data directory (<code class="docutils literal"><span class="pre">/usr/local/foglamp/data</span></code> by default) has not been removed, in case an administrator might want to analyze or reuse the data.</p>
+<p><br /></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="06_testing.html" class="btn btn-neutral float-right" title="Testing FogLAMP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="building_foglamp.html" class="btn btn-neutral" title="Building FogLAMP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

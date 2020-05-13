@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exponential Moving Average &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Filter Plugins" href="../filter.html"/>
+        <link rel="next" title="Event Rate Filter" href="../foglamp-filter-eventrate/index.html"/>
+        <link rel="prev" title="Down Sample Filter" href="../foglamp-filter-downsample/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-asset/index.html">Asset Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-expression/index.html">Expression Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-metadata/index.html">Metadata Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python27/index.html">Python 2.7 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python35/index.html">Python 3.5 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale-set/index.html">Scale Set Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-threshold/index.html">Threshold Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Exponential Moving Average</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../filter.html">FogLAMP Filter Plugins</a> &raquo;</li>
+        
+      <li>Exponential Moving Average</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-filter-ema/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exponential-moving-average">
+<h1>Exponential Moving Average<a class="headerlink" href="#exponential-moving-average" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-filter-ema</em> plugin implements an exponential moving average across a set of data. It also forms an example of how to write a filter plugin purely in Python. Filters written in Python have the same functionality and set of entry points as any other filter.</p>
+<p>The plugin_info entry point that returns details of the plugin and the default configuration</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plugin_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Returns information about the plugin</span>
+<span class="sd">    Args:</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: plugin information</span>
+<span class="sd">    Raises:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;ema&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.8.0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;filter&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;interface&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="n">_DEFAULT_CONFIG</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>The plugin_init entry point that initialises the plugin</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plugin_init</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ingest_ref</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+    <span class="s2">&quot;&quot;&quot; Initialise the plugin</span>
+<span class="s2">    Args:</span>
+<span class="s2">        config: JSON configuration document for the Filter plugin configuration category</span>
+<span class="s2">        ingest_ref:</span>
+<span class="s2">        callback:</span>
+<span class="s2">    Returns:</span>
+<span class="s2">        data: JSON object to be used in future calls to the plugin</span>
+
+<span class="s2">    ...</span>
+<span class="s2">    return data</span>
+</pre></div>
+</div>
+<p>The plugin_reconfigure entry point that us called whenever the configuration is changed</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plugin_reconfigure</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">new_config</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot; Reconfigures the plugin</span>
+<span class="sd">   Args:</span>
+<span class="sd">       handle: handle returned by the plugin initialisation call</span>
+<span class="sd">       new_config: JSON object representing the new configuration category for the category</span>
+<span class="sd">   Returns:</span>
+<span class="sd">       new_handle: new handle to be used in the future calls</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="k">global</span> <span class="n">rate</span><span class="p">,</span> <span class="n">datapoint</span>
+   <span class="o">...</span>
+   <span class="k">return</span> <span class="n">new_handle</span>
+</pre></div>
+</div>
+<p>The plugin_shutdown entry point called to terminate the plugin</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plugin_shutdown</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Shutdowns the plugin doing required cleanup.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        handle: handle returned by the plugin initialisation call</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        plugin shutdown</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>And the plugin_ingest call that is called to do the actual data processing</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plugin_ingest</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="sd">&quot;&quot;&quot; Modify readings data and pass it onward</span>
+<span class="sd">Args:</span>
+<span class="sd">    handle: handle returned by the plugin initialisation call</span>
+<span class="sd">    data: readings data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Python filters are added in the same way as any other filters.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Click on the Applications add icon for your service or task.</li>
+<li>Select the <em>ema</em> plugin from the list of available plugins.</li>
+<li>Name your ema filter.</li>
+<li>Click <em>Next</em> and you will be presented with the following configuration page</li>
+</ul>
+</div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="ema_1" src="../../_images/ema_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><ul class="simple">
+<li>Configure your ema filter<ul>
+<li><strong>EMA datapoint</strong>: The name of the data point to create within the asset</li>
+<li><strong>Rate</strong>: The rate controls the rate of the average generated, in this case it is the percentage the current value contribute to the average value.</li>
+</ul>
+</li>
+<li>Enable your plugin and click <em>Done</em></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-filter-eventrate/index.html" class="btn btn-neutral float-right" title="Event Rate Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-filter-downsample/index.html" class="btn btn-neutral" title="Down Sample Filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

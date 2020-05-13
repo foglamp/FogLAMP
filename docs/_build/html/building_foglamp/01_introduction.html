@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Building Developers Guide" href="index.html"/>
+        <link rel="next" title="Building FogLAMP" href="building_foglamp.html"/>
+        <link rel="prev" title="Building Developers Guide" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Building Developers Guide</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-is-foglamp">What Is FogLAMP?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#foglamp-features">FogLAMP Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp.html">Building FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_installation.html">FogLAMP Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_testing.html">Testing FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_utilities.html">FogLAMP Utilities and Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_tasks.html">FogLAMP Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+          <li><a href="index.html">Building Developers Guide</a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/building_foglamp/01_introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-foglamp">
+<h2>What Is FogLAMP?<a class="headerlink" href="#what-is-foglamp" title="Permalink to this headline">¶</a></h2>
+<p>FogLAMP is an open source platform for the <strong>Internet of Things</strong> and an
+essential component in <strong>Fog Computing</strong>.  It uses a modular
+<strong>microservices architecture</strong> including sensor data collection, storage, processing and forwarding to historians, Enterprise systems and Cloud-based services. FogLAMP can run in highly available, stand alone, unattended environments that assume unreliable network connectivity.</p>
+<p>By providing a modular and distributable framework under an open source Apache v2 license, FogLAMP is the best platform to manage the data infrastructure for IoT. The modules can be distributed in any layer - Edge, Fog and Cloud - and they act together to provide scalability, elasticity and resilience.</p>
+<p>FogLAMP offers an “all-round” solution for data management, combining a bi-directional <strong>Northbound/Southbound</strong> data and metadata communication with a <strong>Eastbound/Westbound</strong> service and object distribution.</p>
+<div class="section" id="foglamp-positioning-in-an-iot-and-iiot-infrastructure">
+<h3>FogLAMP Positioning in an IoT and IIoT Infrastructure<a class="headerlink" href="#foglamp-positioning-in-an-iot-and-iiot-infrastructure" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP can be used in IoT and IIoT infrastructure at Edge and in the Fog.
+It stretches bi-directionally South-North/North-South and it is distributed
+East-West/West-East (see figure below).</p>
+<p><img alt="foglamp_all_round" src="../_images/foglamp_all_round_solution.jpg" /></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In this scenario we refer to “Cloud” as the layer above the Fog. “Fog” is where historians, gateways and middle servers coexist. In practice, the Cloud may also represent internal Enterprise systems, concentrated in regional or global corporate data centers, where larger historians, Big Data and analytical systems reside.</p>
+</div>
+<p>In practical terms, this means that:</p>
+<ul class="simple">
+<li>Intra-layer communication and data exchange:<ul>
+<li>At the <strong>Edge</strong>, microservices are installed on devices, sensors and actuators.</li>
+<li>In the <strong>Fog</strong>, data is collected and aggregated in gateways and regional servers.</li>
+<li>In the <strong>Cloud</strong>, data is distributed and analysed on multiple servers, such as Big Data Systems and Data Historians.</li>
+</ul>
+</li>
+<li>Inter-layer communication and data exchange:<ul>
+<li>From <strong>Edge to Fog</strong>, data is retrieved from multiple sensors and devices and it is aggregated on resilient and highly available middle servers and gateways, either in traditional Data Historians and in the new edge of Machine Learning systems.</li>
+<li>From <strong>Fog to Edge</strong>, configuration information, metadata and other valuable data is transferred to sensors and devices.</li>
+<li>From <strong>Fog to Cloud</strong>, the data collected and optionally transformed is transferred to more powerful distributed Cloud and Enterprise systems.</li>
+<li>From <strong>Cloud to Fog</strong>, results of complex analysis and other valuable information are sent to the designated gateways and middle servers that will interact with the Edge.</li>
+</ul>
+</li>
+<li>Intra-layer service distribution:<ul>
+<li>A microservice architecture based on secure communication allows lightweight service distribution and information exchange among <strong>Edge to Edge</strong> devices.</li>
+<li>FogLAMP provides high availability, scalability and data distribution among <strong>Fog-to-Fog</strong> systems. Due to its portability and modularity, FogLAMP can be installed on a large number of intermediate servers and gateways, as application instances, appliances, containers or virtualized environments.</li>
+<li><strong>Cloud to Cloud FogLAMP server</strong> capabilities provide scalability and elasticity in data storage, retrieval and analytics. The data collected at the Edge and Fog, also combined with external data, can be distributed to multiple systems within a Data Center and replicated to multiple Data Centers to guarantee local and faster access.</li>
+</ul>
+</li>
+</ul>
+<p>All these operations are <strong>scheduled, automated</strong> and <strong>executed securely, unattended</strong> and in a <strong>transactional</strong> fashion (i.e. the system can always revert to a previous state in case of failures or unexpected events).</p>
+</div>
+</div>
+<div class="section" id="foglamp-features">
+<h2>FogLAMP Features<a class="headerlink" href="#foglamp-features" title="Permalink to this headline">¶</a></h2>
+<p>In a nutshell, these are main features of FogLAMP:</p>
+<ul class="simple">
+<li>Transactional, always on, server platform designed to work unattended and with zero maintenance.</li>
+<li>Microservice architecture with secured inter-communication:<ul>
+<li>Core System</li>
+<li>Storage Layer</li>
+<li>South side, sensors and device communication</li>
+<li>North side, Cloud and Enterprise communication</li>
+<li>Application Modules, internal application logic</li>
+</ul>
+</li>
+<li>Pluggable modules for:<ul>
+<li>South side: multiple, data and metadata bi-directional communication</li>
+<li>North side: multiple, data and metadata bi-directional communication</li>
+<li>East/West side: IN/OUT Communicator with external applications</li>
+<li>Plus:<ul>
+<li>Data and communication authentication</li>
+<li>Data and status monitoring and alerting</li>
+<li>Data transformation</li>
+<li>Data storage and retrieval</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Small memory and processing footprint. FogLAMP can be installed and executed on inexpensive Edge devices; microservices can be distributed on sensors and actuator boards.</li>
+<li>Resilient and optionally highly available.</li>
+<li>Discoverable and cluster-based.</li>
+<li>Based on APIs (RESTful and non-RESTful) to communicate with sensors and other devices, to interact with user applications, to manage the platform and to be integrated with a Cloud or Data Center-based data infrastructure.</li>
+<li>Hardened with default secure communication that can be optionally relaxed.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="building_foglamp.html" class="btn btn-neutral float-right" title="Building FogLAMP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Building Developers Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

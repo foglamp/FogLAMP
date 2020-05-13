@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Python 3.5 Script &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Notification Delivery Plugins" href="../notify.html"/>
+        <link rel="next" title="Slack Messages" href="../foglamp-notify-slack/index.html"/>
+        <link rel="prev" title="IFTTT Delivery Plugin" href="../foglamp-notify-ifttt/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-alexa-notifyme/index.html">Amazon Alexa Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-asset/index.html">Asset Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-email/index.html">Email Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-google-hangouts/index.html">Google Chat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-ifttt/index.html">IFTTT Delivery Plugin</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Python 3.5 Script</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-script">Example Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-slack/index.html">Slack Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-telegram/index.html">Telegram Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-notify-north/index.html">Conditional Forwarding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../notify.html">FogLAMP Notification Delivery Plugins</a> &raquo;</li>
+        
+      <li>Python 3.5 Script</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-notify-python35/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="python-3-5-script">
+<h1>Python 3.5 Script<a class="headerlink" href="#python-3-5-script" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-notify-python35</em> notification delivery plugin allows a user supplied Python script to be executed when a notification is triggered or cleared. The script should be written in Python 3.5 syntax.</p>
+<p>A Python script should be provided in the form of a function, the name of that function should match the name of the file the code is loaded form. E.g if you have a script to run which you have saved in a file called alert_light.py it should contain a function alert_light. ~that function is called with a message which is defined in notification itself as a simple string.</p>
+<p>A second function may be provided by the Python plugin code to accept configuration from the plugin that can be used to modify the behavior of the Python code without the need to change the code. The configuration is a JSON document which is again passed as a Python Dict to the set_filter_config function in the user provided Python code. This function should be of the form</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_filter_config</span><span class="p">(</span><span class="n">configuration</span><span class="p">):</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Once you have created your notification rule and move on to the delivery mechanism</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Select the python35 plugin from the list of plugins</p>
+</li>
+<li><p class="first">Click <em>Next</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="python_1" src="../../_images/python_11.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Configure the plugin</p>
+<ul class="simple">
+<li><strong>Python Script</strong>: This is the script that will be executed. Initially you are unable to type in this area and must load your initial script from a file using the <em>Choose Files</em> button below the text area. Once a file has been chosen and loaded you are able to update the Python code in this page.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Any changes made to the script in this screen will be written back to the original file it was loaded from.</p>
+</div>
+<ul class="simple">
+<li><strong>Configuration</strong>: You may enter a JSON document here that will be passed to the <em>set_filter_config</em> function of your Python code.</li>
+</ul>
+</li>
+<li><p class="first">Enable the plugin and click <em>Next</em></p>
+</li>
+<li><p class="first">Complete your notification setup</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="example-script">
+<h2>Example Script<a class="headerlink" href="#example-script" title="Permalink to this headline">¶</a></h2>
+<p>The following is an example script that flashes the LEDs on the Enviro pHAT board on a Raspberry Pi</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">envirophat</span> <span class="kn">import</span> <span class="n">leds</span>
+<span class="k">def</span> <span class="nf">flash_leds</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">leds</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">leds</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code imports some Python libraries and then in a loop will turn the leds on and then off 4 times.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This example will take 4 seconds to execute, unless multiple threads have been turned on for notification delivery this will block any other notifications from being delivered during that time.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-notify-slack/index.html" class="btn btn-neutral float-right" title="Slack Messages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-notify-ifttt/index.html" class="btn btn-neutral" title="IFTTT Delivery Plugin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

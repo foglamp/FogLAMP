@@ -1,0 +1,1522 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Administration API Reference &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="REST API Developers Guide" href="index.html"/>
+        <link rel="next" title="User API Reference" href="03_RESTuser.html"/>
+        <link rel="prev" title="The FogLAMP REST API" href="01_REST.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">REST API Developers Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_REST.html">The FogLAMP REST API</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Administration API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#audit-trail">Audit Trail</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#audit">audit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-management">Configuration Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#category">category</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#task-management">Task Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#task">task</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#other-administrative-api-calls">Other Administrative API calls</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ping">ping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#statistics">statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_RESTuser.html">User API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">REST API Developers Guide</a> &raquo;</li>
+        
+      <li>Administration API Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rest_api_guide/02_RESTadmin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="administration-api-reference">
+<h1>Administration API Reference<a class="headerlink" href="#administration-api-reference" title="Permalink to this headline">¶</a></h1>
+<p>This section presents the list of administrative API methods in alphabetical order.</p>
+<div class="section" id="audit-trail">
+<h2>Audit Trail<a class="headerlink" href="#audit-trail" title="Permalink to this headline">¶</a></h2>
+<p>The audit trail API is used to interact with the audit trail log tables in the storage microservice. In FogLAMP, log information is stored in the system log where the microservice is hosted. All the relevant information used for auditing are instead stored inside FogLAMP and they are accessible through the Admin REST API. The API allows the reading but also the addition of extra audit logs, as if such logs are created within the system.</p>
+<div class="section" id="audit">
+<h3>audit<a class="headerlink" href="#audit" title="Permalink to this headline">¶</a></h3>
+<p>The <em>audit</em> methods implement the audit trail, they are used to create and retrieve audit logs.</p>
+<div class="section" id="get-audit-entries">
+<h4>GET Audit Entries<a class="headerlink" href="#get-audit-entries" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/audit</span></code> - return a list of audit trail entries sorted with most recent first.</p>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>limit</strong> - limit the number of audit entries returned to the number specified</li>
+<li><strong>skip</strong> - skip the first n entries in the audit table, used with limit to implement paged interfaces</li>
+<li><strong>source</strong> - filter the audit entries to be only those from the specified source</li>
+<li><strong>severity</strong> - filter the audit entries to only those of the specified severity</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is an array of JSON objects with the audit trail entries.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="38%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>timestamp</td>
+<td>timestamp</td>
+<td>The timestamp when the audit trail <br />
+item was written.</td>
+<td>2018-04-16 14:33:18.215</td>
+</tr>
+<tr class="row-odd"><td>source</td>
+<td>string</td>
+<td>The source of the audit trail entry.</td>
+<td>CoAP</td>
+</tr>
+<tr class="row-even"><td>severity</td>
+<td>string</td>
+<td>The severity of the event that triggered <br />
+the audit trail entry to be written. <br />
+This will be one of SUCCESS, FAILURE, <br />
+WARNING or INFORMATION.</td>
+<td>FAILURE</td>
+</tr>
+<tr class="row-odd"><td>details</td>
+<td>object</td>
+<td>A JSON object that describes the detail <br />
+of the audit trail event.</td>
+<td>{ “message” : <br />
+“Sensor readings discarded due to malformed payload” }</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/audit?limit<span class="o">=</span><span class="m">2</span>
+<span class="go">{ &quot;totalCount&quot; : 24,</span>
+<span class="go">  &quot;audit&quot;      : [ { &quot;timestamp&quot; : &quot;2018-02-25 18:58:07.748&quot;,</span>
+<span class="go">                     &quot;source&quot;    : &quot;SRVRG&quot;,</span>
+<span class="go">                     &quot;details&quot;   : { &quot;name&quot; : &quot;COAP&quot; },</span>
+<span class="go">                     &quot;severity&quot;  : &quot;INFORMATION&quot; },</span>
+<span class="go">                   { &quot;timestamp&quot; : &quot;2018-02-25 18:58:07.742&quot;,</span>
+<span class="go">                     &quot;source&quot;    : &quot;SRVRG&quot;,</span>
+<span class="go">                     &quot;details&quot;   : { &quot;name&quot; : &quot;HTTP_SOUTH&quot; },</span>
+<span class="go">                     &quot;severity&quot;  : &quot;INFORMATION&quot; },</span>
+<span class="go">                   { &quot;timestamp&quot; : &quot;2018-02-25 18:58:07.390&quot;,</span>
+<span class="go">                     &quot;source&quot;    : &quot;START&quot;,</span>
+<span class="go">                     &quot;details&quot;   : {},</span>
+<span class="go">                     &quot;severity&quot;  : &quot;INFORMATION&quot; }</span>
+<span class="go">                 ]</span>
+<span class="go">}</span>
+<span class="gp">$</span> curl -s http://localhost:8081/foglamp/audit?source<span class="o">=</span>SRVUN<span class="p">&amp;</span><span class="nv">limit</span><span class="o">=</span><span class="m">1</span>
+<span class="go">{ &quot;totalCount&quot; : 4,</span>
+<span class="go">  &quot;audit&quot;      : [ { &quot;timestamp&quot; : &quot;2018-02-25 05:22:11.053&quot;,</span>
+<span class="go">                     &quot;source&quot;    : &quot;SRVUN&quot;,</span>
+<span class="go">                     &quot;details&quot;   : { &quot;name&quot;: &quot;COAP&quot; },</span>
+<span class="go">                     &quot;severity&quot;  : &quot;INFORMATION&quot; }</span>
+<span class="go">                 ]</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="post-audit-entries">
+<h4>POST Audit Entries<a class="headerlink" href="#post-audit-entries" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">POST</span> <span class="pre">/foglamp/audit</span></code> - create a new audit trail entry.</p>
+<p>The purpose of the create method on an audit trail entry is to allow a user interface or an application that is using the FogLAMP API to utilize the FogLAMP audit trail and notification mechanism to raise user defined audit trail entries.</p>
+<p><strong>Request Payload</strong></p>
+<p>The request payload is a JSON object with the audit trail entry minus the timestamp.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="49%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>source</td>
+<td>string</td>
+<td>The source of the audit trail entry.</td>
+<td>LocalMonitor</td>
+</tr>
+<tr class="row-odd"><td>severity</td>
+<td>string</td>
+<td>The severity of the event that triggered <br />
+the audit trail entry to be written. <br />
+This will be one of SUCCESS, FAILURE, <br />
+WARNING or INFORMATION.</td>
+<td>FAILURE</td>
+</tr>
+<tr class="row-even"><td>details</td>
+<td>object</td>
+<td>A JSON object that describes the detail <br />
+of the audit trail event.</td>
+<td>{ “message” : <br />
+“Internal System Error” }</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is the newly created audit trail entry.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="49%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>timestamp</td>
+<td>timestamp</td>
+<td>The timestamp when the audit trail <br />
+item was written.</td>
+<td>2018-04-16 14:33:18.215</td>
+</tr>
+<tr class="row-odd"><td>source</td>
+<td>string</td>
+<td>The source of the audit trail entry.</td>
+<td>LocalMonitor</td>
+</tr>
+<tr class="row-even"><td>severity</td>
+<td>string</td>
+<td>The severity of the event that triggered <br />
+the audit trail entry to be written. <br />
+This will be one of SUCCESS, FAILURE, <br />
+WARNING or INFORMATION.</td>
+<td>FAILURE</td>
+</tr>
+<tr class="row-odd"><td>details</td>
+<td>object</td>
+<td>A JSON object that describes the detail <br />
+of the audit trail event.</td>
+<td>{ “message” : <br />
+“Internal System Error” }</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X POST http://localhost:8081/foglamp/audit <span class="se">\</span>
+-d <span class="s1">&#39;{ &quot;severity&quot;: &quot;FAILURE&quot;, &quot;details&quot;: { &quot;message&quot;: &quot;Internal System Error&quot; }, &quot;source&quot;: &quot;LocalMonitor&quot; }&#39;</span>
+<span class="go">{ &quot;source&quot;: &quot;LocalMonitor&quot;,</span>
+<span class="go">  &quot;timestamp&quot;: &quot;2018-04-17 11:49:55.480&quot;,</span>
+<span class="go">  &quot;severity&quot;: &quot;FAILURE&quot;,</span>
+<span class="go">  &quot;details&quot;: { &quot;message&quot;: &quot;Internal System Error&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/audit?severity<span class="o">=</span>FAILURE
+<span class="go">{ &quot;totalCount&quot;: 1,</span>
+<span class="go">  &quot;audit&quot;: [ { &quot;timestamp&quot;: &quot;2018-04-16 18:32:28.427&quot;,</span>
+<span class="go">               &quot;source&quot;   :    &quot;LocalMonitor&quot;,</span>
+<span class="go">               &quot;details&quot;  : { &quot;message&quot;: &quot;Internal System Error&quot; },</span>
+<span class="go">               &quot;severity&quot; : &quot;FAILURE&quot; }</span>
+<span class="go">           ]</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+</div>
+</div>
+<div class="section" id="configuration-management">
+<h2>Configuration Management<a class="headerlink" href="#configuration-management" title="Permalink to this headline">¶</a></h2>
+<p>Configuration management in an important aspect of the REST API, however due to the discoverable form of the configuration of FogLAMP the API itself is fairly small.</p>
+<p>The configuration REST API interacts with the configuration manager to create, retrieve, update and delete the configuration categories and values. Specifically all updates must go via the management layer as this is used to trigger the notifications to the components that have registered interest in configuration categories. This is the means by which the dynamic reconfiguration of FogLAMP is achieved.</p>
+<div class="section" id="category">
+<h3>category<a class="headerlink" href="#category" title="Permalink to this headline">¶</a></h3>
+<p>The <em>category</em> interface is part of the Configuration Management for FogLAMP and it is used to create, retrieve, update and delete configuration categories and items.</p>
+<div class="section" id="get-categor-ies">
+<h4>GET categor(ies)<a class="headerlink" href="#get-categor-ies" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/category</span></code> - return the list of known categories in the configuration database</p>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a JSON object with an array of JSON objects, one per valid category.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="9%" />
+<col width="55%" />
+<col width="21%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>key</td>
+<td>string</td>
+<td>The category key, each category <br />
+has a unique textual key that defines it.</td>
+<td>network</td>
+</tr>
+<tr class="row-odd"><td>description</td>
+<td>string</td>
+<td>A description of the category that may be <br />
+used for display purposes.</td>
+<td>Network Settings</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/category
+<span class="go">{ &quot;categories&quot;: [ { &quot;key&quot;         : &quot;CC2650ASYN&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;TI SensorTag CC2650 async South Plugin&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;CC2650POLL&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;TI SensorTag CC2650 polling South Plugin&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;COAP&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;COAP Device&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;HTTP_SOUTH&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;HTTP_SOUTH Device&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;POLL&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;South Plugin polling template&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;SCHEDULER&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;Scheduler configuration&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;North_Readings_to_PI&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;OMF North Plugin Configuration&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;SMNTR&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;Service Monitor configuration&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;South&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;South Service configuration&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;rest_api&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;The FogLAMP Admin and User REST API&quot; },</span>
+<span class="go">                  { &quot;key&quot;         : &quot;service&quot;,</span>
+<span class="go">                    &quot;description&quot; : &quot;The FogLAMP service configuration&quot; } ] }</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="get-category">
+<h4>GET category<a class="headerlink" href="#get-category" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/category/{name}</span></code> - return the configuration items in the given category.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>name</strong> is the name of one of the categories returned from the GET /foglamp/category call.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a set of configuration items within the category, each item is a JSON object with the following set of properties.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="36%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>description</td>
+<td>string</td>
+<td>A description of the configuration item that may be used in a user interface.</td>
+<td>The IPv4 network address of the FogLAMP server</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td>string</td>
+<td>A type that may be used by a user interface to know how to display an item.</td>
+<td>IPv4</td>
+</tr>
+<tr class="row-even"><td>default</td>
+<td>string</td>
+<td>An optional default value for the configuration item.</td>
+<td>127.0.0.1</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>string</td>
+<td>The current configured value of the configuration item. This may be empty if no value has been set.</td>
+<td>192.168.0.27</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/category/rest_api
+<span class="go">{ &quot;authentication&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;optional&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;To make the authentication mandatory or optional for API calls&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;optional&quot; },</span>
+<span class="go">  &quot;authProviders&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;JSON&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;{\&quot;providers\&quot;: [\&quot;username\&quot;, \&quot;ldap\&quot;] }&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;A JSON object which is an array of authentication providers to use for the interface&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;{\&quot;providers\&quot;: [\&quot;username\&quot;, \&quot;ldap\&quot;] }&quot; },</span>
+<span class="go">  &quot;certificateName&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;foglamp&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;Certificate file name&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;foglamp&quot; },</span>
+<span class="go">  &quot;enableHttp&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;boolean&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;true&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;Enable or disable the connection via HTTP&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;true&quot; },</span>
+<span class="go">  &quot;httpPort&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;8081&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;The port to accept HTTP connections on&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;8081&quot; },</span>
+<span class="go">  &quot;httpsPort&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;1995&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;The port to accept HTTPS connections on&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;1995&quot; },</span>
+<span class="go">  &quot;allowPing&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;boolean&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;true&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;To allow access to the ping, regardless of the authentication required and authentication header&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;true&quot; },</span>
+<span class="go">  &quot;passwordChange&quot;: {</span>
+<span class="go">      &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">      &quot;default&quot;: &quot;0&quot;,</span>
+<span class="go">      &quot;description&quot;: &quot;Number of days which a password must be changed&quot;,</span>
+<span class="go">      &quot;value&quot;: &quot;0&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="get-category-item">
+<h4>GET category item<a class="headerlink" href="#get-category-item" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/category/{name}/{item}</span></code> - return the configuration item in the given category.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - the name of one of the categories returned from the GET /foglamp/category call.</li>
+<li><strong>item</strong> - the item within the category to return.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a configuration item within the category, each item is a JSON object with the following set of properties.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="36%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>description</td>
+<td>string</td>
+<td>A description of the configuration item that may be used in a user interface.</td>
+<td>The IPv4 network address of the FogLAMP server</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td>string</td>
+<td>A type that may be used by a user interface to know how to display an item.</td>
+<td>IPv4</td>
+</tr>
+<tr class="row-even"><td>default</td>
+<td>string</td>
+<td>An optional default value for the configuration item.</td>
+<td>127.0.0.1</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>string</td>
+<td>The current configured value of the configuration item. This may be empty if no value has been set.</td>
+<td>192.168.0.27</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/category/rest_api/httpsPort
+<span class="go">{ &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">  &quot;default&quot;: &quot;1995&quot;,</span>
+<span class="go">  &quot;description&quot;: &quot;The port to accept HTTPS connections on&quot;,</span>
+<span class="go">  &quot;value&quot;: &quot;1995&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="put-category-item">
+<h4>PUT category item<a class="headerlink" href="#put-category-item" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">PUT</span> <span class="pre">/foglamp/category/{name}/{item}</span></code> - set the configuration item value in the given category.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - the name of one of the categories returned from the GET /foglamp/category call.</li>
+<li><strong>item</strong> - the the item within the category to set.</li>
+</ul>
+<p><strong>Request Payload</strong></p>
+<p>A JSON object with the new value to assign to the configuration item.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="10%" />
+<col width="55%" />
+<col width="18%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>value</td>
+<td>string</td>
+<td>The new value of the configuration item.</td>
+<td>192.168.0.27</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is the newly updated configuration item within the category, the item is a JSON object object with the following set of properties.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="36%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>description</td>
+<td>string</td>
+<td>A description of the configuration item that may be used in a user interface.</td>
+<td>The IPv4 network address of the FogLAMP server</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td>string</td>
+<td>A type that may be used by a user interface to know how to display an item.</td>
+<td>IPv4</td>
+</tr>
+<tr class="row-even"><td>default</td>
+<td>string</td>
+<td>An optional default value for the configuration item.</td>
+<td>127.0.0.1</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>string</td>
+<td>The current configured value of the configuration item. This may be empty if no value has been set.</td>
+<td>192.168.0.27</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X PUT http://localhost:8081/foglamp/category/rest_api/httpsPort <span class="se">\</span>
+  -d <span class="s1">&#39;{ &quot;value&quot; : &quot;1996&quot; }&#39;</span>
+<span class="go">{ &quot;default&quot;: &quot;1995&quot;,</span>
+<span class="go">  &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">  &quot;description&quot;: &quot;The port to accept HTTPS connections on&quot;,</span>
+<span class="go">  &quot;value&quot;: &quot;1996&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="delete-category-item">
+<h4>DELETE category item<a class="headerlink" href="#delete-category-item" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">DELETE</span> <span class="pre">/foglamp/category/{name}/{item}/value</span></code> - unset the value of the configuration item in the given category.</p>
+<p>This will result in the value being returned to the default value if one is defined. If not the value will be blank, i.e. the value property of the JSON object will exist with an empty value.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - the name of one of the categories returned from the GET /foglamp/category call.</li>
+<li><strong>item</strong> - the the item within the category to return.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is the newly updated configuration item within the category, the item is a JSON object object with the following set of properties.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="36%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>description</td>
+<td>string</td>
+<td>A description of the configuration item that may be used in a user interface.</td>
+<td>The IPv4 network address of the FogLAMP server</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td>string</td>
+<td>A type that may be used by a user interface to know how to display an item.</td>
+<td>IPv4</td>
+</tr>
+<tr class="row-even"><td>default</td>
+<td>string</td>
+<td>An optional default value for the configuration item.</td>
+<td>127.0.0.1</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>string</td>
+<td>The current configured value of the configuration item. This may be empty if no value has been set.</td>
+<td>127.0.0.1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X DELETE http://localhost:8081/foglamp/category/rest_api/httpsPort/value
+<span class="go">{ &quot;default&quot;: &quot;1995&quot;,</span>
+<span class="go">  &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">  &quot;description&quot;: &quot;The port to accept HTTPS connections on&quot;,</span>
+<span class="go">  &quot;value&quot;: &quot;1995&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="post-category">
+<h4>POST category<a class="headerlink" href="#post-category" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">POST</span> <span class="pre">/foglamp/category</span></code> - creates a new category</p>
+<p><strong>Request Payload</strong></p>
+<p>A JSON object that defines the category.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="7%" />
+<col width="48%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>key</td>
+<td>string</td>
+<td>The key that identifies the category. <br />
+If the key already exists as a category <br />
+then the contents of this request <br />
+is merged with the data stored.</td>
+<td>backup</td>
+</tr>
+<tr class="row-odd"><td>description</td>
+<td>string</td>
+<td>A description of the configuration category</td>
+<td>Backup configuration</td>
+</tr>
+<tr class="row-even"><td>items</td>
+<td>list</td>
+<td>An optional list of items to create in this category</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><div align="right"> <em>name</em></td>
+<td>string</td>
+<td>The name of a configuration item</td>
+<td>destination</td>
+</tr>
+<tr class="row-even"><td><div align="right"> <em>description</em></td>
+<td>string</td>
+<td>A description of the configuration item</td>
+<td>The destination to which <br />
+the backup will be written</td>
+</tr>
+<tr class="row-odd"><td><div align="right"> <em>type</em></td>
+<td>string</td>
+<td>The type of the configuration item</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td><div align="right"> <em>default</em></td>
+<td>string</td>
+<td>An optional default value for the configuration item</td>
+<td>/backup</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE:</strong> with list we mean a list of JSON objects in the form of { obj1,obj2,etc. }, to differ from the concept of <em>array</em>, i.e. [ obj1,obj2,etc. ]</p>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X POST http://localhost:8081/foglamp/category
+<span class="go">  -d &#39;{ &quot;key&quot;: &quot;My Configuration&quot;, &quot;description&quot;: &quot;This is my new configuration&quot;,</span>
+<span class="go">      &quot;value&quot;: { &quot;item one&quot;: { &quot;description&quot;: &quot;The first item&quot;, &quot;type&quot;: &quot;string&quot;, &quot;default&quot;: &quot;one&quot; },</span>
+<span class="go">                 &quot;item two&quot;: { &quot;description&quot;: &quot;The second item&quot;, &quot;type&quot;: &quot;string&quot;, &quot;default&quot;: &quot;two&quot; },</span>
+<span class="go">                 &quot;item three&quot;: { &quot;description&quot;: &quot;The third item&quot;, &quot;type&quot;: &quot;string&quot;, &quot;default&quot;: &quot;three&quot; } } }&#39;</span>
+<span class="go">{ &quot;description&quot;: &quot;This is my new configuration&quot;, &quot;key&quot;: &quot;My Configuration&quot;, &quot;value&quot;: {</span>
+<span class="go">      &quot;item one&quot;: { &quot;default&quot;: &quot;one&quot;, &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The first item&quot;, &quot;value&quot;: &quot;one&quot; },</span>
+<span class="go">      &quot;item two&quot;: { &quot;default&quot;: &quot;two&quot;, &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The second item&quot;, &quot;value&quot;: &quot;two&quot; },</span>
+<span class="go">      &quot;item three&quot;: { &quot;default&quot;: &quot;three&quot;, &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The third item&quot;, &quot;value&quot;: &quot;three&quot; } }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+</div>
+</div>
+<div class="section" id="task-management">
+<h2>Task Management<a class="headerlink" href="#task-management" title="Permalink to this headline">¶</a></h2>
+<p>The task management API’s allow an administrative user to monitor and control the tasks that are started by the task scheduler either from a schedule or as a result of an API request.</p>
+<div class="section" id="task">
+<h3>task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h3>
+<p>The <em>task</em> interface allows an administrative user to monitor and control FogLAMP tasks.</p>
+<div class="section" id="get-task">
+<h4>GET task<a class="headerlink" href="#get-task" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/task</span></code> - return the list of all known task running or completed</p>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - an optional task name to filter on, only executions of the particular task will be reported.</li>
+<li><strong>state</strong> - an optional query parameter that will return only those tasks in the given state.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a JSON object with an array of task objects.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="41%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>string</td>
+<td>A unique identifier for the task.  <br />
+This takes the form of a uuid and  <br />
+not a Linux process id as the ID’s <br />
+must survive restarts and failovers</td>
+<td>0a787bf3-4f48-4235-ae9a-2816f8ac76cc</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>string</td>
+<td>The name of the task</td>
+<td>purge</td>
+</tr>
+<tr class="row-even"><td>state</td>
+<td>string</td>
+<td>The current state of the task</td>
+<td>Running</td>
+</tr>
+<tr class="row-odd"><td>startTime</td>
+<td>timestamp</td>
+<td>The date and time the task started</td>
+<td>2018-04-17 08:32:15.071</td>
+</tr>
+<tr class="row-even"><td>endTime</td>
+<td>timestamp</td>
+<td>The date and time the task ended   <br />
+This may not exist if the task is  <br />
+not completed.</td>
+<td>2018-04-17 08:32:14.872</td>
+</tr>
+<tr class="row-odd"><td>reason</td>
+<td>string</td>
+<td>An optional reason string that     <br />
+describes why the task failed.</td>
+<td>No destination available <br />
+to write backup</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/task
+<span class="go">{ &quot;tasks&quot;: [ { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;0a787bf3-4f48-4235-ae9a-2816f8ac76cc&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;stats collector&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 08:32:15.071&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 08:32:14.872&quot; }.</span>
+<span class="go">             { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;8cd6258e-58cc-4812-a1a7-f044377f98b7&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;stats collector&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 08:32:30.069&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 08:32:29.851&quot; },</span>
+<span class="go">               ... ] }</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/task?name<span class="o">=</span>purge
+<span class="go">{ &quot;tasks&quot;: [ { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;bddad550-463a-485d-9247-148e952452e0&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;purge&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 09:32:00.203&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 09:31:59.847&quot; },</span>
+<span class="go">             { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;bfe79408-9a4f-4245-bfa5-d843f171d494&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;purge&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 10:32:00.188&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 10:31:59.850&quot; },</span>
+<span class="go">               ... ] }</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/task?state<span class="o">=</span><span class="nb">complete</span>
+<span class="go">{ &quot;tasks&quot;: [ { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;0a787bf3-4f48-4235-ae9a-2816f8ac76cc&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;stats collector&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 08:32:15.071&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 08:32:14.872&quot; },</span>
+<span class="go">             { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;8cd6258e-58cc-4812-a1a7-f044377f98b7&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;stats collector&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 08:32:30.069&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 08:32:29.851&quot; },</span>
+<span class="go">               ... ] }</span>
+<span class="gp"> $</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="get-task-latest">
+<h4>GET task latest<a class="headerlink" href="#get-task-latest" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/task/latest</span></code> - return the list of most recent task execution for each name.</p>
+<p>This call is designed to allow a monitoring interface to show when each task was last run and what the status of that task was.</p>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - an optional task name to filter on, only executions of the particular task will be reported.</li>
+<li><strong>state</strong> - an optional query parameter that will return only those tasks in the given state.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a JSON object with an array of task objects.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="41%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>string</td>
+<td>A unique identifier for the task.  <br />
+This takes the form of a uuid and  <br />
+not a Linux process id as the ID’s <br />
+must survive restarts and failovers</td>
+<td>0a787bf3-4f48-4235-ae9a-2816f8ac76cc</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>string</td>
+<td>The name of the task</td>
+<td>purge</td>
+</tr>
+<tr class="row-even"><td>state</td>
+<td>string</td>
+<td>The current state of the task</td>
+<td>Running</td>
+</tr>
+<tr class="row-odd"><td>startTime</td>
+<td>timestamp</td>
+<td>The date and time the task started</td>
+<td>2018-04-17 08:32:15.071</td>
+</tr>
+<tr class="row-even"><td>endTime</td>
+<td>timestamp</td>
+<td>The date and time the task ended   <br />
+This may not exist if the task is  <br />
+not completed.</td>
+<td>2018-04-17 08:32:14.872</td>
+</tr>
+<tr class="row-odd"><td>reason</td>
+<td>string</td>
+<td>An optional reason string that     <br />
+describes why the task failed.</td>
+<td>No destination available <br />
+to write backup</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/task/latest
+<span class="go">{ &quot;tasks&quot;: [ { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;a3759550-43e5-46b3-8048-e906847fc565&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;pid&quot;: 16293,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;certificate checker&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 09:05:00.081&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 09:05:00.011&quot; },</span>
+<span class="go">             { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;71bbc064-bb05-46c4-8059-5d70fc534ecf&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;pid&quot;: 19806,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;purge&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 14:32:00.404&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 14:31:59.849&quot; },</span>
+<span class="go">               ... ] }</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/task/latest?name<span class="o">=</span>purge
+<span class="go">{ &quot;tasks&quot;: [ { &quot;exitCode&quot;: 0,</span>
+<span class="go">               &quot;id&quot;: &quot;71bbc064-bb05-46c4-8059-5d70fc534ecf&quot;,</span>
+<span class="go">               &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">               &quot;pid&quot;: 19806,</span>
+<span class="go">               &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">               &quot;name&quot;: &quot;purge&quot;,</span>
+<span class="go">               &quot;endTime&quot;: &quot;2018-04-17 14:32:00.404622&quot;,</span>
+<span class="go">               &quot;startTime&quot;: &quot;2018-04-17 14:31:59.849690&quot; ] }</span>
+<span class="gp"> $</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="get-task-by-id">
+<h4>GET task by ID<a class="headerlink" href="#get-task-by-id" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/task/{id}</span></code> - return the task information for the given task</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>id</strong> - the uuid of the task whose data should be returned.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a JSON object containing the task details.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="41%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>string</td>
+<td>A unique identifier for the task.  <br />
+This takes the form of a uuid and  <br />
+not a Linux process id as the ID’s <br />
+must survive restarts and failovers</td>
+<td>0a787bf3-4f48-4235-ae9a-2816f8ac76cc</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>string</td>
+<td>The name of the task</td>
+<td>purge</td>
+</tr>
+<tr class="row-even"><td>state</td>
+<td>string</td>
+<td>The current state of the task</td>
+<td>Running</td>
+</tr>
+<tr class="row-odd"><td>startTime</td>
+<td>timestamp</td>
+<td>The date and time the task started</td>
+<td>2018-04-17 08:32:15.071</td>
+</tr>
+<tr class="row-even"><td>endTime</td>
+<td>timestamp</td>
+<td>The date and time the task ended   <br />
+This may not exist if the task is  <br />
+not completed.</td>
+<td>2018-04-17 08:32:14.872</td>
+</tr>
+<tr class="row-odd"><td>reason</td>
+<td>string</td>
+<td>An optional reason string that     <br />
+describes why the task failed.</td>
+<td>No destination available <br />
+to write backup</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/task/0aadfb7d-73c1-4ac0-901c-81773b5583c1
+<span class="go">{ &quot;exitCode&quot;: 0,</span>
+<span class="go">  &quot;id&quot;: &quot;0aadfb7d-73c1-4ac0-901c-81773b5583c1&quot;,</span>
+<span class="go">  &quot;state&quot;: &quot;Complete&quot;,</span>
+<span class="go">  &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">  &quot;name&quot;: &quot;purge&quot;,</span>
+<span class="go">  &quot;endTime&quot;: &quot;2018-04-17 13:32:00.243&quot;,</span>
+<span class="go">  &quot;startTime&quot;: &quot;2018-04-17 13:31:59.848&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+<div class="section" id="cancel-task-by-id">
+<h4>Cancel task by ID<a class="headerlink" href="#cancel-task-by-id" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">PUT</span> <span class="pre">/foglamp/task/{id}/cancel</span></code> - cancel a task</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>id</strong> - the uuid of the task to cancel.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a JSON object with the details of the cancelled task.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="41%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>string</td>
+<td>A unique identifier for the task.  <br />
+This takes the form of a uuid and  <br />
+not a Linux process id as the ID’s <br />
+must survive restarts and failovers</td>
+<td>0a787bf3-4f48-4235-ae9a-2816f8ac76cc</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>string</td>
+<td>The name of the task</td>
+<td>purge</td>
+</tr>
+<tr class="row-even"><td>state</td>
+<td>string</td>
+<td>The current state of the task</td>
+<td>Running</td>
+</tr>
+<tr class="row-odd"><td>startTime</td>
+<td>timestamp</td>
+<td>The date and time the task started</td>
+<td>2018-04-17 08:32:15.071</td>
+</tr>
+<tr class="row-even"><td>endTime</td>
+<td>timestamp</td>
+<td>The date and time the task ended   <br />
+This may not exist if the task is  <br />
+not completed.</td>
+<td>2018-04-17 08:32:14.872</td>
+</tr>
+<tr class="row-odd"><td>reason</td>
+<td>string</td>
+<td>An optional reason string that     <br />
+describes why the task failed.</td>
+<td>No destination available <br />
+to write backup</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X PUT http://localhost:8081/foglamp/task/0aadfb7d-73c1-4ac0-901c-81773b5583c1/cancel
+<span class="go">{ &quot;id&quot;: &quot;0aadfb7d-73c1-4ac0-901c-81773b5583c1&quot;,</span>
+<span class="go">  &quot;state&quot;: &quot;Cancelled&quot;,</span>
+<span class="go">  &quot;reason&quot;: &quot;&quot;,</span>
+<span class="go">  &quot;name&quot;: &quot;purge&quot;,</span>
+<span class="go">  &quot;endTime&quot;: &quot;2018-04-17 13:32:00.243&quot;,</span>
+<span class="go">  &quot;startTime&quot;: &quot;2018-04-17 13:31:59.848&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p><br /></p>
+</div>
+</div>
+</div>
+<div class="section" id="other-administrative-api-calls">
+<h2>Other Administrative API calls<a class="headerlink" href="#other-administrative-api-calls" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ping">
+<h3>ping<a class="headerlink" href="#ping" title="Permalink to this headline">¶</a></h3>
+<p>The <em>ping</em> interface gives a basic confidence check that the FogLAMP appliance is running and the API aspect of the appliance is functional. It is designed to be a simple test that can  be applied by a user or by an HA monitoring system to test the liveness and responsiveness of the system.</p>
+<div class="section" id="get-ping">
+<h4>GET ping<a class="headerlink" href="#get-ping" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/ping</span></code> - return liveness of FogLAMP</p>
+<p><em>NOTE:</em> the GET method can be executed without authentication even when authentication is required. This behaviour is configurable via a configuration option.</p>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is some basic health information in a JSON object.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="57%" />
+<col width="14%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>authenticationOptional</td>
+<td>boolean</td>
+<td>When true, the REST API does not require authentication. When false, users must successfully login in order to call the rest API. Default is <em>true</em></td>
+<td>true</td>
+</tr>
+<tr class="row-odd"><td>dataPurged</td>
+<td>numeric</td>
+<td>A count of the number of readings purged</td>
+<td>226</td>
+</tr>
+<tr class="row-even"><td>dataRead</td>
+<td>numeric</td>
+<td>A count of the number of sensor readings</td>
+<td>1452</td>
+</tr>
+<tr class="row-odd"><td>dataSent</td>
+<td>numeric</td>
+<td>A count of the number of readings sent to PI</td>
+<td>347</td>
+</tr>
+<tr class="row-even"><td>uptime</td>
+<td>numeric</td>
+<td>Time in seconds since FogLAMP started</td>
+<td>2113.076449394226</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/ping
+<span class="go">{ &quot;authenticationOptional&quot;: true,</span>
+<span class="go">&quot;dataPurged&quot;: 226,</span>
+<span class="go">&quot;dataRead&quot;: 1452,</span>
+<span class="go">&quot;dataSent&quot;: 347,</span>
+<span class="go">&quot;uptime&quot;: 2113.076449394226 }</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="statistics">
+<h3>statistics<a class="headerlink" href="#statistics" title="Permalink to this headline">¶</a></h3>
+<p>The <em>statistics</em> interface allows the retrieval of live statistics and statistical history for the FogLAMP device.</p>
+<div class="section" id="get-statistics">
+<h4>GET statistics<a class="headerlink" href="#get-statistics" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/statistics</span></code> - return a general set of statistics</p>
+<p><strong>Response Payload</strong></p>
+<p>The response payload is a JSON document with statistical information (all numerical), these statistics are absolute counts since FogLAMP started.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>BUFFERED</td>
+<td>The number of readings currently in the FogLAMP buffer</td>
+</tr>
+<tr class="row-odd"><td>DISCARDED</td>
+<td>The number of readings discarded at the input side by FogLAMP, i.e. discarded before being  placed in the buffer. This may be due to some error in the readings themselves.</td>
+</tr>
+<tr class="row-even"><td>PURGED</td>
+<td>The number of readings removed from the buffer by the <em>Purge</em> task</td>
+</tr>
+<tr class="row-odd"><td>READINGS</td>
+<td>The number of readings received by FogLAMP since startup</td>
+</tr>
+<tr class="row-even"><td><em>NORTH_TASK_NAME</em></td>
+<td>The number of readings sent to the PI system via the OMF plugin with north instance name</td>
+</tr>
+<tr class="row-odd"><td>UNSENT</td>
+<td>The number of readings filtered out in the send process</td>
+</tr>
+<tr class="row-even"><td>UNSNPURGED</td>
+<td>The number of readings that were purged from the buffer before being sent</td>
+</tr>
+<tr class="row-odd"><td><em>ASSET-CODE</em></td>
+<td>The number of readings received by FogLAMP since startup with name <em>asset-code</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/statistics
+<span class="go">[ { &quot;description&quot; : &quot;The number of readings currently in the FogLAMP buffer&quot;,</span>
+<span class="go">    &quot;key&quot;         : &quot;BUFFERED&quot;,</span>
+<span class="go">    &quot;value&quot;       : 0 },</span>
+<span class="go">...</span>
+<span class="go">  { &quot;description&quot; : &quot;The number of readings received by FogLAMP since startup for sensor FOGBENCH/ACCELEROMETER&quot;,</span>
+<span class="go">    &quot;key&quot;         : &quot;FOGBENCH/ACCELEROMETER&quot;,</span>
+<span class="go">    &quot;value&quot;       : 2 },</span>
+<span class="go">... ]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-statistics-history">
+<h4>GET statistics/history<a class="headerlink" href="#get-statistics-history" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/statistics/history</span></code> - return a historical set of statistics. This interface is normally used to check if a set of sensors or devices are sending data to FogLAMP, by comparing the recent statistics and the number of readings received for an asset.</p>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>limit</strong> - limit the result set to the <em>N</em> most recent entries.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>A JSON document containing an array of statistical information, these statistics are delta counts since the previous entry in the array. The time interval between values is a constant defined that runs the gathering process which populates the history statistics in the storage layer.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>interval</td>
+<td>The interval in seconds between successive statistics values</td>
+</tr>
+<tr class="row-odd"><td>statistics[].BUFFERED</td>
+<td>The number of readings currently in the FogLAMP buffer</td>
+</tr>
+<tr class="row-even"><td>statistics[].DISCARDED</td>
+<td>The number of readings discarded at the input side by FogLAMP, i.e. discarded before being  placed in the buffer. This may be due to some error in the readings themselves.</td>
+</tr>
+<tr class="row-odd"><td>statistics[].PURGED</td>
+<td>The number of readings removed from the buffer by the <em>Purge</em> task</td>
+</tr>
+<tr class="row-even"><td>statistics[].READINGS</td>
+<td>The number of readings received by FogLAMP since startup</td>
+</tr>
+<tr class="row-odd"><td>statistics[].*NORTH_TASK_NAME*</td>
+<td>The number of readings sent to the PI system via the OMF plugin with north instance name</td>
+</tr>
+<tr class="row-even"><td>statistics[].UNSENT</td>
+<td>The number of readings filtered out in the send process</td>
+</tr>
+<tr class="row-odd"><td>statistics[].UNSNPURGED</td>
+<td>The number of readings that were purged from the buffer before being sent</td>
+</tr>
+<tr class="row-even"><td>statistics[].*ASSET-CODE*</td>
+<td>The number of readings received by FogLAMP since startup with name <em>asset-code</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/statistics/history?limit<span class="o">=</span><span class="m">2</span>
+<span class="go">{ &quot;interval&quot;   : 15,</span>
+<span class="go">  &quot;statistics&quot; : [ { &quot;READINGS&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/LUXOMETER&quot;: 0,</span>
+<span class="go">                     &quot;DISCARDED&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/HUMIDITY&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/ACCELEROMETER&quot;: 0,</span>
+<span class="go">                     &quot;UNSENT&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/TEMPERATURE&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/GYROSCOPE&quot;: 0,</span>
+<span class="go">                     &quot;UNSNPURGED&quot;: 0,</span>
+<span class="go">                     &quot;BUFFERED&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/MOUSE&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/MAGNETOMETER&quot;: 0,</span>
+<span class="go">                     &quot;PURGED&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/WALL CLOCK&quot;: 0,</span>
+<span class="go">                     &quot;North_Readings_to_PI&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/PRESSURE&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/SWITCH&quot;: 0,</span>
+<span class="go">                     &quot;history_ts&quot;: &quot;2018-05-15 22:39:10.374&quot; },</span>
+<span class="go">                   { &quot;READINGS&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/LUXOMETER&quot;: 0,</span>
+<span class="go">                     &quot;DISCARDED&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/HUMIDITY&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/ACCELEROMETER&quot;: 0,</span>
+<span class="go">                     &quot;UNSENT&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/TEMPERATURE&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/GYROSCOPE&quot;: 0,</span>
+<span class="go">                     &quot;UNSNPURGED&quot;: 0,</span>
+<span class="go">                     &quot;BUFFERED&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/MOUSE&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/MAGNETOMETER&quot;: 0,</span>
+<span class="go">                     &quot;PURGED&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/WALL CLOCK&quot;: 0,</span>
+<span class="go">                     &quot;North_Readings_to_PI&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/PRESSURE&quot;: 0,</span>
+<span class="go">                     &quot;FOGBENCH/SWITCH&quot;: 0,</span>
+<span class="go">                     &quot;history_ts&quot;: &quot;2018-05-15 22:38:55.653&quot; } ]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="03_RESTuser.html" class="btn btn-neutral float-right" title="User API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="01_REST.html" class="btn btn-neutral" title="The FogLAMP REST API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

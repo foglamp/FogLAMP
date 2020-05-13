@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Rate Filter &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Filter Plugins" href="../filter.html"/>
+        <link rel="next" title="Root Mean Squared (RMS) Filter" href="../foglamp-filter-rms/index.html"/>
+        <link rel="prev" title="Python 3.5 Filter" href="../foglamp-filter-python35/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-asset/index.html">Asset Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-expression/index.html">Expression Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-metadata/index.html">Metadata Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python27/index.html">Python 2.7 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python35/index.html">Python 3.5 Filter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale-set/index.html">Scale Set Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-threshold/index.html">Threshold Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../filter.html">FogLAMP Filter Plugins</a> &raquo;</li>
+        
+      <li>Rate Filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-filter-rate/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rate-filter">
+<h1>Rate Filter<a class="headerlink" href="#rate-filter" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-filter-rate</em> plugin that can be used to reduce the rate a reading is stored
+until an interesting event occurs. The filter will read data at full
+rate from the input side and buffer data internally, sending out averages
+for each value over a time frame determined by the filter configuration.</p>
+<p>The user can provide either one or two simple expressions that will be evaluated to
+form a trigger for the filter. One expressions will set the trigger and
+the other will clear it. When the trigger is set then the filter will
+no longer average the data over the configured time period, but will
+instead send the full bandwidth data out of the filter. If the second expression, the
+one that clears the full rate sending of data is omitted then the full rate is
+cleared as soon as the trigger expression returns false. Alternatively the filter can be
+configured to clear the sending of full rate data after a fixed time.</p>
+<p>The filter also allows a pre-trigger time to be configured. In this
+case it will buffer this much data internally and when the trigger is
+initially set this pre-buffered data will be sent. The pre-buffered data
+is discarded if the trigger is not set and the data gets to the defined
+age for holding pre-trigger information.</p>
+<p>Rate filters are added in the same way as any other filters.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Click on the Applications add icon for your service or task.</p>
+</li>
+<li><p class="first">Select the <em>rate</em> plugin from the list of available plugins.</p>
+</li>
+<li><p class="first">Name your rate filter.</p>
+</li>
+<li><p class="first">Click <em>Next</em> and you will be presented with the following configuration page</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="rate_1" src="../../_images/rate_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Configure your rate filter</p>
+<ul>
+<li><p class="first"><strong>Trigger Expression</strong>: An expression to set the trigger for full rate data</p>
+</li>
+<li><p class="first"><strong>Terminate ON</strong>: The mechanism to stop full rate forwarding, this may be another expression or a time window</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="rate_2" src="../../_images/rate_2.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first"><strong>End Expression</strong>: An expression to clear the trigger for full rate data, if left blank this will simply be the trigger filter evaluating to false</p>
+</li>
+<li><p class="first"><strong>Full rate time (ms)</strong>: The time window, in milliseconds to forward data at the full rate</p>
+</li>
+<li><p class="first"><strong>Pre-trigger time (ms)</strong>: An optional pre-trigger time expressed in milliseconds</p>
+</li>
+<li><p class="first"><strong>Reduced collection rate</strong>: The nominal data rate to send data out. This defines the period over which is outgoing data item is averaged.</p>
+</li>
+<li><p class="first"><strong>Rate Units</strong>: The units that the reduced collection rate is expressed in; per second, minute, hour or day</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="rate_3" src="../../_images/rate_3.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first"><strong>Exclusions</strong>: A set of asset names that are excluded from the rate limit processing and always sent at full rate</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Enable your filter and click <em>Done</em></p>
+</li>
+</ul>
+</div></blockquote>
+<p>For example if the filter is working with a SensorTag and it reads the tag
+data at 10ms intervals but we only wish to send 1 second averages under
+normal circumstances. However if the X axis acceleration exceed 1.5g
+then we want to send full bandwidth data until the X axis acceleration
+drops to less than 0.2g, and we also want to see the data for the 1
+second before the acceleration hit this peak the configuration might be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Nominal Data Rate</strong>: 1, data rate unit “per second”</li>
+<li><strong>Trigger set expression</strong>: X &gt; 1.5</li>
+<li><strong>Trigger clear expression</strong>: X &lt; 0.2</li>
+<li><strong>Pre-trigger time (mS)</strong>: 1000</li>
+</ul>
+</div></blockquote>
+<p>The trigger expression uses the same expression mechanism, <a href="http://www.partow.net/programming/exprtk/index.html">ExprTk</a>  as the
+<a href="../foglamp-south-expression/index.html">foglamp-south-expression</a>, <a href="../foglamp-filter-expression/index.html">foglamp-filter-expression</a> and <a href="../foglamp-filter-threshold/index.html">foglamp-filter-threshold</a> plugins</p>
+<p>Expression may contain any of the following…</p>
+<blockquote>
+<div><ul class="simple">
+<li>Mathematical operators (+, -, *, /, %, ^)</li>
+<li>Functions (min, max, avg, sum, abs, ceil, floor, round, roundn, exp, log, log10, logn, pow, root, sqrt, clamp, inrange, swap)</li>
+<li>Trigonometry (sin, cos, tan, acos, asin, atan, atan2, cosh, cot, csc, sec, sinh, tanh, d2r, r2d, d2g, g2d, hyp)</li>
+<li>Equalities &amp; Inequalities (=, ==, &lt;&gt;, !=, &lt;, &lt;=, &gt;, &gt;=)</li>
+<li>Logical operators (and, nand, nor, not, or, xor, xnor, mand, mor)</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This plugin is designed to work with streams with a single asset in the stream, there is no mechanism in the expression syntax to support multiple asset names.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-filter-rms/index.html" class="btn btn-neutral float-right" title="Root Mean Squared (RMS) Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-filter-python35/index.html" class="btn btn-neutral" title="Python 3.5 Filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

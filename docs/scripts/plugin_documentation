@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+function plugin_doc {
+	plugin=$1
+	dest=$2
+	product=`echo $plugin | sed -e 's/-.*//'`
+    if [[ ${product} == "foglamp" ]]; then org=dianomic; else org=fledge-iot; fi
+	type=`echo ${plugin} | sed -e 's/fledge-//' -e 's/foglamp-//' -e 's/-.*//'`
+	name=`echo ${plugin} | sed -e 's/fledge-//' -e 's/foglamp-//' -e "s/${type}-//"`
+	mkdir -p /tmp/doc.$$
+	(
+		cd /tmp/doc.$$
+		git clone https://github.com/${org}/${plugin}.git
+		if [[ "${DOCBRANCH}" != "" ]]; then
+			cd ${plugin}
+			git checkout ${DOCBRANCH}
+		fi
+	)
+	if [[ ${product} == "fledge" ]]; then destplugin="foglamp-${type}-${name}"; else destplugin=${plugin}; fi
+	if [[ -d /tmp/doc.$$/${plugin}/docs ]]; then
+		rm -rf plugins/${destplugin}
+		mkdir -p plugins/${destplugin}
+		cp -r /tmp/doc.$$/${plugin}/docs/. plugins/${destplugin}
+		if [[ -f plugins/${destplugin}/index.rst ]]; then
+			echo "    ${destplugin}/index" >> $dest
+		else
+			files=`ls ${destplugin}/*.rst`
+			file=`basename $files .rst`
+			echo "    ${destplugin}/${file}" >> $dest
+		fi
+		if [[ "$product" = "fledge" ]]; then
+		    find plugins/${destplugin} -name "*.rst" -exec sed -i "{}" \
+            -e "s/fledge-/foglamp-/g" \
+            -e "s/Fledge/FogLAMP/g" \
+            -e 's/fledge/FogLAMP/g' \
+            -e 's/FLEDGE/FOGLAMP/g' \
+            \;
+		fi
+	fi
+	rm -rf /tmp/doc.$$
+}
+
+# Always create a fresh set of documentation
+if [[ -d plugins ]]; then rm -rf plugins; fi
+mkdir plugins
+
+cat > plugins/south.rst << EOFSOUTH
+*********************
+FogLAMP South Plugins
+*********************
+
+.. toctree::
+
+EOFSOUTH
+cat > plugins/north.rst << EOFNORTH
+*********************
+FogLAMP North Plugins
+*********************
+
+.. toctree::
+
+EOFNORTH
+cat > plugins/filter.rst << EOFFILTER
+**********************
+FogLAMP Filter Plugins
+**********************
+
+.. toctree::
+
+EOFFILTER
+cat > plugins/rule.rst << EOFRULE
+*********************************
+FogLAMP Notification Rule Plugins
+*********************************
+
+.. toctree::
+
+EOFRULE
+cat > plugins/notify.rst << EOFNOTIFY
+*************************************
+FogLAMP Notification Delivery Plugins
+*************************************
+
+.. toctree::
+
+EOFNOTIFY
+token=`cat ~/.gittoken`
+header="Authorization: token ${token}"
+fledgeRepos=`curl -s -H "$header" https://api.github.com/orgs/fledge-iot/repos\?per_page=100`
+fledgeRepoNames=`echo ${fledgeRepos} | python3 -c 'import json,sys;repos=json.load(sys.stdin);fRepos = [r["name"] for r in repos];print("\n".join(fRepos))' | sort -f`
+dianomicRepos=`curl -s -H "${header}" https://api.github.com/orgs/dianomic/repos\?per_page=100`
+dianomicRepoNames=`echo ${dianomicRepos} | python3 -c 'import json,sys;repos=json.load(sys.stdin);valid_repos_prefix=["foglamp-south-","foglamp-north-","foglamp-filter-","foglamp-notify-","foglamp-rule-"];exclude_plugins=["foglamp-south-cc2650asyn","foglamp-south-esp8266","foglamp-south-mqtt","foglamp-south-coral-people","foglamp-south-coral-classify","foglamp-south-raspi-classify","foglamp-south-coral-object-detection","foglamp-south-coral-people-image","foglamp-south-image-classifier","foglamp-south-wind_sensors","foglamp-north-piserver","foglamp-north-mqtt","foglamp-north-gcp","foglamp-north-gcp-gateway","foglamp-north-Azure-IoT-Hub"];fRepos = [r["name"] for r in repos if any(rp in r["name"] for rp in valid_repos_prefix) and r["name"] not in exclude_plugins];print("\n".join(fRepos))' | sort -f`
+REPOSITORIES=`echo ${fledgeRepoNames} ${dianomicRepoNames} | sort -f`
+echo ${REPOSITORIES}
+
+for repo in ${REPOSITORIES}
+do
+	type=`echo ${repo} | sed -e 's/fledge-//' -e 's/foglamp-//' -e 's/-.*//'`
+	if [[ ${type} = "south" || ${type} = "north" || ${type} = "filter" || ${type} = "rule" || ${type} = "notify" ]]; then
+		dest=plugins/${type}.rst
+		plugin_doc ${repo} ${dest}
+	fi
+done

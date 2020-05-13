@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FogLAMP Filter Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Documentation" href="../plugin_index.html"/>
+        <link rel="next" title="Asset Filter" href="foglamp-filter-asset/index.html"/>
+        <link rel="prev" title="Splunk Data Collector" href="foglamp-north-splunk/index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FogLAMP Filter Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-asset/index.html">Asset Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-expression/index.html">Expression Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-metadata/index.html">Metadata Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-python27/index.html">Python 2.7 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-python35/index.html">Python 3.5 Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-scale-set/index.html">Scale Set Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-threshold/index.html">Threshold Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+      <li>FogLAMP Filter Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugins/filter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foglamp-filter-plugins">
+<h1>FogLAMP Filter Plugins<a class="headerlink" href="#foglamp-filter-plugins" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-asset/index.html">Asset Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-asset/index.html#asset-rules">Asset Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-expression/index.html">Expression Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-expression/index.html#exprtk">Expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-metadata/index.html">Metadata Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-metadata/index.html#example-metadata">Example Metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-python27/index.html">Python 2.7 Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-python27/index.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-python35/index.html">Python 3.5 Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-python35/index.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-scale-set/index.html">Scale Set Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-scale-set/index.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-threshold/index.html">Threshold Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foglamp-filter-threshold/index.html#expressions">Expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="foglamp-filter-asset/index.html" class="btn btn-neutral float-right" title="Asset Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="foglamp-north-splunk/index.html" class="btn btn-neutral" title="Splunk Data Collector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

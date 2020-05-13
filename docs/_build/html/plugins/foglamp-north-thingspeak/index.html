@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ThingSpeak &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP North Plugins" href="../north.html"/>
+        <link rel="next" title="InfluxDB Time Series Database" href="../foglamp-north-influxdb/index.html"/>
+        <link rel="prev" title="OPCUA Server" href="../foglamp-north-opcua/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-gcp/index.html">Google Cloud Platform North Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-http/index.html">North HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-http-c/index.html">North HTTP-C</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-kafka/index.html">Kafka Producer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-opcua/index.html">OPCUA Server</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ThingSpeak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-influxdb/index.html">InfluxDB Time Series Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-north-splunk/index.html">Splunk Data Collector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../north.html">FogLAMP North Plugins</a> &raquo;</li>
+        
+      <li>ThingSpeak</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-north-thingspeak/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="thingspeak">
+<h1>ThingSpeak<a class="headerlink" href="#thingspeak" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-north-thingspeak</em> plugin provides a mechanism to <a href="https://thingspeak.com">ThingSpeak</a>, allowing an easy route to send data from an FogLAMP environment into MATLAB.</p>
+<p>In order to send data to ThingSpeak you must first create a channel to receive it.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Login to your <a href="https://thingspeak.com/login">ThingSpeak</a> account</p>
+</li>
+<li><p class="first">From the menu bar select the <em>Channels</em> menu and the <em>My Channels</em> option</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="thingspeak_1" src="../../_images/thingspeak_1.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Click on <em>New Channel</em> to create a new channel</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="thingspeak_2" src="../../_images/thingspeak_2.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Enter the details for your channel, in particular name and the set of fields. These field names should match the asset names you are going to send from FogLAMP.</p>
+</li>
+<li><p class="first">When satisfied click on <em>Save Channel</em></p>
+</li>
+<li><p class="first">You will need the channel ID and the API key for your channel. To get this for a channel, on the <em>My Channels</em> page click on the <em>API Keys</em> box for your channel</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="thingspeak_3" src="../../_images/thingspeak_3.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div></blockquote>
+<p>Once you have created your channel on <a href="https://thingspeak.com">ThingSpeak</a> you may create your north task on FogLAMP to send data to this channel</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Select <em>North</em> from the left hand menu bar.</p>
+</li>
+<li><p class="first">Click on the + icon in the top left</p>
+</li>
+<li><p class="first">Choose ThingSpeak from the plugin selection list</p>
+</li>
+<li><p class="first">Name your task</p>
+</li>
+<li><p class="first">Click on <em>Next</em></p>
+</li>
+<li><p class="first">Configure the plugin</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="thingspeak_4" src="../../_images/thingspeak_4.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><strong>URL</strong>: The URL of the ThingSpeak server, this can usually be left as the default.</li>
+<li><strong>API Key</strong>: The write API key from the ThingSpeak channel you created</li>
+<li><strong>Source</strong>: Controls if readings data or FogLAMP statistics are to be send to ThingSpeak</li>
+<li><strong>Fields</strong>: Allows you to select what fields to send to ThingSpeak. It’s a JSON document that contains a single array called elements. Each item of the array is a JSON object that has two properties, asset and reading. The asset should match the asset you wish to send and the reading the data point name.</li>
+<li><strong>Channel ID</strong>: The channel ID of your ThingSpeak Channel</li>
+</ul>
+</li>
+<li><p class="first">Click on <em>Next</em></p>
+</li>
+<li><p class="first">Enable your north task and click on <em>Done</em></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-north-influxdb/index.html" class="btn btn-neutral float-right" title="InfluxDB Time Series Database" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-north-opcua/index.html" class="btn btn-neutral" title="OPCUA Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

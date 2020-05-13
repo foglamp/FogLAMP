@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>REST API Developers Guide &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="next" title="The FogLAMP REST API" href="01_REST.html"/>
+        <link rel="prev" title="Storage Plugins" href="../plugin_developers_guide/05_storage_plugins.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">REST API Developers Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_REST.html">The FogLAMP REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_RESTadmin.html">Administration API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_RESTuser.html">User API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>REST API Developers Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rest_api_guide/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rest-api-developers-guide">
+<h1>REST API Developers Guide<a class="headerlink" href="#rest-api-developers-guide" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01_REST.html">The FogLAMP REST API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_REST.html#introducing-the-foglamp-rest-api">Introducing the FogLAMP REST API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_REST.html#port-usage">Port Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_REST.html#infrastructure">Infrastructure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_RESTadmin.html">Administration API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_RESTadmin.html#audit-trail">Audit Trail</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_RESTadmin.html#audit">audit</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-audit-entries">GET Audit Entries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#post-audit-entries">POST Audit Entries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_RESTadmin.html#configuration-management">Configuration Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_RESTadmin.html#category">category</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-categor-ies">GET categor(ies)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-category">GET category</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-category-item">GET category item</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#put-category-item">PUT category item</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#delete-category-item">DELETE category item</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#post-category">POST category</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_RESTadmin.html#task-management">Task Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_RESTadmin.html#task">task</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-task">GET task</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-task-latest">GET task latest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-task-by-id">GET task by ID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#cancel-task-by-id">Cancel task by ID</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_RESTadmin.html#other-administrative-api-calls">Other Administrative API calls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_RESTadmin.html#ping">ping</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-ping">GET ping</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="02_RESTadmin.html#statistics">statistics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-statistics">GET statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_RESTadmin.html#get-statistics-history">GET statistics/history</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_RESTuser.html">User API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_RESTuser.html#browsing-assets">Browsing Assets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_RESTuser.html#asset">asset</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_RESTuser.html#get-all-assets">GET all assets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_RESTuser.html#get-asset-readings">GET asset readings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_RESTuser.html#get-asset-reading">GET asset reading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_RESTuser.html#get-asset-reading-summary">GET asset reading summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_RESTuser.html#get-timed-average-asset-reading">GET timed average asset reading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="01_REST.html" class="btn btn-neutral float-right" title="The FogLAMP REST API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../plugin_developers_guide/05_storage_plugins.html" class="btn btn-neutral" title="Storage Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Developer Guide" href="index.html"/>
+        <link rel="next" title="Writing and Using Plugins" href="02_writing_plugins.html"/>
+        <link rel="prev" title="Plugin Developer Guide" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Plugin Developer Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plugins-in-this-version-of-foglamp">Plugins in this version of FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-new-plugins">Installing New Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_writing_plugins.html">Writing and Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_plugins.html">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_C_plugins.html">South Plugins in C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="035_CPP.html">C++ Support Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="037_hybrid_plugins.html">Hybrid Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_north_plugins.html">North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_storage_plugins.html">Storage Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Plugin Developer Guide</a> &raquo;</li>
+        
+      <li>Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/01_FogLAMP_plugins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <p>FogLAMP makes extensive use of plugin components to extend the base functionality of the platform. In particular, plugins are used to;</p>
+<blockquote>
+<div><ul class="simple">
+<li>Extend the set of sensors and actuators that FogLAMP supports.</li>
+<li>Extend the set of services to which FogLAMP will push accumulated data gathered from those sensors.</li>
+<li>The mechanism by which FogLAMP buffers data internally.</li>
+<li>Filter plugins may be used to augment, edit or remove data as it flows through FogLAMP.</li>
+<li>Rule plugins extend the rules that may trigger the delivery of notifications at the edge.</li>
+<li>Notification delivery plugins allow for new delivery mechanisms to be integrated into FogLAMP.</li>
+</ul>
+</div></blockquote>
+<p>This chapter presents the plugins that are bundled with FogLAMP, how to write and use new plugins to support different sensors, protocols, historians and storage devices. It will guide you through the process and entry points that are required for the various different types of plugin.</p>
+<p>There are also numerous plugins that are available as separate packages or in separate repositories that may be used with FogLAMP.</p>
+<div class="section" id="plugins">
+<h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
+<p>In this version of FogLAMP you have six types of plugins:</p>
+<ul class="simple">
+<li><strong>South Plugins</strong> - They are responsible for communication between FogLAMP and the sensors and actuators they support. Each instance of a FogLAMP South microservice will use a plugin for the actual communication to the sensors or actuators that that instance of the South microservice supports.</li>
+<li><strong>North Plugins</strong> - They are responsible for taking reading data passed to them from the South bound service and doing any necessary conversion to the data and providing the protocol to send that converted data to a north-side task.</li>
+<li><strong>Storage Plugins</strong> - They sit between the Storage microservice and the physical data storage mechanism that stores the FogLAMP configuration and readings data. Storage plugins differ from other plugins in that they are written exclusively in C/C++, however they share the same common attributes and entry points that the other filter must support.</li>
+<li><strong>Filter Plugins</strong> - Filter plugins are used to modify data as it flows through FogLAMP. Filter plugins may be combined into a set of ordered filters that are applied as a pipeline to either the south ingress service or the north egress task that sends data to external systems.</li>
+<li><strong>Notification Rule Plugins</strong> - These are used by the optional notification service in order to evaluate data that flows into the notification service to determine if a notification should be sent.</li>
+<li><strong>Notification Delivery Plugins</strong> - These plugins are used by the optional notification service to deliver a notification to a system when a notification rule has triggered. These plugins allow the mechanisms to deliver notifications to be extended.</li>
+</ul>
+<div class="section" id="plugins-in-this-version-of-foglamp">
+<h2>Plugins in this version of FogLAMP<a class="headerlink" href="#plugins-in-this-version-of-foglamp" title="Permalink to this headline">¶</a></h2>
+<p>This version of FogLAMP provides the following plugins in the main repository:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="9%" />
+<col width="9%" />
+<col width="22%" />
+<col width="22%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Type</th>
+<th class="head">Name</th>
+<th class="head">Initial
+<br /> Status</th>
+<th class="head">Description</th>
+<th class="head">Availability</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Storage</td>
+<td>SQLite</td>
+<td>Enabled</td>
+<td>SQLite storage <br />
+for data and metadata</td>
+<td>Ubuntu: x86_64 <br />
+Ubuntu Core: x86, ARM <br />
+Raspbian</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Storage</td>
+<td>Postgres</td>
+<td>Disabled</td>
+<td>PostgreSQL storage <br />
+for data and metadata</td>
+<td>Ubuntu: x86_64 <br />
+Ubuntu Core: x86, ARM <br />
+Raspbian</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>North</td>
+<td>OMF</td>
+<td>Disabled</td>
+<td>OSIsoft Message Format <br />
+sender to PI Connector <br />
+Relay OMF</td>
+<td>Ubuntu: x86_64 <br />
+Ubuntu Core: x86, ARM <br />
+Raspbian</td>
+<td>It works with PI Connector <br />
+Relay OMF 1.2.X and 2.2. The plugin
+also works against EDS and OCS.</td>
+</tr>
+</tbody>
+</table>
+<p>In addition to the plugins in the main repository, there are many other plugins available in separate repositories, a list of the <a href="../foglamp_plugins.html">available plugins</a> is maintained within this document.</p>
+</div>
+<div class="section" id="installing-new-plugins">
+<h2>Installing New Plugins<a class="headerlink" href="#installing-new-plugins" title="Permalink to this headline">¶</a></h2>
+<p>As a general rule and unless the documentation states otherwise, plugins should be installed in two ways:</p>
+<ul class="simple">
+<li>When the plugin is available as <strong>package</strong>, it should be installed when <strong>FogLAMP is running</strong>. <br /> This is the required method because the package executed pre and post-installation tasks that require FogLAMP to run.</li>
+<li>When the plugin is available as <strong>source code</strong>, it should be installed when <strong>FogLAMP is either running or not</strong>. <br /> You will want to manually move the plugin code into the right location where FogLAMP is installed, add pre-requisites and execute the REST commands necessary to start the plugin <strong>after</strong> you have started FogLAMP if it is not running when you start this process.</li>
+</ul>
+<p>For example, this is the command to use to install the <em>OpenWeather</em> South plugin:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo systemctl status foglamp.service
+<span class="go">● foglamp.service - LSB: FogLAMP</span>
+<span class="go">   Loaded: loaded (/etc/init.d/foglamp; bad; vendor preset: enabled)</span>
+<span class="go">   Active: active (running) since Wed 2018-05-16 01:32:25 BST; 4min 1s ago</span>
+<span class="go">     Docs: man:systemd-sysv-generator(8)</span>
+<span class="go">   CGroup: /system.slice/foglamp.service</span>
+<span class="go">           ├─13741 python3 -m foglamp.services.core</span>
+<span class="go">           └─13746 /usr/local/foglamp/services/storage --address=0.0.0.0 --port=40138</span>
+
+<span class="go">May 16 01:36:09 ubuntu python3[13741]: FogLAMP[13741] INFO: scheduler: foglamp.services.core.scheduler.scheduler: Process started: Schedule &#39;stats collection&#39; process &#39;stats coll</span>
+<span class="go">                                       [&#39;tasks/statistics&#39;, &#39;--port=40138&#39;, &#39;--address=127.0.0.1&#39;, &#39;--name=stats collector&#39;]</span>
+<span class="go">...</span>
+<span class="go">FogLAMP v1.3.1 running.</span>
+<span class="go">FogLAMP Uptime:  266 seconds.</span>
+<span class="go">FogLAMP records: 0 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="gp">$</span>
+<span class="gp">$</span> sudo cp foglamp-south-openweathermap-1.2-x86_64.deb /var/cache/apt/archives/.
+<span class="gp">$</span> sudo apt install /var/cache/apt/archives/foglamp-south-openweathermap-1.2-x86_64.deb
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">Reading state information... Done</span>
+<span class="go">Note, selecting &#39;foglamp-south-openweathermap&#39; instead of &#39;/var/cache/apt/archives/foglamp-south-openweathermap-1.2-x86_64.deb&#39;</span>
+<span class="go">The following packages were automatically installed and are no longer required:</span>
+<span class="go">  linux-headers-4.4.0-109 linux-headers-4.4.0-109-generic linux-headers-4.4.0-119 linux-headers-4.4.0-119-generic linux-headers-4.4.0-121 linux-headers-4.4.0-121-generic</span>
+<span class="go">  linux-image-4.4.0-109-generic linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic linux-image-extra-4.4.0-109-generic linux-image-extra-4.4.0-119-generic</span>
+<span class="go">  linux-image-extra-4.4.0-121-generic</span>
+<span class="go">Use &#39;sudo apt autoremove&#39; to remove them.</span>
+<span class="go">The following NEW packages will be installed</span>
+<span class="go">  foglamp-south-openweathermap</span>
+<span class="go">0 to upgrade, 1 to newly install, 0 to remove and 0 not to upgrade.</span>
+<span class="go">Need to get 0 B/3,404 B of archives.</span>
+<span class="go">After this operation, 0 B of additional disk space will be used.</span>
+<span class="go">Selecting previously unselected package foglamp-south-openweathermap.</span>
+<span class="gp gp-VirtualEnv">(Reading database ... 211747 files and directories currently installed.)</span>
+<span class="go">Preparing to unpack .../foglamp-south-openweathermap-1.2-x86_64.deb ...</span>
+<span class="go">Unpacking foglamp-south-openweathermap (1.2) ...</span>
+<span class="go">Setting up foglamp-south-openweathermap (1.2) ...</span>
+<span class="go">openweathermap plugin installed.</span>
+<span class="gp">$</span>
+<span class="gp">$</span> foglamp status
+<span class="go">FogLAMP v1.3.1 running.</span>
+<span class="go">FogLAMP Uptime:  271 seconds.</span>
+<span class="go">FogLAMP records: 36 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">foglamp.services.south --port=42066 --address=127.0.0.1 --name=openweathermap</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>You may also install new plugins directly from within the FogLAMP GUI, however you will need to have setup your Linux machine to include the FogLAMP package repository in the list of repositories the Linux package manager searches for new packages.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="02_writing_plugins.html" class="btn btn-neutral float-right" title="Writing and Using Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Plugin Developer Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

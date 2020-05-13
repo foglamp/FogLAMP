@@ -1,0 +1,618 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FogLAMP Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="Securing FogLAMP" href="securing_foglamp.html"/>
+        <link rel="prev" title="FogLAMP Architecture" href="foglamp_architecture.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FogLAMP Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#south-plugins">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#north-plugins">North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter-plugins">Filter Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notification-rule-plugins">Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notification-delivery-plugins">Notification Delivery Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>FogLAMP Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/foglamp_plugins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foglamp-plugins">
+<h1>FogLAMP Plugins<a class="headerlink" href="#foglamp-plugins" title="Permalink to this headline">¶</a></h1>
+<p>The following set of plugins are available for FogLAMP. These plugins
+extend the functionality by adding new sources of data, new destinations,
+processing filters that can enhance or modify the data, rules for
+notification delivery and notification delivery mechanisms.</p>
+<div class="section" id="south-plugins">
+<h2>South Plugins<a class="headerlink" href="#south-plugins" title="Permalink to this headline">¶</a></h2>
+<p>South plugins add new ways to get data into FogLAMP, a number of south
+plugins are available ready built or users may add new south plugins of
+their own by writing them in Python or C/C++.</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">FogLAMP South Plugins</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>am2315</td>
+<td>FogLAMP south plugin for an AM2315 temperature and humidity sensor</td>
+</tr>
+<tr class="row-odd"><td>benchmark</td>
+<td>A FogLAMP benchmark plugin to measure the ingestion rates on particular hardware</td>
+</tr>
+<tr class="row-even"><td>cc2650</td>
+<td>A FogLAMP south plugin for the Texas Instruments SensorTag CC2650</td>
+</tr>
+<tr class="row-odd"><td>coap</td>
+<td>A south plugin for FogLAMP that pulls data from a COAP sensor</td>
+</tr>
+<tr class="row-even"><td>csv</td>
+<td>A FogLAMP south plugin in C++ for reading CSV files</td>
+</tr>
+<tr class="row-odd"><td>csv-async</td>
+<td>A FogLAMP asynchronous plugin for reading CSV data</td>
+</tr>
+<tr class="row-even"><td>dht</td>
+<td>A FogLAMP south plugin in C++ that interfaces to a DHT-11 temperature and humidity sensor</td>
+</tr>
+<tr class="row-odd"><td>dht11</td>
+<td>A FogLAMP south plugin that interfaces a DHT-11 temperature sensor</td>
+</tr>
+<tr class="row-even"><td>dnp3</td>
+<td>A south plugin for FogLAMP that implements the DNP3 protocol</td>
+</tr>
+<tr class="row-odd"><td>envirophat</td>
+<td>A FogLAMP south service for the Raspberry Pi EnviroPhat sensors</td>
+</tr>
+<tr class="row-even"><td>expression</td>
+<td>A FogLAMP south plugin that uses a user define expression to generate data</td>
+</tr>
+<tr class="row-odd"><td>FlirAX8</td>
+<td>A FogLAMP hybrid south plugin that uses foglamp-south-modbus-c to get temperature data from a Flir Thermal camera</td>
+</tr>
+<tr class="row-even"><td>game</td>
+<td>The south plugin used for the FogLAMP lab session game involving remote controlled cars</td>
+</tr>
+<tr class="row-odd"><td>http</td>
+<td>A Python south plugin for FogLAMP used to connect one FogLAMP instance to another</td>
+</tr>
+<tr class="row-even"><td>ina219</td>
+<td>A FogLAMP south plugin for the INA219 voltage and current sensor</td>
+</tr>
+<tr class="row-odd"><td>modbus-c</td>
+<td>A FogLAMP south plugin that implements modbus-tcp and modbus-rtu</td>
+</tr>
+<tr class="row-even"><td>modbustcp</td>
+<td>A FogLAMP south plugin that implements modbus-tcp in Python</td>
+</tr>
+<tr class="row-odd"><td>mqtt-sparkplug</td>
+<td>A FogLAMP south plugin that implements the Sparkplug API over MQTT</td>
+</tr>
+<tr class="row-even"><td>opcua</td>
+<td>A FogLAMP south service that pulls data from an OPC-UA server</td>
+</tr>
+<tr class="row-odd"><td>openweathermap</td>
+<td>A FogLAMP south plugin to pull weather data from OpenWeatherMap</td>
+</tr>
+<tr class="row-even"><td>playback</td>
+<td>A FogLAMP south plugin to replay data stored in a CSV file</td>
+</tr>
+<tr class="row-odd"><td>pt100</td>
+<td>A FogLAMP south plugin for the PT100 temperature sensor</td>
+</tr>
+<tr class="row-even"><td>random</td>
+<td>A south plugin for FogLAMP that generates random numbers</td>
+</tr>
+<tr class="row-odd"><td>randomwalk</td>
+<td>A FogLAMP south plugin that returns data that with randomly generated steps</td>
+</tr>
+<tr class="row-even"><td>roxtec</td>
+<td>A FogLAMP south plugin for the Roxtec cable gland project</td>
+</tr>
+<tr class="row-odd"><td>sensehat</td>
+<td>A FogLAMP south plugin for the Raspberry Pi Sensehat sensors</td>
+</tr>
+<tr class="row-even"><td>sensorphone</td>
+<td>A FogLAMP south plugin the task to the iPhone SensorPhone app</td>
+</tr>
+<tr class="row-odd"><td>sinusoid</td>
+<td>A FogLAMP south plugin that produces a simulated sine wave</td>
+</tr>
+<tr class="row-even"><td>systeminfo</td>
+<td>A FogLAMP south plugin that gathers information about the system it is running on.</td>
+</tr>
+<tr class="row-odd"><td>usb4704</td>
+<td>A FogLAMP south plugin the Advantech USB-4704 data acquisition module</td>
+</tr>
+<tr class="row-even"><td>wind-turbine</td>
+<td>A FogLAMP south plugin for a number of sensor connected to a wind turbine demo</td>
+</tr>
+<tr class="row-odd"><td>beckhoff</td>
+<td>A Beckhoff ADS data ingress plugin for FogLAMP, this monitors Beckhoff PLCs and returns the state of internal variables within the PLC</td>
+</tr>
+<tr class="row-even"><td>csvplayback</td>
+<td>csv playback using pandas</td>
+</tr>
+<tr class="row-odd"><td>digiducer</td>
+<td>South plugin for the Digiducer 333D01 vibration sensor</td>
+</tr>
+<tr class="row-even"><td>human-detector</td>
+<td>A machine learning model to detect people within a live video stream</td>
+</tr>
+<tr class="row-odd"><td>phidget</td>
+<td>FogLAMP south code for different phidgets</td>
+</tr>
+<tr class="row-even"><td>sarcos</td>
+<td>A south plugin to process the Sarcos XO data files</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="north-plugins">
+<h2>North Plugins<a class="headerlink" href="#north-plugins" title="Permalink to this headline">¶</a></h2>
+<p>North plugins add new destinations to which data may be sent by FogLAMP. A
+number of north plugins are available ready built or users may add new
+north plugins of their own by writing them in Python or C/C++.</p>
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">FogLAMP North Plugins</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>gcp</td>
+<td>A north plugin to send data to Google Cloud Platform Iot Core</td>
+</tr>
+<tr class="row-odd"><td>http</td>
+<td>A Python implementation of a north plugin to send data between FogLAMP instances using HTTP</td>
+</tr>
+<tr class="row-even"><td>http-c</td>
+<td>A FogLAMP north plugin that sends data between FogLAMP instances using HTTP/HTTPS</td>
+</tr>
+<tr class="row-odd"><td>kafka</td>
+<td>A FogLAMP plugin for sending data north to Apache Kafka</td>
+</tr>
+<tr class="row-even"><td>opcua</td>
+<td>A north plugin for FogLAMP that makes it act as an OPC-UA server for the data it reads from sensors</td>
+</tr>
+<tr class="row-odd"><td>thingspeak</td>
+<td>A FogLAMP north plugin to send data to Matlab’s ThingSpeak cloud</td>
+</tr>
+<tr class="row-even"><td>influxdb</td>
+<td>A north plugin for sending data to InfluxDB</td>
+</tr>
+<tr class="row-odd"><td>splunk</td>
+<td>A north plugin for sending data to Splunk</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="filter-plugins">
+<h2>Filter Plugins<a class="headerlink" href="#filter-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Filter plugins add new ways in which data may be modified, enhanced
+or cleaned as part of the ingress via a south service or egress to a
+destination system. A number of north plugins are available ready built
+or users may add new north plugins of their own by writing them in Python
+or C/C++.</p>
+<p>It is also possible, using particular filters, to supply expressions
+or script snippets that can operate on the data as well. This provides a
+simple way to process the data in FogLAMP as it is read from devices or
+written to destination systems.</p>
+<table border="1" class="colwidths-given docutils" id="id3">
+<caption><span class="caption-text">FogLAMP Filter Plugins</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>asset</td>
+<td>A FogLAMP processing filter that is used to block or allow certain assets to pass onwards in the data stream</td>
+</tr>
+<tr class="row-odd"><td>change</td>
+<td>A FogLAMP processing filter plugin that only forwards data that changes by more than a configurable amount</td>
+</tr>
+<tr class="row-even"><td>delta</td>
+<td>A FogLAMP processing filter plugin that removes duplicates from the stream of data and only forwards new values that differ from previous values by more than a given tolerance</td>
+</tr>
+<tr class="row-odd"><td>expression</td>
+<td>A FogLAMP processing filter plugin that applies a user define formula to the data as it passes through the filter</td>
+</tr>
+<tr class="row-even"><td>fft</td>
+<td>A FogLAMP processing filter plugin that calculates a Fast Fourier Transform across sensor data</td>
+</tr>
+<tr class="row-odd"><td>Flir-Validity</td>
+<td>A FogLAMP processing filter used for processing temperature data from a Flir thermal camera</td>
+</tr>
+<tr class="row-even"><td>metadata</td>
+<td>A FogLAMP processing filter plugin that adds metadata to the readings in the data stream</td>
+</tr>
+<tr class="row-odd"><td>python27</td>
+<td>A FogLAMP processing filter that allows Python 2 code to be run on each sensor value.</td>
+</tr>
+<tr class="row-even"><td>python35</td>
+<td>A FogLAMP processing filter that allows Python 3 code to be run on each sensor value.</td>
+</tr>
+<tr class="row-odd"><td>rate</td>
+<td>A FogLAMP processing filter plugin that sends reduced rate data until an expression triggers sending full rate data</td>
+</tr>
+<tr class="row-even"><td>rms</td>
+<td>A FogLAMP processing filter plugin that calculates RMS value for sensor data</td>
+</tr>
+<tr class="row-odd"><td>scale</td>
+<td>A FogLAMP processing filter plugin that applies an offset and scale factor to the data</td>
+</tr>
+<tr class="row-even"><td>scale-set</td>
+<td>A FogLAMP processing filter plugin that applies a set of sale factors to the data</td>
+</tr>
+<tr class="row-odd"><td>threshold</td>
+<td>A FogLAMP processing filter that only forwards data when a threshold is crossed</td>
+</tr>
+<tr class="row-even"><td>blocktest</td>
+<td>A filter designed to aid testing. It combines incoming readings into bigger blocks before sending onwards</td>
+</tr>
+<tr class="row-odd"><td>downsample</td>
+<td>A data down sampling filter</td>
+</tr>
+<tr class="row-even"><td>ema</td>
+<td>Generate exponential moving average datapoint: include a rate of current value and a rate of history values</td>
+</tr>
+<tr class="row-odd"><td>eventrate</td>
+<td>A filter designed for use in the north to trigger sending rates based on event notification assets</td>
+</tr>
+<tr class="row-even"><td>fft2</td>
+<td>Filter for FFT signal processing, finding peak frequencies, etc.</td>
+</tr>
+<tr class="row-odd"><td>rms-trigger</td>
+<td>An RMS filter that uses a trigger asset rather than a fixed set of readings for each caclulation</td>
+</tr>
+<tr class="row-even"><td>simple-python</td>
+<td>The simple Python filter plugin is analogous to the expression filter but accept Python code rather than the expression syntax</td>
+</tr>
+<tr class="row-odd"><td>statistics</td>
+<td>Generic statistics filter for FogLAMP data</td>
+</tr>
+<tr class="row-even"><td>vibration_features</td>
+<td>A filter plugin that takes a stream of vibration data and generates a set of features that characterise that data</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="notification-rule-plugins">
+<h2>Notification Rule Plugins<a class="headerlink" href="#notification-rule-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Notification rule plugins provide the logic that is used by the
+notification service to determine if a condition has been met that should
+trigger or clear that condition and hence send a notification. A number of
+notification plugins are available as standard, however as with any plugin the
+user is able to write new plugins in Python or C/C++ to extend the set of
+notification rules.</p>
+<table border="1" class="colwidths-given docutils" id="id4">
+<caption><span class="caption-text">FogLAMP Notification Rule Plugins</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>average</td>
+<td>A FogLAMP notification rule plugin that evaluates an expression based sensor data notification rule plugin that triggers when sensors values depart from the moving average by more than a configured limit.</td>
+</tr>
+<tr class="row-odd"><td>outofbound</td>
+<td>A FogLAMP notification rule plugin that triggers when sensors values exceed limits set in the configuration of the plugin.</td>
+</tr>
+<tr class="row-even"><td>simple-expression</td>
+<td>A FogLAMP notification rule plugin that evaluates an expression based sensor data</td>
+</tr>
+<tr class="row-odd"><td>ML-bad-bearing</td>
+<td>Notification rule plugin to detect bad bearing</td>
+</tr>
+<tr class="row-even"><td>ML-engine-failure</td>
+<td>Notification rule plugin for detecting imminent engine failure using ML model</td>
+</tr>
+<tr class="row-odd"><td>periodic</td>
+<td>A rule that periodically fires based on a timer when data is observed.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="notification-delivery-plugins">
+<h2>Notification Delivery Plugins<a class="headerlink" href="#notification-delivery-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Notification delivery plugins provide the mechanisms to deliver the
+notification messages to the systems that will receive them.  A number
+of notification delivery plugins are available as standard, however as
+with any plugin the user is able to write new plugins in Python or C/C++
+to extend the set of notification rules.</p>
+<table border="1" class="colwidths-given docutils" id="id5">
+<caption><span class="caption-text">FogLAMP Notification Delivery Plugins</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>alexa-notifyme</td>
+<td>A FogLAMP notification delivery plugin that sends notifications to the Amazon Alexa platform</td>
+</tr>
+<tr class="row-odd"><td>asset</td>
+<td>A FogLAMP notification delivery plugin that creates an asset in FogLAMP when a notification occurs</td>
+</tr>
+<tr class="row-even"><td>blynk</td>
+<td>A FogLAMP notification delivery plugin that sends notifications to the Blynk service</td>
+</tr>
+<tr class="row-odd"><td>email</td>
+<td>A FogLAMP notification delivery plugin that sends notifications via email</td>
+</tr>
+<tr class="row-even"><td>google-hangouts</td>
+<td>A FogLAMP notification delivery plugin that sends alerts on the Google hangout platform</td>
+</tr>
+<tr class="row-odd"><td>ifttt</td>
+<td>A FogLAMP notification delivery plugin that triggers an action of IFTTT</td>
+</tr>
+<tr class="row-even"><td>python35</td>
+<td>A FogLAMP notification delivery plugin that runs an arbitrary Python 3 script</td>
+</tr>
+<tr class="row-odd"><td>slack</td>
+<td>A FogLAMP notification delivery plugin that sends notifications via the slack instant messaging platform</td>
+</tr>
+<tr class="row-even"><td>telegram</td>
+<td>A FogLAMP notification delivery plugin that sends notifications via the telegram service</td>
+</tr>
+<tr class="row-odd"><td>north</td>
+<td>Deliver notification data via a FogLAMP north task</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="securing_foglamp.html" class="btn btn-neutral float-right" title="Securing FogLAMP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="foglamp_architecture.html" class="btn btn-neutral" title="FogLAMP Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

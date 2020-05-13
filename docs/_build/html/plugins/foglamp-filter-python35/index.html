@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Python 3.5 Filter &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../../index.html"/>
+        <link rel="up" title="FogLAMP Filter Plugins" href="../filter.html"/>
+        <link rel="next" title="Rate Filter" href="../foglamp-filter-rate/index.html"/>
+        <link rel="prev" title="Python 2.7 Filter" href="../foglamp-filter-python27/index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../plugin_index.html">Plugin Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../south.html">FogLAMP South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../north.html">FogLAMP North Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../filter.html">FogLAMP Filter Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-asset/index.html">Asset Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-change/index.html">Change Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-delta/index.html">Delta Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-expression/index.html">Expression Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-fft/index.html">Fast Fourier Transform Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-Flir-Validity/index.html">Flir Validity Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-metadata/index.html">Metadata Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-python27/index.html">Python 2.7 Filter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Python 3.5 Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rate/index.html">Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-rms/index.html">Root Mean Squared (RMS) Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale/index.html">Scale Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-scale-set/index.html">Scale Set Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-threshold/index.html">Threshold Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-downsample/index.html">Down Sample Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-ema/index.html">Exponential Moving Average</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-eventrate/index.html">Event Rate Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-simple-python/index.html">Simple Python Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-statistics/index.html">Statistics Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../foglamp-filter-vibration_features/index.html">Vibration Features Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rule.html">FogLAMP Notification Rule Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notify.html">FogLAMP Notification Delivery Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../plugin_index.html">Plugin Documentation</a> &raquo;</li>
+        
+          <li><a href="../filter.html">FogLAMP Filter Plugins</a> &raquo;</li>
+        
+      <li>Python 3.5 Filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/plugins/foglamp-filter-python35/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="python-3-5-filter">
+<h1>Python 3.5 Filter<a class="headerlink" href="#python-3-5-filter" title="Permalink to this headline">¶</a></h1>
+<p>The <em>foglamp-filter-python35</em> filter allows snippets of Python to be easily written that can be used as filters in FogLAMP. A similar filter exists that uses Python 2.7 syntax, the <a href="../foglamp-filter-python27/index.html">foglamp-filter-python27</a> filter. A Python code snippet will be called with sets of asset readings as they or read or processed in a filter pipeline. The data appears in the Python code as a JSON document passed as a Python Dict type.</p>
+<p>The user should provide a Python function whose name matches the name given to the plugin when added to the filter pipeline of the south service or north task, e.g. if you name your filter myPython then you should have a function named myPython in the code you enter. This function is send a set of readings to process and should return a set of processed readings. The returned set of readings may be empty if the filter removes all data.</p>
+<p>A general code syntax for the function that should be provided is;</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myPython</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+        <span class="o">...</span>
+    <span class="k">return</span> <span class="n">readings</span>
+</pre></div>
+</div>
+<p>Each element that is processed has a number of attributes that may be accessed</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribute</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>asset_code</td>
+<td>The name of the asset the reading data relates to.</td>
+</tr>
+<tr class="row-odd"><td>timestamp</td>
+<td>The data and time FogLAMP first read this data</td>
+</tr>
+<tr class="row-even"><td>user_timestamp</td>
+<td>The data and time the data for the data itself, this may differ from the timestamp above</td>
+</tr>
+<tr class="row-odd"><td>readings</td>
+<td>The set of readings for the asset, this is itself an object that contains a number of key/value pairs that are the data points for this reading.</td>
+</tr>
+</tbody>
+</table>
+<p>In order to access an data point within the readings, for example one named <em>temperature</em>, it is a simple case of extracting the value of with <em>temperature</em> as its key.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myPython</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+        <span class="n">reading</span> <span class="o">=</span> <span class="n">elem</span><span class="p">[</span><span class="s1">&#39;readings&#39;</span><span class="p">]</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">reading</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
+        <span class="o">...</span>
+    <span class="k">return</span> <span class="n">readings</span>
+</pre></div>
+</div>
+<p>It is possible to write your Python code such that it does not know the data point names in advance, in which case you are able to iterate over the names as follows;</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myPython</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+        <span class="n">reading</span> <span class="o">=</span> <span class="n">elem</span><span class="p">[</span><span class="s1">&#39;readings&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">reading</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">reading</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
+            <span class="o">...</span>
+    <span class="k">return</span> <span class="n">readings</span>
+</pre></div>
+</div>
+<p>A second function may be provided by the Python plugin code to accept configuration from the plugin that can be used to modify the behavior of the Python code without the need to change the code. The configuration is a JSON document which is again passed as a Python Dict to the set_filter_config function in the user provided Python code. This function should be of the form</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_filter_config</span><span class="p">(</span><span class="n">configuration</span><span class="p">):</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Python35 filters are added in the same way as any other filters.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Click on the Applications add icon for your service or task.</p>
+</li>
+<li><p class="first">Select the <em>python35</em> plugin from the list of available plugins.</p>
+</li>
+<li><p class="first">Name your python35 filter, this should be the same name as the Python function you will provide.</p>
+</li>
+<li><p class="first">Click <em>Next</em> and you will be presented with the following configuration page</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><img alt="python35_1" src="../../_images/python35_11.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Enter the configuration for your python35 filter</p>
+<ul>
+<li><p class="first"><strong>Python script</strong>: This is the script that will be executed. Initially you are unable to type in this area and must load your initial script from a file using the <em>Choose Files</em> button below the text area. Once a file has been chosen and loaded you are able to update the Python code in this page.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Any changes made to the script in this screen will <strong>not</strong> be written back to the original file it was loaded from.</p>
+</div>
+</li>
+<li><p class="first"><strong>Configuration</strong>: You may enter a JSON document here that will be passed to the <em>set_filter_config</em> function of your Python code.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Enable the python35 filter and click on <em>Done</em> to activate your plugin</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following example uses Python to create an exponential moving average plugin. It adds a data point called <em>ema</em> to every asset. It assumes a single data point exists within the asset, but it does not assume the name of that data point. A rate can be set for the EMA using the configuration of the plugin.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># generate exponential moving average</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># exponential moving average rate default value: include 7% of current value</span>
+<span class="n">rate</span> <span class="o">=</span> <span class="mf">0.07</span>
+<span class="c1"># latest ema value</span>
+<span class="n">latest</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># get configuration if provided.</span>
+<span class="c1"># set this JSON string in configuration:</span>
+<span class="c1">#      {&quot;rate&quot;:0.07}</span>
+<span class="k">def</span> <span class="nf">set_filter_config</span><span class="p">(</span><span class="n">configuration</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">rate</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;rate&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="c1"># Process a reading</span>
+<span class="k">def</span> <span class="nf">doit</span><span class="p">(</span><span class="n">reading</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">rate</span><span class="p">,</span> <span class="n">latest</span>
+
+    <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">reading</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">latest</span><span class="p">:</span>
+            <span class="n">latest</span> <span class="o">=</span> <span class="n">reading</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">latest</span> <span class="o">=</span> <span class="n">reading</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">*</span> <span class="n">rate</span> <span class="o">+</span> <span class="n">latest</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rate</span><span class="p">)</span>
+        <span class="n">reading</span><span class="p">[</span><span class="sa">b</span><span class="s1">&#39;ema&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">latest</span>
+
+<span class="c1"># process one or more readings</span>
+<span class="k">def</span> <span class="nf">ema</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">readings</span><span class="p">):</span>
+        <span class="n">doit</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="s1">&#39;reading&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">readings</span>
+</pre></div>
+</div>
+<p>Examining the content of the Python, a few things to note are;</p>
+<blockquote>
+<div><ul class="simple">
+<li>The filter is given the name <code class="docutils literal"><span class="pre">ema</span></code>. This name defines the default method which will be executed, namely ema().</li>
+<li>The function <code class="docutils literal"><span class="pre">ema</span></code> is passed 1 or more readings to process. It splits these into individual readings, and calls the function <code class="docutils literal"><span class="pre">doit</span></code> to perform the actual work.</li>
+<li>The function <code class="docutils literal"><span class="pre">doit</span></code> walks through each attribute in that reading, updates a global variable <code class="docutils literal"><span class="pre">latest</span></code> with the latest value of the ema. It then adds an <em>ema</em> attribute to the reading.</li>
+<li>The function <code class="docutils literal"><span class="pre">ema</span></code> returns the modified readings list which then is passed to the next filter in the pipeline.</li>
+<li>set_filter_config() is called whenever the user changes the JSON configuration in the plugin. This function will alter the global variable <code class="docutils literal"><span class="pre">rate</span></code> that is used within the function <code class="docutils literal"><span class="pre">doit</span></code>.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../foglamp-filter-rate/index.html" class="btn btn-neutral float-right" title="Rate Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../foglamp-filter-python27/index.html" class="btn btn-neutral" title="Python 2.7 Filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,802 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Testing FogLAMP &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Building Developers Guide" href="index.html"/>
+        <link rel="next" title="FogLAMP Utilities and Scripts" href="04_utilities.html"/>
+        <link rel="prev" title="FogLAMP Installation" href="04_installation.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Building Developers Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp.html">Building FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_installation.html">FogLAMP Installation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Testing FogLAMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#first-checks-foglamp-status">First Checks: FogLAMP Status</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hello-foggy-world">Hello, Foggy World!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hello-from-the-southern-hemisphere-of-the-foglamp-world">Hello from the Southern Hemisphere of the FogLAMP World</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#checking-what-s-inside-foglamp">Checking What’s Inside FogLAMP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sending-greetings-to-the-northern-hemisphere">Sending Greetings to the Northern Hemisphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="04_utilities.html">FogLAMP Utilities and Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_tasks.html">FogLAMP Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+          <li><a href="index.html">Building Developers Guide</a> &raquo;</li>
+        
+      <li>Testing FogLAMP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/building_foglamp/06_testing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="testing-foglamp">
+<h1>Testing FogLAMP<a class="headerlink" href="#testing-foglamp" title="Permalink to this headline">¶</a></h1>
+<p>After the installation, you are now ready to test FogLAMP. An end-to-end test involves three types of tests:</p>
+<ul class="simple">
+<li>The <strong>South</strong> side, i.e. testing the collection of information from South microservices and associated plugins</li>
+<li>The <strong>North</strong> side, i.e. testing the tasks that send data North to historians, databases, Enterprise and Cloud systems</li>
+<li>The <strong>East/West</strong> side, i.e. testing the interaction of external applications with FogLAMP via REST API.</li>
+</ul>
+<p>This chapter describes how to tests FogLAMP in these three directions.</p>
+<div class="section" id="first-checks-foglamp-status">
+<h2>First Checks: FogLAMP Status<a class="headerlink" href="#first-checks-foglamp-status" title="Permalink to this headline">¶</a></h2>
+<p>Before we start, let’s make sure that FogLAMP is up and running and that we have the tasks and services in place to execute the tests. <br /> First, run the <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> command to check if FogLAMP has already started. The result of the command can be:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">not</span> <span class="pre">running.</span></code> - it means that we must start FogLAMP with <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code></li>
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">starting.</span></code> - it means that we have started FogLAMP but the starting phase has not been completed yet. You should wait for a little while (from few seconds to about a minute) to see FogLAMP running.</li>
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">running.</span></code> - (plus extra rows giving the uptime and other info. It means that FogLAMP is up and running, hence it is ready for use.</li>
+</ul>
+<p>When you have a running FogLAMP, check the extra information provided by the <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp status
+<span class="go">FogLAMP running.</span>
+<span class="go">FogLAMP uptime:  282 seconds.</span>
+<span class="go">FogLAMP Records: 10 read, 0 sent, 0 purged.</span>
+<span class="go">FogLAMP does not require authentication.</span>
+<span class="go">=== FogLAMP services:</span>
+<span class="go">foglamp.services.core</span>
+<span class="go">=== FogLAMP tasks:</span>
+<span class="go">foglamp.tasks.north.sending_process --stream_id 1 --debug_level 1 --port=44180 --address=127.0.0.1 --name=sending process</span>
+<span class="go">foglamp.tasks.north.sending_process --stream_id 2 --debug_level 1 --port=44180 --address=127.0.0.1 --name=statistics to pi</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Let’s analyze the output of the command:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">running.</span></code> - The FogLAMP Core microservice is running on this machine and it is responding to the status command as <em>running</em> because other basic microservices are also running.</li>
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">uptime:</span>&#160; <span class="pre">282</span> <span class="pre">seconds.</span></code> - This is a simple uptime in second provided by the Core microservice. It is equivalent to the <code class="docutils literal"><span class="pre">ping</span></code> method called via the REST API.</li>
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">records:</span></code> - This is a summary of the number of records received from sensors and devices (South), sent to other services (North) and purged from the buffer.</li>
+<li><code class="docutils literal"><span class="pre">FogLAMP</span> <span class="pre">authentication</span></code> - This row describes if a user or an application must authenticate to ogLAMP in order to operate with the REST API.</li>
+</ul>
+<p>The following lines provide a list of the modules running in this installation of FogLAMP. They are separated by dots and described in this way:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The prefix <code class="docutils literal"><span class="pre">foglamp</span></code> is always present and identifies the FogLAMP modules.</li>
+<li>The following term describes the type of module: <em>services</em> for microservices, <em>tasks</em> for tasks etc.</li>
+<li>The following term is the name of the module: <em>core</em>, <em>storage</em>, <em>north</em>, <em>south</em>, <em>app</em>, <em>alert</em></li>
+<li>The last term is the name of the plugin executed as part of the module.</li>
+<li>Extra arguments may be available: they are the arguments passed to the module by the core when it is launched.</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">===</span> <span class="pre">FogLAMP</span> <span class="pre">services:</span></code> - This block contains the list of microservices running in the FogLAMP platform.<ul>
+<li><code class="docutils literal"><span class="pre">foglamp.services.core</span></code> is the Core microservice itself</li>
+<li><code class="docutils literal"><span class="pre">foglamp.services.south</span> <span class="pre">--port=44180</span> <span class="pre">--address=127.0.0.1</span> <span class="pre">--name=COAP</span></code> - This South microservice is a listener of data pushed to FogLAMP via a CoAP protocol</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">===</span> <span class="pre">FogLAMP</span> <span class="pre">tasks:</span></code> - This block contains the list of tasks running in the FogLAMP platform.<ul>
+<li><code class="docutils literal"><span class="pre">foglamp.tasks.north.sending_process</span> <span class="pre">...</span> <span class="pre">--name=sending</span> <span class="pre">process</span></code> is a North task that prepares and sends data collected by the South modules to the OSIsoft PI System in OMF (OSIsoft Message Format).</li>
+<li><code class="docutils literal"><span class="pre">foglamp.tasks.north.sending_process</span> <span class="pre">...</span> <span class="pre">--name=statistics</span> <span class="pre">to</span> <span class="pre">pi</span></code> is a North task that prepares and sends the internal statistics to the OSIsoft PI System in OMF (OSIsoft Message Format).</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="hello-foggy-world">
+<h2>Hello, Foggy World!<a class="headerlink" href="#hello-foggy-world" title="Permalink to this headline">¶</a></h2>
+<p>The output of the <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> command gives you an idea of the modules running in your machine, but let’s try to get more information from FogLAMP.</p>
+<div class="section" id="the-foglamp-rest-api">
+<h3>The FogLAMP REST API<a class="headerlink" href="#the-foglamp-rest-api" title="Permalink to this headline">¶</a></h3>
+<p>First of all, we need to familiarize with the FogLAMP REST API. The API provides a set of methods used to monitor and administer the status of FogLAMP. Users and developers can also use the API to interact with external applications.</p>
+<p>This is a short list of the methods available to the administrators.  A more detailed list will be available soon:
+- <strong>ping</strong> provides the uptime of the FogLAMP Core microservice
+- <strong>statistics</strong> provides a set of statistics of the FogLAMP platform, such as data collected, sent, purged, rejected etc.
+- <strong>asset</strong> provides a list of asset that have readings buffered in FogLAMP.
+- <strong>category</strong> provides a list of the configuration of the modules and components in FogLAMP.</p>
+<div class="section" id="useful-tools">
+<h4>Useful Tools<a class="headerlink" href="#useful-tools" title="Permalink to this headline">¶</a></h4>
+<p>Systems Administrators and Developers may already have their favorite tools to interact with a REST API, and they can probably use the same tools with FogLAMP. If you are not familiar with any tool, we recommend one of these:</p>
+<ul class="simple">
+<li>If you are familiar with the Linux shell and command lines, <a href="https://en.wikipedia.org/wiki/CURL" target="_blank">curl</a> is the simplest and most useful tool available. It comes with every Linux distribution (or you can easily add it if it is not available in the default installation.</li>
+<li>If you prefer to use a browser-like interface, we recommend <a href="https://www.getpostman.com" target="_blank">Postman</a>. Postman is an application available on Linux, MacOS and Windows and allows you to save queries, results, and run a set of queries with a single click.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="hello-world">
+<h3>Hello World!<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h3>
+<p>Let’s execute the <em>ping</em> method. First, you must identify the IP address where FogLAMP is running. If you have installed FogLAMP on your local machine, you can use <em>localhost</em>. Alternatively, check the IP address of the machine where FogLAMP is installed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This version of FogLAMP does not have any security setup by default, therefore you may be able to access the entry point for the REST API by any external application, but there may be security setting on your operating environment that prevent access to specific ports from external applications. If you receive an error using the ping method, and the <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> command says that everything is running, it is likely that you are experiencing a security issue.</p>
+</div>
+<p>The default port for the REST API is 8081. Using curl, try this command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/ping <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">{&quot;dataPurged&quot;: 0, &quot;dataRead&quot;: 10, &quot;uptime&quot;: 2646.8824095726013, &quot;dataSent&quot;: 0, &quot;authenticationOptional&quot;: true}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">echo</span></code> at the end of the line is simply used to add an extra new line to the output.
+<br /> <br />
+If you are using Postman, select the <em>GET</em> method and type <code class="docutils literal"><span class="pre">http://localhost:8081/foglamp/ping</span></code> in the URI address input. If you are accessing a remote machine, replace <em>localhost</em> with the correct IP address. The output should be something like:</p>
+<p><a class="reference external" href="https://s3.amazonaws.com/foglamp/readthedocs/images/05_postman_ping.jpg"><img alt="postman_ping" src="https://s3.amazonaws.com/foglamp/readthedocs/images/05_postman_ping.jpg" /></a></p>
+<p>This is the first message you may receive from FogLAMP!</p>
+</div>
+</div>
+<div class="section" id="hello-from-the-southern-hemisphere-of-the-foglamp-world">
+<h2>Hello from the Southern Hemisphere of the FogLAMP World<a class="headerlink" href="#hello-from-the-southern-hemisphere-of-the-foglamp-world" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now try something more exciting. The primary job of FogLAMP is to collect data from the Edge (we call it <em>South</em>), buffer it in our storage engine and then we send the data to Cloud historians and Enterprise Servers (we call them <em>North</em>). We also offer information to local or networked applications, something we call <em>East</em> or <em>West</em>.
+<br /> <br />
+In order to insert data you may need a sensor or a device that generates data. If you want to try FogLAMP but you do not have any sensor at hand, do not worry, we have a tool that can generate data as if it is a sensor.</p>
+<div class="section" id="fogbench-a-brief-intro">
+<h3>fogbench: a Brief Intro<a class="headerlink" href="#fogbench-a-brief-intro" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP comes with a little but pretty handy tool called <strong>fogbench</strong>. The tools is written in Python and it uses the same libraries of other modules of FogLAMP, therefore no extra libraries are needed. With <em>fogbench</em> you can do many things, like inserting data stored in files, running benchmarks to understand how FogLAMP performs in a given environment, or test an end-to-end installation.</p>
+<p>Note: This following instructions assume you have downloaded and installed the CoAP south plugin from <a class="reference external" href="https://github.com/foglamp-iot/foglamp-south-coap">https://github.com/foglamp-iot/foglamp-south-coap</a>.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/foglamp-iot/foglamp-south-coap
+<span class="gp">$</span> <span class="nb">cd</span> foglamp-south-coap
+<span class="gp">$</span> sudo cp -r python /usr/local/foglamp/python/foglamp/plugins/south/
+<span class="gp">$</span> sudo pip3 install -r /usr/local/foglamp/python/requirements-coap.txt
+<span class="gp">$</span> chown -R root:root /usr/local/foglamp/python/foglamp/plugins/south/coap
+<span class="gp">$</span> curl -sX POST http://localhost:8081/foglamp/service -d <span class="s1">&#39;{&quot;name&quot;: &quot;CoAP&quot;, &quot;type&quot;: &quot;south&quot;, &quot;plugin&quot;: &quot;coap&quot;, &quot;enabled&quot;: true}&#39;</span>
+</pre></div>
+</div>
+<p>Depending on your environment, you can call <em>fogbench</em> in one of those ways:</p>
+<ul class="simple">
+<li>In a development environment, use the script <em>scripts/extras/fogbench</em>, inside your project repository (remember to set the <em>FOGLAMP_ROOT</em> environment variable with the path to your project repository folder).</li>
+<li>In an environment deployed with <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code>, use the script <em>bin/fogbench</em>.</li>
+<li>In a snap installation, call the <code class="docutils literal"><span class="pre">foglamp.fogbench</span></code> script.</li>
+</ul>
+<p>Regardless of the position or environment, the <em>fogbench</em> tool, responds to your call like this:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp.fogbench
+<span class="gp">&gt;</span>&gt;&gt; Make sure south CoAP plugin service is running <span class="p">&amp;</span> listening on specified host and port
+<span class="go">usage: fogbench [-h] [-v] [-k {y,yes,n,no}] -t TEMPLATE [-o OUTPUT]</span>
+<span class="go">                [-I ITERATIONS] [-O OCCURRENCES] [-H HOST] [-P PORT]</span>
+<span class="go">                [-i INTERVAL] [-S {total}]</span>
+<span class="go">fogbench: error: the following arguments are required: -t/--template</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>…or more specifically, when you call invoke <em>fogbench</em> with the <em>–help</em> or <em>-h</em> argument:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> foglamp.fogbench -h
+<span class="gp">&gt;</span>&gt;&gt; Make sure south CoAP plugin service is running <span class="p">&amp;</span> listening on specified host and port
+<span class="go">usage: fogbench [-h] [-v] [-k {y,yes,n,no}] -t TEMPLATE [-o OUTPUT]</span>
+<span class="go">                [-I ITERATIONS] [-O OCCURRENCES] [-H HOST] [-P PORT]</span>
+<span class="go">                [-i INTERVAL] [-S {total}]</span>
+
+<span class="go">fogbench -- a Python script used to test FogLAMP (simulate payloads)</span>
+
+<span class="go">optional arguments:</span>
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  -v, --version         show program&#39;s version number and exit</span>
+<span class="go">  -k {y,yes,n,no}, --keep {y,yes,n,no}</span>
+<span class="go">                          Do not delete the running sample (default: no)</span>
+<span class="go">  -t TEMPLATE, --template TEMPLATE</span>
+<span class="go">                        Set the template file, json extension</span>
+<span class="go">  -o OUTPUT, --output OUTPUT</span>
+<span class="go">                        Set the statistics output file</span>
+<span class="go">  -I ITERATIONS, --iterations ITERATIONS</span>
+<span class="go">                        The number of iterations of the test (default: 1)</span>
+<span class="go">  -O OCCURRENCES, --occurrences OCCURRENCES</span>
+<span class="go">                        The number of occurrences of the template (default: 1)</span>
+<span class="go">  -H HOST, --host HOST  CoAP server host address (default: localhost)</span>
+<span class="go">  -P PORT, --port PORT  The FogLAMP port. (default: 5683)</span>
+<span class="go">  -i INTERVAL, --interval INTERVAL</span>
+<span class="go">                        The interval in seconds for each iteration (default:</span>
+<span class="go">                        0)</span>
+<span class="go">  -S {total}, --statistics {total}</span>
+<span class="go">                        The type of statistics to collect (default: total)</span>
+
+<span class="go">The initial version of fogbench is meant to test the sensor/device interface</span>
+<span class="go">of FogLAMP using CoAP</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>In order to use <em>fogbench</em> you need a template file. The template is a set of JSON elements that are used to create a random set of values that simulate the data generated by one or more sensors. FogLAMP comes with a template file named <em>fogbench_sensor_coap.template.json</em>. The template is located here:</p>
+<ul class="simple">
+<li>In a development environment, look in <em>data/extras/fogbench</em> in the project repository folder.</li>
+<li>In an environment deployed using <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code>, look in <em>$FOGLAMP_DATA/extras/fogbench</em>.</li>
+<li>In a snap installation, look in <em>/snap/foglamp/current/usr/local/foglamp/data/extras/fogbench</em> (the directory is readonly).</li>
+</ul>
+<p>The template file looks like this:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> cat /snap/foglamp/current/usr/local/foglamp/data/extras/fogbench/fogbench_sensor_coap.template.json
+<span class="go">[</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/luxometer&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;lux&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: 0, &quot;max&quot;: 130000, &quot;precision&quot;:3 } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/pressure&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;pressure&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: 800.0, &quot;max&quot;: 1100.0, &quot;precision&quot;:1 } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/humidity&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;humidity&quot;,    &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: 0.0, &quot;max&quot;: 100.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;temperature&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: 0.0, &quot;max&quot;: 50.0  } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/temperature&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;object&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: 0.0, &quot;max&quot;: 50.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;ambient&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: 0.0, &quot;max&quot;: 50.0 } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/accelerometer&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;x&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -2.0, &quot;max&quot;: 2.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;y&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -2.0, &quot;max&quot;: 2.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;z&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -2.0, &quot;max&quot;: 2.0 } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/gyroscope&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;x&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -255.0, &quot;max&quot;: 255.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;y&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -255.0, &quot;max&quot;: 255.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;z&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -255.0, &quot;max&quot;: 255.0 } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;fogbench/magnetometer&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;x&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -255.0, &quot;max&quot;: 255.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;y&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -255.0, &quot;max&quot;: 255.0 },</span>
+<span class="go">                        { &quot;name&quot;: &quot;z&quot;, &quot;type&quot;: &quot;number&quot;, &quot;min&quot;: -255.0, &quot;max&quot;: 255.0 } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;mouse&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;button&quot;, &quot;type&quot;: &quot;enum&quot;, &quot;list&quot;: [ &quot;up&quot;, &quot;down&quot; ] } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;switch&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;button&quot;, &quot;type&quot;: &quot;enum&quot;, &quot;list&quot;: [ &quot;up&quot;, &quot;down&quot; ] } ] },</span>
+<span class="go">  { &quot;name&quot;          : &quot;wall clock&quot;,</span>
+<span class="go">    &quot;sensor_values&quot; : [ { &quot;name&quot;: &quot;tick&quot;, &quot;type&quot;: &quot;enum&quot;, &quot;list&quot;: [ &quot;tock&quot; ] } ] }</span>
+<span class="go">]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>In the array, each element simulates a message from a sensor, with a name, a set of data points that have their name, value type and range.</p>
+</div>
+<div class="section" id="data-coming-from-south">
+<h3>Data Coming from South<a class="headerlink" href="#data-coming-from-south" title="Permalink to this headline">¶</a></h3>
+<p>Now you should have all the information necessary to test the CoAP South microservice. From the command line, type:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">$FOGLAMP_ROOT/scripts/extras/fogbench</span></code> <code class="docutils literal"><span class="pre">-t</span> <span class="pre">$FOGLAMP_ROOT/data/extras/fogbench/fogbench_sensor_coap.template.json</span></code>, if you are in a development environment, with the <em>FOGLAMP_ROOT</em> environment variable set with the path to your project repository folder</li>
+<li><code class="docutils literal"><span class="pre">$FOGLAMP_ROOT/bin/fogbench</span> <span class="pre">-t</span> <span class="pre">$FOGLAMP_DATA/extras/fogbench/fogbench_sensor_coap.template.json</span></code>, if you are in a deployed environment, with <em>FOGLAMP_ROOT</em> and <em>FOGLAMP_DATA</em> set correctly.
+- If you have installed FogLAMP in the default location (i.e. <em>/usr/local/foglamp</em>), type <code class="docutils literal"><span class="pre">cd</span> <span class="pre">/usr/local/foglamp;bin/fogbench</span> <span class="pre">-t</span> <span class="pre">data/extras/fogbench/fogbench_sensor_coap.template.json</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">foglamp.fogbench</span></code> <code class="docutils literal"><span class="pre">-t</span> <span class="pre">/snap/foglamp/current/usr/local/foglamp/data/extras/fogbench/fogbench_sensor_coap.template.json</span></code>, if you have installed a snap version of FogLAMP.</li>
+</ul>
+<p>The output of your command should be:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> scripts/extras/fogbench -t data/extras/fogbench/fogbench_sensor_coap.template.json
+<span class="gp">&gt;</span>&gt;&gt; Make sure south CoAP plugin service is running <span class="p">&amp;</span> listening on specified host and port
+<span class="go">Total Statistics:</span>
+
+<span class="go">Start Time: 2017-12-17 07:17:50.615433</span>
+<span class="go">Ene Time:   2017-12-17 07:17:50.650620</span>
+
+<span class="go">Total Messages Transferred: 10</span>
+<span class="go">Total Bytes Transferred:    2880</span>
+
+<span class="go">Total Iterations: 1</span>
+<span class="go">Total Messages per Iteration: 10.0</span>
+<span class="go">Total Bytes per Iteration:    2880.0</span>
+
+<span class="go">Min messages/second: 284.19586779208225</span>
+<span class="go">Max messages/second: 284.19586779208225</span>
+<span class="go">Avg messages/second: 284.19586779208225</span>
+
+<span class="go">Min Bytes/second: 81848.4099241197</span>
+<span class="go">Max Bytes/second: 81848.4099241197</span>
+<span class="go">Avg Bytes/second: 81848.4099241197</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Congratulations! You have just inserted data into FogLAMP from the CoAP South microservice. More specifically, the output informs you that the data inserted has been composed by 10 different messages for a total of 2,880 Bytes, for an average of 284 messages per second and 81,848 Bytes per second.</p>
+<p>If you want to stress FogLAMP a bit, you may insert the same data sample several times, by using the <em>-I</em> or <em>–iterations</em> argument:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> scripts/extras/fogbench -t data/extras/fogbench/fogbench_sensor_coap.template.json -I <span class="m">100</span>
+<span class="gp">&gt;</span>&gt;&gt; Make sure south CoAP plugin service is running <span class="p">&amp;</span> listening on specified host and port
+<span class="go">Total Statistics:</span>
+
+<span class="go">Start Time: 2017-12-17 07:33:40.568130</span>
+<span class="go">End Time:   2017-12-17 07:33:43.205626</span>
+
+<span class="go">Total Messages Transferred: 1000</span>
+<span class="go">Total Bytes Transferred:    288000</span>
+
+<span class="go">Total Iterations: 100</span>
+<span class="go">Total Messages per Iteration: 10.0</span>
+<span class="go">Total Bytes per Iteration:    2880.0</span>
+
+<span class="go">Min messages/second: 98.3032852957946</span>
+<span class="go">Max messages/second: 625.860558267618</span>
+<span class="go">Avg messages/second: 455.15247432732866</span>
+
+<span class="go">Min Bytes/second: 28311.346165188843</span>
+<span class="go">Max Bytes/second: 180247.840781074</span>
+<span class="go">Avg Bytes/second: 131083.9126062706</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Here we have inserted the same set of data 100 times, therefore the total number of Bytes inserted is 288,000. The performance and insertion rates varies with each iteration and <em>fogbench</em> presents the minimum, maximum and average values.</p>
+</div>
+</div>
+<div class="section" id="checking-what-s-inside-foglamp">
+<h2>Checking What’s Inside FogLAMP<a class="headerlink" href="#checking-what-s-inside-foglamp" title="Permalink to this headline">¶</a></h2>
+<p>We can check if FogLAMP has now stored what we have inserted from the South microservice by using the <em>asset</em> API. From curl or Postman, use this URL:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">[{&quot;asset_code&quot;: &quot;switch&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/temperature&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/humidity&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/luxometer&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/accelerometer&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;wall clock&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/magnetometer&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;mouse&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/pressure&quot;, &quot;count&quot;: 11}, {&quot;asset_code&quot;: &quot;fogbench/gyroscope&quot;, &quot;count&quot;: 11}]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>The output of the asset entry point provides a list of assets buffered in FogLAMP and the count of elements stored. The output is a JSON array with two elements:</p>
+<ul class="simple">
+<li><strong>asset_code</strong> : the name of the sensor or device that provides the data</li>
+<li><strong>count</strong> : the number of occurrences of the asset in the buffer</li>
+</ul>
+<div class="section" id="feeding-east-west-applications">
+<h3>Feeding East/West Applications<a class="headerlink" href="#feeding-east-west-applications" title="Permalink to this headline">¶</a></h3>
+<p>Let’s suppose that we are interested in the data collected for one of the assets listed in the previous query, for example <em>fogbench/temperature</em>. The <em>asset</em> entry point can be used to retrieve the data points for individual assets by simply adding the code of the asset to the URI:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Ftemperature <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">[{&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 13, &quot;object&quot;: 41}}, {&quot;timestamp&quot;: &quot;2017-12-18 10:38:12.580&quot;, &quot;reading&quot;: {&quot;ambient&quot;: 33, &quot;object&quot;: 7}}]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Let’s see the JSON output on a more readable format:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:29.652&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-12-18 10:38:12.580&quot;</span><span class="p">,</span> <span class="nt">&quot;reading&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;ambient&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span> <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">}</span> <span class="p">}</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>The JSON structure depends on the sensor and the plugin used to capture the data. In this case, the values shown are:</p>
+<ul class="simple">
+<li><strong>timestamp</strong> : the timestamp generated by the sensors. In this case, since we have inserted 10 times the same value and one time a new value using <em>fogbench</em>, the result is 10 timestamps with the same value and one timestamp with a different value.</li>
+<li><strong>reading</strong> : a JSON structure that is the set of data points provided by the sensor. In this case:
+- <strong>ambient</strong> : the ambient temperature in Celsius
+- <strong>object</strong> : the object temperature in Celsius. Again, the values are repeated 10 times, due to the iteration executed by <em>fogbench</em>, plus an isolated element, so there are 11 readings in total. Also, it is very unlikely that in a real sensor the ambient and the object temperature differ so much, but here we are using a random number generator.</li>
+</ul>
+<p>You can dig even more in the data and extract only a subset of the reading. Fog example, you can select the ambient temperature and limit to the last 5 readings:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Ftemperature/ambient?limit<span class="o">=</span><span class="m">5</span> <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">[ { &quot;ambient&quot;: 13, &quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot; },</span>
+<span class="go">  { &quot;ambient&quot;: 13, &quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot; }</span>
+<span class="go">  { &quot;ambient&quot;: 13, &quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot; },</span>
+<span class="go">  { &quot;ambient&quot;: 13, &quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot; },</span>
+<span class="go">  { &quot;ambient&quot;: 13, &quot;timestamp&quot;: &quot;2017-12-18 10:38:29.652&quot; } ]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>We have beautified the JSON output for you, so it is more readable.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When you select a specific element in the reading, the timestamp and the element are presented in the opposite order compared to the previous example. This is a known issue that will be fixed in the next version.</p>
+</div>
+</div>
+</div>
+<div class="section" id="sending-greetings-to-the-northern-hemisphere">
+<h2>Sending Greetings to the Northern Hemisphere<a class="headerlink" href="#sending-greetings-to-the-northern-hemisphere" title="Permalink to this headline">¶</a></h2>
+<p>The next and last step is to send data to North, which means that we can take all of some of the data we buffer in FogLAMP and we can send it to a historian or a database using a North task or microservice.</p>
+<div class="section" id="the-omf-translator">
+<h3>The OMF Translator<a class="headerlink" href="#the-omf-translator" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP comes with a North plugin called <em>OMF Translator</em>. OMF is the OSIsoft Message Format, which is the message format accepted by the PI Connector Relay OMF. The PI Connector Relay OMF is provided by OSIsoft and it is used to feed the OSIsoft PI System.</p>
+<ul class="simple">
+<li>Information regarding OSIsoft are available <a href="https://www.osisoft.com/" target="_blank">here</a></li>
+<li>Information regarding OMF are available <a href="http://omf-docs.readthedocs.io" target="_blank">here</a></li>
+<li>Information regarding the OSIsoft PI System are available <a href="https://www.osisoft.com/pi-system" target="_blank">here</a></li>
+</ul>
+<p><em>OMF Translator</em> is scheduled as a North task that is executed every 30 seconds (the time may vary, we set it to 30 seconds to facilitate the testing).</p>
+</div>
+<div class="section" id="preparing-the-pi-system">
+<h3>Preparing the PI System<a class="headerlink" href="#preparing-the-pi-system" title="Permalink to this headline">¶</a></h3>
+<p>In order to test the North task and plugin, first you need to setup the PI system. Here we assume you are already familiar with PI and you have a Windows server with PI installed, up and running. The minimum installation must include the PI System and the PI Connector Relay OMF. Once you have checked that everything is installed and works correctly, you should collect the IP address of the Windows system.</p>
+</div>
+<div class="section" id="setting-the-omf-translator-plugin">
+<h3>Setting the OMF Translator Plugin<a class="headerlink" href="#setting-the-omf-translator-plugin" title="Permalink to this headline">¶</a></h3>
+<p>FogLAMP uses the same <em>OMF Translator</em> plugin to send two streams of data: the data coming from the South modules and buffered in FogLAMP and the statistics generated and collected from FogLAMP. In the current installation, these two streams refer to the categories and streams <em>SEND_PR_1</em> (South data) and <em>SEND_PR_2</em> (FogLAMP Statistics).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In this version, only the South data can be sent to the PI System.</p>
+</div>
+<p>If you are curious to see which categories are available in FogLAMP, simply type:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/category <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">{ &quot;categories&quot;: [ { &quot;key&quot;: &quot;SCHEDULER&quot;,  &quot;description&quot;: &quot;Scheduler configuration&quot;                   },</span>
+<span class="go">                  { &quot;key&quot;: &quot;SEND_PR_1&quot;,  &quot;description&quot;: &quot;OMF North Plugin Configuration&quot;            },</span>
+<span class="go">                  { &quot;key&quot;: &quot;SEND_PR_2&quot;,  &quot;description&quot;: &quot;OMF North Statistics Plugin Configuration&quot; },</span>
+<span class="go">                  { &quot;key&quot;: &quot;SEND_PR_4&quot;,  &quot;description&quot;: &quot;OCS North Plugin Configuration&quot;            },</span>
+<span class="go">                  { &quot;key&quot;: &quot;SMNTR&quot;,      &quot;description&quot;: &quot;Service Monitor configuration&quot;             },</span>
+<span class="go">                  { &quot;key&quot;: &quot;South&quot;,      &quot;description&quot;: &quot;South Service configuration&quot;               },</span>
+<span class="go">                  { &quot;key&quot;: &quot;rest_api&quot;,   &quot;description&quot;: &quot;The FogLAMP Admin and User REST API&quot;       },</span>
+<span class="go">                  { &quot;key&quot;: &quot;service&quot;,    &quot;description&quot;: &quot;The FogLAMP service configuration&quot;         }</span>
+<span class="go">                ]</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>For each plugin, you will see corresponding category e.g. For foglamp-south-coap the registered category will be <code class="docutils literal"><span class="pre">{</span> <span class="pre">&quot;key&quot;:</span> <span class="pre">&quot;COAP&quot;,</span> <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;CoAP</span> <span class="pre">Listener</span> <span class="pre">South</span> <span class="pre">Plugin&quot;}</span></code>.
+The configuration for the OMF Translator used to stream the South data is initially disabled, all you can see about the settings is:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/category/SEND_PR_1 <span class="p">;</span> <span class="nb">echo</span>
+<span class="go">{</span>
+<span class="go">  &quot;plugin&quot;: {</span>
+<span class="go">    &quot;value&quot;: &quot;omf&quot;,</span>
+<span class="go">    &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">    &quot;default&quot;: &quot;omf&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;Python module name of the plugin to load&quot;</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>At this point it may be a good idea to familiarize with the <a href="https://stedolan.github.io/jq" target="_blank">jq</a> tool, it will help you a lot in selecting and using data via the REST API. You may remember, we discussed it in the <a href="building_foglamp.html" target="_blank">Building FogLAMP</a> chapter.</p>
+<p>First, we can see the list of all the scheduled tasks (the process of sending data to a PI Connector Relay OMF is one of them). The command is:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/schedule <span class="p">|</span> jq
+<span class="go">{</span>
+<span class="go">  &quot;schedules&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;name&quot;: &quot;OMF to OCS north&quot;,</span>
+<span class="go">      &quot;repeat&quot;: 30,</span>
+<span class="go">      &quot;time&quot;: 0,</span>
+<span class="go">      &quot;processName&quot;: &quot;North Readings to OCS&quot;,</span>
+<span class="go">      &quot;exclusive&quot;: true,</span>
+<span class="go">      &quot;type&quot;: &quot;INTERVAL&quot;,</span>
+<span class="go">      &quot;enabled&quot;: false,</span>
+<span class="go">      &quot;day&quot;: null,</span>
+<span class="go">      &quot;id&quot;: &quot;5d7fed92-fb9a-11e7-8c3f-9a214cf093ae&quot;</span>
+<span class="go">    },</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>…which means: “show me all the tasks that can be scheduled”, The output has been made more readable by jq. There are several tasks, we need to identify the one we need and extract its unique id. We can achieve that with the power of jq: first we can select the JSON object that shows the elements of the sending task:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/schedule <span class="p">|</span> jq <span class="s1">&#39;.schedules[] | select( .name == &quot;OMF to PI north&quot;)&#39;</span>
+<span class="go">{</span>
+<span class="go">  &quot;id&quot;: &quot;2b614d26-760f-11e7-b5a5-be2e44b06b34&quot;,</span>
+<span class="go">  &quot;name&quot;: &quot;OMF to PI north&quot;,</span>
+<span class="go">  &quot;type&quot;: &quot;INTERVAL&quot;,</span>
+<span class="go">  &quot;repeat&quot;: 30,</span>
+<span class="go">  &quot;time&quot;: 0,</span>
+<span class="go">  &quot;day&quot;: null,</span>
+<span class="go">  &quot;exclusive&quot;: true,</span>
+<span class="go">  &quot;processName&quot;: &quot;North Readings to PI&quot;,</span>
+<span class="go">  &quot;enabled&quot;: false</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Let’s have a look at what we have found:</p>
+<ul class="simple">
+<li><strong>id</strong> is the unique identifier of the schedule.</li>
+<li><strong>name</strong> is a user-friendly name of the schedule.</li>
+<li><strong>type</strong> is the type of schedule, in this case a schedule that is triggered at regular intervals.</li>
+<li><strong>repeat</strong> specifies the interval of 30 seconds.</li>
+<li><strong>time</strong> specifies when the schedule should run: since the type is INTERVAL, this element is irrelevant.</li>
+<li><strong>day</strong> indicates the day of the week the schedule should run, in this case it will be constantly every 30 seconds</li>
+<li><strong>exclusive</strong> indicates that only a single instance of this task should run at any time.</li>
+<li><strong>processName</strong> is the name of the task to be executed.</li>
+<li><strong>enabled</strong> indicates whether the schedule is currently enabled or disabled.</li>
+</ul>
+<p>Now let’s identify the plugin used to send data to the PI Connector Relay OMF. This is currently identified by the key <em>SEND_PR_1</em> (yes, we know it is not intuitive, we will make it better in future releases):</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/category <span class="p">|</span> jq <span class="s1">&#39;.categories[] | select ( .key == &quot;SEND_PR_1&quot; )&#39;</span>
+<span class="go">{</span>
+<span class="go">  &quot;key&quot;:         &quot;SEND_PR_1&quot;,</span>
+<span class="go">  &quot;description&quot;: &quot;OMF North Plugin Configuration&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>We can get the specific information adding the name of the task to the URL:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span>  curl -s http://localhost:8081/foglamp/category/SEND_PR_1 <span class="p">|</span> jq
+<span class="go">{</span>
+<span class="go">  &quot;plugin&quot;: {</span>
+<span class="go">    &quot;description&quot;: &quot;Python module name of the plugin to load&quot;,</span>
+<span class="go">    &quot;type&quot;:        &quot;string&quot;,</span>
+<span class="go">    &quot;value&quot;:       &quot;omf&quot;,</span>
+<span class="go">    &quot;default&quot;:     &quot;omf&quot;</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Now, the output returned does not say much: this is because the plugin has never been enabled, so the configuration has not been loaded yet. First, let’s enabled the schedule. From a the previous query of the schedulable tasks, we know the id is <em>2b614d26-760f-11e7-b5a5-be2e44b06b34</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl  -X PUT http://localhost:8081/foglamp/schedule/2b614d26-760f-11e7-b5a5-be2e44b06b34 -d <span class="s1">&#39;{ &quot;enabled&quot; : true }&#39;</span>
+<span class="go">{ &quot;schedule&quot;: { &quot;id&quot;:          &quot;2b614d26-760f-11e7-b5a5-be2e44b06b34&quot;,</span>
+<span class="go">                &quot;name&quot;:        &quot;OMF to PI north&quot;,</span>
+<span class="go">                &quot;type&quot;:        &quot;INTERVAL&quot;,</span>
+<span class="go">                &quot;repeat&quot;:      30.0,</span>
+<span class="go">                &quot;time&quot;:        0,</span>
+<span class="go">                &quot;day&quot;:         null,</span>
+<span class="go">                &quot;exclusive&quot;:   true,</span>
+<span class="go">                &quot;processName&quot;: &quot;North Readings to PI&quot;,</span>
+<span class="go">                &quot;enabled&quot;:     true</span>
+<span class="go">              }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Once enabled, the plugin will be executed inside the <em>SEND_PR_1</em> task within 30 seconds, so you have to wait up to 30 seconds to see the new, full configuration. After 30 seconds or so, you should see something like this:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/category/SEND_PR_1 <span class="p">|</span> jq
+<span class="go">{ &quot;north&quot;:             { &quot;description&quot;: &quot;The name of the north to use to translate the readings into the output format and send them&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;string&quot;, &quot;value&quot;: &quot;omf&quot;, &quot;default&quot;: &quot;omf&quot; },</span>
+<span class="go">  &quot;OMFRetrySleepTime&quot;: { &quot;description&quot;: &quot;Seconds between each retry for the communication with the OMF PI Connector Relay&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;1&quot;, &quot;default&quot;: &quot;1&quot; },</span>
+<span class="go">  &quot;filterRule&quot;:        { &quot;description&quot;: &quot;JQ formatted filter to apply (applicable if applyFilter is True)&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;string&quot;, &quot;value&quot;: &quot;.[]&quot;, &quot;default&quot;: &quot;.[]&quot; },</span>
+<span class="go">  &quot;URL&quot;:               { &quot;description&quot;: &quot;The URL of the PI Connector to send data to&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;string&quot;, &quot;value&quot;: &quot;https://pi-server:5460/ingress/messages&quot;, &quot;default&quot;: &quot;https://pi-server:5460/ingress/messages&quot; },</span>
+<span class="go">  &quot;plugin&quot;:            { &quot;description&quot;: &quot;OMF North Plugin&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;string&quot;, &quot;value&quot;: &quot;omf&quot;, &quot;default&quot;: &quot;omf&quot; },</span>
+<span class="go">  &quot;producerToken&quot;:     { &quot;description&quot;: &quot;The producer token that represents this FogLAMP stream&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;string&quot;, &quot;value&quot;: &quot;omf_north_0001&quot;, &quot;default&quot;: &quot;omf_north_0001&quot; },</span>
+<span class="go">  &quot;OMFMaxRetry&quot;:       { &quot;description&quot;: &quot;Max number of retries for the communication with the OMF PI Connector Relay&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;5&quot;, &quot;default&quot;: &quot;5&quot; },</span>
+<span class="go">  &quot;enable&quot;:            { &quot;description&quot;: &quot;A switch that can be used to enable or disable execution of the sending process.&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;boolean&quot;, &quot;value&quot;: &quot;True&quot;, &quot;default&quot;: &quot;True&quot; },</span>
+<span class="go">  &quot;OMFHttpTimeout&quot;:    { &quot;description&quot;: &quot;Timeout in seconds for the HTTP operations with the OMF PI Connector Relay&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;30&quot;, &quot;default&quot;: &quot;30&quot; },</span>
+<span class="go">  &quot;StaticData&quot;:        { &quot;description&quot;: &quot;Static data to include in each sensor reading sent to OMF.&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;JSON&quot;, &quot;value&quot;: &quot;{\&quot;Company\&quot;: \&quot;Dianomic\&quot;, \&quot;Location\&quot;: \&quot;Palo Alto\&quot;}&quot;, &quot;default&quot;: &quot;{\&quot;Company\&quot;: \&quot;Dianomic\&quot;, \&quot;Location\&quot;: \&quot;Palo Alto\&quot;}&quot; },</span>
+<span class="go">  &quot;duration&quot;:          { &quot;description&quot;: &quot;How long the sending process should run (in seconds) before stopping.&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;60&quot;, &quot;default&quot;: &quot;60&quot; },</span>
+<span class="go">  &quot;sleepInterval&quot;:     { &quot;description&quot;: &quot;A period of time, expressed in seconds, to wait between attempts to send readings when there are no readings to be sent.&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;5&quot;, &quot;default&quot;: &quot;5&quot; },</span>
+<span class="go">  &quot;source&quot;:            { &quot;description&quot;: &quot;Defines the source of the data to be sent on the stream, this may be one of either readings, statistics or audit.&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;string&quot;, &quot;value&quot;: &quot;readings&quot;, &quot;default&quot;: &quot;readings&quot; },</span>
+<span class="go">  &quot;blockSize&quot;:         { &quot;description&quot;: &quot;The size of a block of readings to send in each transmission.&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;5000&quot;, &quot;default&quot;: &quot;5000&quot; },</span>
+<span class="go">  &quot;applyFilter&quot;:       { &quot;description&quot;: &quot;Whether to apply filter before processing the data&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;boolean&quot;, &quot;value&quot;: &quot;False&quot;, &quot;default&quot;: &quot;False&quot; },</span>
+<span class="go">  &quot;stream_id&quot;:         { &quot;description&quot;: &quot;Stream ID&quot;,</span>
+<span class="go">                         &quot;type&quot;: &quot;integer&quot;, &quot;value&quot;: &quot;1&quot;, &quot;default&quot;: &quot;1&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>You can look at the descriptions to have a taste of what you can control with this plugin. The default configuration should be fine, with the exception of the <em>URL</em>, which of course should refer to the IP address of the machine and the port used by the PI Connector Relay OMF. The PI Connector Relay OMF 1.0 used the HTTP protocol with port 8118 and version 1.2, or higher, uses the HTTPS and port 5460. Assuming that the port is <em>5460</em> and the IP address is <em>192.168.56.101</em>, you can set the new URL with this PUT method:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sH<span class="s1">&#39;Content-Type: application/json&#39;</span> -X PUT -d <span class="s1">&#39;{ &quot;value&quot;: &quot;https://192.168.56.101:5460/ingress/messages&quot; }&#39;</span> http://localhost:8081/foglamp/category/SEND_PR_1/URL <span class="p">|</span> jq
+<span class="go">{ &quot;description&quot;: &quot;The URL of the PI Connector to send data to&quot;,</span>
+<span class="go">  &quot;type&quot;:        &quot;string&quot;,</span>
+<span class="go">  &quot;value&quot;:       &quot;https://192.168.56.101:5460/ingress/messages&quot;,</span>
+<span class="go">  &quot;default&quot;:     &quot;https://pi-server:5460/ingress/messages&quot;</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>You can note that the <em>value</em> element is the only one that can be changed in <em>URL</em> (the other elements are factory settings).</p>
+<p>Now we are ready to send data North, to the PI System.</p>
+</div>
+<div class="section" id="sending-data-to-the-pi-system">
+<h3>Sending Data to the PI System<a class="headerlink" href="#sending-data-to-the-pi-system" title="Permalink to this headline">¶</a></h3>
+<p>The last bit to accomplish is to start the PI Connector Relay OMF on the Windows Server. The output may look like this screenshot, where you can see the Connector Relay debug window on the left and teh PI Data Explorer on the right.</p>
+<p><a class="reference external" href="https://s3.amazonaws.com/foglamp/readthedocs/images/05_win_server_waiting.jpg"><img alt="win_server_waiting" src="https://s3.amazonaws.com/foglamp/readthedocs/images/05_win_server_waiting.jpg" /></a></p>
+<p>Wait a few seconds …et voilà! Readings and statistics are in the PI System:</p>
+<p><a class="reference external" href="https://s3.amazonaws.com/foglamp/readthedocs/images/05_pi_loaded.jpg"><img alt="pi_loaded" src="https://s3.amazonaws.com/foglamp/readthedocs/images/05_pi_loaded.jpg" /></a></p>
+<p>Congratulations! You have experienced an end-to-end test of FogLAMP, from South with sensor data through FogLAMP and East/West applications and finally to North towards Historians.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="04_utilities.html" class="btn btn-neutral float-right" title="FogLAMP Utilities and Scripts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="04_installation.html" class="btn btn-neutral" title="FogLAMP Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

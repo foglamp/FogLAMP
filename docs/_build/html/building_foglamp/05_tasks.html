@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FogLAMP Tasks &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Building Developers Guide" href="index.html"/>
+        <link rel="next" title="Building and using FogLAMP on Raspbian" href="../RASPBIAN.html"/>
+        <link rel="prev" title="FogLAMP Utilities and Scripts" href="04_utilities.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../build_index.html">Building FogLAMP</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Building Developers Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="building_foglamp.html">Building FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_installation.html">FogLAMP Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_testing.html">Testing FogLAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_utilities.html">FogLAMP Utilities and Scripts</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FogLAMP Tasks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#purge">Purge</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../RASPBIAN.html">Building and using FogLAMP on Raspbian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html">Building and using FogLAMP on RedHat/CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#install-foglamp-on-red-hat-centos-using-the-rpm-package">Install FogLAMP on Red Hat/CentOS using the RPM package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../REDHAT.html#build-of-foglamp-on-red-hat-centos">Build of FogLAMP on Red Hat/CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../build_index.html">Building FogLAMP</a> &raquo;</li>
+        
+          <li><a href="index.html">Building Developers Guide</a> &raquo;</li>
+        
+      <li>FogLAMP Tasks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/building_foglamp/05_tasks.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foglamp-tasks">
+<h1>FogLAMP Tasks<a class="headerlink" href="#foglamp-tasks" title="Permalink to this headline">¶</a></h1>
+<p>Tasks are part of the FogLAMP IoT platform. They are like services, but with a clear distinction:</p>
+<ul class="simple">
+<li><em>services</em> are started at a certain point (usually at startup) and they are likely to continue to work until FogLAMP stops.</li>
+<li><em>tasks</em> are started when required, they execute a job and then they terminate.</li>
+</ul>
+<p>In simple terms, a service is meant to always listen and react to requests, while a task is triggered by an event and then when job is terminated, the tasks ends.</p>
+<p>That said, tasks and services shared these same features:</p>
+<ul class="simple">
+<li>They are both started by the FogLAMP scheduler. It is likely that services are started at startup, while tasks can start at a given time or interval.</li>
+<li>They both use the internal API to communicate with other services.</li>
+<li>They both use the same pluggable architecture to separate a common logic, usually associated to the internal features of FogLAMP, from a more generic logic, usually closer to the type of operations that must be performed.</li>
+</ul>
+<p>In this chapter we present a set of tasks that are commonly available in FogLAMP.</p>
+<div class="section" id="purge">
+<h2>Purge<a class="headerlink" href="#purge" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Purge</em> task is triggered by the scheduler to purge old data that is still stored (buffered) in FogLAMP. The logic applied to the task is relatively simple:</p>
+<ul class="simple">
+<li>The task is called exclusively (i.e. there cannot be more than one <em>Purge</em> task running at any given time) by the FogLAMP scheduler every hour (by default).</li>
+<li>Data that is older than a certain date/time is removed.</li>
+<li>Optionally, data is removed if the total size of the stored objects is bigger than 1GByte (default)</li>
+<li>Optionally, data is not removed if it has not been extracted and used by any North task or service yet.</li>
+<li>All purge operations are stored in the audit log.</li>
+</ul>
+<div class="section" id="purge-schedule">
+<h3>Purge Schedule<a class="headerlink" href="#purge-schedule" title="Permalink to this headline">¶</a></h3>
+<p><em>Purge</em> is one of the tasks launched by the FogLAMP scheduler. You can retrieve information about the scheduling by calling the <em>GET</em> method of the <em>schedule</em> call. The name and the process name of the task are both <em>purge</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX GET http://localhost:8081/foglamp/schedule
+<span class="go">...</span>
+<span class="go">{ &quot;id&quot;          : &quot;cea17db8-6ccc-11e7-907b-a6006ad3dba0&quot;,</span>
+<span class="go">  &quot;name&quot;        : &quot;purge&quot;,</span>
+<span class="go">  &quot;time&quot;        : 0,</span>
+<span class="go">  &quot;enabled&quot;     : true,</span>
+<span class="go">  &quot;repeat&quot;      : 3600,</span>
+<span class="go">  &quot;type&quot;        : &quot;INTERVAL&quot;,</span>
+<span class="go">  &quot;exclusive&quot;   : true,</span>
+<span class="go">  &quot;processName&quot; : &quot;purge&quot;,</span>
+<span class="go">  &quot;day&quot;         : null },</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>As you can see from the JSON output, the task is scheduled to be executed every hour (3,600 seconds). In order to change the interval between <em>Purge</em> tasks, you can call the <em>PUT</em> method of the <em>schedule</em> call by passing the associated <em>id</em>. For example, in order to change the task to be executed any 5 minutes (i.e. 300 seconds) you should call:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX PUT http://localhost:8081/foglamp/schedule/cea17db8-6ccc-11e7-907b-a6006ad3dba0 -d <span class="s1">&#39;{&quot;repeat&quot;: 300}&#39;</span>
+<span class="go">{ &quot;schedule&quot;: { &quot;id&quot;: &quot;cea17db8-6ccc-11e7-907b-a6006ad3dba0&quot;,</span>
+<span class="go">                &quot;name&quot;        : &quot;purge&quot;,</span>
+<span class="go">                &quot;time&quot;        : 0,</span>
+<span class="go">                &quot;enabled&quot;     : true,</span>
+<span class="go">                &quot;repeat&quot;      : 300,</span>
+<span class="go">                &quot;type&quot;        : &quot;INTERVAL&quot;,</span>
+<span class="go">                &quot;exclusive&quot;   : true,</span>
+<span class="go">                &quot;processName&quot; : &quot;purge&quot;,</span>
+<span class="go">                &quot;day&quot;         : null }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="purge-configuration">
+<h3>Purge Configuration<a class="headerlink" href="#purge-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The configuration of the <em>Purge</em> task is stored in the metadata structures of FogLAMP and it can be retrieve using the <em>GET</em> method of the <em>category/PURGE_READ</em> call. This is the command used to retrieve the configuration in JSON format:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX GET http://localhost:8081/foglamp/category/PURGE_READ
+<span class="go">{ &quot;retainUnsent&quot; : { &quot;type&quot;: &quot;boolean&quot;,</span>
+<span class="go">                     &quot;default&quot;: &quot;False&quot;,</span>
+<span class="go">                     &quot;description&quot;: &quot;Retain data that has not been sent to any historian yet.&quot;,</span>
+<span class="go">                     &quot;value&quot;: &quot;False&quot; },</span>
+<span class="go">  &quot;age&quot;          : { &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">                     &quot;default&quot;: &quot;72&quot;,</span>
+<span class="go">                     &quot;description&quot;: &quot;Age of data to be retained, all data that is older than this value will be removed,unless retained. (in Hours)&quot;,</span>
+<span class="go">                     &quot;value&quot;: &quot;72&quot; },</span>
+<span class="go">  &quot;size&quot;         : { &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">                     &quot;default&quot;: &quot;1000000&quot;,</span>
+<span class="go">                     &quot;description&quot;: &quot;Maximum size of data to be retained, the oldest data will be removed to keep below this size, unless retained. (in Kbytes)&quot;,</span>
+<span class="go">                     &quot;value&quot;: &quot;1000000&quot; } }</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Changes can be applied using the <em>PUT</em> method for each parameter call. For example, in order to change the retention policy for data that has not been sent to historians yet, you can use this call:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX PUT http://locahost:8081/foglamp/category/PURGE_READ/retainUnsent -d <span class="s1">&#39;{&quot;value&quot;: &quot;True&quot;}&#39;</span>
+<span class="go">{ &quot;type&quot;: &quot;boolean&quot;,</span>
+<span class="go">  &quot;default&quot;: &quot;False&quot;,</span>
+<span class="go">  &quot;description&quot;: &quot;Retain data that has not been sent to any historian yet.&quot;,</span>
+<span class="go">  &quot;value&quot;: &quot;True&quot; }</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>The following table shows the list of parameters that can be changed in the <em>Purge</em> task:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Item</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>retainUnsent</td>
+<td>boolean</td>
+<td>False</td>
+<td>Retain data that has not been sent to “North” yet When <em>True</em>, data that has not yet been retrieved by any North service or task, will not be purged. When <em>False</em>, data is purged without checking whether it has been sent to a North destination yet or not.</td>
+</tr>
+<tr class="row-odd"><td>age</td>
+<td>integer</td>
+<td>72</td>
+<td>Age in hours of the data to be retained. Data that is older than this value, will be purged.</td>
+</tr>
+<tr class="row-even"><td>size</td>
+<td>integer</td>
+<td>1000000</td>
+<td>Size in KBytes of data that will be retained in FogLAMP. Older data will be removed to keep the data stored in FogLAMP below this size.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../RASPBIAN.html" class="btn btn-neutral float-right" title="Building and using FogLAMP on Raspbian" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="04_utilities.html" class="btn btn-neutral" title="FogLAMP Utilities and Scripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

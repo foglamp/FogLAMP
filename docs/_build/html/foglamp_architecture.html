@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FogLAMP Architecture &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="FogLAMP Plugins" href="foglamp_plugins.html"/>
+        <link rel="prev" title="Processing Data" href="processing_data.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FogLAMP Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foglamp-core">FogLAMP Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#storage-layer">Storage Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#southbound-microservices">Southbound Microservices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#northbound-microservices">Northbound Microservices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filters">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#event-engine">Event Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rest-api">REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graphical-user-interface">Graphical User Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>FogLAMP Architecture</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/foglamp_architecture.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="foglamp-architecture">
+<h1>FogLAMP Architecture<a class="headerlink" href="#foglamp-architecture" title="Permalink to this headline">¶</a></h1>
+<p>The following diagram shows the architecture of FogLAMP:</p>
+<ul class="simple">
+<li>Components in blue are <strong>plugins</strong>. Plugins are light-weight modules that enable FogLAMP to be extended. There are a variety of types of plugins: south-facing, north-facing, storage engine, filters, event rules and event delivery mechanisms. Plugins can be written in python (for fast development) or C++ (for high performance).</li>
+<li>Components in green are <strong>microservices</strong>. They can co-exist in the same operating environment or they can be distributed across multiple environments.</li>
+</ul>
+<p><img alt="foglamp_architecture" src="_images/foglamp_architecture.png" /></p>
+<div class="section" id="foglamp-core">
+<h2>FogLAMP Core<a class="headerlink" href="#foglamp-core" title="Permalink to this headline">¶</a></h2>
+<p>The Core microservice coordinates all of the FogLAMP operations. Only one Core service can be active at any time.</p>
+<p>Core functionality includes:</p>
+<p><strong>Scheduler</strong>: Flexible scheduler to bring up processes.</p>
+<p><strong>Configuration Management</strong>: maintain configuration of all FogLAMP components. Enable software updates across all FogLAMP components.</p>
+<p><strong>Monitoring</strong>: monitor all FogLAMP components, and if a problem is discovered (such as an unresponsive microservice), attempt to self-heal.</p>
+<p><strong>REST API</strong>: expose external management and data APIs for functionality across all components.</p>
+<p><strong>Backup</strong>: FogLAMP system backup and restore functionality.</p>
+<p><strong>Audit Logging</strong>: maintain logs of system changes for auditing purposes.</p>
+<p><strong>Certificate Storage</strong>: maintain security certificates for different components, including south services, north services, and API security.</p>
+<p><strong>User Management</strong>: maintain authentication and permission info on FogLAMP administrators.</p>
+<p><strong>Asset Browsing</strong>: enable querying of stored asset data.</p>
+</div>
+<div class="section" id="storage-layer">
+<h2>Storage Layer<a class="headerlink" href="#storage-layer" title="Permalink to this headline">¶</a></h2>
+<p>The Storage microservice provides two principal functions: a) maintenance of FogLAMP configuration and run-time state, and b) storage/buffering of asset data. The type of storage engine is pluggable, so in installations with a small footprint, a plugin for SQLite may be chosen, or in installations with a high number of concurrent requests and larger footprint Postgresql may be suitable. In micro installations, for example on Edge devices, in-memory temporary storage may be the best option.</p>
+</div>
+<div class="section" id="southbound-microservices">
+<h2>Southbound Microservices<a class="headerlink" href="#southbound-microservices" title="Permalink to this headline">¶</a></h2>
+<p>Southbound microservices offer bi-directional communication of data and metadata between Edge devices, such as sensors, actuators or PLCs and FogLAMP. Smaller systems may have this service installed onboard Edge devices. Southbound components are typically deployed as always-running services, which continuously wait for new data. Alternatively, they can be deployed as single-shot tasks, which periodically spin up, collect data and spin down.</p>
+</div>
+<div class="section" id="northbound-microservices">
+<h2>Northbound Microservices<a class="headerlink" href="#northbound-microservices" title="Permalink to this headline">¶</a></h2>
+<p>Northbound microservices offer bi-directional communication of data and metadata between the FogLAMP platform and larger systems located locally or in the cloud. Larger systems may be private and public Cloud data services, proprietary solutions or FogLAMP instances with larger footprints. Northbound components are typically deployed as one-shot tasks, which periodically spin up and send data which has been batched, then spin down. However, they can also be deployed as continually-running services.</p>
+</div>
+<div class="section" id="filters">
+<h2>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h2>
+<p>Filters are plugins which modify streams of data that flow through FogLAMP. They can be deployed at ingress (in a South service), or at egress (in a North service). Typically, ingress filters are used to transform or enrich data, and egress filters are used to reduce flow to northbound pipes and infrastructure, i.e. by compressing or reducing data that flows out. Multiple filters can be applied in “pipelines”, and once configured, pipelines can be applied to multiple south or north services.</p>
+<p>A sample of existing Filters:</p>
+<p><strong>Expression</strong>: apply an arbitrary mathematical equation across one or more assets.</p>
+<p><strong>Python35</strong>: run user-specified python code across one or more assets.</p>
+<p><strong>Metadata</strong>: apply tags to data, to note the device/location it came from, or to attribute data to a manufactured part.</p>
+<p><strong>RMS/Peak</strong>: summarize vibration data by generating a Root Mean Squared (RMS) across n samples.</p>
+<p><strong>FFT</strong>: generate a Fast Fourier Transform (FFT) of vibration data to discover component waveforms.</p>
+<p><strong>Delta</strong>: Only send data that has changed by a specified amount.</p>
+<p><strong>Rate</strong>: buffer data but don’t send it, then if an error condition occurs, send the previous data.</p>
+</div>
+<div class="section" id="event-engine">
+<h2>Event Engine<a class="headerlink" href="#event-engine" title="Permalink to this headline">¶</a></h2>
+<p>The event engine maintains zero or more rule/action pairs. Each rule subscribes to desired asset data, and evaluates it. If the rule triggers, its associated action is executed.</p>
+<p><strong>Data Subscriptions</strong>: Rules can evaluate every data point for a specified asset, or they can evaluate the minimum, maximum or average of a specified window of data points.</p>
+<p><strong>Rules</strong>: the most basic rule evaluates if values are over/under a specified threshold. The Expression plugin will evaluate an arbitrary math equation across one or more assets. The Python35 plugin will execute user-specified python code to one or more assets.</p>
+<p><strong>Actions</strong>: A variety of delivery mechanisms exist to execute a python application, or create arbitrary data, or email/slack/hangout/communicate a message.</p>
+</div>
+<div class="section" id="rest-api">
+<h2>REST API<a class="headerlink" href="#rest-api" title="Permalink to this headline">¶</a></h2>
+<p>The FogLAMP API provides methods to administer FogLAMP, and to interact with the data inside it.</p>
+</div>
+<div class="section" id="graphical-user-interface">
+<h2>Graphical User Interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>A GUI enables administration of FogLAMP. All GUI capability is through the REST API, so FogLAMP can also be administered through scripts or other management tools. The GUI contains pages to:</p>
+<p><strong>Health</strong>: See if services are responsive. See data that’s flowed in and out of FogLAMP</p>
+<p><strong>Assets &amp; Readings</strong>: analytics of data in FogLAMP</p>
+<p><strong>South</strong>: manage south services</p>
+<p><strong>North</strong>: manage north services</p>
+<p><strong>Notifications</strong>: manage event engine rules and delivery mechanisms</p>
+<p><strong>Certificate Store</strong>: manage certificates</p>
+<p><strong>Backup &amp; Restore</strong>: backup/restore FogLAMP</p>
+<p><strong>Logs</strong>: see system, notification, audit logging information</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="foglamp_plugins.html" class="btn btn-neutral float-right" title="FogLAMP Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="processing_data.html" class="btn btn-neutral" title="Processing Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

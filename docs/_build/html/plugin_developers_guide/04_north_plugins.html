@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>North Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Developer Guide" href="index.html"/>
+        <link rel="next" title="Storage Plugins" href="05_storage_plugins.html"/>
+        <link rel="prev" title="Hybrid Plugins" href="037_hybrid_plugins.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Plugin Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_FogLAMP_plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_writing_plugins.html">Writing and Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_plugins.html">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_C_plugins.html">South Plugins in C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="035_CPP.html">C++ Support Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="037_hybrid_plugins.html">Hybrid Plugins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">North Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-omf-plugin">The OMF Plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#omf-plugin-configuration">OMF Plugin Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#changing-the-omf-plugin-configuration">Changing the OMF Plugin Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-in-the-pi-system">Data in the PI System</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_storage_plugins.html">Storage Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Plugin Developer Guide</a> &raquo;</li>
+        
+      <li>North Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/04_north_plugins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="north-plugins">
+<h1>North Plugins<a class="headerlink" href="#north-plugins" title="Permalink to this headline">¶</a></h1>
+<p>North plugins are used in North tasks and microservices to extract data buffered in FogLAMP and send it Northbound, i.e. to a server or a service in the Cloud or in an Enterprise data center. We currently have two North plugins, one to send data to an OSIsoft PI Server and one to the OSIsoft Cloud Service.</p>
+<div class="section" id="the-omf-plugin">
+<h2>The OMF Plugin<a class="headerlink" href="#the-omf-plugin" title="Permalink to this headline">¶</a></h2>
+<p>The OMF Plugin is used by a North task to send data to an OSIsoft PI server via a PI Connector Relay or PI Web API, it can also send to Edge Data Store or OSIsoft Cloud Services. All these destinations share a single protocol for communication, OMF. <em>OMF</em> stands for OSIsoft Message Format, it is the JSON format defined by OSIsoft to send IoT data to a PI server via a Connector Relay server.</p>
+<p>The plugin is designed to send two streams of data:</p>
+<ul class="simple">
+<li>The data collected by South microservices and buffered into FogLAMP</li>
+<li>The statistics generated by FogLAMP</li>
+</ul>
+<p>The streams are managed by two different North tasks using the same plugin, but with a different configuration. The two tasks are registered in the list of scheduled jobs and they can be identified using the <code class="docutils literal"><span class="pre">schedule</span></code> API call:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX GET   http://locahost:8081/foglamp/schedule
+<span class="go">{</span>
+<span class="go">  &quot;schedules&quot;: [</span>
+<span class="go">    { &quot;day&quot;: null,</span>
+<span class="go">      &quot;time&quot;: 0,</span>
+<span class="go">      &quot;name&quot;: &quot;OMF to PI north&quot;,</span>
+<span class="go">      &quot;exclusive&quot;: true,</span>
+<span class="go">      &quot;processName&quot;: &quot;North Readings to PI&quot;,</span>
+<span class="go">      &quot;enabled&quot;: false,</span>
+<span class="go">      &quot;type&quot;: &quot;INTERVAL&quot;,</span>
+<span class="go">      &quot;repeat&quot;: 30,</span>
+<span class="go">      &quot;id&quot;: &quot;2b614d26-760f-11e7-b5a5-be2e44b06b34&quot; },</span>
+<span class="go">    { &quot;day&quot;: null,</span>
+<span class="go">      &quot;time&quot;: 0,</span>
+<span class="go">      &quot;name&quot;: &quot;Stats OMF to PI north&quot;,</span>
+<span class="go">      &quot;exclusive&quot;: true,</span>
+<span class="go">      &quot;processName&quot;: &quot;North Statistics to PI&quot;,</span>
+<span class="go">      &quot;enabled&quot;: false,</span>
+<span class="go">      &quot;type&quot;: &quot;INTERVAL&quot;,</span>
+<span class="go">      &quot;repeat&quot;: 30,</span>
+<span class="go">      &quot;id&quot;: &quot;1d7c327e-7dae-11e7-bb31-be2e44b06b34&quot; },</span>
+<span class="go">  ...</span>
+<span class="go">  ]</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>The output of API call above shows three interesting tasks: the two tasks associated to the OMF plugin, the one to send data (<em>OMF to PI north</em>) and the one to send statistics (<em>North Statistics to PI</em>).</p>
+<p>The two scheduled tasks are associated to two configuration items that can be retrieved using the <code class="docutils literal"><span class="pre">category</span></code> API call. The items are named <code class="docutils literal"><span class="pre">SEND_PR_1</span></code> and <code class="docutils literal"><span class="pre">SEND_PR_2</span></code>.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX GET   http://localhost:8081/foglamp/category/SEND_PR_1
+<span class="go">{ &quot;plugin&quot;: { &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">              &quot;default&quot;: &quot;omf&quot;,</span>
+<span class="go">              &quot;value&quot;: &quot;omf&quot;,</span>
+<span class="go">              &quot;description&quot;: &quot;Python module name of the plugin to load&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span> curl -sX GET   http://localhost:8081/foglamp/category/SEND_PR_2
+<span class="go">{ &quot;plugin&quot;: { &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">              &quot;default&quot;: &quot;omf&quot;,</span>
+<span class="go">              &quot;value&quot;: &quot;omf&quot;,</span>
+<span class="go">              &quot;description&quot;: &quot;Python module name of the plugin to load&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>In order to activate the tasks, you must change their status. First you must collect their id (from the GET method of the <code class="docutils literal"><span class="pre">schedule</span></code> API call), then you must use the IDs with the PUT method of the same call:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX PUT http://vbox-dev:8081/foglamp/schedule/2b614d26-760f-11e7-b5a5-be2e44b06b34 -d <span class="s1">&#39;{ &quot;enabled&quot; : true}&#39;</span>
+<span class="go">{ &quot;schedule&quot;: { &quot;day&quot;: null,</span>
+<span class="go">                &quot;time&quot;: 0,</span>
+<span class="go">                &quot;name&quot;: &quot;OMF to PI north&quot;,</span>
+<span class="go">                &quot;exclusive&quot;: true,</span>
+<span class="go">                &quot;processName&quot;: &quot;North Readings to PI&quot;,</span>
+<span class="go">                &quot;enabled&quot;: true,</span>
+<span class="go">                &quot;type&quot;: &quot;INTERVAL&quot;,</span>
+<span class="go">                &quot;repeat&quot;: 30.0,</span>
+<span class="go">                &quot;id&quot;: &quot;2b614d26-760f-11e7-b5a5-be2e44b06b34&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span> curl -sX PUT http://vbox-dev:8081/foglamp/schedule/1d7c327e-7dae-11e7-bb31-be2e44b06b34 -d <span class="s1">&#39;{ &quot;enabled&quot; : true}&#39;</span>
+<span class="go">{ &quot;schedule&quot;: { &quot;day&quot;: null,</span>
+<span class="go">                &quot;time&quot;: 0,</span>
+<span class="go">                &quot;name&quot;: &quot;Stats OMF to PI north&quot;,</span>
+<span class="go">                &quot;exclusive&quot;: true,</span>
+<span class="go">                &quot;processName&quot;: &quot;North Statistics to PI&quot;,</span>
+<span class="go">                &quot;enabled&quot;: true,</span>
+<span class="go">                &quot;type&quot;: &quot;INTERVAL&quot;,</span>
+<span class="go">                &quot;repeat&quot;: 30.0,</span>
+<span class="go">                &quot;id&quot;: &quot;1d7c327e-7dae-11e7-bb31-be2e44b06b34&quot; }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>At this point, the configuration has been enriched with default values of the tasks:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX GET http://vbox-dev:8081/foglamp/category/SEND_PR_1
+<span class="go">{ &quot;filterRule&quot;: {</span>
+<span class="go">    &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">    &quot;default&quot;: &quot;.[]&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;JQ formatted filter to apply (applicable if applyFilter is True)&quot;,</span>
+<span class="go">    &quot;value&quot;: &quot;.[]&quot; },</span>
+<span class="go">  &quot;plugin&quot;: { &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">    &quot;default&quot;: &quot;omf&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;OMF North Plugin&quot;,</span>
+<span class="go">    &quot;value&quot;: &quot;omf&quot; },</span>
+<span class="go">  ...</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -sX GET http://vbox-dev:8081/foglamp/category/SEND_PR_2
+<span class="go">{ &quot;URL&quot;: {</span>
+<span class="go">    &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">    &quot;default&quot;: &quot;https://pi-server:5460/ingress/messages&quot;,</span>
+<span class="go">    &quot;value&quot;: &quot;https://pi-server:5460/ingress/messages&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;The URL of the PI Connector to send data to&quot; },</span>
+<span class="go">  &quot;filterRule&quot;: {</span>
+<span class="go">    &quot;type&quot;: &quot;string&quot;,</span>
+<span class="go">    &quot;default&quot;: &quot;.[]&quot;,</span>
+<span class="go">    &quot;value&quot;: &quot;.[]&quot;,</span>
+<span class="go">    &quot;description&quot;: &quot;JQ formatted filter to apply (applicable if applyFilter is True)&quot; },</span>
+<span class="go">  ...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<div class="section" id="omf-plugin-configuration">
+<h3>OMF Plugin Configuration<a class="headerlink" href="#omf-plugin-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The following table presents the list of configuration options available for the task that sends data to OMF (category <em>SEND_PR_1</em>):</p>
+<p>The following table presents the list of configuration options available for the task that sends statistics to OMF (category <em>SEND_PR_2</em>):</p>
+<p>The last parameter to review is the <em>OMF Type</em>. The call is the GET method <code class="docutils literal"><span class="pre">foglamp/category/OMF_TYPES</span></code>, which returns an integer value that identifies the measurement type:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX GET http://vbox-dev:8081/foglamp/category/OMF_TYPES
+<span class="go">{</span>
+<span class="go">  &quot;type-id&quot;: {</span>
+<span class="go">    &quot;description&quot;: &quot;Identify sensor and measurement types&quot;,</span>
+<span class="go">    &quot;type&quot;: &quot;integer&quot;,</span>
+<span class="go">    &quot;default&quot;: &quot;0001&quot;,</span>
+<span class="go">    &quot;value&quot;: &quot;0001&quot;</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>If you change the value, you can easily identify the set of data sent to and then stored into PI.</p>
+</div>
+<div class="section" id="changing-the-omf-plugin-configuration">
+<h3>Changing the OMF Plugin Configuration<a class="headerlink" href="#changing-the-omf-plugin-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Before you send data to the PI server, it is likely that you need to apply more changes to the configuration. The most important items to change are:</p>
+<ul class="simple">
+<li><strong>URL</strong> : the URL to the PI Connector Relay OMF. It is usually composed by the name or address of the Windows server where the Connector Relay service is running, the port associated to the service and the ingress/messages API call. The communication is via HTTPS protocol.</li>
+<li><strong>producerToken</strong> : the token provided by the Data Collection Manager when the PI administrator sets the use of FogLAMP.</li>
+<li><strong>type-id</strong> : the measurement type for the stream of data.</li>
+<li><strong>source</strong> : this parameter should be set to <em>readings</em> (default) when the plugin is used to send data collected by South microservices, and to <em>statistics</em> when the plugin is used to send FogLAMP statistics to the PI system.</li>
+</ul>
+<p>An example of the changes to apply to the plugins to send data to the PI system is available here <a class="reference external" href="../building_foglamp/06_testing.html#sending-greetings-to-the-northern-hemisphere">here</a>.</p>
+</div>
+<div class="section" id="data-in-the-pi-system">
+<h3>Data in the PI System<a class="headerlink" href="#data-in-the-pi-system" title="Permalink to this headline">¶</a></h3>
+<p>Once the North plugins have been set properly, you should expect to see data automatically sent and stored in the PI Server. More specifically, the process of the plugin is the following:</p>
+<ul class="simple">
+<li><strong>Assets</strong> buffered in FogLAMP are stored as <em>elements</em> in the PI System.
+- <em>PI Asset Framework</em> is automatically update with the new assets.
+- JSON objects captured as part of the <em>reading</em> in FogLAMP become <em>attributes</em> in the PI Data Archive</li>
+<li>The <strong>Producer Token</strong> is used to authenticate and create the hierarchy of elements in the <em>PI Asset Framework</em></li>
+<li>The configuration object named as <strong>Static Data</strong> is added as a set of <em>attributes</em> in the PI Data Archive</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="05_storage_plugins.html" class="btn btn-neutral float-right" title="Storage Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="037_hybrid_plugins.html" class="btn btn-neutral" title="Hybrid Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

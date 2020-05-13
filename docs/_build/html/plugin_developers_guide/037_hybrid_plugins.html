@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hybrid Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Developer Guide" href="index.html"/>
+        <link rel="next" title="North Plugins" href="04_north_plugins.html"/>
+        <link rel="prev" title="C++ Support Classes" href="035_CPP.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Plugin Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_FogLAMP_plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_writing_plugins.html">Writing and Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_plugins.html">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_C_plugins.html">South Plugins in C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="035_CPP.html">C++ Support Classes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hybrid Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_north_plugins.html">North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_storage_plugins.html">Storage Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Plugin Developer Guide</a> &raquo;</li>
+        
+      <li>Hybrid Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/037_hybrid_plugins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hybrid-plugins">
+<h1>Hybrid Plugins<a class="headerlink" href="#hybrid-plugins" title="Permalink to this headline">¶</a></h1>
+<p>In addition to plugins written in Python and C/C++ it is possible to have a hybrid plugin that is a combination of an existing plugin and configuration for that plugin. This is useful in a situation whereby there are multiple sensors or devices that you connect to FogLAMP that have common configuration. It allows devices to be added without repeating the common configuration.</p>
+<p>Using our example of a <em>DHT11</em> sensor connected to a GPIO pin, if we wanted to create a new plugin for a <em>DHT11</em> that was always connected to pin 4 then we could do this by creating a JSON file as below that supplies a fixed default value for the GPIO pin.</p>
+<div class="highlight-JSON"><div class="highlight"><pre><span></span><span class="p">{</span>
+      <span class="nt">&quot;description&quot;</span> <span class="p">:</span> <span class="s2">&quot;A DHT11 sensor connected to GPIO pin 4&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;DHT11-4&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;connection&quot;</span> <span class="p">:</span> <span class="s2">&quot;DHT11&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;defaults&quot;</span> <span class="p">:</span> <span class="p">{</span>
+              <span class="nt">&quot;pin&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                      <span class="nt">&quot;default&quot;</span> <span class="p">:</span> <span class="s2">&quot;4&quot;</span>
+                      <span class="p">}</span>
+                   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This creates a new hybrid plugin called DHT11-4 that is installed by copying this file into the plugins/south/DHT11-4 directory of your installation. Once installed it can be treated as any other south plugin within FogLAMP. The effect of this hybrid plugin is to load the <em>DHT11</em> plugin and always set the configuration parameter called “pin” to the value “4”. The item “pin” will hidden from the user in the FogLAMP GUI when they create the instance of the plugin. This allows for a simpler and more streamlined user experience when adding plugins with common configuration.</p>
+<p>The items in the JSON file are;</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>description</td>
+<td>A description of the hybrid plugin. This will appear the right of the selection list in the FogLAMP user interface when the plugin is selected.</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>The name of the plugin itself. This must match the filename of the JSON file and also the name of the directory the file is placed in.</td>
+</tr>
+<tr class="row-even"><td>connection</td>
+<td>The name of the underlying plugin that will be used as the basis for this hybrid plugin. This must be a C/C++ or Python plugin, it can not be another hybrid plugin.</td>
+</tr>
+<tr class="row-odd"><td>defaults</td>
+<td>The set of values to default in this hybrid plugin. These are configuration parameters of the underlying plugin that will be fixed in the hybrid plugin. Each hybrid plugin can have one or my values here.</td>
+</tr>
+</tbody>
+</table>
+<p>It may not be difficult to enter the GPIO pin in each case in this example, where it becomes more useful is for plugins such as <em>Modbus</em> where a complex map is required to be entered in a JSON document. By using a hybrid plugin we can define the map we need once and then add new sensors of the same type without having to repeat the map. An example of this would be the Flir AX8 camera that require a total of 176 Modbus registers to be mapped into 88 different values in an asset. A hybrid plugin <em>foglamp-south-FlirAX8</em> defines that mapping once and as a result adding a new Flir AX8 camera is as simple as selecting the FlirAX8 hybrid plugin and entering the IP address of the camera.</p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="04_north_plugins.html" class="btn btn-neutral float-right" title="North Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="035_CPP.html" class="btn btn-neutral" title="C++ Support Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

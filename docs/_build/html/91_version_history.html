@@ -1,0 +1,1015 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Version History &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="index.html"/>
+        <link rel="next" title="Downloads" href="92_downloads.html"/>
+        <link rel="prev" title="Building and using FogLAMP on RedHat/CentOS" href="REDHAT.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Version History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foglamp-v1">FogLAMP v1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#v1-8-0">v1.8.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-7-0">v1.7.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-6-0">v1.6.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-5-2">v1.5.2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-5-1">v1.5.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-5-0">v1.5.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-4-1">v1.4.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-4-0">v1.4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-3-1">v1.3.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fixed-issues">Fixed Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-3">v1.3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#new-features">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#known-issues">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-2">v1.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-1-1">v1.1.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-1">v1.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">New Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#v1-0">v1.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Known Issues</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Version History</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/91_version_history.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="version-history">
+<h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="foglamp-v1">
+<h2>FogLAMP v1<a class="headerlink" href="#foglamp-v1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="v1-8-0">
+<h3>v1.8.0<a class="headerlink" href="#v1-8-0" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2020-05-08</p>
+<ul>
+<li><p class="first"><strong>FogLAMP Core</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Documentation has been added for the use of the SQLite In Memory storage plugin.</li>
+<li>The support bundle functionality has been improved to include more detail in order to aid tracking down issues in installations.</li>
+<li>Improvements have been made to the documentation of the OMF plugin in line with the enhancements to the code. This includes the documentation of OCS and EDS support as well as PI Web API.</li>
+<li>An issue with forwarding data between two FogLAMP instances in different time zones has been resolved.</li>
+<li>A new API entry point has been added to the FogLAMP REST API to allow the removal of plugin packages.</li>
+<li>The notification service has been updated to allow for the delivery of multiple notifications in parallel.</li>
+<li>Improvements have been made to the handling of asset codes within the buffer in order to improve the ingest performance of FogLAMP. This is transparent to all services outside of the storage service and has no impact on the public APIs.</li>
+<li>Extra information has been added to the notification trigger such that trigger time and the asset that triggered the notification is included.</li>
+<li>A new configuration item type of “northTask” has been introduced. It allows the user to enter the name of a northTask in the configuration of another category within FogLAMP.</li>
+<li>Data on multiple assets may now be requested in a single call to the asset growing API within FogLAMP.</li>
+<li>An additional API has been added to the asset browser to allow time bucketed data to be returned for multiple data points of multiple assets in a single call.</li>
+<li>Support has been added for nested readings within the reading data.</li>
+<li>Messages about exceeding the configured latency of the south service may be repeated when the latency is above the configured value for a period of time. These have now been replaced with a single message when the latency is exceeded and another when the condition is cleared.</li>
+<li>The feedback provided to the user when a configuration item is set to an invalid value has been improved.</li>
+<li>Configuration items can now be marked as mandatory, this improves the user experience when configuring plugins.</li>
+<li>A new configuration item type, code, has been added to improve the user experience when adding code snippets in configuration data.</li>
+<li>Improvements have been made to the caching of configuration data within the core of FogLAMP.</li>
+<li>The logging of package installation has been improved.</li>
+<li>Additions have been added to the public API to allow multiple audit log sources to be extracted in a single API call.</li>
+<li>The audit trail has been improved to show all package additions and updates in the audit trail.</li>
+<li>A new API has been added to allow notification plugin packages to be updated.</li>
+<li>A new API has been added to allow filter code versions to be updated.</li>
+<li>A new API call has been added to allow retrieval of reading data over a period of time which is averaged into time buckets within that time period.</li>
+<li>The notification service now supports rule plugins implemented in Python as well as C++.</li>
+<li>Improvements have been made to the checking of configuration items such that minimum, maximum values and string lengths are now checked.</li>
+<li>The plugin developers documentation has been updated to include a description building C/C++ south plugins.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Bug Fix:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Improvements have been made to the generation of the support bundle.</li>
+<li>An issue in the reporting of the task names in the foglamp status script has been resolved.</li>
+<li>The purge by size (number of readings) would remove all data if the number of rows to retain was less than 1000, this has now been resolved.</li>
+<li>On occasions plugins would disappear from the list of available plugins, this has now been resolved.</li>
+<li>Improvements have been made to the management of the certificate store to ensure the correct files are uploaded to the store.</li>
+<li>An expensive and unnecessary test was being performed in the asset browsing API of FogLAMP. This slowed down the user interface and put load n the server. This has now been removed and has improved the performance of examining the buffered data within the FogLAMP instance.</li>
+<li>The FogBench utility used to send data to FogLAMP has been updated in line with new Python packages for the CoAP protocol.</li>
+<li>Configuration category relationships were not always correctly cleaned up when a filter is deleted, this has now been resolved.</li>
+<li>The support bundle functionality has been updated to provide information on the Python processes.</li>
+<li>The REST API incorrectly allowed configuration categories with a blank name to be created. This has now been prevented.</li>
+<li>Validation of minimum and maximum configuration item values was not correctly performed in the REST API, this has now been resolved.</li>
+<li>Nested objects within readings could cause the storage engine to fail and those readings to not be stored. This has now been resolved.</li>
+<li>On occasion shutting down a service may fail if the filters for that service have not been activated, this has now been resolved.</li>
+<li>An issue that cause notifications for asset whose names contain special characters has been resolved.</li>
+<li>The asset tracker was not correctly adding entries to the asset tracker, this has now been resolved.</li>
+<li>An intermittent issue that prevented the notification service being enabled on the Buster release on Raspberry Pi has been resolved.</li>
+<li>An intermittent problem that would prevent the north sending process to fail has been resolved.</li>
+<li>Performance improvements have been made to the installation of new packages from the package repository from within the FogLAMP API and user interface.</li>
+<li>It is now possible to reuse the name of a north process after deleting one with the same name.</li>
+<li>The incorrect HTTP error code is returned by the asset summary API call if an asset does not exist, this has now been resolved.</li>
+<li>Deleting and recreating a south service may cause errors in the log to appear. These have now been resolved.</li>
+<li>The SQLite and SQLiteInMemory storage engines have been updated to enable a purge to be defined that reduces the number of readings to a specified value rather than simply allowing a purge by the age of the data. This is designed to allow tighter controls on the size of the buffer database when high frequency data in particular is being stored within the FogLAMP buffer.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>GUI</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The user interface for viewing logs has been improve to allow filtering by service and task.  A search facility has also been added.</li>
+<li>The requirement that a key file is uploaded with every certificate file has been removed from the graphical user interface as this is not always true.</li>
+<li>The performance of adding a new notification via the graphical user interface has been improved.</li>
+<li>The feedback in the graphical user interface has been improved when installation of the notification service fails.</li>
+<li>Installing the FogLAMP graphical user interface on OSX platforms fails due to the new version of the brew package manager. This has now been resolved.</li>
+<li>Improve script editing has been added to the graphical user interface.</li>
+<li>Improvements have been made to the user interface for the installations and enabling of the notification service.</li>
+<li>The notification audit log user interface has been improved in the GUI to allow all the logs relating to notifications to be viewed in a single screen.</li>
+<li>The user interface has been redesigned to make better use of the screen space when editing south and north services.</li>
+<li>Support has been added to the graphical user interface to determine when configuration items are not valid based on the values of other items These items that are not valid in the current configuration are greyed out in the interface.</li>
+<li>The user interface now shows the version of the code in the settings page.</li>
+<li>Improvements have been made to the user interface layout to force footers to stay at the bottom of the screen.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Bug Fix:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Improvements have been made to the zoom and pan options within the graph displays.</li>
+<li>The wizard used for the creation of new notifications in the graphical user interface would loose values when going back and forth between pages, this has now been resolved.</li>
+<li>A memory leak that was affecting the performance of the graphical user interface has been fixed, improving performance of the interface.</li>
+<li>Incorrect category names may be displayed int he graphical user interface, this has now be resolved.</li>
+<li>Issues with the layout of the graphical user interface when viewed on an Apple iPad have been resolved.</li>
+<li>The asset graph in the graphical user interface would sometimes not resize to fit the screen correctly, this has now been resolved.</li>
+<li>The “Asset &amp; Readings” option in the graphical user interface was initially slow to respond, this has now been improved.</li>
+<li>The pagination of audit logs has bene improved when multiple sources are displayed.</li>
+<li>The counts in the user interface for notifications have been corrected.</li>
+<li>Asset data graphs are not able to handle correctly the transition between one day and the next. This is now resolved.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Plugins</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The existing set of OMF north plugins have been rationalised and replaced by a single OMF north plugin that is able to support the connector rely, PI Web API, EDS and OCS.</li>
+<li>A new notification rule plugin has been added that will trigger periodically if data is observed for a given asset. The trigger interval is defined in seconds. The plugin is primarily designed to be used with conditional forwarding as a means to sample data, although other uses might include a watchdog implementation for particular data streams.</li>
+<li>When a Modbus TCP connection is closed by the remote end we fail to read a value, we then reconnect and move on to read the next value. On device with short timeout values, smaller than the poll interval, we fail the same reading every time and never get a value for that reading. The behaviour has been modified to allow us to retry reading the original value after re-establishing the connection.</li>
+<li>The OMF north plugin has been updated to support the released version of the OSIsoft EDS product as a destination for data.</li>
+<li>New functionality has been added to the north data to PI plugin when using PI Web API that allows the location in the PI Server AF hierarchy to be defined. A default location can be set and an override based on the asset name or metadata within the reading. The data may also be placed in multiple locations within the AF hierarchy.</li>
+<li>A new notification delivery plugin has been added that allows a north task to be triggered to send data for a period of time either side of the notification trigger event. This allows conditional forwarding of large amounts of data when a trigger event occurs.</li>
+<li>The asset notification delivery plugin has been updated to allow creation of new assets both for notifications that are triggered and/or cleared.</li>
+<li>The rate filter now allows the termination of sending full rate data either by use of an expression or by specifying a time in milliseconds.</li>
+<li>A new downsampling filter has been written that allows the rate of data to be reduced using one of a number of different algorithms.</li>
+<li>A new plugin that support the Digiducer 333D01 vibration sensor has been added.</li>
+<li>A new simple Python filter has been added that calculates an exponential moving average,</li>
+<li>Some typos in the OPCUA south and north plugin configuration have been fixed.</li>
+<li>The OPCUA north plugin has been updated to support nested reading objects correctly and also to allow a name to be set for the OPCUA server. These have also been some stability fixes in the underlying OPCUA layer used by this and the south OPCUA plugin.</li>
+<li>The modbus map configuration now supports byte swapping and word swapping by use of the {{swap}} property of the map. This may take the values {{bytes}}, {{words}} or {{both}}.</li>
+<li>The people detection machine learning plugin now supports RTSP streams as input.</li>
+<li>The option list items in the OMF plugin have been updated to make them more user friendly and descriptive.</li>
+<li>The threshold notification rule has been updated such that the unused fields in the configuration now correctly grey out in the GUI dependent upon the setting of the window type or single item asset validation.</li>
+<li>The configuration of the OMF north plugin for connecting to the PI Server has been improved to give the user better feedback as to what elements are valid based on choice of connection method and security options chosen.</li>
+<li>Support has been added for simple Python code to be entered into a filter that does not require all of the support code. This is designed to allow a user to very quickly develop filters with limited programming.</li>
+<li>Support has been added for filters written entirely in Python, these are full featured filters as supported by the C++ filtering mechanism and include dynamic reconfiguration.</li>
+<li>The foglamp-filter-expression filter has been modified to better deal with streams which contain multiple assets. It is now possible to use the syntax &lt;assetName&gt;.&lt;datapointName&gt; in an expression in addition to the previous &lt;datapointName&gt;. The result is that if two assets in the data stream have the same data point names it is now possible to differentiate between them.</li>
+<li>A new plugin to collect variables from Beckhoff PLC’s has been written. The plugin uses the TwinCAT 2 or TwinCAT 3 protocols to collect specified variable from the running PLC.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Bug Fix:</p>
+<blockquote>
+<div><ul class="simple">
+<li>An issue in the sending of data to the PI server with large values has been resolved.</li>
+<li>The playback south plugin was not correctly replaying timestamps within the file, this has now been resolved.</li>
+<li>Use of the asset filter in a north task could result in the north task terminating. This has now resolved.</li>
+<li>A small memory leak in the south service statistics handling code was impacting the performance of the south service, this is now resolved.</li>
+<li>An issue has been discovered in the Flir camera plugin with the validity attribute of the spot temperatures, this has now been resolved.</li>
+<li>It was not possible to send data for the same asset from two different FogLAMP’s into the PI Server using PI Web API, this has now been resolved.</li>
+<li>The filter FogLAMP RMS Trigger was not able to be dynamically reconfigured, this has now been resolved.</li>
+<li>If a filter in the north sending process increased the number of readings it was possible that the limit of the number of readings sent in a single block . The sending process will now ensure this can not happen.</li>
+<li>RMS filter plugin was not able to be dynamically reconfigured, this has now been resolved.</li>
+<li>The HTTP South plugin that is used to receive data from another FogLAMP instance may fail with some combinations of filters applied to the service. This issue has now been resolved.</li>
+<li>The rule filter may give errors if expressions have variables not satisfied in the reading data. Under some circumstances it has been seen that the filter fails to process data after giving this error. This has been resolved by changes to make the rate filter more robust.</li>
+<li>Blank values for asset names in the south service may cause the service to become unresponsive. Blank asset names have now been correctly detected, asset names are required configuration values.</li>
+<li>A new version of the driver software for the USB-4704 Data Acquisition Module has been released, the plugin has been updated to use this driver version.</li>
+<li>The OPCUA North plugin might report incorrect counts for sent readings on some platforms, this has now been resolved.</li>
+<li>The simple Python filter plugin was not adding correct asset tracking data, this has now been updated.</li>
+<li>An issue with the asset filter failing when incorrect configuration was present has bene resolved.</li>
+<li>The benchmark plugin now enforces a minimum number of asset of 1.</li>
+<li>The OPCUA plugins are now available on the Raspberry Pi Buster platform.</li>
+<li>Errors that prevented the use of the Postgres storage plugin have been resolved.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="v1-7-0">
+<h3>v1.7.0<a class="headerlink" href="#v1-7-0" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2019-08-15</p>
+<ul>
+<li><p class="first"><strong>FogLAMP Core</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Added support for Raspbian Buster</li>
+<li>Additional, optional flow control has been added to the south service to prevent it from overwhelming the storage service. This is enabled via the throttling option in the south service advanced configuration.</li>
+<li>The mechanism for including JSON configuration in C++ plugins has been improved and the macros for the inline coding moved to a standard location to prevent duplication.</li>
+<li>An option has been added that allows the system to be updated to the latest version of the system packages prior to installing a new plugin or component.</li>
+<li>FogLAMP now supports password type configuration items. This allows passwords to be hidden from the user in the user interface.</li>
+<li>A new feature has been added that allows the logs of plugin or other package installation to be retrieved.</li>
+<li>Installation logs for package installations are now retained and available via the REST API.</li>
+<li>A mechanism has been added that allows plugins to be marked as deprecated prior to the removal of these plugins in future releases. Running a deprecated plugin will result in a warning being logged, but otherwise the plugin will operate as normal.</li>
+<li>The FogLAMP REST API has been updated to add a new entry point that will allow a plugin to be updated from the package repository.</li>
+<li>An additional API has been added to fetch the set of installed services within a FogLAMP installation.</li>
+<li>An API has been added that allows the caller to retrieve the list of plugins that are available in the FogLAMP package repository.</li>
+<li>The /foglamp/plugins REST API has been extended to allow plugins to be installed from an APT/RPM repository.</li>
+<li>Addition of support for hybrid plugins. A hybrid plugin is a JSON file that defines another plugin to load along with some default configuration for that plugin. This gives a means to create a new plugin by customising the configuration of an existing plugin. An example might be a plugin for a specific modbus device type that uses the generic modbus plugin and a predefined modbus map.</li>
+<li>The notification service has been improved to allow the re-trigger time of a notification to be defined by the user on a per notification basis.</li>
+<li>A new environment variable, FOGLAMP_PLUGIN_PATH has been added to allow plugins to be stored in multiple locations or locations outside of the usual FogLAMP installation directory.</li>
+<li>Added support for FOGLAMP_PLUGIN_PATH environment variable, that would be used for searching additional directory paths for plugins/filters to use with FogLAMP.</li>
+<li>FogLAMP packages for the Google Coral Edge TPU development board have been made available.</li>
+<li>Support has been added to the OMF north plugin for the PI Web API OMF endpoint. The PI Server functionality to support this is currently in beta test.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Bug Fix/Improvements:</p>
+<blockquote>
+<div><ul class="simple">
+<li>An issue with the notification service becoming unresponsive on the Raspberry Pi Buster release has been resolved.</li>
+<li>A debug message was being incorrectly logged as an error when adding a Python south plugin. The message level has now been corrected.</li>
+<li>A problem whereby not all properties of configuration items are updated when a new version of a configuration category is installed has been fixed.</li>
+<li>The notification service was not correctly honouring the notification types for one shot, toggled and retriggered notifications. This has now be bought in line with the documentation.</li>
+<li>The system log was becoming flooded with messages from the plugin discovery utility. This utility now logs at the correct level and only logs errors and warning by default.</li>
+<li>Improvements to the REST API allow for selective sets of statistic history to be retrieved. This reduces the size of the returned result set and improves performance.</li>
+<li>The order in which filters are shutdown in a pipeline of filters has been reversed to resolve an issue regarding releasing Python interpreters, under some circumstances shutdowns of later filters would fail if multiple Python filters were being used.</li>
+<li>The output of the <cite>foglamp status</cite> command was corrupt, showing random text after the number of seconds for which foglamp has been up. This has now been resolved.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>GUI</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A new log option has been added to the GUI to show the logs of package installations.</li>
+<li>It is now possible to edit Python scripts directly in the GUI for plugins that load Python snippets.</li>
+<li>A new log retrieval option has been added to the GUI that will show only notification delivery events. This makes it easier for a user to see what notifications have been sent by the system.</li>
+<li>The GUI asset graphs have been improved such that multiple tabs are now available for graphing and tabular display of asset data.</li>
+<li>The GUI menu has been reordered to move the Notifications entry below the South and North entries.</li>
+<li>Support has been added to the FogLAMP GUI for entry of password fields. Data is obfuscated as it is entered or edited.</li>
+<li>The GUI now shows plugin name and version for each north task defined.</li>
+<li>The GUI now shows the plugin name and version for each south service that is configured.</li>
+<li>The GUI has been updated such that it can install new plugins from the FogLAMP package repository for south services and north tasks. A list of available packages from the repository is displayed to allow the user to pick from that list. The FogLAMP instance must have connectivity tot he package repository to allow this feature to succeed.</li>
+<li>The GUI now supports using certificates to authenticate with the FogLAMP instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Bug Fix/Improvements:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Improved editing of JSON configuration entities in the configuration editor.</li>
+<li>Improvements have been made to the asset browser graphs in the GUI to make better use of the available space to show the graph itself.</li>
+<li>The GUI was incorrectly showing FogLAMP as down in certain circumstances, this has now been resolved.</li>
+<li>An issue in the edit dialog for the north plugin which sometimes prevented the enabled state from being correctly modified has been resolved.</li>
+<li>Exported CSV data from the GUI would sometimes be missing column headers, these are now always present.</li>
+<li>The exporting of data as a CSV file in the GUI has been improved such that it no longer outputs the readings as a block of JSON, but rather individual columns. This allows the data to be imported into a spreadsheet with ease.</li>
+<li>Missing help text has been added for notification trigger and enabled elements.</li>
+<li>A number of issues in the filter configuration editor have been resolved. These issues meant that sometimes new values were not honoured or when changes were made with multiple filters in a chain only one filter would be updated.</li>
+<li>Under some rare circumstances the GUI asset graph may show incorrect dates, this issue has now been resolved.</li>
+<li>The FogLAMP GUI build and start commands did not work on Windows platforms and preventing the running on those platforms. This has now been resolved and the FogLAMP GUI can be built and run on Windows platforms.</li>
+<li>The GUI was not correctly interpreting the value of the readonly attribute of configuration items when the value was anything other than true. This has been resolved.</li>
+<li>The FogLAMP GUI RPM package had an error that caused installation to fail on some systems, this is now resolved.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Plugins</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A new filter has been created that looks for changes in values and only sends full rate data around the time of those changes. At other times the filter can be configured to send reduced rate averages of the data.</li>
+<li>A new rule plugin has been implemented that will create notifications if the value of a data point moves more than a defined percentage from the average for that data point. A moving average for each data point is calculated by the plugin, this may be a simple average or an exponential moving average.</li>
+<li>A new south plugin has been created that supports the DNP3 protocol.</li>
+<li>A south plugin has been created based on the Google TensorFlow people detection model. It uses a live feed from a video camera and returns data regarding the number of people detected and the position within the frame.</li>
+<li>A south plugin based on the Google TensorFlow demo model for people recognition has been created. The plugin reads an image from a file and returns the people co-ordinates of the people it detects within the image.</li>
+<li>A new north plugin has been added that creates an OPCUA server based on the data ingested by the FogLAMP instance.</li>
+<li>Support has been added for a Flir Thermal Imaging Camera connected via Modbus TCP. Both a south plugin to gather the data and a filter plugin, to clean the data, have been added.</li>
+<li>A new south plugin has been created based on the Google TensorFlow demo model that accepts a live feed from a Raspberry Pi camera and classifies the images.</li>
+<li>A new south plugin has been created based on the Google TensorFlow demo model for object detection. The plugin return object count, name position and confidence data.</li>
+<li>The change filter has been made available on CentOS and RedHat 7 releases.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Bug Fix/Improvements:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Support  for reading floating point values in a pair of 16 bit registers has been added to the modbus plugin.</p>
+</li>
+<li><p class="first">Improvements have been made to the performance of the modbus plugin when large numbers of contiguous registers are read. Also the addition of support for floating point values in modbus registers.</p>
+</li>
+<li><p class="first">Flir south service has been modified to support the Flir camera range as currently available, i.e. a maximum of 10 areas as opposed to the 20 that were previously supported. This has improved performance, especially on low performance platforms.</p>
+</li>
+<li><p class="first">The python35 filter plugin did not allow the Python code to add attributes to the data. This has now been resolved.</p>
+</li>
+<li><p class="first">The playback south plugin did not correctly take the timestamp data from he CSV file. An option is now available that will allow this.</p>
+</li>
+<li><p class="first">The rate filter has been enhanced to accept a list of assets that should be passed through the filter without having the rate of those assets altered.</p>
+</li>
+<li><p class="first">The filter plugin python35 crashed on the Buster release on the Raspberry Pi, this has now been resolved.</p>
+</li>
+<li><p class="first">The FFT filter now enforces that the number of samples must be a power of 2.</p>
+</li>
+<li><p class="first">The ThingSpeak north plugin was not updated in line with changes to the timestamp handling in FogLAMP, this resulted in a crash when it tried to send data to ThingSpeak. This has been resolved and the cause of the crash also fixed such that now an error will be logged rather than the task crashing.</p>
+</li>
+<li><p class="first">The configuration of the simple expression notification rule plugin has been simplified.</p>
+</li>
+<li><p class="first">The DHT 11 plugin mistakenly had a dependency on the Wiring PI package. This has now been removed.</p>
+</li>
+<li><p class="first">The system information plugin was missing a dependency that would cause it to fail to install on systems that did not already have the package it was depend on installed. This has been resolved.</p>
+</li>
+<li><p class="first">The phidget south plugin reconfiguration method would crash the service on occasions, this has now been resolved.</p>
+</li>
+<li><p class="first">The notification service would sometimes become unresponsive after calling the notify-python35 plugin, this has now been resolved.</p>
+</li>
+<li><p class="first">The configuration options regarding notification evaluation of single items and windows has been improved to make it less confusing to end users.</p>
+</li>
+<li><p class="first">The OverMax and UnderMin notification rules have been combined into a single threshold rule plugin.</p>
+</li>
+<li><p class="first">The OPCUA south plugin was incorrectly reporting itself as the upcua plugin. This is now resolved.</p>
+</li>
+<li><p class="first">The OPCUA south plugin has been updated to support subscriptions both using browse names and Node Id’s. Node ID is now the default subscription mechanism as this is much higher performance than traversing the object tree looking at browse names.</p>
+</li>
+<li><p class="first">Shutting down the OPCUA service when it has failed to connect to an OPCUA server, either because of an incorrect configuration or the OPCUA server being down resulted in the service crashing. The service now shuts down cleanly.</p>
+</li>
+<li><p class="first">In order to install the foglamp-south-modbus package on RedHat Enterprise Linux or CentOS 7 you must have configured the epel repository by executing the command:</p>
+<p><cite>sudo yum install epel-release</cite></p>
+</li>
+<li><p class="first">A number of packages have been renamed in order to obtain better consistency in the naming and to facilitate the upgrade of packages from the API and graphical interface to FogLAMP. This will result in duplication of certain plugins after upgrading to the release. This is only an issue of the plugins had been previously installed, these old plugin should be manually removed form the system to alleviate this problem.</p>
+<p>The plugins involved are,</p>
+<blockquote>
+<div><ul class="simple">
+<li>foglamp-north-http Vs foglamp-north-http-north</li>
+<li>foglamp-south-http Vs foglamp-south-http-south</li>
+<li>foglamp-south-Csv Vs foglamp-south-csv</li>
+<li>foglamp-south-Expression Vs foglamp-south-expression</li>
+<li>foglamp-south-dht Vs foglamp-south-dht11V2</li>
+<li>foglamp-south-modbusc Vs foglamp-south-modbus</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="v1-6-0">
+<h3>v1.6.0<a class="headerlink" href="#v1-6-0" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2019-05-22</p>
+<ul>
+<li><p class="first"><strong>FogLAMP Core</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The scope of the FogLAMP certificate store has been widen to allow it to store .pem certificates and keys for accessing cloud functions.</li>
+<li>The creation of a Docker container for FogLAMP has been added to the packaging options for FogLAMP in this version of FogLAMP.</li>
+<li>Red Hat Enterprise Linux packages have been made available from this release of FogLAMP onwards. These packages include all the applicable plugins and notification service for FogLAMP.</li>
+<li>The FogLAMP API now supports the creation of configuration snapshots which can be used to create configuration checkpoints and rollback configuration changes.</li>
+<li>The FogLAMP administration API has been extended to allow the installation of new plugins via API.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Improvements/Bug Fix:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A bug that prevents multiple FogLAMP’s on the same network being discoverable via multicast DNS lookup has been fixed.</li>
+<li>Set, unset optional configuration attributes</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>GUI</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">New Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The FogLAMP Graphical User Interface now has the ability to show sets of graphs over a time period for data such as the spectrum analysis produced but the Fast Fourier transform filter.</li>
+<li>The FogLAMP Graphical User Interface is now available as an RPM file that may be installed on Red Hat Enterprise Linux or CentOS.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Improvements/Bug Fix:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Improvements have been made to the FogLAMP Graphical User Interface to allow more control of the time periods displayed in the graphs of asset values.</li>
+<li>Some improvements to screen layout in the FogLAMP Graphical User Interface have been made in order to improve the look and reduce the screen space used in some of the screens.</li>
+<li>Improvements have been made to the appearance of dropdown and other elements with the FogLAMP Graphical User Interface.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Plugins</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>New Features:</dt>
+<dd><ul class="first last">
+<li>A new threshold filter has been added that can be used to block onward transmission of data until a configured expression evaluates too true.</li>
+<li>The Modbus RTU/TCP south plugin is now available on CentOS 7.6 and RHEL 7.6.</li>
+<li>A new north plugin has been added to allow data to be sent the Google Cloud Platform IoT Core interface.</li>
+<li>The FFT filter now has an option to output raw frequency spectra. Note this can not be accepted into all north bound systems.</li>
+<li>Changed the release status of the FFT filter plugin.</li>
+<li>Added the ability in the modbus plugin to define multiple registers that create composite values. For example two 16 bit registers can be put together to make one 32 bit value. This is does using an array of register values in a modbus map, e.g. {“name”:”rpm”,”slave”:1,”register”:[33,34],”scale”:0.1,”offset”:0}. Register 33 contains the low 16 its of the RPM and register 34 the high 16 bits of the RPM.</li>
+<li>Addition of a new Notification Delivery plugin to send notifications to a Google Hangouts chatroom.</li>
+<li>A new plugin has been created that uses machine learning based on Google’s TensorFlow technology to classify image data and populate derived information the north side systems. The current TensorFlow model in use will recognise hard written digits and populate those digits. This plugins is currently a proof of concept for machine learning.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Improvements/Bug Fix:</dt>
+<dd><ul class="first last">
+<li>Removal of unnecessary include directive from Modbus-C plugin.</li>
+<li>Improved error reporting for the modbus-c plugin and added documentation on the configuration of the plugin.</li>
+<li>Improved the subscription handling in the OPCUA south plugin.</li>
+<li>Stability improvements have been made to the notification service, these related to the handling of dynamic reconfigurations of the notifications.</li>
+<li>Removed erroneous default for script configuration option in Python35 notification delivery plugin.</li>
+<li>Corrected description of the enable configuration item.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="v1-5-2">
+<h3>v1.5.2<a class="headerlink" href="#v1-5-2" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2019-04-08</p>
+<ul>
+<li><p class="first"><strong>FogLAMP Core</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>New Features:</dt>
+<dd><ul class="first last">
+<li>Notification service, notification rule and delivery plugins</li>
+<li>Addition of a new notification delivery plugin that will create an asset reading when a notification is delivered. This can then be sent to any system north of the FogLAMP instance via the usual mechanisms</li>
+<li>Bulk insert support for SQLite and Postgres storage plugins</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Enhancements / Bug Fix:</dt>
+<dd><ul class="first last">
+<li>Performance improvements for SQLite storage plugin.</li>
+<li>Improved performance of data browsing where large datasets have been acquired</li>
+<li>Optimized statistics history collection</li>
+<li>Optimized purge task</li>
+<li>The readings count shown on GUI and south page and corresponding API endpoints now shows total readings count and not what is currently buffered by FogLAMP. So these counts don’t reduce when purge task runs</li>
+<li>Static data in the OMF plugin was not being correctly taken from the plugin configuration</li>
+<li>Reduced the number of informational log messages being sent to the syslog</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>GUI</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>New Features:</dt>
+<dd><ul class="first last">
+<li>Notifications UI</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Bug Fix:</dt>
+<dd><ul class="first last">
+<li>Backup creation time format</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="v1-5-1">
+<h3>v1.5.1<a class="headerlink" href="#v1-5-1" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2019-03-12</p>
+<ul>
+<li><p class="first"><strong>FogLAMP Core</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Bug Fix: plugin loading errors</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>GUI</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Bug Fix: uptime shows up to 24 hour clock only</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="v1-5-0">
+<h3>v1.5.0<a class="headerlink" href="#v1-5-0" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2019-02-21</p>
+<ul>
+<li><p class="first"><strong>FogLAMP Core</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Performance improvements and Bug Fixes</li>
+<li>Introduction of Safe Mode in case FogLAMP is accidentally configured to generate so much data that it is overwhelmed and can no longer be managed.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>GUI</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>re-organization of screens for Health, Assets, South and North</li>
+<li>bug fixes</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>South</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Many Performance improvements, including conversion to C++</li>
+<li>Modbus plugin</li>
+<li>many other new south plugins</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>North</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Compressed data via OMF</li>
+<li>Kafka</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Filters</strong>: Perform data pre-processing, and allow distributed applications to be built on FogLAMP.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Delta: only send data upon change</li>
+<li>Expression: run a complex mathematical expression across one or more data streams</li>
+<li>Python: run arbitrary python code to modify a data stream</li>
+<li>Asset: modify Asset metadata</li>
+<li>RMS: Generate new asset with Root Mean Squared and Peak calculations across data streams</li>
+<li>FFT (beta): execute a Fast Fourier Transform across a data stream. Valuable for Vibration Analysis</li>
+<li>Many others</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Event Notification Engine (beta)</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Run rules to detect conditions and generate events at the edge</li>
+<li>Default Delivery Mechanisms: email, external script</li>
+<li>Fully pluggable, so custom Rules and Delivery Mechanisms can be easily created</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Debian Packages for All Repo’s</strong></p>
+</li>
+</ul>
+</div>
+<div class="section" id="v1-4-1">
+<h3>v1.4.1<a class="headerlink" href="#v1-4-1" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-10-10</p>
+</div>
+<div class="section" id="v1-4-0">
+<h3>v1.4.0<a class="headerlink" href="#v1-4-0" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-09-25</p>
+</div>
+<div class="section" id="v1-3-1">
+<h3>v1.3.1<a class="headerlink" href="#v1-3-1" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-07-13</p>
+<div class="section" id="fixed-issues">
+<h4>Fixed Issues<a class="headerlink" href="#fixed-issues" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Open File Descriptors</strong><ul>
+<li><strong>open file descriptors</strong>: Storage service did not close open files, leading to multiple open file descriptors</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="v1-3">
+<h3>v1.3<a class="headerlink" href="#v1-3" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-07-05</p>
+<div class="section" id="new-features">
+<h4>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Python version upgrade</strong><ul>
+<li><strong>python 3 version</strong>: The minimal supported python version is now python 3.5.3.</li>
+</ul>
+</li>
+<li><strong>aiohttp python package version upgrade</strong><ul>
+<li><strong>aiohttp package version</strong>: aiohttp (version 3.2.1) and aiohttp_cors (version 0.7.0) is now being used</li>
+</ul>
+</li>
+<li><strong>Removal of south plugins</strong><ul>
+<li><strong>coap</strong>: coap south plugin was moved into its own repository <a class="reference external" href="https://github.com/foglamp-iot/foglamp-south-coap">https://github.com/foglamp-iot/foglamp-south-coap</a></li>
+<li><strong>http</strong>: http south plugin was moved into its own repository <a class="reference external" href="https://github.com/foglamp-iot/foglamp-south-http">https://github.com/foglamp-iot/foglamp-south-http</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="known-issues">
+<h4>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Issues in Documentation</strong><ul>
+<li><strong>plugin documentation</strong>: testing FogLAMP requires user to first install southbound plugins necessary (CoAP, http)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="v1-2">
+<h3>v1.2<a class="headerlink" href="#v1-2" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-04-23</p>
+<div class="section" id="id1">
+<h4>New Features<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Changes in the REST API</strong><ul>
+<li><strong>ping Method</strong>: the ping method now returns uptime, number of records read/sent/purged and if FogLAMP requires REST API authentication.</li>
+</ul>
+</li>
+<li><strong>Storage Layer</strong><ul>
+<li><strong>Default Storage Engine</strong>: The default storage engine is now SQLite. We provide a script to migrate from PostgreSQL in 1.1.1 version to 1.2. PostgreSQL is still available in the main repository and package, but it will be removed to an operate repository in future versions.</li>
+</ul>
+</li>
+<li><strong>Admin and Maintenance Scripts</strong><ul>
+<li><strong>foglamp status</strong>: the command now shows what the <code class="docutils literal"><span class="pre">ping</span></code> REST method provides.</li>
+<li><strong>setenv script</strong>: a new script has been added to simplify the user interaction. The script is in <em>$FOGLAMP_ROOT/extras/scripts</em> and it is called <em>setenv.sh</em>.</li>
+<li><strong>foglamp service script</strong>: a new service script has been added to setup FogLAMP as a service. The script is in <em>$FOGLAMP_ROOT/extras/scripts</em> and it is called <em>foglamp.service</em>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h4>Known Issues<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Issues in the REST API</strong><ul>
+<li><strong>asset method response</strong>: the <code class="docutils literal"><span class="pre">asset</span></code> method returns a JSON object with asset code named <code class="docutils literal"><span class="pre">asset_code</span></code> instead of <code class="docutils literal"><span class="pre">assetCode</span></code></li>
+<li><strong>task method response</strong>: the <code class="docutils literal"><span class="pre">task</span></code> method returns a JSON object with unexpected element <code class="docutils literal"><span class="pre">&quot;exitCode&quot;</span></code></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="v1-1-1">
+<h3>v1.1.1<a class="headerlink" href="#v1-1-1" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-01-18</p>
+<div class="section" id="id3">
+<h4>New Features<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Fixed aiohttp incompatibility</strong>: This fix is for the incompatibility of <em>aiohttp</em> with <em>yarl</em>, discovered in the previous version. The issue has been fixed.</li>
+<li><strong>Fixed avahi-daemon issue</strong>: Avahi daemon is a pre-requisite of FogLAMP, FogLAMP can now run as a snap or build from source without avahi daemon installed.</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h4>Known Issues<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>PostgreSQL with Snap</strong>: the issue described in version 1.0 still persists, see <a class="reference internal" href="#id7"><span class="std std-ref">Known Issues</span></a> in v1.0.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="v1-1">
+<h3>v1.1<a class="headerlink" href="#v1-1" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2018-01-09</p>
+<div class="section" id="id5">
+<h4>New Features<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Startup Script</strong>:<ul>
+<li><code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code> script now checks if the Core microservice has started.</li>
+<li><code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code> creates a <em>core.err</em> file in <em>$FOGLAMP_DATA</em> and writes the stderr there.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h4>Known Issues<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Incompatibility between aiohttp and yarl when FogLAMP is built from source</strong>: in this version we use <em>aiohttp 2.3.6</em> (<a href="https://github.com/foglamp-iot/FogLAMP/blob/1.1/python/requirements.txt" target="_blank">check here</a>). This version is incompatible with updated versions of <em>yarl</em> (0.18.0+). If you intend to use this version, change the requirements for <em>aiohttp</em> for version 2.3.8 or higher.</li>
+<li><strong>PostgreSQL with Snap</strong>: the issue described in version 1.0 still persists, see <a class="reference internal" href="#id7"><span class="std std-ref">Known Issues</span></a> in v1.0.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="v1-0">
+<h3>v1.0<a class="headerlink" href="#v1-0" title="Permalink to this headline">¶</a></h3>
+<p>Release Date: 2017-12-11</p>
+<div class="section" id="features">
+<h4>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>All the essential microservices are now in place: <em>Core, Storage, South, North</em>.</li>
+<li>Storage plugins available in the main repository:<ul>
+<li><strong>Postgres</strong>: The storage layer relies on PostgreSQL for data and metadata</li>
+</ul>
+</li>
+<li>South plugins available in the main repository:<ul>
+<li><strong>CoAP Listener</strong>: A CoAP microservice plugin listening to client applications that send data to FogLAMP</li>
+</ul>
+</li>
+<li>North plugins available in the main repository:<ul>
+<li><strong>OMF Translator</strong>: A task plugin sending data to OSIsoft PI Connector Relay 1.0</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<span id="id8"></span><h4>Known Issues<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>Startup Script</strong>: <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">start</span></code> does not check if the Core microservice has started correctly, hence it may report that “FogLAMP started.” when the process has died. As a workaround, check with <code class="docutils literal"><span class="pre">foglamp</span> <span class="pre">status</span></code> the presence of the FogLAMP microservices.</li>
+<li><strong>Snap Execution on Raspbian</strong>: there is an issue on Raspbian when the FogLAMP snap package is used. It is an issue with the snap environment, it looks for a shared object to preload on Raspian, but the object is not available. As a workaround, a superuser should comment a line in the file <em>/etc/ld.so.preload</em>. Add a <code class="docutils literal"><span class="pre">#</span></code> at the beginning of this line: <code class="docutils literal"><span class="pre">/usr/lib/arm-linux-gnueabihf/libarmmem.so</span></code>. Save the file and you will be able to immediately use the snap.</li>
+<li><strong>OMF Translator North Plugin for FogLAMP Statistics</strong>: in this version the statistics collected by FogLAMP are not sent automatically to the PI System via the OMF Translator plugin, as it is supposed to be. The issue will be fixed in a future release.</li>
+<li><strong>Snap installed in an environment with an existing version of PostgreSQL</strong>: the FogLAMP snap does not check if another version of PostgreSQL is available on the machine. The result may be a conflict between the tailored version of PostgreSQL installed with the snap and the version of PostgreSQL generally available on the machine. You can check if PostgreSQL is installed using the command <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">dpkg</span> <span class="pre">-l</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'postgres'</span></code>. All packages should be removed with <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">dpkg</span> <span class="pre">--purge</span> <span class="pre">&lt;package&gt;</span></code>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="92_downloads.html" class="btn btn-neutral float-right" title="Downloads" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="REDHAT.html" class="btn btn-neutral" title="Building and using FogLAMP on RedHat/CentOS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

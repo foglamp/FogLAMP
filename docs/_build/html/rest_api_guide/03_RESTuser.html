@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>User API Reference &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="REST API Developers Guide" href="index.html"/>
+        <link rel="next" title="Building FogLAMP" href="../build_index.html"/>
+        <link rel="prev" title="Administration API Reference" href="02_RESTadmin.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_developers_guide/index.html">Plugin Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">REST API Developers Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_REST.html">The FogLAMP REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_RESTadmin.html">Administration API Reference</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">User API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#browsing-assets">Browsing Assets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#asset">asset</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">REST API Developers Guide</a> &raquo;</li>
+        
+      <li>User API Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rest_api_guide/03_RESTuser.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-api-reference">
+<h1>User API Reference<a class="headerlink" href="#user-api-reference" title="Permalink to this headline">¶</a></h1>
+<p>The user API provides a mechanism to access the data that is buffered within FogLAMP. It is designed to allow users and applications to get a view of the data that is available in the buffer and do analysis and possibly trigger actions based on recently received sensor readings.</p>
+<p>In order to use the entry points in the user API, with the exception of the <code class="docutils literal"><span class="pre">/foglamp/authenticate</span></code> entry point, there must be an authenticated client calling the API. The client must provide a header field in each request, authtoken, the value of which is the token that was retrieved via a call to <code class="docutils literal"><span class="pre">/foglamp/authenticate</span></code>. This token must be checked for validity and also that the authenticated entity has user or admin permissions.</p>
+<div class="section" id="browsing-assets">
+<h2>Browsing Assets<a class="headerlink" href="#browsing-assets" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="asset">
+<h3>asset<a class="headerlink" href="#asset" title="Permalink to this headline">¶</a></h3>
+<p>The asset method is used to browse all or some assets, based on search and filtering.</p>
+<div class="section" id="get-all-assets">
+<h4>GET all assets<a class="headerlink" href="#get-all-assets" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/asset</span></code> - Return an array of asset codes buffered in FogLAMP and a count of assets by code.</p>
+<p><strong>Response Payload</strong></p>
+<p>An array of JSON objects, one per asset.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="8%" />
+<col width="53%" />
+<col width="24%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>[].assetCode</td>
+<td>string</td>
+<td>The code of the asset</td>
+<td>fogbench/accelerometer</td>
+</tr>
+<tr class="row-odd"><td>[].count</td>
+<td>number</td>
+<td>The number of recorded readings for the asset code</td>
+<td>22359</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset
+<span class="go">[ { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/accelerometer&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/gyroscope&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/humidity&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/luxometer&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/magnetometer&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/mouse&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/pressure&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/switch&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/temperature&quot; },</span>
+<span class="go">  { &quot;count&quot;: 18, &quot;assetCode&quot;: &quot;fogbench/wall clock&quot; } ]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-asset-readings">
+<h4>GET asset readings<a class="headerlink" href="#get-asset-readings" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/asset/{code}</span></code> - Return an array of readings for a given asset code.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>code</strong> - the asset code to retrieve.</li>
+</ul>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>limit</strong> - set the limit of the number of readings to return. If not specified, the defaults is 20 readings.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>An array of JSON objects with the readings data for a series of readings sorted in reverse chronological order.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="12%" />
+<col width="45%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>[].timestamp</td>
+<td>timestamp</td>
+<td>The time at which the reading was received.</td>
+<td>2018-04-16 14:33:18.215</td>
+</tr>
+<tr class="row-odd"><td>[].reading</td>
+<td>JSON object</td>
+<td>The JSON reading object received from the sensor.</td>
+<td>{“reading”: {“x”:0, “y”:0, “z”:1}</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Faccelerometer
+<span class="go">[ { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: -2, &quot;z&quot;: 0 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:59.692&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 0, &quot;z&quot;: -1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:54.643&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: 2, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:49.899&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: -1, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:47.026&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: -2, &quot;z&quot;: -2 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:42.746&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 2, &quot;z&quot;: 0 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:37.418&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -2, &quot;y&quot;: -1, &quot;z&quot;: 2 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:32.650&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 0, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.870&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 1, &quot;y&quot;: 1, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.870&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 0, &quot;z&quot;: -1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.869&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 2, &quot;y&quot;: -1, &quot;z&quot;: 0 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.868&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: -2, &quot;z&quot;: 2 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.867&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 2, &quot;y&quot;: 1, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.867&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 1, &quot;y&quot;: -2, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.866&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 2, &quot;y&quot;: -1, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.865&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: -1, &quot;z&quot;: 2 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.865&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: -2, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.864&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: -2, &quot;z&quot;: 0 }, &quot;timestamp&quot;: &quot;2018-04-19 13:45:15.881&quot; } ]</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Faccelerometer?limit<span class="o">=</span><span class="m">5</span>
+<span class="go">[ { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: -2, &quot;z&quot;: 0 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:59.692&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: 0, &quot;y&quot;: 0, &quot;z&quot;: -1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:54.643&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: 2, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:49.899&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: -1, &quot;z&quot;: 1 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:47.026&quot; },</span>
+<span class="go">  { &quot;reading&quot;: { &quot;x&quot;: -1, &quot;y&quot;: -2, &quot;z&quot;: -2 }, &quot;timestamp&quot;: &quot;2018-04-19 14:20:42.746&quot; } ]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-asset-reading">
+<h4>GET asset reading<a class="headerlink" href="#get-asset-reading" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/asset/{code}/{reading}</span></code> - Return an array of single readings for a given asset code.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>code</strong> - the asset code to retrieve.</li>
+<li><strong>reading</strong> - the sensor from the assets JSON formatted reading.</li>
+</ul>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>limit</strong> - set the limit of the number of readings to return. If not specified, the defaults is 20 single readings.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>An array of JSON objects with a series of readings sorted in reverse chronological order.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="14%" />
+<col width="48%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>timestamp</td>
+<td>timestamp</td>
+<td>The time at which the reading was received.</td>
+<td>2018-04-16 14:33:18.215</td>
+</tr>
+<tr class="row-odd"><td>{reading}</td>
+<td>JSON object</td>
+<td>The value of the specified reading.</td>
+<td>“temperature”: 20</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Fhumidity/temperature
+<span class="go">[ { &quot;temperature&quot;: 20, &quot;timestamp&quot;: &quot;2018-04-19 14:20:59.692&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 33, &quot;timestamp&quot;: &quot;2018-04-19 14:20:54.643&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 35, &quot;timestamp&quot;: &quot;2018-04-19 14:20:49.899&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 0, &quot;timestamp&quot;: &quot;2018-04-19 14:20:47.026&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 37, &quot;timestamp&quot;: &quot;2018-04-19 14:20:42.746&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 47, &quot;timestamp&quot;: &quot;2018-04-19 14:20:37.418&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 26, &quot;timestamp&quot;: &quot;2018-04-19 14:20:32.650&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 12, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.870&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 38, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.869&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 7, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.869&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 21, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.868&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 5, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.867&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 40, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.867&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 39, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.866&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 29, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.865&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 41, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.865&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 46, &quot;timestamp&quot;: &quot;2018-04-19 14:06:05.864&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 10, &quot;timestamp&quot;: &quot;2018-04-19 13:45:15.881&quot; } ]</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Faccelerometer?limit<span class="o">=</span><span class="m">5</span>
+<span class="go">[ { &quot;temperature&quot;: 20, &quot;timestamp&quot;: &quot;2018-04-19 14:20:59.692&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 33, &quot;timestamp&quot;: &quot;2018-04-19 14:20:54.643&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 35, &quot;timestamp&quot;: &quot;2018-04-19 14:20:49.899&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 0, &quot;timestamp&quot;: &quot;2018-04-19 14:20:47.026&quot; },</span>
+<span class="go">  { &quot;temperature&quot;: 37, &quot;timestamp&quot;: &quot;2018-04-19 14:20:42.746&quot; } ]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-asset-reading-summary">
+<h4>GET asset reading summary<a class="headerlink" href="#get-asset-reading-summary" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/asset/{code}/{reading}/summary</span></code> - Return minimum, maximum and average values of a reading by asset code.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>code</strong> - the asset code to retrieve.</li>
+<li><strong>reading</strong> - the sensor from the assets JSON formatted reading.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>An array of JSON objects with a series of readings sorted in reverse chronological order.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="10%" />
+<col width="55%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>{reading}.average</td>
+<td>number</td>
+<td>The average value of the set of       <br />
+sensor values selected in the query string</td>
+<td>27</td>
+</tr>
+<tr class="row-odd"><td>{reading}.min</td>
+<td>number</td>
+<td>The minimum value of the set of       <br />
+sensor values selected in the query string</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>{reading}.max</td>
+<td>number</td>
+<td>The maximum value of the set of       <br />
+sensor values selected in the query string</td>
+<td>47</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Fhumidity/temperature/summary
+<span class="go">{ &quot;temperature&quot;: { &quot;max&quot;: 47, &quot;min&quot;: 0, &quot;average&quot;: 27 } }</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-timed-average-asset-reading">
+<h4>GET timed average asset reading<a class="headerlink" href="#get-timed-average-asset-reading" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foglamp/asset/{code}/{reading}/series</span></code> - Return minimum, maximum and average values of a reading by asset code in a time series. The default interval in the series is one second.</p>
+<p><strong>Path Parameters</strong></p>
+<ul class="simple">
+<li><strong>code</strong> - the asset code to retrieve.</li>
+<li><strong>reading</strong> - the sensor from the assets JSON formatted reading.</li>
+</ul>
+<p><strong>Request Parameters</strong></p>
+<ul class="simple">
+<li><strong>limit</strong> - set the limit of the number of readings to return. If not specified, the defaults is 20 single readings.</li>
+</ul>
+<p><strong>Response Payload</strong></p>
+<p>An array of JSON objects with a series of readings sorted in reverse chronological order.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="13%" />
+<col width="51%" />
+<col width="24%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>timestamp</td>
+<td>timestamp</td>
+<td>The time the reading represents.</td>
+<td>2018-04-16 14:33:18</td>
+</tr>
+<tr class="row-odd"><td>average</td>
+<td>number</td>
+<td>The average value of the set of       <br />
+sensor values selected in the query string</td>
+<td>27</td>
+</tr>
+<tr class="row-even"><td>min</td>
+<td>number</td>
+<td>The minimum value of the set of       <br />
+sensor values selected in the query string</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>max</td>
+<td>number</td>
+<td>The maximum value of the set of       <br />
+sensor values selected in the query string</td>
+<td>47</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Fhumidity/temperature/series
+<span class="go">[ { &quot;timestamp&quot;: &quot;2018-04-19 14:20:59&quot;, &quot;max&quot;: 20, &quot;min&quot;: 20, &quot;average&quot;: 20 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:54&quot;, &quot;max&quot;: 33, &quot;min&quot;: 33, &quot;average&quot;: 33 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:49&quot;, &quot;max&quot;: 35, &quot;min&quot;: 35, &quot;average&quot;: 35 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:47&quot;, &quot;max&quot;: 0,  &quot;min&quot;: 0,  &quot;average&quot;: 0  },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:42&quot;, &quot;max&quot;: 37, &quot;min&quot;: 37, &quot;average&quot;: 37 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:37&quot;, &quot;max&quot;: 47, &quot;min&quot;: 47, &quot;average&quot;: 47 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:32&quot;, &quot;max&quot;: 26, &quot;min&quot;: 26, &quot;average&quot;: 26 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:06:05&quot;, &quot;max&quot;: 46, &quot;min&quot;: 5,  &quot;average&quot;: 27.8 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 13:45:15&quot;, &quot;max&quot;: 10, &quot;min&quot;: 10, &quot;average&quot;: 10 } ]</span>
+<span class="gp">$</span>
+<span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/fogbench%2Fhumidity/temperature/series
+<span class="go">[ { &quot;timestamp&quot;: &quot;2018-04-19 14:20:59&quot;, &quot;max&quot;: 20, &quot;min&quot;: 20, &quot;average&quot;: 20 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:54&quot;, &quot;max&quot;: 33, &quot;min&quot;: 33, &quot;average&quot;: 33 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:49&quot;, &quot;max&quot;: 35, &quot;min&quot;: 35, &quot;average&quot;: 35 },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:47&quot;, &quot;max&quot;: 0,  &quot;min&quot;: 0,  &quot;average&quot;: 0  },</span>
+<span class="go">  { &quot;timestamp&quot;: &quot;2018-04-19 14:20:42&quot;, &quot;max&quot;: 37, &quot;min&quot;: 37, &quot;average&quot;: 37 } ]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../build_index.html" class="btn btn-neutral float-right" title="Building FogLAMP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="02_RESTadmin.html" class="btn btn-neutral" title="Administration API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

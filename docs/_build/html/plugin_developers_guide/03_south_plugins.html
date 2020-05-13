@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>South Plugins &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Developer Guide" href="index.html"/>
+        <link rel="next" title="South Plugins in C" href="03_south_C_plugins.html"/>
+        <link rel="prev" title="Writing and Using Plugins" href="02_writing_plugins.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Plugin Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_FogLAMP_plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_writing_plugins.html">Writing and Using Plugins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">South Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polled-mode">Polled Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#plugin-poll">Plugin Poll</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#async-io-mode">Async IO Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#plugin-start">Plugin Start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#async-handler">Async Handler</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#a-south-plugin-example-in-python-the-dht11-sensor">A South Plugin Example In Python: the DHT11 Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-hardware">The Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-software">The Software</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-plugin">The Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#building-foglamp-and-adding-the-plugin">Building FogLAMP and Adding the Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-plugin">Using the Plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_C_plugins.html">South Plugins in C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="035_CPP.html">C++ Support Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="037_hybrid_plugins.html">Hybrid Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_north_plugins.html">North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_storage_plugins.html">Storage Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Plugin Developer Guide</a> &raquo;</li>
+        
+      <li>South Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/03_south_plugins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="south-plugins">
+<h1>South Plugins<a class="headerlink" href="#south-plugins" title="Permalink to this headline">¶</a></h1>
+<p>South plugins are used to communicate with sensors and actuators, there are two modes of plugin operation; <em>asyncio</em> and <em>polled</em>.</p>
+<div class="section" id="polled-mode">
+<h2>Polled Mode<a class="headerlink" href="#polled-mode" title="Permalink to this headline">¶</a></h2>
+<p>Polled mode is the simplest form of South plugin that can be written, a poll routine is called at an interval defined in the plugin configuration. The South service determines the type of the plugin by examining at the mode property in the information the plugin returns from the <em>plugin_info</em> call.</p>
+<div class="section" id="plugin-poll">
+<h3>Plugin Poll<a class="headerlink" href="#plugin-poll" title="Permalink to this headline">¶</a></h3>
+<p>The plugin <em>poll</em> method is called periodically to collect the readings from a poll mode sensor. As with all other calls the argument passed to the method is the handle returned by the initialization call, the return of the method should be the JSON payload of the readings to return.</p>
+<p>The JSON payload returned, as a Python dictionary, should contain the properties; asset, timestamp, key and readings.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>asset</td>
+<td>The asset key of the sensor device that is being read</td>
+</tr>
+<tr class="row-odd"><td>timestamp</td>
+<td>A timestamp for the reading data</td>
+</tr>
+<tr class="row-even"><td>key</td>
+<td>A UUID which is the unique key of this reading</td>
+</tr>
+<tr class="row-odd"><td>readings</td>
+<td>The reading data itself as a JSON object</td>
+</tr>
+</tbody>
+</table>
+<p>It is important that the <em>poll</em> method does not block as this will prevent the proper operation of the South microservice.
+Using the example of our simple DHT11 device attached to a GPIO pin, the <em>poll</em> routine could be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plugin_poll</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Extracts data from the sensor and returns it in a JSON document as a Python dict.</span>
+
+<span class="sd">    Available for poll mode only.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        handle: handle returned by the plugin initialisation call</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        returns a sensor reading in a JSON document, as a Python dict, if it is available</span>
+<span class="sd">        None - If no reading is available</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        DataRetrievalError</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">humidity</span><span class="p">,</span> <span class="n">temperature</span> <span class="o">=</span> <span class="n">Adafruit_DHT</span><span class="o">.</span><span class="n">read_retry</span><span class="p">(</span><span class="n">Adafruit_DHT</span><span class="o">.</span><span class="n">DHT11</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">humidity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">time_stamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">))</span>
+            <span class="n">readings</span> <span class="o">=</span>  <span class="p">{</span> <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="n">temperature</span> <span class="p">,</span> <span class="s1">&#39;humidity&#39;</span> <span class="p">:</span> <span class="n">humidity</span> <span class="p">}</span>
+            <span class="n">wrapper</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;asset&#39;</span><span class="p">:</span> <span class="s1">&#39;dht11&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">time_stamp</span><span class="p">,</span>
+                    <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+                    <span class="s1">&#39;readings&#39;</span><span class="p">:</span> <span class="n">readings</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataRetrievalError</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="async-io-mode">
+<h2>Async IO Mode<a class="headerlink" href="#async-io-mode" title="Permalink to this headline">¶</a></h2>
+<p>In asyncio mode the plugin inserts itself into the event processing loop of the South Service itself. This is a more complex mechanism and is intended for plugins that need to block or listen for incoming data via a network.</p>
+<div class="section" id="plugin-start">
+<h3>Plugin Start<a class="headerlink" href="#plugin-start" title="Permalink to this headline">¶</a></h3>
+<p>The <em>plugin_start</em> method, as with other plugin calls, is called with the plugin handle data that was returned from the <em>plugin_init</em> call. The <em>plugin_start</em> call will only be called once for a plugin, it is the responsibility of <em>plugin_start</em> to install the plugin code into the python event handling system for asyncIO. Assuming an example whereby the interface to a sensor is via HTTP and the sensor will make HTTP POST calls to our plugin in order to send data into FogLAMP, a <em>plugin_start</em> for this scenario would create a web application endpoint for reception of the POST command.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">(</span><span class="n">middlewares</span><span class="o">=</span><span class="p">[</span><span class="n">middleware</span><span class="o">.</span><span class="n">error_middleware</span><span class="p">])</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">SensorPhoneIngest</span><span class="o">.</span><span class="n">render_post</span><span class="p">)</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">make_handler</span><span class="p">()</span>
+<span class="n">coro</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_server</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">ensure_future</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code first gets the event loop for this Python execution, it then creates the web application and adds a route for the POST request. In this case it is calling the <em>render_post</em> method of the object <em>SensorPhone</em>. It then goes on to create the handler and install the web server instance into the event system.</p>
+</div>
+<div class="section" id="async-handler">
+<h3>Async Handler<a class="headerlink" href="#async-handler" title="Permalink to this headline">¶</a></h3>
+<p>The async handler is defined for incoming message has the responsibility of taking the sensor data and ingesting that into FogLAMP. Unlike the poll mechanism, this is done from within the handler rather than by passing the data back to the South service itself. A convenient method exists for ingesting readings, <em>Ingest.add_readings</em>. This call is passed an asset, timestamp, key and readings document for the asset and will do everything else required to make sure the readings are stored in the FogLAMP buffer. <br /> In the case of our HTTP based example above, the code would create the items needed to generate the arguments to the <em>Ingest.add_readings</em> call, by creating data items and retrieving them from the payload sent by the sensor.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Ingest</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">increment_discarded_counter</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;busy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+        <span class="n">asset</span> <span class="o">=</span> <span class="s1">&#39;SensorPhone&#39;</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">))</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;messages must be a list&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">readings</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+             <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">Ingest</span><span class="o">.</span><span class="n">add_readings</span><span class="p">(</span><span class="n">asset</span><span class="o">=</span><span class="n">asset</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">readings</span><span class="o">=</span><span class="n">readings</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>It would then respond to the HTTP request and return. Since the handler is embedded in the event loop this will happen in the context of a coroutine and would happen each time a new POST request is received.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">code</span>
+<span class="k">return</span> <span class="n">web</span><span class="o">.</span><span class="n">json_response</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="a-south-plugin-example-in-python-the-dht11-sensor">
+<h2>A South Plugin Example In Python: the DHT11 Sensor<a class="headerlink" href="#a-south-plugin-example-in-python-the-dht11-sensor" title="Permalink to this headline">¶</a></h2>
+<p>Let’s try to put all the information together and write a plugin. We can continue to use the example of an inexpensive sensor, the DHT11, used to measure temperature and humidity, directly wired to a Raspberry PI. This plugin is available on github, <a href="https://github.com/foglamp-iot/foglamp-south-dht11" target="_blank">FogLAMP DHT11 South Plugin</a>.</p>
+<p>First, here is a set of links where you can find more information regarding this sensor:</p>
+<ul class="simple">
+<li><a href="https://www.adafruit.com/product/386" target="_blank">DHT11 Product Description</a></li>
+<li><a href="https://s3.amazonaws.com/foglamp/docs/v1/Common/plugins/South/DHT11/DHT11.pdf" target="_blank">DHT11 Product Manual</a></li>
+<li><a href="https://github.com/adafruit/Adafruit_Python_DHT" target="_blank">ADAFruit DHT Library</a></li>
+</ul>
+<div class="section" id="the-hardware">
+<h3>The Hardware<a class="headerlink" href="#the-hardware" title="Permalink to this headline">¶</a></h3>
+<p>The DHT sensor is directly connected to a Raspberry PI 2 or 3. You may decide to buy a sensor and a resistor and solder them yourself, or you can buy a ready-made circuit that provides the correct output to wire to the Raspberry PI. <a href="https://s3.amazonaws.com/foglamp/docs/v1/Common/plugins/South/DHT11/DHT11-with-resistor.jpg" target="_blank">This picture</a> shows a DHT11 with resistor that you can buy online.</p>
+<p>The sensor can be directly connected to the Raspberry PI GPIO (General Purpose Input/Output). An introduction to the GPIO and the pinset is available <a href="https://www.raspberrypi.org/documentation/usage/gpio/README.md" target="_blank">here</a>. In our case, you must connect the sensor on these pins:</p>
+<ul class="simple">
+<li><strong>VCC</strong> is connected to PIN #2 (5v Power)</li>
+<li><strong>GND</strong> is connected to PIN #6 (Ground)</li>
+<li><strong>DATA</strong> is connected to PIN #7 (BCM 4 - GPCLK0)</li>
+</ul>
+<p><a href="https://s3.amazonaws.com/foglamp/docs/v1/Common/plugins/South/DHT11/DHT11-RaspPI-wired.jpg" target="_blank">This picture</a> shows the sensor wired to the Raspberry PI and <a href="https://s3.amazonaws.com/foglamp/docs/v1/Common/plugins/South/DHT11/DHT11-RaspPI-pins.jpg" target="_blank">this</a> is a zoom into the wires used.</p>
+</div>
+<div class="section" id="the-software">
+<h3>The Software<a class="headerlink" href="#the-software" title="Permalink to this headline">¶</a></h3>
+<p>For this plugin we use the ADAFruit Python Library (links to the GitHub repository are above). First, you must install the library (in future versions the library will be provided in a ready-made package):</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+<span class="go">Cloning into &#39;Adafruit_Python_DHT&#39;...</span>
+<span class="go">remote: Counting objects: 249, done.</span>
+<span class="go">remote: Total 249 (delta 0), reused 0 (delta 0), pack-reused 249</span>
+<span class="go">Receiving objects: 100% (249/249), 77.00 KiB | 0 bytes/s, done.</span>
+<span class="go">Resolving deltas: 100% (142/142), done.</span>
+<span class="gp">$</span> <span class="nb">cd</span> Adafruit_Python_DHT
+<span class="gp">$</span> sudo apt-get install build-essential python-dev
+<span class="go">Reading package lists... Done</span>
+<span class="go">Building dependency tree</span>
+<span class="go">Reading state information... Done</span>
+<span class="go">The following NEW packages will be installed:</span>
+<span class="go">build-essential python-dev</span>
+<span class="go">...</span>
+<span class="gp">$</span> sudo python3 setup.py install
+<span class="go">running install</span>
+<span class="go">running bdist_egg</span>
+<span class="go">running egg_info</span>
+<span class="go">creating Adafruit_DHT.egg-info</span>
+<span class="go">...</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-plugin">
+<h3>The Plugin<a class="headerlink" href="#the-plugin" title="Permalink to this headline">¶</a></h3>
+<p>This is the code for the plugin:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># FOGLAMP_BEGIN</span>
+<span class="c1"># See: http://foglamp.readthedocs.io/</span>
+<span class="c1"># FOGLAMP_END</span>
+
+<span class="sd">&quot;&quot;&quot; Plugin for a DHT11 temperature and humidity sensor attached directly</span>
+<span class="sd">    to the GPIO pins of a Raspberry Pi</span>
+
+<span class="sd">    This plugin uses the Adafruit DHT library, to install this perform</span>
+<span class="sd">    the following steps:</span>
+
+<span class="sd">        git clone https://github.com/adafruit/Adafruit_Python_DHT.git</span>
+<span class="sd">        cd Adafruit_Python_DHT</span>
+<span class="sd">        sudo apt-get install build-essential python-dev</span>
+<span class="sd">        sudo python setup.py install</span>
+
+<span class="sd">    To access the GPIO pins foglamp must be able to access /dev/gpiomem,</span>
+<span class="sd">    the default access for this is owner and group read/write. Either</span>
+<span class="sd">    FogLAMP must be added to the group or the permissions altered to</span>
+<span class="sd">    allow FogLAMP access to the device.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+<span class="kn">from</span> <span class="nn">foglamp.common</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">foglamp.services.south</span> <span class="kn">import</span> <span class="n">exceptions</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mark Riddoch&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (c) 2017 OSIsoft, LLC&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Apache 2.0&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{VERSION}</span><span class="s2">&quot;</span>
+
+<span class="n">_DEFAULT_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;plugin&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;Python module name of the plugin to load&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;dht11&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;pollInterval&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;The interval between poll calls to the device poll routine expressed in milliseconds.&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;1000&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;gpiopin&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;The GPIO pin into which the DHT11 data pin is connected&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;4&#39;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="n">_LOGGER</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Setup the access to the logging system of FogLAMP &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">plugin_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Returns information about the plugin.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: plugin information</span>
+<span class="sd">    Raises:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;DHT11 GPIO&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;poll&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;south&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;interface&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="n">_DEFAULT_CONFIG</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">plugin_init</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Initialise the plugin.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: JSON configuration document for the device configuration category</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        handle: JSON object to be used in future calls to the plugin</span>
+<span class="sd">    Raises:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;gpiopin&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">handle</span>
+
+
+<span class="k">def</span> <span class="nf">plugin_poll</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Extracts data from the sensor and returns it in a JSON document as a Python dict.</span>
+
+<span class="sd">    Available for poll mode only.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        handle: handle returned by the plugin initialisation call</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        returns a sensor reading in a JSON document, as a Python dict, if it is available</span>
+<span class="sd">        None - If no reading is available</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        DataRetrievalError</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">humidity</span><span class="p">,</span> <span class="n">temperature</span> <span class="o">=</span> <span class="n">Adafruit_DHT</span><span class="o">.</span><span class="n">read_retry</span><span class="p">(</span><span class="n">Adafruit_DHT</span><span class="o">.</span><span class="n">DHT11</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">humidity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">time_stamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">))</span>
+            <span class="n">readings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="n">temperature</span><span class="p">,</span> <span class="s1">&#39;humidity&#39;</span><span class="p">:</span> <span class="n">humidity</span><span class="p">}</span>
+            <span class="n">wrapper</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;asset&#39;</span><span class="p">:</span>     <span class="s1">&#39;dht11&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">time_stamp</span><span class="p">,</span>
+                    <span class="s1">&#39;key&#39;</span><span class="p">:</span>       <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+                    <span class="s1">&#39;readings&#39;</span><span class="p">:</span>  <span class="n">readings</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataRetrievalError</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">plugin_reconfigure</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">new_config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Reconfigures the plugin, it should be called when the configuration of the plugin is changed during the</span>
+<span class="sd">        operation of the device service.</span>
+<span class="sd">        The new configuration category should be passed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        handle: handle returned by the plugin initialisation call</span>
+<span class="sd">        new_config: JSON object representing the new configuration category for the category</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        new_handle: new handle to be used in the future calls</span>
+<span class="sd">    Raises:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">new_handle</span> <span class="o">=</span> <span class="n">new_config</span><span class="p">[</span><span class="s1">&#39;gpiopin&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">new_handle</span>
+
+
+<span class="k">def</span> <span class="nf">plugin_shutdown</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Shutdowns the plugin doing required cleanup, to be called prior to the device service being shut down.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        handle: handle returned by the plugin initialisation call</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    Raises:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-foglamp-and-adding-the-plugin">
+<h3>Building FogLAMP and Adding the Plugin<a class="headerlink" href="#building-foglamp-and-adding-the-plugin" title="Permalink to this headline">¶</a></h3>
+<p>If you have not built FogLAMP yet, follow the steps described <a href="../03_getting_started.html#building-foglamp">here</a>. After the build, you can optionally install FogLAMP following <a href="../04_installation.html">these</a> steps.</p>
+<ul class="simple">
+<li>If you have started FogLAMP from the build directory, copy the structure of the <em>foglamp-south-dht11/python/</em> directory into the <em>python</em> directory:</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ~/FogLAMP
+<span class="gp">$</span> cp -R ~/foglamp-south-dht11/python/foglamp/plugins/south/dht11 python/foglamp/plugin/south/
+<span class="gp">$</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>If you have installed FogLAMP by executing <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code>, copy the structure of the <em>foglamp-south-dht11/python/</em> directory into the installed <em>python</em> directory:</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo cp -R ~/foglamp-south-dht11/python/foglamp/plugins/south/dht11 /usr/local/foglamp/python/foglamp/plugin/south/
+<span class="gp">$</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have installed FogLAMP using an alternative <em>DESTDIR</em>, remember to add the path to the destination directory to the <code class="docutils literal"><span class="pre">cp</span></code> command.</p>
+</div>
+<ul class="simple">
+<li>Add service</li>
+</ul>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -sX POST http://localhost:8081/foglamp/service -d <span class="s1">&#39;{&quot;name&quot;: &quot;dht11&quot;, &quot;type&quot;: &quot;south&quot;, &quot;plugin&quot;: &quot;dht11&quot;, &quot;enabled&quot;: true}&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Each plugin repo has its own debian packaging script and documentation, And that is the recommended way to go! As above method(s) may need explicit action for linux and/or python dependencies installation.</p>
+</div>
+</div>
+<div class="section" id="using-the-plugin">
+<h3>Using the Plugin<a class="headerlink" href="#using-the-plugin" title="Permalink to this headline">¶</a></h3>
+<p>Once south plugin is added as an enabled service, You are ready to use the DHT11 plugin.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -X GET http://localhost:8081/foglamp/service <span class="p">|</span> jq
+</pre></div>
+</div>
+<p>Let’s see what we have collected so far:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset <span class="p">|</span> jq
+<span class="go">[</span>
+<span class="go">  {</span>
+<span class="go">    &quot;count&quot;: 158,</span>
+<span class="go">    &quot;asset_code&quot;: &quot;dht11&quot;</span>
+<span class="go">  }</span>
+<span class="go">]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Finally, let’s extract some values:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/dht11?limit<span class="o">=</span><span class="m">5</span> <span class="p">|</span> jq
+<span class="go">[</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:41:39.672&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 19,</span>
+<span class="go">      &quot;humidity&quot;: 62</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:41:35.615&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 19,</span>
+<span class="go">      &quot;humidity&quot;: 63</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:41:34.087&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 19,</span>
+<span class="go">      &quot;humidity&quot;: 62</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:41:32.557&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 19,</span>
+<span class="go">      &quot;humidity&quot;: 63</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:41:31.028&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 19,</span>
+<span class="go">      &quot;humidity&quot;: 63</span>
+<span class="go">    }</span>
+<span class="go">  }</span>
+<span class="go">]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Clearly we will not see many changes in temperature or humidity, unless we place our thumb on the sensor or we blow warm breathe on it :-)</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> curl -s http://localhost:8081/foglamp/asset/dht11?limit<span class="o">=</span><span class="m">5</span> <span class="p">|</span> jq
+<span class="go">[</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:43:16.787&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 25,</span>
+<span class="go">      &quot;humidity&quot;: 95</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:43:15.258&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 25,</span>
+<span class="go">      &quot;humidity&quot;: 95</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:43:13.729&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 24,</span>
+<span class="go">      &quot;humidity&quot;: 95</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:43:12.201&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 24,</span>
+<span class="go">      &quot;humidity&quot;: 95</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  {</span>
+<span class="go">    &quot;timestamp&quot;: &quot;2017-12-30 14:43:05.616&quot;,</span>
+<span class="go">    &quot;reading&quot;: {</span>
+<span class="go">      &quot;temperature&quot;: 22,</span>
+<span class="go">      &quot;humidity&quot;: 95</span>
+<span class="go">    }</span>
+<span class="go">  }</span>
+<span class="go">]</span>
+<span class="gp">$</span>
+</pre></div>
+</div>
+<p>Needless to say, the North plugin will send the buffered data to the PI system using the OMF plugin or any other north system using the appropriate north plugin.</p>
+<p><a class="reference external" href="https://s3.amazonaws.com/foglamp/readthedocs/images/06_dht11_tags_in_PI.jpg"><img alt="DHT11 in PI" src="https://s3.amazonaws.com/foglamp/readthedocs/images/06_dht11_tags_in_PI.jpg" /></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="03_south_C_plugins.html" class="btn btn-neutral float-right" title="South Plugins in C" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="02_writing_plugins.html" class="btn btn-neutral" title="Writing and Using Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,501 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C++ Support Classes &mdash; FogLAMP  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FogLAMP  documentation" href="../index.html"/>
+        <link rel="up" title="Plugin Developer Guide" href="index.html"/>
+        <link rel="next" title="Hybrid Plugins" href="037_hybrid_plugins.html"/>
+        <link rel="prev" title="South Plugins in C" href="03_south_C_plugins.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FogLAMP
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processing_data.html">Processing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_architecture.html">FogLAMP Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../foglamp_plugins.html">FogLAMP Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../securing_foglamp.html">Securing FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notifications.html">Notifications Service</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Plugin Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_FogLAMP_plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_writing_plugins.html">Writing and Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_plugins.html">South Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_south_C_plugins.html">South Plugins in C</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">C++ Support Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reading">Reading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-category">Configuration Category</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logger">Logger</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="037_hybrid_plugins.html">Hybrid Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_north_plugins.html">North Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_storage_plugins.html">Storage Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api_guide/index.html">REST API Developers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_index.html">Building FogLAMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../91_version_history.html">Version History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../92_downloads.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KERBEROS.html">Kerberos authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_index.html">Plugin Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FogLAMP</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Plugin Developer Guide</a> &raquo;</li>
+        
+      <li>C++ Support Classes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plugin_developers_guide/035_CPP.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c-support-classes">
+<h1>C++ Support Classes<a class="headerlink" href="#c-support-classes" title="Permalink to this headline">¶</a></h1>
+<p>A number of support classes exist within the common library that forms part of every FogLAMP plugin.</p>
+<div class="section" id="reading">
+<h2>Reading<a class="headerlink" href="#reading" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Reading</em> class and the associated <em>Datapoint</em> and <em>DatapointValue</em> classes provide the mechanism within C++ classes to manipulated the reading asset data. The public part of the <em>Reading</em> class is currently defined as follows;</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">Reading</span> <span class="p">{</span>
+        <span class="nl">public</span><span class="p">:</span>
+                <span class="n">Reading</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">asset</span><span class="p">,</span> <span class="n">Datapoint</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+                <span class="n">Reading</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">asset</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Datapoint</span> <span class="o">*&gt;</span> <span class="n">values</span><span class="p">);</span>
+                <span class="n">Reading</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">asset</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Datapoint</span> <span class="o">*&gt;</span> <span class="n">values</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">ts</span><span class="p">);</span>
+                <span class="n">Reading</span><span class="p">(</span><span class="k">const</span> <span class="n">Reading</span><span class="o">&amp;</span> <span class="n">orig</span><span class="p">);</span>
+
+                <span class="o">~</span><span class="n">Reading</span><span class="p">();</span>
+                <span class="kt">void</span>                            <span class="nf">addDatapoint</span><span class="p">(</span><span class="n">Datapoint</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+                <span class="n">Datapoint</span>                       <span class="o">*</span><span class="nf">removeDatapoint</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">toJSON</span><span class="p">(</span><span class="kt">bool</span> <span class="n">minimal</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getDatapointsJSON</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="c1">// Return AssetName</span>
+                <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span>              <span class="n">getAssetName</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_asset</span><span class="p">;</span> <span class="p">};</span>
+                <span class="c1">// Set AssetName</span>
+                <span class="kt">void</span>                            <span class="nf">setAssetName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">assetName</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_asset</span> <span class="o">=</span> <span class="n">assetName</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">unsigned</span> <span class="kt">int</span>                    <span class="nf">getDatapointCount</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_values</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">removeAllDatapoints</span><span class="p">();</span>
+                <span class="c1">// Return Reading datapoints</span>
+                <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Datapoint</span> <span class="o">*&gt;</span>  <span class="n">getReadingData</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_values</span><span class="p">;</span> <span class="p">};</span>
+                <span class="c1">// Return refrerence to Reading datapoints</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Datapoint</span> <span class="o">*&gt;&amp;</span>       <span class="n">getReadingData</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_values</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">unsigned</span> <span class="kt">long</span>                   <span class="nf">getId</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_id</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">unsigned</span> <span class="kt">long</span>                   <span class="nf">getTimestamp</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">m_timestamp</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">unsigned</span> <span class="kt">long</span>                   <span class="nf">getUserTimestamp</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">m_userTimestamp</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setId</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">id</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_id</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setTimestamp</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">ts</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_timestamp</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="p">(</span><span class="kt">time_t</span><span class="p">)</span><span class="n">ts</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setTimestamp</span><span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="n">tm</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_timestamp</span> <span class="o">=</span> <span class="n">tm</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setTimestamp</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">timestamp</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">getTimestamp</span><span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tm</span><span class="p">)</span> <span class="p">{</span> <span class="o">*</span><span class="n">tm</span> <span class="o">=</span> <span class="n">m_timestamp</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setUserTimestamp</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">uTs</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_userTimestamp</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="p">(</span><span class="kt">time_t</span><span class="p">)</span><span class="n">uTs</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setUserTimestamp</span><span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="n">tm</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_userTimestamp</span> <span class="o">=</span> <span class="n">tm</span><span class="p">;</span> <span class="p">};</span>
+                <span class="kt">void</span>                            <span class="nf">setUserTimestamp</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">timestamp</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">getUserTimestamp</span><span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tm</span><span class="p">)</span> <span class="p">{</span> <span class="o">*</span><span class="n">tm</span> <span class="o">=</span> <span class="n">m_userTimestamp</span><span class="p">;</span> <span class="p">};</span>
+
+                <span class="k">typedef</span> <span class="k">enum</span> <span class="n">dateTimeFormat</span> <span class="p">{</span> <span class="n">FMT_DEFAULT</span><span class="p">,</span> <span class="n">FMT_STANDARD</span><span class="p">,</span> <span class="n">FMT_ISO8601</span> <span class="p">}</span> <span class="n">readingTimeFormat</span><span class="p">;</span>
+
+                <span class="c1">// Return Reading asset time - ts time</span>
+                <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getAssetDateTime</span><span class="p">(</span><span class="n">readingTimeFormat</span> <span class="n">datetimeFmt</span> <span class="o">=</span> <span class="n">FMT_DEFAULT</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">addMs</span> <span class="o">=</span> <span class="nb">true</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="c1">// Return Reading asset time - user_ts time</span>
+                <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getAssetDateUserTime</span><span class="p">(</span><span class="n">readingTimeFormat</span> <span class="n">datetimeFmt</span> <span class="o">=</span> <span class="n">FMT_DEFAULT</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">addMs</span> <span class="o">=</span> <span class="nb">true</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <em>Reading</em> class contains a number of items that are mapped to the JSON representation of data that is sent to the FogLAMP storage service and are used by the various services and plugins within FogLAMP.</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Asset Name</strong>: The name of the asset. The asset name is set in the constructor of the reading and retrieved via the <em>getAssetName()</em> method.</li>
+<li><strong>Timestamp</strong>: The timestamp when the reading was first seen within FogLAMP.</li>
+<li><strong>User Timestamp</strong>: The timestamp for the actual data in the reading. This may differ from the value of Timestamp if the device itself is able to supply a timestamp value.</li>
+<li><strong>Datapoints</strong>: The actual data of a reading stored in a Datapoint class.</li>
+</ul>
+</div></blockquote>
+<p>The <em>Datapoint</em> class provides a name for each data point within a <em>Reading</em> and the tagged type data for the reading value. The public definition of the <em>Datapoint</em> class is as follows;</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">Datapoint</span> <span class="p">{</span>
+        <span class="nl">public</span><span class="p">:</span>
+                <span class="cm">/**</span>
+<span class="cm">                 * Construct with a data point value</span>
+<span class="cm">                 */</span>
+                <span class="n">Datapoint</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">DatapointValue</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">m_value</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+                <span class="o">~</span><span class="n">Datapoint</span><span class="p">();</span>
+                <span class="cm">/**</span>
+<span class="cm">                 * Return asset reading data point as a JSON</span>
+<span class="cm">                 * property that can be included within a JSON</span>
+<span class="cm">                 * document.</span>
+<span class="cm">                 */</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>     <span class="n">toJSONProperty</span><span class="p">();</span>
+                <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getName</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">void</span> <span class="nf">setName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">const</span> <span class="n">DatapointValue</span> <span class="nf">getData</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">DatapointValue</span><span class="o">&amp;</span> <span class="n">getData</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Closely associated with the <em>Datapoint</em> is the <em>DatapointValue</em> which uses a tagged union to store the values. The public definition of the <em>DatapointValue</em>  is as follows;</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">DatapointValue</span> <span class="p">{</span>
+        <span class="nl">public</span><span class="p">:</span>
+                <span class="cm">/**</span>
+<span class="cm">                 * Constructors for the various types</span>
+<span class="cm">                 */</span>
+                <span class="n">DatapointValue</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">;</span>
+                <span class="n">DatapointValue</span><span class="p">(</span><span class="k">const</span> <span class="kt">long</span> <span class="n">value</span><span class="p">);</span>
+                <span class="n">DatapointValue</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">value</span><span class="p">);</span>
+                <span class="n">DatapointValue</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">values</span><span class="p">);</span>
+                <span class="n">DatapointValue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Datapoint</span><span class="o">*&gt;*&amp;</span> <span class="n">values</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">isDict</span><span class="p">)</span>
+                <span class="n">DatapointValue</span><span class="p">(</span><span class="k">const</span> <span class="n">DatapointValue</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">)</span>
+
+                <span class="n">DatapointValue</span><span class="o">&amp;</span> <span class="n">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">DatapointValue</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+                <span class="o">~</span><span class="n">DatapointValue</span><span class="p">();</span>
+
+                <span class="kt">void</span> <span class="nf">deleteNestedDPV</span><span class="p">();</span>
+
+                <span class="cm">/**</span>
+<span class="cm">                 * Set the value for the various types</span>
+<span class="cm">                 */</span>
+                <span class="kt">void</span> <span class="nf">setValue</span><span class="p">(</span><span class="kt">long</span> <span class="n">value</span><span class="p">);</span>
+                <span class="kt">void</span> <span class="nf">setValue</span><span class="p">(</span><span class="kt">double</span> <span class="n">value</span><span class="p">);</span>
+
+                <span class="cm">/**</span>
+<span class="cm">                 * Return the value as the various types</span>
+<span class="cm">                 */</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>     <span class="n">toString</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">long</span> <span class="nf">toInt</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">double</span> <span class="nf">toDouble</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+                <span class="k">typedef</span> <span class="k">enum</span> <span class="n">DatapointTag</span>
+                <span class="p">{</span>
+                        <span class="n">T_STRING</span><span class="p">,</span>
+                        <span class="n">T_INTEGER</span><span class="p">,</span>
+                        <span class="n">T_FLOAT</span><span class="p">,</span>
+                        <span class="n">T_FLOAT_ARRAY</span><span class="p">,</span>
+                        <span class="n">T_DP_DICT</span><span class="p">,</span>
+                        <span class="n">T_DP_LIST</span>
+                <span class="p">}</span> <span class="n">dataTagType</span><span class="p">;</span>
+                <span class="n">dataTagType</span> <span class="nf">getType</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getTypeStr</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Datapoint</span><span class="o">*&gt;*&amp;</span> <span class="n">getDpVec</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration-category">
+<h2>Configuration Category<a class="headerlink" href="#configuration-category" title="Permalink to this headline">¶</a></h2>
+<p>The <em>ConfigCategory</em> class is a support class for managing configuration information within a plugin and is passed to the plugin entry points. The public definition of the class is as follows;</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">ConfigCategory</span> <span class="p">{</span>
+        <span class="nl">public</span><span class="p">:</span>
+                <span class="k">enum</span> <span class="n">ItemType</span> <span class="p">{</span>
+                        <span class="n">UnknownType</span><span class="p">,</span>
+                        <span class="n">StringItem</span><span class="p">,</span>
+                        <span class="n">EnumerationItem</span><span class="p">,</span>
+                        <span class="n">JsonItem</span><span class="p">,</span>
+                        <span class="n">BoolItem</span><span class="p">,</span>
+                        <span class="n">NumberItem</span><span class="p">,</span>
+                        <span class="n">DoubleItem</span><span class="p">,</span>
+                        <span class="n">ScriptItem</span><span class="p">,</span>
+                        <span class="n">CategoryType</span><span class="p">,</span>
+                        <span class="n">CodeItem</span>
+                <span class="p">};</span>
+
+                <span class="n">ConfigCategory</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">json</span><span class="p">);</span>
+                <span class="n">ConfigCategory</span><span class="p">()</span> <span class="p">{};</span>
+                <span class="n">ConfigCategory</span><span class="p">(</span><span class="k">const</span> <span class="n">ConfigCategory</span><span class="o">&amp;</span> <span class="n">orig</span><span class="p">);</span>
+                <span class="o">~</span><span class="n">ConfigCategory</span><span class="p">();</span>
+                <span class="kt">void</span>                            <span class="nf">addItem</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">description</span><span class="p">,</span>
+                                                        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">type</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">def</span><span class="p">,</span>
+                                                        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">addItem</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">description</span><span class="p">,</span>
+                                                        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">def</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span>
+                                                        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">options</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">removeItems</span><span class="p">();</span>
+                <span class="kt">void</span>                            <span class="nf">removeItemsType</span><span class="p">(</span><span class="n">ItemType</span> <span class="n">type</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">keepItemsType</span><span class="p">(</span><span class="n">ItemType</span> <span class="n">type</span><span class="p">);</span>
+                <span class="kt">bool</span>                            <span class="nf">extractSubcategory</span><span class="p">(</span><span class="n">ConfigCategory</span> <span class="o">&amp;</span><span class="n">subCategories</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">setDescription</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">description</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getName</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getDescription</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">unsigned</span> <span class="kt">int</span>                    <span class="nf">getCount</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">itemExists</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">setItemDisplayName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">displayName</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getValue</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getType</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getDescription</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getDefault</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">setDefault</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getDisplayName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span>        <span class="n">getOptions</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getLength</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getMinimum</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getMaximum</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isString</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isEnumeration</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isJSON</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isBool</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isNumber</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isDouble</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="kt">bool</span>                            <span class="nf">isDeprecated</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">toJSON</span><span class="p">(</span><span class="k">const</span> <span class="kt">bool</span> <span class="n">full</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">itemsToJSON</span><span class="p">(</span><span class="k">const</span> <span class="kt">bool</span> <span class="n">full</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">ConfigCategory</span><span class="o">&amp;</span>                 <span class="n">operator</span><span class="o">=</span><span class="p">(</span><span class="n">ConfigCategory</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">);</span>
+                <span class="n">ConfigCategory</span><span class="o">&amp;</span>                 <span class="n">operator</span><span class="o">+=</span><span class="p">(</span><span class="n">ConfigCategory</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">);</span>
+                <span class="kt">void</span>                            <span class="nf">setItemsValueFromDefault</span><span class="p">();</span>
+                <span class="kt">void</span>                            <span class="nf">checkDefaultValuesOnly</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">itemToJSON</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">itemName</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+                <span class="k">enum</span> <span class="n">ItemAttribute</span>              <span class="p">{</span> <span class="n">ORDER_ATTR</span><span class="p">,</span> <span class="n">READONLY_ATTR</span><span class="p">,</span> <span class="n">MANDATORY_ATTR</span><span class="p">,</span> <span class="n">FILE_ATTR</span><span class="p">};</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span>                     <span class="n">getItemAttribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">itemName</span><span class="p">,</span>
+                                                                 <span class="n">ItemAttribute</span> <span class="n">itemAttribute</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Although <em>ConfigCategory</em> is a complex class, only a few of the methods are commonly used within a plugin</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>itemExists:</strong> - used to test if an expected configuration item exists within the configuration category.</li>
+<li><strong>getValue:</strong> - return the value of a configuration item from within the configuration category</li>
+<li><strong>isBool:</strong> - tests if a configuration item is of boolean type</li>
+<li><strong>isNumber:</strong> - tests if a configuration item is a number</li>
+<li><strong>isDouble:</strong> - tests if a configuration item is valid to be represented as a double</li>
+<li><strong>isString:</strong> - tests if a configuration item is a string</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="logger">
+<h2>Logger<a class="headerlink" href="#logger" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Logger</em> class is used to write entries to the syslog system within FogLAMP. A singleton <em>Logger</em> exists which can be obtained using the following code snippet;</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="n">Logger</span> <span class="o">*</span><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">::</span><span class="n">getLogger</span><span class="p">();</span>
+<span class="n">logger</span><span class="o">-&gt;</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;An error has occurred within the plugin processing&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>It is then possible to log messages at one of five different log levels; <em>debug</em>, <em>info</em>, <em>warn</em>, <em>error</em> or <em>fatal</em>. Messages may be logged using standard printf formatting strings. The public definition of the <em>Logger</em> class is as follows;</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">Logger</span> <span class="p">{</span>
+        <span class="nl">public</span><span class="p">:</span>
+                <span class="n">Logger</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">application</span><span class="p">);</span>
+                <span class="o">~</span><span class="n">Logger</span><span class="p">();</span>
+                <span class="k">static</span> <span class="n">Logger</span> <span class="o">*</span><span class="nf">getLogger</span><span class="p">();</span>
+                <span class="kt">void</span> <span class="nf">debug</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="p">...);</span>
+                <span class="kt">void</span> <span class="nf">printLongString</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+                <span class="kt">void</span> <span class="nf">info</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="p">...);</span>
+                <span class="kt">void</span> <span class="nf">warn</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="p">...);</span>
+                <span class="kt">void</span> <span class="nf">error</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="p">...);</span>
+                <span class="kt">void</span> <span class="nf">fatal</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="p">...);</span>
+                <span class="kt">void</span> <span class="nf">setMinLevel</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">level</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The various log levels should be used as follows;</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>debug</strong>: should be used to output messages that are relevant only to a programmer that is debugging the plugin.</li>
+<li><strong>info</strong>: should be used for information that is meaningful to the end users, but should not normally be logged.</li>
+<li><strong>warn</strong>: should be used for warning messages that will normally be logged but reflect a condition that does not prevent the plugin from operating.</li>
+<li><strong>error</strong>: should be used for conditions that cause a temporary failure in processing within the plugin.</li>
+<li><strong>fatal</strong>: should be used for conditions that cause the plugin to fail processing permanently, possibly requiring a restart of the microservice in order to resolve.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="037_hybrid_plugins.html" class="btn btn-neutral float-right" title="Hybrid Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="03_south_C_plugins.html" class="btn btn-neutral" title="South Plugins in C" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Dianomic Systems.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
