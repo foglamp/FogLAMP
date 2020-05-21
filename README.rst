@@ -38,7 +38,7 @@ This is the FogLAMP project.
 
   - Fledge is available in GitHub as the |fledge-iot| project.
   
-  - The latest version of FogLAMP is still available from Dianomic and has all the latest Fledge features plus extra plugin functionality.**
+  - The latest version of FogLAMP is still available from Dianomic and has all the latest Fledge features plus extra plugin functionality.
 
   - Your may |foglamp-download| or |fledge-download| packaged binaries from the Dianomic website. These include all avialable plugins for your chosen architecture.
   
