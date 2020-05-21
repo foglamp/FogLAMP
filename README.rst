@@ -2,12 +2,49 @@
 
    <br />
 
+.. |fledge| raw:: html
 
+   <a href="https://www.lfedge.org/projects/fledge">Fledge</a>
+   
+.. |fledge-iot| raw:: html
+
+   <a href="https://github.com/fledge-iot/fledge">fledge-iot</a>
+
+.. |foglamp-download| raw:: html
+
+   <a href="http://dianomic.com/download-foglamp/">download FogLAMP<a>
+   
+.. |fledge-download| raw:: html
+
+   <a href="http://dianomic.com/download-fledge/">download Fledge<a>
+   
+.. |fledge-doc| raw:: html
+
+   <a href="https://fledge-iot.readthedocs.io/en/latest/">Fledge<a>
+      
+.. |foglamp-doc| raw:: html
+
+   <a href="https://foglamp.readthedocs.io/en/latest/">FogLAMP<a>
+   
 *******
 FogLAMP
 *******
 
 This is the FogLAMP project.
+
+**The open source version of FogLAMP has moved to become part of the Linux Foundation LFedge Project**
+
+  Within the Linux Foundation FogLAMP is now known as |fledge|. 
+
+  - Fledge is available in GitHub as the |fledge-iot| project.
+  
+  - The latest version of FogLAMP is still available from Dianomic and has all the latest Fledge features plus extra plugin functionality.
+
+  - Your may |foglamp-download| or |fledge-download| packaged binaries from the Dianomic website. These include all available plugins for your chosen architecture.
+  
+  - Documentation is available on readthedocs for both |fledge-doc and |foglamp-doc| and includes details of the plugins available for each.
+  
+**This repository is now archieved.**
 
 FogLAMP is an open source platform for the **Internet of Things**, and an essential component in **Fog Computing**. It uses a modular **microservices architecture** including sensor data collection, storage, processing and forwarding to historians, Enterprise systems and Cloud-based services. FogLAMP can run in highly available, stand alone, unattended environments that assume unreliable network connectivity.
 
