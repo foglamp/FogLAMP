@@ -40,9 +40,9 @@ This is the FogLAMP project.
   
   - The latest version of FogLAMP is still available from Dianomic and has all the latest Fledge features plus extra plugin functionality.
 
-  - Your may |foglamp-download| or |fledge-download| packaged binaries from the Dianomic website. These include all avialable plugins for your chosen architecture.
+  - Your may |foglamp-download| or |fledge-download| packaged binaries from the Dianomic website. These include all available plugins for your chosen architecture.
   
-  - Documentation is avaiable on readthedocs for both |fledge-doc and |foglamp-doc| and includes details of the plugins available for each.
+  - Documentation is available on readthedocs for both |fledge-doc and |foglamp-doc| and includes details of the plugins available for each.
   
 **This repository is now archieved.**
 
