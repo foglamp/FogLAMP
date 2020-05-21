@@ -42,7 +42,7 @@ This is the FogLAMP project.
 
   - Your may |foglamp-download| or |fledge-download| packaged binaries from the Dianomic website. These include all available plugins for your chosen architecture.
   
-  - Documentation is available on readthedocs for both |fledge-doc and |foglamp-doc| and includes details of the plugins available for each.
+  - Documentation is available on readthedocs for both |fledge-doc| and |foglamp-doc| and includes details of the plugins available for each.
   
 **This repository is now archieved.**
 
