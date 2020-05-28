@@ -301,8 +301,8 @@
 </div>
 <div class="section" id="obtaining-the-source-code">
 <h3>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Permalink to this headline">¶</a></h3>
-<p>FogLAMP is available on GitHub. The link to the repository is <a href="https://github.com/foglamp-iot/FogLAMP" target="_blank">https://github.com/foglamp-iot/FogLAMP</a>. In order to clone the code in the repository, type:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/foglamp-iot/FogLAMP.git
+<p>FogLAMP is available on GitHub. The link to the repository is <a href="https://github.com/foglamp/FogLAMP" target="_blank">https://github.com/foglamp/FogLAMP</a>. In order to clone the code in the repository, type:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/foglamp/FogLAMP.git
 <span class="go">Cloning into &#39;FogLAMP&#39;...</span>
 <span class="go">remote: Counting objects: 15639, done.</span>
 <span class="go">remote: Compressing objects: 100% (88/88), done.</span>
@@ -710,7 +710,7 @@ As a next step, let’s install FogLAMP!</p>
 <div class="section" id="id3">
 <h3>Building FogLAMP<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>We are finally ready to install FogLAMP, but we need to apply some little changes to the code and the make files. These changes will be removed in the future, but for the moment they are necessary to complete the procedure.</p>
-<p>First, clone the Github repository with the usual command: <br /> <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/foglamp-iot/FogLAMP.git</span></code> <br /> The project should have been added to your machine under the <em>FogLAMP</em> directory.</p>
+<p>First, clone the Github repository with the usual command: <br /> <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/foglamp/FogLAMP.git</span></code> <br /> The project should have been added to your machine under the <em>FogLAMP</em> directory.</p>
 <p>We need to apply these changes to <em>C/plugins/storage/postgres/CMakeLists.txt</em>:</p>
 <ul class="simple">
 <li>Replace <br /> <code class="docutils literal"><span class="pre">include_directories(../../../thirdparty/rapidjson/include</span> <span class="pre">/usr/include/postgresql)</span></code> <br /> with: <br /> <code class="docutils literal"><span class="pre">include_directories(../../../thirdparty/rapidjson/include</span> <span class="pre">/usr/pgsql-9.6/include)</span></code> <br /> <code class="docutils literal"><span class="pre">link_directories(/usr/pgsql-9.6/lib)</span></code> <br /></li>

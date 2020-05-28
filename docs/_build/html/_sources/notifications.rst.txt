@@ -106,7 +106,7 @@ The steps involved in building the notification service, assuming you have alrea
 
 .. code-block:: console
 
-   $ git clone https://github.com/foglamp-iot/foglamp-service-notification.git
+   $ git clone https://github.com/foglamp/foglamp-service-notification.git
    ...
    $ cd foglamp-service-notification
    $ ./requirements.sh

@@ -14,7 +14,7 @@
 .. Links in new tabs
 .. |FogLAMP Repo| raw:: html
 
-   <a href="https://github.com/foglamp-iot/FogLAMP" target="_blank">https://github.com/foglamp-iot/FogLAMP</a>
+   <a href="https://github.com/foglamp/FogLAMP" target="_blank">https://github.com/foglamp/FogLAMP</a>
 
 .. |GCC Bug| raw:: html
 
@@ -155,7 +155,7 @@ FogLAMP is available on GitHub. The link to the repository is |FogLAMP Repo|. In
 
 .. code-block:: console
 
-  $ git clone https://github.com/foglamp-iot/FogLAMP.git
+  $ git clone https://github.com/foglamp/FogLAMP.git
   Cloning into 'FogLAMP'...
   remote: Counting objects: 15639, done.
   remote: Compressing objects: 100% (88/88), done.
@@ -638,7 +638,7 @@ Building FogLAMP
 
 We are finally ready to install FogLAMP, but we need to apply some little changes to the code and the make files. These changes will be removed in the future, but for the moment they are necessary to complete the procedure.
 
-First, clone the Github repository with the usual command: |br| ``git clone https://github.com/foglamp-iot/FogLAMP.git`` |br| The project should have been added to your machine under the *FogLAMP* directory.
+First, clone the Github repository with the usual command: |br| ``git clone https://github.com/foglamp/FogLAMP.git`` |br| The project should have been added to your machine under the *FogLAMP* directory.
 
 We need to apply these changes to *C/plugins/storage/postgres/CMakeLists.txt*:
 

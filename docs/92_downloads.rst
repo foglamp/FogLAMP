@@ -12,20 +12,20 @@
 
 .. |foglamp repo| raw:: html
 
-   <a href="https://github.com/foglamp-iot/foglamp" target="_blank">https://github.com/foglamp-iot/foglamp</a>
+   <a href="https://github.com/foglamp/foglamp" target="_blank">https://github.com/foglamp/foglamp</a>
 
 .. |foglamp prj| raw:: html
 
-   <a href="https://github.com/foglamp-iot" target="_blank">https://github.com/foglamp-iot</a>
+   <a href="https://github.com/foglamp" target="_blank">https://github.com/foglamp</a>
 
 .. |foglamp gui| raw:: html
 
-   <a href="https://github.com/foglamp-iot/foglamp-gui" target="_blank">https://github.com/foglamp-iot/foglamp-gui</a>
+   <a href="https://github.com/foglamp/foglamp-gui" target="_blank">https://github.com/foglamp/foglamp-gui</a>
 
 
 .. |downloads| raw:: html
 
-   <a href="http://dianomic.com/download-packages/">Downloads Page</a>
+   <a href="http://dianomic.com/download-foglamp/">Downloads Page</a>
 
 
    
