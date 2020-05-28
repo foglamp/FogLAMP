@@ -7,7 +7,7 @@
 .. |foglamp_all_round| image:: ../images/foglamp_all_round_solution.jpg
 
 .. Links
-.. _FogLAMP project on GitHub: https://github.com/foglamp-iot/FogLAMP/issues
+.. _FogLAMP project on GitHub: https://github.com/foglamp/FogLAMP/issues
 
 
 ************

@@ -14,7 +14,7 @@
 
 .. |foglamp DHT| raw:: html
 
-   <a href="https://github.com/foglamp-iot/foglamp-south-dht" target="_blank">https://github.com/foglamp-iot/foglamp-south-dht</a>
+   <a href="https://github.com/foglamp/foglamp-south-dht" target="_blank">https://github.com/foglamp/foglamp-south-dht</a>
    <br />
 
 
@@ -196,7 +196,7 @@ If you have not built FogLAMP yet, follow the steps described |Getting Started|.
 
 .. code-block:: console
 
-  $ git clone https://github.com/foglamp-iot/foglamp-south-dht.git
+  $ git clone https://github.com/foglamp/foglamp-south-dht.git
   ...
   $
 

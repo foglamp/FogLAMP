@@ -12,7 +12,7 @@
 
 .. |1.1 requirements| raw:: html
 
-   <a href="https://github.com/foglamp-iot/FogLAMP/blob/1.1/python/requirements.txt" target="_blank">check here</a>
+   <a href="https://github.com/foglamp/FogLAMP/blob/1.1/python/requirements.txt" target="_blank">check here</a>
 
 
 .. =============================================
@@ -501,8 +501,8 @@ New Features
   
 - **Removal of south plugins**
 
-  - **coap**: coap south plugin was moved into its own repository https://github.com/foglamp-iot/foglamp-south-coap
-  - **http**: http south plugin was moved into its own repository https://github.com/foglamp-iot/foglamp-south-http
+  - **coap**: coap south plugin was moved into its own repository https://github.com/foglamp/foglamp-south-coap
+  - **http**: http south plugin was moved into its own repository https://github.com/foglamp/foglamp-south-http
 
 
 Known Issues

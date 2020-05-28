@@ -54,8 +54,8 @@ If your system does not have Raspbian pre-installed, you can find instructions o
 
 You can obtain FogLAMP in two ways:
 
-- Dianomic Systems offers pre-built, certified binaries of FogLAMP for Debian using either Intel or ARM architectures. This is the recommended method, especially for new users. You can download these from https://FogLAMP.readthedocs.io/en/master/92_downloads.html.
-- As source code from https://github.com/foglamp-iot/.  Instructions for downloading and building FogLAMP source code can be found in the FogLAMP Developer’s Guide
+- Dianomic Systems offers pre-built, certified binaries of FogLAMP for Debian using either Intel or ARM architectures. This is the recommended method, especially for new users. You can download these from https://foglamp.readthedocs.io/en/latest/92_downloads.html
+- As source code from https://github.com/foglamp/.  Instructions for downloading and building FogLAMP source code can be found in the FogLAMP Developer’s Guide
 
 In general, FogLAMP installation will require the following packages:
 

@@ -19,7 +19,7 @@
 
 .. |DHT Repo| raw:: html
 
-   <a href="https://github.com/foglamp-iot/foglamp-south-dht11" target="_blank">FogLAMP DHT11 South Plugin</a>
+   <a href="https://github.com/foglamp/foglamp-south-dht11" target="_blank">FogLAMP DHT11 South Plugin</a>
 
 .. |ADAFruit| raw:: html
 

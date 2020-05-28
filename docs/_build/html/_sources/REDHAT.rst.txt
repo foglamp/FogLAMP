@@ -3,8 +3,8 @@
    <br />
 
 .. Links
-.. _download page: http://dianomic.com/download-packages
-.. _foglamp-pkg: https://github.com/foglamp-iot/foglamp-pkg
+.. _download page: http://dianomic.com/download-foglamp
+.. _foglamp-pkg: https://github.com/foglamp/foglamp-pkg
 
 *******************************************
 Building and using FogLAMP on RedHat/CentOS
